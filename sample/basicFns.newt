@@ -1,0 +1,20 @@
+// Basic Global Functions
+
+
+global Map(obj, fn)
+begin
+	foreach slot,value in obj do call fn with (slot,value);
+end;
+
+
+global DeepClone(obj)
+begin
+	obj := clone(obj);
+
+	if isFrame(obj) or isArray(obj) then
+	begin
+		foreach slot,value in obj do obj.(slot) := DeepClone(value);
+	end;
+
+	return obj;
+end;

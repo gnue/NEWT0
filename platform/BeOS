@@ -1,0 +1,13 @@
+# for BeOS
+
+CC = gcc
+YACC = bison -d
+LEX = flex
+
+CFLAGS = $(DEBUG) -O2 -pipe
+LIBS = -ldl $(EXTLIBS)
+LDFLAGS = $(DEBUG) -O2 # -rdynamic
+LDSHARED = $(CC) -nostart  $(build)/_APP_
+
+NEWTEXE = $(build)/newt
+NEWTLIBSUFFIX  = so

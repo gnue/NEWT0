@@ -1,0 +1,45 @@
+#!newt
+
+
+local testFiles := [
+	{file: "easter.newt", newline: true},
+	{file: "fib.newt", success: 17711, newline: true},
+	{file: "regex.newt", success: "123;foo"},
+];
+
+
+local testResults := [];
+
+
+foreach v in testFiles do
+begin
+	print(paramStr("*** \"^0\" start...", [v.file]));
+	if v.newline then print("\n");
+
+	try
+		result := load(v.file);
+
+		if v.success then
+			result := v.success == result;
+	onexception |evt.ex| do begin
+		print("*** exception ");
+		p(CurrentException());
+		result := nil;
+	end;
+
+	okStr := if result then "OK" else "NG";
+
+	if v.newline then
+		print(paramStr("*** \"^0\" done (^1)\n\n", [v.file, okStr]))
+	else
+		print(paramStr("done (^0)\n", [okStr]));
+
+	AddArraySlot(testResults, {file: v.file, result: result});
+end;
+
+
+foreach v in testResults do
+begin
+	okStr := if v.result then "OK" else "NG";
+	print(paramStr("  ^0 ==> ^1\n", [v.file, okStr]));
+end;

@@ -1,0 +1,39 @@
+#!newt
+
+// inheritance sample code.
+
+begin
+	local frame := {
+		level: 0,
+		_proto: {
+			level: 1,
+			foo: func(x, t)
+			begin
+				if x then
+				begin
+					Print(t & "foo-1(true) [" & self.level & "]\n");
+					inherited:foo(x, t & "\t");
+				end else begin
+					Print(t & "foo-1(nil) [" & self.level & "]\n");
+				end;
+			end,
+			_proto: {
+				level: 2,
+				foo: func(x, t)
+				begin
+					if x then
+					begin
+						Print(t & "foo-2(true) [" & self.level & "]\n");
+					end else begin
+						Print(t & "foo-2(nil) [" & self.level & "]\n");
+					end;
+				end
+			}
+		}
+	};
+	
+	frame:foo(nil, "");
+	frame:foo(true, "");
+	frame._proto:foo(nil, "");
+	frame._proto:foo(true, "");
+end

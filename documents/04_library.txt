@@ -1,0 +1,57 @@
+拡張ライブラリ
+-------------
+
+
+■protoFILE
+
+　説明：ファイル入出力
+　使用方法：
+
+　　//拡張ライブラリの要求
+　　Require("protoFILE");
+
+　　//フレームの作成
+　　file := {_proto: @protoFILE};
+　　//オープン(mode は man fopen を参照）
+　　file:open(path, mode);
+
+　　//出力
+　　file:print(str);
+　　//１行入力
+　　line := file:gets();
+　　//バイナリ入力
+　　binary := file:read(len);
+　　//EOF のチェック
+　　file:eof();
+　　//シーク
+　　file:seek(offset, whence);	// whence: 'set, 'curr or 'end
+　　//ファイルポインタの取得
+　　file:tell();
+　　//ファイルポインタを 0 に戻す
+　　file:rewind();
+
+　　//クローズ
+　　file:close();
+
+
+■protoREGEX
+
+　説明：正規表現
+　使用方法：
+
+　　//拡張ライブラリの要求
+　　Require("protoREGEX");
+
+　　//正規表現オブジェクトの作成
+　　// 使用できる正規表現は man regex を参照
+　　// オプションは i と m が使用可能
+　　reg := /正規表現のパターン/オプション;
+
+　　//パターンマッチの実行
+　　// str …　検索対象の文字列
+　　// 戻り値 nil … 失敗
+　　// 戻り値 配列 … 成功（マッチした部分文字列が配列の要素に入る）
+　　matchs = reg:match(str);
+
+　　//後始末（NewtonScript にデストラクタがないため）
+　　reg:cleanup();

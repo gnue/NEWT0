@@ -1,0 +1,13 @@
+# for FreeBSD
+
+CC = gcc
+YACC = yacc -d
+LEX = flex
+
+CFLAGS = $(DEBUG) -O2 -pipe -D__FREEBSD__
+LIBS = $(EXTLIBS)
+LDFLAGS = $(DEBUG) -O2 -rdynamic
+LDSHARED = $(CC) -shared
+
+NEWTEXE = $(build)/newt
+NEWTLIBSUFFIX  = so

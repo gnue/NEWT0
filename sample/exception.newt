@@ -1,0 +1,32 @@
+#!newt
+
+begin
+	// Catch built-in.
+	try
+		5 / 0;
+	onexception |evt.ex.fr| do
+		Print("Caught built-in\n");
+
+	// Catch custom.
+	try
+		Throw('|evt.ex.foo|, nil);
+	onexception |evt.ex.foo| do
+		Print("Caught custom\n");
+
+	// Catch custom with data.
+	try
+		Throw('|evt.ex.foo;type.ref.frame|, {});
+	onexception |evt.ex.foo| do
+		Print("Caught custom with data\n");
+	
+	// Catch and print data.
+	try
+		Throw('|evt.ex.foo;type.ref.string|, "Some data");
+	onexception |evt.ex.foo| do
+		Print("Caught: " & CurrentException().data & "\n");
+	
+	// Don't catch.
+	try
+		throw('|evt.ex.foo|, nil);
+	onexception |evt.ex.msg| do nil;
+end;
