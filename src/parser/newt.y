@@ -25,6 +25,7 @@
 /* マクロ */
 #define SYMCHECK(v, sym)	if (v != sym) NPSError(kNErrSyntaxError);
 #define TYPECHECK(v)		if (! (v == NS_INT || v == NSSYM0(array))) NPSError(kNErrSyntaxError);
+#define ERR_NOS2C(msg)		if (NEWT_MODE_NOS2) yyerror(msg);
 
 
 %}
@@ -85,6 +86,7 @@
 			kLOOP	kWHILE	kREPEAT kUNTIL  kDO		kIN
 			kGLOBAL	kLOCAL	kCONSTANT
 			k3READER		// ３点リーダー（独自拡張）
+			kERROR			// エラー
 
     /* オブジェクト */
 
@@ -181,7 +183,10 @@ expr
 		| constructor
 		| lvalue						{ $$ = NPSGenNode1(kNPSLvalue, $1); }
 		| lvalue kASNOP expr			{ $$ = NPSGenNode2(kNPSAsign, $1, $3); }
-		| kMAGICPOINTER kASNOP expr		{ $$ = NPSGenNode2(kNPSAsign, $1, $3); }	// 独自拡張
+		| kMAGICPOINTER kASNOP expr		{	// マジックポインタの定義（独自拡張）
+											ERR_NOS2C("Assign Magic Pointer");	// NOS2 非互換
+											$$ = NPSGenNode2(kNPSAsign, $1, $3);
+										}
 		| exists_expr
 		| function_call
 		| message_send
@@ -258,7 +263,10 @@ expr_sequence
 literal
 		: simple_literal
 		| kSTRING		{ $$ = NPSGenNode1(kNPSClone, $1); }
-		| binary		{ $$ = NPSGenNode1(kNPSClone, $1); }		// バイナリデータ（独自拡張）
+		| binary		{	// バイナリデータ（独自拡張）
+							ERR_NOS2C("Binary Syntax");	// NOS2 非互換
+							$$ = NPSGenNode1(kNPSClone, $1);
+						}
 		| '\'' object   { $$ = NewtPackLiteral($2); }
 		;
 
@@ -270,8 +278,11 @@ simple_literal
 		| kMAGICPOINTER
 		| kTRUE			{ $$ = kNewtRefTRUE; }
 		| kNIL			{ $$ = kNewtRefNIL; }
-		| kUNBIND		{ $$ = kNewtRefUnbind; }	// （独自拡張）
-//		| binary									// バイナリデータ（独自拡張）
+		| kUNBIND		{	// #UNBIND （独自拡張）
+							ERR_NOS2C("Unbind Ref");	// NOS2 非互換
+							$$ = kNewtRefUnbind;
+						}
+//		| binaryy		{ ERR_NOS2C("Binary Syntax"); }	// バイナリデータ（独自拡張）
 		;
 
 object
@@ -281,7 +292,7 @@ object
 		| path_expr
 		| array
 		| frame
-		| binary									// バイナリデータ（独自拡張）
+		| binary		{ ERR_NOS2C("Binary Syntax"); }	// バイナリデータ（独自拡張）
 		;
 
 path_expr
@@ -385,7 +396,10 @@ formal_argument
 		;
 
 indefinite_argument
-		: kSYMBOL k3READER			{ $$ = NPSGenNode1(kNPSIndefinite, $1); }	// 不定長（独自拡張）
+		: kSYMBOL k3READER			{	// 不定長（独自拡張）
+										ERR_NOS2C("Indefinite Argument");	// NOS2 非互換
+										$$ = NPSGenNode1(kNPSIndefinite, $1);
+									}
 		;
 
 type

@@ -16,9 +16,9 @@
 /* マクロ定義 */
 #define NEWT_NAME		"newt"									///< コマンド名
 #define NEWT_PROTO		"/0"									///< プロト
-#define NEWT_VERSION	"0.0.9"									///< バージョン
+#define NEWT_VERSION	"0.1.0"									///< バージョン
 #define NEWT_COPYRIGHT	"Copyright (C) 2003-2005 Makoto Nukui"  ///< コピーライト
-#define NEWT_BUILD		"2005-03-28-1"							///< ビルド番号
+#define NEWT_BUILD		"2005-04-01-2"							///< ビルド番号
 #define NEWT_PARAMS		"[switches] [--] [programfile]"			///< 引数
 
 /// 使用方法
@@ -31,6 +31,7 @@
 						"  -i [symbols]    print function info\n"		\
 						"  -v              print version number\n"		\
 						"  -h              print this help message\n"	\
+						"  --newton,--nos2 Newton OS 2.0 compatible	\n"	\
 						"  --copyright     print copyright\n"			\
 						"  --version       print version number\n"
 

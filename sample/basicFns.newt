@@ -12,9 +12,13 @@ begin
 	obj := clone(obj);
 
 	if isFrame(obj) or isArray(obj) then
-	begin
 		foreach slot,value in obj do obj.(slot) := DeepClone(value);
-	end;
 
 	return obj;
+end;
+
+
+global GetFunctionArgCount(fn)
+begin
+	return fn.numArgs;
 end;

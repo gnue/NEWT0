@@ -28,6 +28,7 @@
 #define NEWT_POOL			(newt_env.pool)					///< メモリプール
 #define NEWT_SWEEP			(newt_env.sweep)				///< SWEEPフラグ
 #define NEWT_NEEDGC			(newt_env.needgc)				///< GCフラグ
+#define NEWT_MODE_NOS2		(newt_env.mode.nos2)			///< NOS2 コンパチブル
 
 #define NSSTR(s)			(NewtMakeString(s, false))		///< 文字列オブジェクトの作成
 #define NSSTRCONST(s)		(NewtMakeString(s, true))		///< 文字列定数オブジェクトの作成
@@ -74,9 +75,15 @@ typedef struct {
     newtRefVar	global_fns;		///< グローバル関数テーブル
     newtRefVar	magic_pointers;	///< マジックポインタテーブル
 
+	// メモリ関係
     newtPool	pool;			///< メモリプール
     bool		sweep;			///< 現在の sweep 状態（トグルする）
     bool		needgc;			///< GC が必要
+
+	/// モード
+	struct {
+		bool	nos2;			///< NOS2 コンパチブル
+	} mode;
 
     // デバッグ
     bool		_debug;			///< デバッグフラグ

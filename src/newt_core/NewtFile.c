@@ -28,6 +28,7 @@
 #include "NewtIO.h"
 #include "NewtFile.h"
 
+
 /*------------------------------------------------------------------------*/
 /** 動的ライブラリをインストールする
  *
@@ -87,6 +88,18 @@ bool NewtFileExists(char * path)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
+/** ファイルセパレータを返す
+ *
+ * @return			ファイルセパレータ
+ */
+
+char NewtGetFileSeparator(void)
+{
+	return '/';
+}
+
+
+/*------------------------------------------------------------------------*/
 /** ホームディレクトリのパスを取得
  *
  * @param s			[in] ファイルのパス
@@ -112,13 +125,15 @@ char * NewtGetHomeDir(const char * s, char ** subdir)
 	uint32_t	len;
 	char *  login = NULL;
 	char *  dir = NULL;
-	char *  sep;
+	char *  sepp;
+	char	sep;
 
-	sep = strchr(s + 1, '/');
+	sep = NewtGetFileSeparator();
+ 	sepp = strchr(s + 1, sep);
 
-	if (sep != NULL)
+	if (sepp != NULL)
 	{
-		len = sep - (s + 1);
+		len = sepp - (s + 1);
 		login = malloc(len + 1);
 		strncpy(login, s + 1, len);
 		pswd = getpwnam(s + 1);
@@ -137,7 +152,7 @@ char * NewtGetHomeDir(const char * s, char ** subdir)
 		dir = pswd->pw_dir;
 
 	if (subdir != NULL)
-		*subdir = sep;
+		*subdir = sepp;
 
 	if (s + 1 != login)
 		free(login);
@@ -153,13 +168,14 @@ char * NewtGetHomeDir(const char * s, char ** subdir)
  *
  * @param s1		[in] ディレクトリ名
  * @param s2		[in] ファイル名
+ * @param sep		[in] ファイルセパレータ
  *
  * @return			作成されたパス
  *
  * @note			取得されたホームディレクトリの文字列は free する必要がある
  */
 
-char * NewtJoinPath(char * s1, char * s2)
+char * NewtJoinPath(char * s1, char * s2, char sep)
 {
 	char *		path;
 	uint32_t	len;
@@ -176,7 +192,7 @@ char * NewtJoinPath(char * s1, char * s2)
 
 	strcpy(path, s1);
 
-	path[len1] = '/';
+	path[len1] = sep;
 	strncpy(path + len1 + 1, s2, len2 + 1);
 
 	return path;
@@ -195,24 +211,27 @@ char * NewtRelToAbsPath(char * s)
 {
 	char *  src;
 	char *  dst;
+	char	sep;
+
+	sep = NewtGetFileSeparator();
 
 	for (src = dst = s; *src != '\0';)
 	{
-		if (src[0] == '/' && src[1] == '.')
+		if (src[0] == sep && src[1] == '.')
 		{
-			if (src[2] == '/' || src[2] == '\0')
+			if (src[2] == sep || src[2] == '\0')
 			{
 				src += 2;
 				continue;
 			}
-			else if (src[2] == '.' && src[3] == '/')
+			else if (src[2] == '.' && src[3] == sep)
 			{
 				src += 3;
 
 				while (s < dst)
 				{
 					dst--;
-					if (*dst == '/') break;
+					if (*dst == sep) break;
 				}
 
 				continue;
@@ -226,7 +245,7 @@ char * NewtRelToAbsPath(char * s)
 		dst++;
 	}
 
-	if (s < dst && *(dst - 1) == '/')
+	if (s < dst && *(dst - 1) == sep)
 		*(dst - 1) = '\0';
 	else if (src != dst)
 		*dst = '\0';
@@ -251,25 +270,32 @@ newtRef NewtExpandPath(const char *	s)
 	char *  subdir = NULL;
 	char *  dir = NULL;
 	char *  wd = NULL;
+	char	sep;
 
-	switch (*s)
+	sep = NewtGetFileSeparator();
+
+	if (*s == sep)
 	{
-		case '/':
-			dir = (char *)s;
-			break;
+		dir = (char *)s;
+	}
+#ifdef __WIN32__
+	else if (isalpha(*s) && s[1] == ':')
+	{
+		dir = (char *)s;
+	}
+#endif
+	else if (*s == '~')
+	{
+		dir = NewtGetHomeDir(s, &subdir);
 
-		case '~':
-			dir = NewtGetHomeDir(s, &subdir);
-
-			if (subdir != NULL && subdir[1] != '\0')
-				subdir++;
-			else
-				subdir = NULL;
-			break;
-
-		default:
-			subdir = (char *)s;
-			break;
+		if (subdir != NULL && subdir[1] != '\0')
+			subdir++;
+		else
+			subdir = NULL;
+	}
+	else
+	{
+		subdir = (char *)s;
 	}
 
 	if (dir == NULL)
@@ -278,7 +304,7 @@ newtRef NewtExpandPath(const char *	s)
 
 	if (subdir != NULL)
 	{
-		dir = NewtJoinPath(dir, subdir);
+		dir = NewtJoinPath(dir, subdir, sep);
 		NewtRelToAbsPath(dir);
 	}
 
@@ -308,10 +334,13 @@ char * NewtBaseName(char * s, uint32_t len)
 {
 	uint32_t	base = 0;
 	uint32_t	i;
+	char		sep;
+
+	sep = NewtGetFileSeparator();
 
 	for (i = 0; i < len; i++)
 	{
-		if (s[i] == '/')
+		if (s[i] == sep)
 			base = i + 1;
 	}
 
@@ -563,16 +592,18 @@ newtRef NsDirName(newtRefArg rcvr, newtRefArg r)
 {
 	char *  base;
 	char *  s;
+	char	sep;
 
     if (! NewtRefIsString(r))
         return NewtThrow(kNErrNotAString, r);
 
 	s = NewtRefToString(r);
     base = NewtBaseName(s, NewtStringLength(r));
+	sep = NewtGetFileSeparator();
 
 	if (base != NULL && s < base)
 	{
-		if (base - 1 != s && *(base - 1) == '/')
+		if (base - 1 != s && *(base - 1) == sep)
 			base--;
 
 		if (s < base)
@@ -622,7 +653,8 @@ newtRef NsBaseName(newtRefArg rcvr, newtRefArg r)
 
 newtRef NsJoinPath(newtRefArg rcvr, newtRefArg r1, newtRefArg r2)
 {
-	newtRefVar	initObj[] = {r1, NSSTR("/"), r2};
+	char		sep = NewtGetFileSeparator();
+	newtRefVar	initObj[] = {r1, NewtMakeCharacter(sep), r2};
 	newtRefVar  r;
 
 	r = NewtMakeArray2(kNewtRefNIL, sizeof(initObj) / sizeof(newtRefVar), initObj);

@@ -191,6 +191,7 @@ typedef struct {
 	const char *	fname;				///< 入力中のファイル名
 	uint32_t		lineno;				///< 字句解析の行番号
 	uint32_t		tokenpos;			///< トークンの位置
+	uint16_t		yyleng;				///< トークンの長さ
 	char			linebuf[NEWT_LEX_LINEBUFFSIZE];  ///< 行バッファ
 } nps_env_t;
 

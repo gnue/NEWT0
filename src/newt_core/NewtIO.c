@@ -19,15 +19,12 @@
 
 
 /*------------------------------------------------------------------------*/
-/** printf フォーマットで出力する（不定長）
+/** 入出力ストリーム構造体にファイルの情報をセットする
  *
- * @param stream	[in] 出力ストリーム
- * @param format	[in] フォーマット
- * @param ...		[in] printf 引数
+ * @param stream	[out]入出力ストリーム
+ * @param f			[in] ファイル
  *
- * @return			printf の戻り値
- *
- * @note			newtStream_t を使用
+ * @return			なし
  */
 
 void NIOSetFile(newtStream_t * stream, FILE * f)
@@ -171,7 +168,7 @@ int NIOFputs(const char *str, newtStream_t * stream)
 /*------------------------------------------------------------------------*/
 /** printf フォーマットで出力する（不定長）
  *
- * @param stream	[in] 出力ストリーム
+ * @param f			[in] 出力ストリーム
  * @param format	[in] フォーマット
  * @param ...		[in] printf 引数
  *
@@ -198,7 +195,7 @@ int NewtFprintf(FILE * f, const char * format, ...)
 /** 文字の出力
  *
  * @param c			[in] 文字
- * @param stream	[in] 出力ストリーム
+ * @param f			[in] 出力ストリーム
  *
  * @return			fputc の戻り値
  */
@@ -216,7 +213,7 @@ int NewtFputc(int c, FILE * f)
 /** 文字の出力
  *
  * @param str		[in] 文字列
- * @param stream	[in] 出力ストリーム
+ * @param f			[in] 出力ストリーム
  *
  * @return			fputs の戻り値
  */
@@ -241,7 +238,7 @@ int NewtFputs(const char *str, FILE * f)
  * @return			printf の戻り値
  */
 
-int NewtDebugMsg(const char * debugpos, const char * format, ...)
+int NewtDebugMsg(const char * title, const char * format, ...)
 {
 	newtStream_t	stream;
 	va_list	args;
@@ -249,10 +246,10 @@ int NewtDebugMsg(const char * debugpos, const char * format, ...)
 
 	NIOSetFile(&stream, stderr);
 
-	if (debugpos != NULL)
+	if (title != NULL)
 	{
 		NIOFputs("[", &stream);
-		NIOFputs(debugpos, &stream);
+		NIOFputs(title, &stream);
 		NIOFputs("] ", &stream);
 	}
 

@@ -205,6 +205,8 @@
 			<key>Layout</key>
 			<array>
 				<dict>
+					<key>BecomeActive</key>
+					<true/>
 					<key>ContentConfiguration</key>
 					<dict>
 						<key>PBXBottomSmartGroupGIDs</key>
@@ -299,7 +301,7 @@
 										<key>PBXProjectModuleLabel</key>
 										<string>protoFILE.c</string>
 										<key>bookmark</key>
-										<string>F5924AE707F7FDAF003781AC</string>
+										<string>F553018407FCA0CB00D34126</string>
 										<key>history</key>
 										<array>
 											<string>F5F77C3C079282C900E25761</string>
@@ -308,7 +310,7 @@
 											<string>F558617307E0A4520080D223</string>
 											<string>F558618707E0A5D90080D223</string>
 											<string>F54F306B07E0E50100EF95BF</string>
-											<string>F5924AE307F7FDAE003781AC</string>
+											<string>F5924AE707F7FDAF003781AC</string>
 										</array>
 										<key>prevStack</key>
 										<array>
@@ -376,9 +378,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>F5924AE507F7FDAE003781AC</string>
+				<string>F553018207FCA0CB00D34126</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>F5924AE607F7FDAE003781AC</string>
+				<string>F553018307FCA0CB00D34126</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>

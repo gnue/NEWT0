@@ -1001,7 +1001,7 @@ void NPSErrorStr(char c, char * s)
 		NewtFprintf(stderr, "\"%s\" ", nps_env.fname);
 
     NewtFprintf(stderr, "lines %d: %s:\n%s\n", nps_env.lineno, s, nps_env.linebuf);
-    NewtFprintf(stderr, "%*s\n", nps_env.tokenpos + 1, "^");
+    NewtFprintf(stderr, "%*s\n", nps_env.tokenpos - nps_env.yyleng + 1, "^");
 }
 
 
