@@ -1,0 +1,13 @@
+# for Linux
+
+CC = gcc
+YACC = bison -d
+LEX = flex
+
+CFLAGS = $(DEBUG) -O2 -pipe
+LIBS = -ldl $(EXTLIBS)
+LDFLAGS = $(DEBUG) -O2 -rdynamic
+LDSHARED = $(CC) -shared
+
+NEWTEXE = $(build)/newt
+NEWTLIBSUFFIX  = so

@@ -1,0 +1,13 @@
+# for Cygwin
+
+CC = gcc
+YACC = bison -d
+LEX = flex
+
+CFLAGS = $(DEBUG) -O2 -pipe
+LIBS = $(EXTLIBS)
+LDIMPORT = $(build)/libnewt.a
+LDFLAGS = $(DEBUG) -O2 -Wl,--export-all-symbols,--out-implib=$(LDIMPORT)
+LDSHARED = $(CC) -shared 
+
+NEWTLIBSUFFIX  = dll

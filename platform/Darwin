@@ -1,0 +1,13 @@
+# for Darwin
+
+CC = gcc
+YACC = yacc -d
+LEX = flex
+
+CFLAGS = $(DEBUG) -O2 -pipe -D__DARWIN__
+LIBS = -ldl $(EXTLIBS)
+LDFLAGS = $(DEBUG) -O2
+LDSHARED = cc -dynamic -bundle -undefined suppress -flat_namespace
+
+NEWTEXE = $(build)/newt
+NEWTLIBSUFFIX = dylib

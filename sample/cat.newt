@@ -1,0 +1,14 @@
+#!newt
+
+Require("protoFILE");
+
+if 1 < length(_ARGV_) then
+begin
+	file := {_proto: @protoFILE};
+
+	file:open(_ARGV_[1], "r");
+	while line := file:gets() do print(line);
+	file:close();
+end;
+
+true;

@@ -1,0 +1,10 @@
+#!newt
+
+// protoREGEX sample code.
+
+Require("protoREGEX");
+
+re := /([a-zA-Z]+)([0-9]*)/;
+matchs := re:match("foo123");
+
+matchs[2] & ";" & matchs[1];

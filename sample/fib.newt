@@ -1,0 +1,16 @@
+#!newt
+
+
+func fib(n)
+begin
+	if 2 < n then
+		return fib(n - 1) + fib(n - 2);
+
+	return n;
+end;
+
+
+for i := 0 to 21 do p(fib(i));
+
+
+fib(21);
