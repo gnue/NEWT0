@@ -318,7 +318,7 @@ void NBCGenPUSH(newtRefArg r)
 
         case kNewtSpecial:
         case kNewtMagicPointer:
-            if (((r >> 2) & 0xffff) == r)
+            if ((r & 0xffff0000) == 0)
                 NBCGenCode(kNBCPushConstant, r);
             else
                 NBCGenCodeL(kNBCPush, r);

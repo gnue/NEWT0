@@ -2502,6 +2502,7 @@ newtRef NsCurrentException(newtRefArg rcvr)
 }
 
 
+#ifdef __NAMED_MAGIC_POINTER__
 /*------------------------------------------------------------------------*/
 /** 正規表現オブジェクト（フレーム）の生成
  *
@@ -2522,6 +2523,8 @@ newtRef NsMakeRegex(newtRefArg rcvr, newtRefArg pattern, newtRefArg opt)
 
 	return NewtMakeFrame2(sizeof(v) / (sizeof(newtRefVar) * 2), v);
 }
+
+#endif /* __NAMED_MAGIC_POINTER__ */
 
 
 #pragma mark -

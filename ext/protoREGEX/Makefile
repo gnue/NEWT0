@@ -3,6 +3,7 @@ srcdir = $(proj)/src
 build = $(proj)/build
 parser = $(srcdir)/parser
 core = $(srcdir)/newt_core
+objdir = $(build)/obj
 
 
 DEBUG = # -g
@@ -16,17 +17,20 @@ include $(proj)/platform/$(shell uname)
 NEWTLIBNAME	= protoREGEX
 NEWTEXLIB	= $(build)/$(NEWTLIBNAME).$(NEWTLIBSUFFIX)
 
-LIBOBJ		= $(build)/$(NEWTLIBNAME).o
+LIBOBJ		= $(objdir)/$(NEWTLIBNAME).o
 
 
 .c.o:
 	$(CC) $(CFLAGS) $(INCS) -c $< -o $@
 
 
-all: $(build) $(NEWTEXLIB)
+all: $(build) $(objdir) $(NEWTEXLIB)
 
 $(build):
-	mkdir -p $(build)
+	mkdir -p $@
+
+$(objdir):
+	mkdir -p $@
 
 $(NEWTEXLIB): $(LIBOBJ)
 	$(LDSHARED) $< $(LDIMPORT) $(LIBREGEX) -o $@

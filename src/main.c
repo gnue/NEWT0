@@ -29,7 +29,8 @@
 
 /// オプション
 enum {
-    optNone		= 0,
+    optNone			= 0,
+    optNos2,
     optCopyright,
     optVersion,
     optStaff,
@@ -42,6 +43,8 @@ enum {
 static keyword_t	reserved_words[] = {
         // アルファベット順にソートしておくこと
         {"copyright",	optCopyright},
+        {"newton",		optNos2},
+        {"nos2",		optNos2},
         {"staff",		optStaff},
         {"version",		optVersion},
     };
@@ -326,6 +329,11 @@ void newt_option(const char * s)
 
     switch (lookup_words(reserved_words, wlen, s))
     {
+		// NOS2 コンパチブル
+		case optNos2:
+			NEWT_MODE_NOS2 = true;
+			break;
+
         // コピーライト
         case optCopyright:
             newt_show_copyright();

@@ -25,7 +25,7 @@ extern "C" {
 #endif
 
 
-void	newt_install(void);
+void	newt_install(void);		///< 拡張ライブラリのエントリポイント（インストール）
 
 
 #ifdef __cplusplus

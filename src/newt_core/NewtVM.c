@@ -3392,7 +3392,11 @@ void NVMInitGlobalFns0(void)
     NewtDefGlobalFunc(NSSYM0(shiftRight),	NsShiftRight,		2, "ShiftRight(n1, n2)");
     NewtDefGlobalFunc(NSSYM0(objectEqual),	NsObjectEqual,		2, "ObjectEqual(obj1, obj2)");		// “ÆŽ©Šg’£
     NewtDefGlobalFunc(NSSYM0(defMagicPointer),NsDefMagicPointer,2, "DefMagicPointer(mp, value)");	// “ÆŽ©Šg’£
+
+#ifdef __NAMED_MAGIC_POINTER__
     NewtDefGlobalFunc(NSSYM0(makeRegex),	NsMakeRegex,		2, "MakeRegex(pattern, opt)");		// “ÆŽ©Šg’£
+#endif /* __NAMED_MAGIC_POINTER__ */
+
 	NewtDefGlobalFunc(NSSYM(RemoveSlot),	NsRemoveSlot,		2, "RemoveSlot(obj, slot)");
 
     NewtDefGlobalFunc(NSSYM(Throw),			NsThrow,			2, "Throw(name, data)");

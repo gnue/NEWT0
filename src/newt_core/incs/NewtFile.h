@@ -40,9 +40,10 @@ extern "C" {
 void *		NewtDylibInstall(const char* fname);
 bool		NewtFileExists(char * path);
 
+char		NewtGetFileSeparator(void);
 char *		NewtGetHomeDir(const char * s, char ** subdir);
 char *		NewtRelToAbsPath(char * s);
-char *		NewtJoinPath(char * s1, char * s2);
+char *		NewtJoinPath(char * s1, char * s2, char sep);
 newtRef		NewtExpandPath(const char * s);
 
 char *		NewtBaseName(char * s, uint32_t len);

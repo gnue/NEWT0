@@ -11,6 +11,9 @@
 
 
 /* ヘッダファイル */
+#include <string.h>
+#include <errno.h>
+
 #include "version.h"
 #include "NewtEnv.h"
 #include "NewtObj.h"
@@ -37,11 +40,37 @@ newt_sym_t	newt_sym;		///< よく使うシンボルの保管場所
 
 
 /* 関数プロトタイプ */
+char *	replacechr(char * str, char srch, char repl);
+
 static void		NewtInitSYM(void);
 static void		NewtInitSysEnv(void);
 static void		NewtInitARGV(int argc, const char * argv[]);
 static void		NewtInitVersInfo(void);
 static void		NewtInitEnv(int argc, const char * argv[]);
+
+
+#pragma mark -
+/*------------------------------------------------------------------------*/
+/** 文字列の文字を指定された文字で置き換える
+ *
+ * @param str		[i/o]文字列
+ * @param src		[in] 置換えられる文字
+ * @param dest		[in] 置換える文字
+ *
+ * @return			置き換えられた文字列
+ */
+
+char * replacechr(char * str, char src, char dest)
+{
+	char *	s;
+
+	for (s = str; *s; s++)
+	{
+		if (*s == src) *s = dest;
+	}
+
+	return str;
+}
 
 
 #pragma mark -
@@ -217,7 +246,7 @@ void NewtInitSysEnv(void)
  
 void NewtInitARGV(int argc, const char * argv[])
 {
-	newtRefVar  exepath;
+	newtRefVar  exepath = kNewtRefUnbind;
 	newtRefVar  r;
 	uint16_t	i;
 
@@ -229,7 +258,35 @@ void NewtInitARGV(int argc, const char * argv[])
 		NewtSetArraySlot(r, i - 1, NewtMakeString(argv[i], true));
 	}
 
-	exepath = NewtExpandPath(argv[0]);
+#ifdef __WIN32__
+	{
+		char	sep;
+
+		sep = NewtGetFileSeparator();
+
+		if (sep != '\\')
+		{
+			char *	path;
+
+			path = strdup(argv[0]);
+
+			if (path)
+			{
+				replacechr(path, '\\', sep);
+				exepath = NewtExpandPath(path);
+				free(path);
+			}
+			else
+			{
+				exit(errno);
+			}
+		}
+	}
+#endif
+
+	if (NewtRefIsNIL(exepath))
+		exepath = NewtExpandPath(argv[0]);
+
     NcSetSlot(GLOBALS, NSSYM0(_EXEDIR_), NcDirName(exepath));
 }
 
@@ -533,7 +590,7 @@ newtRef NSResolveMagicPointer(newtRefArg r)
 /** マジックポインタの定義
  *
  * @param r			[in] マジックポインタ
- * @param fn		[in] オブジェクト
+ * @param v			[in] オブジェクト
  *
  * @return			オブジェクト
  */
@@ -821,7 +878,7 @@ newtRef NcResolveMagicPointer(newtRefArg r)
  *
  * @param rcvr		[in] レシーバ
  * @param r			[in] マジックポインタ
- * @param fn		[in] オブジェクト
+ * @param v			[in] オブジェクト
  *
  * @return			オブジェクト
  */
@@ -892,7 +949,7 @@ newtRef NcResolveMagicPointer(newtRefArg r)
  *
  * @param rcvr		[in] レシーバ
  * @param r			[in] マジックポインタ
- * @param fn		[in] オブジェクト
+ * @param v			[in] オブジェクト
  *
  * @return			オブジェクト
  */

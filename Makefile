@@ -3,10 +3,15 @@ build = ./build
 ext = ./ext
 parser = $(srcdir)/parser
 core = $(srcdir)/newt_core
+objdir = $(build)/obj
+yytmp = $(objdir)/yytmp
+tardir = $(shell basename `pwd`)_$(shell uname)
+docdir = $(build)/html
 
 
+VPATH = $(core)
 DEBUG = # -g
-INCS = -I$(srcdir) -I$(core)/incs -I$(srcdir)/parser -I$(build)
+INCS = -I$(srcdir) -I$(core)/incs -I$(srcdir)/parser -I$(yytmp)
 EXTLIBS = 
 STRIP = strip -x
 
@@ -18,24 +23,25 @@ ifndef NEWT
 endif
 
 
-MAINOBJ       = $(build)/main.o
+MAINOBJ       = $(objdir)/main.o
 
-COREOBJS      = $(build)/NewtBC.o \
-                $(build)/NewtEnv.o \
-                $(build)/NewtFile.o \
-                $(build)/NewtFns.o \
-                $(build)/NewtGC.o \
-                $(build)/NewtIO.o \
-                $(build)/NewtMem.o \
-                $(build)/NewtObj.o \
-                $(build)/NewtParser.o \
-                $(build)/NewtPrint.o \
-                $(build)/NewtStr.o \
-                $(build)/NewtVM.o
+COREOBJS      = $(objdir)/NewtBC.o \
+                $(objdir)/NewtEnv.o \
+                $(objdir)/NewtFile.o \
+                $(objdir)/NewtFns.o \
+                $(objdir)/NewtGC.o \
+                $(objdir)/NewtIO.o \
+                $(objdir)/NewtMem.o \
+                $(objdir)/NewtNSOF.o \
+                $(objdir)/NewtObj.o \
+                $(objdir)/NewtParser.o \
+                $(objdir)/NewtPrint.o \
+                $(objdir)/NewtStr.o \
+                $(objdir)/NewtVM.o
 
-PARSEROBJS    = $(build)/y.tab.o \
-                $(build)/lex.yy.o \
-                $(build)/lookup_words.o
+PARSEROBJS    = $(yytmp)/y.tab.o \
+                $(yytmp)/lex.yy.o \
+                $(objdir)/lookup_words.o
 
 NEWTLIBS	  = $(ext)/protoFILE \
 				$(ext)/protoREGEX
@@ -52,15 +58,20 @@ NEWTLIBS	  = $(ext)/protoFILE \
 all: newt ext
 
 
-### mkdir build
+### make directory
 
 $(build):
-	mkdir -p $(build)
+	mkdir -p $@
 
+$(objdir):
+	mkdir -p $@
+
+$(yytmp):
+	mkdir -p $@
 
 ### newt
 
-newt: $(build) $(NEWT) $(LDIMPORT)
+newt: $(build) $(objdir) $(yytmp) $(NEWT) $(LDIMPORT)
 
 $(NEWT): $(MAINOBJ) $(PARSEROBJS) $(COREOBJS)
 	$(CC) $(LDFLAGS) $(LIBS) $(MAINOBJ) $(PARSEROBJS) $(COREOBJS) $(LIBS) -o $@
@@ -75,53 +86,20 @@ $(MAINOBJ): $(srcdir)/main.c $(srcdir)/version.h
 
 ### PARSER
 
-$(build)/y.tab.c $(build)/y.tab.h: $(parser)/newt.y
+$(yytmp)/y.tab.c $(yytmp)/y.tab.h: $(parser)/newt.y
 	$(YACC) -o $@ $<
 
-$(build)/lex.yy.c: $(parser)/newt.l $(build)/y.tab.h
+$(yytmp)/lex.yy.c: $(parser)/newt.l $(yytmp)/y.tab.h
 	$(LEX) -o$@ $<
 
-$(build)/lookup_words.o: $(parser)/lookup_words.c $(parser)/lookup_words.h
+$(objdir)/lookup_words.o: $(parser)/lookup_words.c $(parser)/lookup_words.h
 	$(CC) $(CFLAGS) $(INCS) -c $< -o $@
 
 
 ### CORE
 
-$(build)/NewtBC.o: $(core)/NewtBC.c
-	$(CC) $(CFLAGS) $(INCS) -c $< -o $@
-
-$(build)/NewtEnv.o: $(core)/NewtEnv.c
-	$(CC) $(CFLAGS) $(INCS) -c $< -o $@
-
-$(build)/NewtFile.o: $(core)/NewtFile.c
-	$(CC) $(CFLAGS) $(INCS) -c $< -o $@
-
-$(build)/NewtFns.o: $(core)/NewtFns.c
-	$(CC) $(CFLAGS) $(INCS) -c $< -o $@
-
-$(build)/NewtGC.o: $(core)/NewtGC.c
-	$(CC) $(CFLAGS) $(INCS) -c $< -o $@
-
-$(build)/NewtIO.o: $(core)/NewtIO.c
-	$(CC) $(CFLAGS) $(INCS) -c $< -o $@
-
-$(build)/NewtMem.o: $(core)/NewtMem.c
-	$(CC) $(CFLAGS) $(INCS) -c $< -o $@
-
-$(build)/NewtObj.o: $(core)/NewtObj.c
-	$(CC) $(CFLAGS) $(INCS) -c $< -o $@
-
-$(build)/NewtParser.o: $(core)/NewtParser.c
-	$(CC) $(CFLAGS) $(INCS) -c $< -o $@
-
-$(build)/NewtPrint.o: $(core)/NewtPrint.c
-	$(CC) $(CFLAGS) $(INCS) -c $< -o $@
-
-$(build)/NewtStr.o: $(core)/NewtStr.c
-	$(CC) $(CFLAGS) $(INCS) -c $< -o $@
-
-$(build)/NewtVM.o: $(core)/NewtVM.c
-	$(CC) $(CFLAGS) $(INCS) -c $< -o $@
+$(COREOBJS)::
+	$(CC) $(CFLAGS) $(INCS) -c $(core)/$(notdir $*.c) -o $@
 
 
 ### ext
@@ -132,10 +110,32 @@ $(NEWTLIBS)::
 	$(MAKE) -C $@
 
 
-### strip
+### strip (for win)
 
 strip:
 	$(STRIP) $(NEWT) $(build)/*.$(NEWTLIBSUFFIX)
+
+
+### ARCHIVE
+
+copy:
+	rm -rf $(build)/$(tardir)
+	mkdir -p $(build)/$(tardir)
+	cp $(NEWT) $(build)/$(tardir)
+	cp $(build)/*.$(NEWTLIBSUFFIX) $(build)/$(tardir)
+	cp -Rp COPYING README.* documents sample $(build)/$(tardir)
+
+
+tgz: copy
+	tar czf $(build)/$(tardir).tgz -C $(build) $(tardir)
+
+
+### DOCUMENT GENERATE
+
+doc:
+	rm -rf $(docdir)
+	mkdir -p $(docdir)
+	cd misc; doxygen doxygen.conf
 
 
 ### TEST

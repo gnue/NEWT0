@@ -61,6 +61,8 @@ static void			lex_debug(int type);
 #undef YY_INPUT
 #define YY_INPUT(b, r, ms) (r=nps_yyinput(yyin, b, ms))
 
+#define WORN_NOS2(msg)		if (NEWT_MODE_NOS2) NPSErrorStr('W', msg);
+
 %}
 
 %x COMMENT
@@ -131,7 +133,7 @@ REGEX-SEQUENCE			({REGEX-CHARACTER}|{ESCAPE-SEQUENCE})*{TRUNCATED-ESCAPE}?
 ("&"|"&&")						{ return lex_op(yytext, kSTROP); }
 ("<<"|">>")						{ return lex_op(yytext, kSFTOP); }
 ([<>]"="?|"="|"<>"|"==")		{ return lex_op(yytext, kRELOP); }
-"..."							{ return k3READER; }
+"..."							{ return lex_update_tokenpos(k3READER); }
 
 ":="							{ return lex_update_tokenpos(kASNOP); }
 ":?"							{ return lex_update_tokenpos(kSNDOP); }
@@ -247,6 +249,7 @@ int lex_update_tokenpos(int op)
 	strncat(nps_env.linebuf, yytext, sizeof(nps_env.linebuf));
 
 	nps_env.tokenpos += yyleng;
+	nps_env.yyleng = yyleng;
 	return op;
 }
 
@@ -268,6 +271,7 @@ void lex_newline(void)
 
 	nps_env.linebuf[0] = '\0';
 	nps_env.tokenpos = 0;
+	nps_env.yyleng = 0;
 	nps_env.lineno++;
 	yyless(n);
 }
@@ -524,7 +528,7 @@ int lex_makesymbol(char *s, bool trunc)
         tokn = lookup_words(reserved_words, wlen, s);
 
         if (tokn != -1)
-            return lex_reserveword(tokn, s);
+            return lex_update_tokenpos(lex_reserveword(tokn, s));
     }
 
     yylval.obj = NewtMakeSymbol(s);
@@ -639,8 +643,7 @@ int lex_makereal(double n)
 
 int lex_makemagicpointer(int n)
 {
-	NPSError(kNErrSyntaxError);
-	return kUNBIND;
+	return lex_update_tokenpos(kERROR);
 }
 
 
@@ -655,6 +658,8 @@ int lex_makemagicpointer(int n)
 
 int lex_makenamedmp(char *s, bool trunc)
 {
+	int		pos;
+
     if (trunc)
     {
         s = lex_escapestr(lex_truncstr(s));
@@ -663,7 +668,12 @@ int lex_makenamedmp(char *s, bool trunc)
     yylval.obj = NewtMakeNamedMP(s);
     lex_debug(kMAGICPOINTER);
 
-	return lex_update_tokenpos(kMAGICPOINTER);
+	pos = lex_update_tokenpos(kMAGICPOINTER);
+
+	// NOS2 ”ñŒÝŠ·
+	WORN_NOS2("Named Magic Pinter");
+
+	return pos;
 }
 
 #else
@@ -678,6 +688,11 @@ int lex_makenamedmp(char *s, bool trunc)
 
 int lex_makemagicpointer(int n)
 {
+	if (0x03ff < n)
+	{	// ”’l‚ª”ÍˆÍŠO
+		return lex_update_tokenpos(kERROR);
+	}
+
 	yylval.obj = NewtMakeMagicPointer(0, n);
     lex_debug(kMAGICPOINTER);
 
@@ -696,8 +711,7 @@ int lex_makemagicpointer(int n)
 
 int lex_makenamedmp(char *s, bool trunc)
 {
-	NPSError(kNErrSyntaxError);
-	return kUNBIND;
+	return lex_update_tokenpos(kERROR);
 }
 
 #endif
