@@ -68,6 +68,7 @@ static void			lex_debug(int type);
 %x COMMENT
 %x SHELL
 %s BINARY
+%x STRING
 %x REGEX
 
 ALPHA					[A-Za-z]
@@ -119,6 +120,17 @@ REGEX-SEQUENCE			({REGEX-CHARACTER}|{ESCAPE-SEQUENCE})*{TRUNCATED-ESCAPE}?
 									return lex_update_tokenpos(kBINED);
 								}
 
+<STRING>{NEWLINE}				{
+									nps_env.lineno++;
+									yymore();
+								}
+
+<STRING>{CHARACTER-SEQUENCE}	yymore();
+<STRING>"\""					{
+									BEGIN INITIAL;
+									return lex_makestring(yytext, true);
+								}
+
 <REGEX>{ALPHA}+					{ return lex_makestring(yytext, false); }
 <REGEX>.						{
 									unput(*yytext);
@@ -142,6 +154,11 @@ __LINE__						{ return lex_makeinteger(nps_env.lineno); }
 ":?"							{ return lex_update_tokenpos(kSNDOP); }
 
 "\""{CHARACTER-SEQUENCE}"\""	{ return lex_makestring(yytext, true); }
+
+"\""							{
+									BEGIN STRING;
+									yymore();
+								}
 
 {SYMBOL}						{ return lex_makesymbol(yytext, false); }
 "|"{SYMBOL-SEQUENCE}"|"			{ return lex_makesymbol(yytext, true); }
