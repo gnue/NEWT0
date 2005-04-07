@@ -128,6 +128,9 @@ REGEX-SEQUENCE			({REGEX-CHARACTER}|{ESCAPE-SEQUENCE})*{TRUNCATED-ESCAPE}?
 {NEWLINE}						lex_newline();
 {SPACE}+						lex_update_tokenpos(0);
 
+__FILE__						{ return lex_makestring((char *)(nps_env.fname?nps_env.fname:"-"), false); }
+__LINE__						{ return lex_makeinteger(nps_env.lineno); }
+
 [+-]							{ return lex_op(yytext, kADDOP); }
 [*/]							{ return lex_op(yytext, kMULOP); }
 ("&"|"&&")						{ return lex_op(yytext, kSTROP); }
