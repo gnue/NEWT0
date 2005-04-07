@@ -256,7 +256,8 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>48</integer>
+									<integer>43</integer>
+									<integer>41</integer>
 									<integer>1</integer>
 									<integer>0</integer>
 								</array>
@@ -293,7 +294,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>version.h</string>
+								<string>lookup_words.h</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -301,12 +302,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>version.h</string>
+										<string>lookup_words.h</string>
 										<key>bookmark</key>
-										<string>F58B6DB40805184A006CC16D</string>
+										<string>F54EC8090805221C00BB383E</string>
 										<key>history</key>
 										<array>
-											<string>F5FEEDCE072437F600CE7A95</string>
 											<string>F5C0D8BF0727958B00D83D1B</string>
 											<string>F5622F0907E02949009AAF9A</string>
 											<string>F5622F7607E02D68009AAF9A</string>
@@ -350,10 +350,11 @@
 											<string>F54394F607FE1D1200F32002</string>
 											<string>F50BE99107FE2F2800D978FE</string>
 											<string>F5FD05E4080413B7001280B8</string>
-											<string>F55CDD800804141900423F02</string>
 											<string>F55CDD810804141900423F02</string>
-											<string>F58B6DAE08051702006CC16D</string>
-											<string>F58B6DAF08051702006CC16D</string>
+											<string>F54EC7E708051A1A00BB383E</string>
+											<string>F54EC7E808051A1A00BB383E</string>
+											<string>F54EC803080521DB00BB383E</string>
+											<string>F54EC804080521DB00BB383E</string>
 										</array>
 										<key>prevStack</key>
 										<array>
@@ -405,8 +406,9 @@
 											<string>F5C37E1307FC1D2E00F92B70</string>
 											<string>F57E7A1007FD364200256511</string>
 											<string>F57E7A1A07FD36C200256511</string>
-											<string>F58B6D800805109C006CC16D</string>
-											<string>F58B6DB008051702006CC16D</string>
+											<string>F54EC7EA08051A1A00BB383E</string>
+											<string>F54EC7EB08051A1A00BB383E</string>
+											<string>F54EC805080521DB00BB383E</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -464,9 +466,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>F58B6D820805109C006CC16D</string>
+				<string>F54EC7E50805197300BB383E</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>F58B6D830805109C006CC16D</string>
+				<string>F54EC7E60805197300BB383E</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -495,8 +497,6 @@
 	<key>WindowOrderList</key>
 	<array>
 		<string>1C0AD2B3069F1EA900FABCE6</string>
-		<string>F5640E2407005869003CCEBC</string>
-		<string>1C530D57069F1CE1000CFCEE</string>
 		<string>/Users/gnue/misc/Documents/wk/Newt/NEWT0/newt.xcode</string>
 	</array>
 	<key>WindowString</key>
@@ -529,7 +529,7 @@
 										<key>PBXProjectModuleLabel</key>
 										<string>newt.l</string>
 										<key>bookmark</key>
-										<string>F58B6DB50805184A006CC16D</string>
+										<string>F58B6DBB08051936006CC16D</string>
 										<key>history</key>
 										<array>
 											<string>F58B6DA008051600006CC16D</string>
@@ -739,7 +739,7 @@
 												<key>PBXProjectModuleLabel</key>
 												<string>NewtParser.c</string>
 												<key>bookmark</key>
-												<string>F58B6DB60805184A006CC16D</string>
+												<string>F58B6DBC08051936006CC16D</string>
 												<key>history</key>
 												<array>
 													<string>F58B6D8B0805122B006CC16D</string>
@@ -965,9 +965,9 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C0AD2B3069F1EA900FABCE6</string>
-				<string>F58B6DA308051600006CC16D</string>
+				<string>F54EC7EE08051C1C00BB383E</string>
 				<string>1CD0528B0623707200166675</string>
-				<string>F58B6DA408051600006CC16D</string>
+				<string>F54EC7EF08051C1C00BB383E</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.run</string>
