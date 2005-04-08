@@ -693,7 +693,7 @@ nps_node_t NPSGenIfThenElse(nps_node_t cond, nps_node_t ifthen, nps_node_t ifels
     }
     else
     {
-        node = NewtMakeArray(kNewtRefNIL, 2);
+        node = NewtMakeArray(kNewtRefUnbind, 2);
         NewtSetArraySlot(node, 0, ifthen);
         NewtSetArraySlot(node, 1, ifelse);
     }
@@ -719,7 +719,7 @@ nps_node_t NPSGenForLoop(nps_node_t index, nps_node_t v,
 {
     newtRefVar	r;
 
-    r = NewtMakeArray(kNewtRefNIL, 4);
+    r = NewtMakeArray(kNewtRefUnbind, 4);
     NewtSetArraySlot(r, 0, index);
     NewtSetArraySlot(r, 1, v);
     NewtSetArraySlot(r, 2, to);
@@ -747,7 +747,7 @@ nps_node_t NPSGenForeach(nps_node_t index, nps_node_t val, nps_node_t obj,
 {
     newtRefVar	r;
 
-    r = NewtMakeArray(kNewtRefNIL, 5);
+    r = NewtMakeArray(kNewtRefUnbind, 5);
     NewtSetArraySlot(r, 0, index);
     NewtSetArraySlot(r, 1, val);
     NewtSetArraySlot(r, 2, obj);

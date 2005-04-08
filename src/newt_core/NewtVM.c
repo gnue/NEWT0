@@ -25,6 +25,7 @@
 #include "NewtFile.h"
 #include "NewtIO.h"
 #include "NewtPrint.h"
+#include "NewtNSOF.h"
 
 
 /* å^êÈåæ */
@@ -1061,7 +1062,7 @@ newtRef NVMMakeArgsArray(uint16_t numArgs)
 	newtRefVar	args;
 	int16_t		i;
 
-	args = NewtMakeArray(kNewtRefNIL, numArgs);
+	args = NewtMakeArray(kNewtRefUnbind, numArgs);
 
 	for (i = numArgs - 1; 0 <= i; i--)
 	{
@@ -2823,11 +2824,11 @@ void is_make_array(int16_t b)
         x = stk_pop();
 
         if (NewtRefIsInteger(x))
-            a = NewtMakeArray(kNewtRefNIL, NewtRefToInteger(x));
+            a = NewtMakeArray(kNewtRefUnbind, NewtRefToInteger(x));
     }
     else
     {
-        a = NewtMakeArray(kNewtRefNIL, b);
+        a = NewtMakeArray(kNewtRefUnbind, b);
 
         if (NewtRefIsNotNIL(a))
         {
@@ -3478,6 +3479,8 @@ void NVMInitExGlobalFns(void)
     NewtDefGlobalFunc(NSSYM(LoadLib),	NsLoadLib,			1, "LoadLib(file)");
     NewtDefGlobalFunc(NSSYM(Load),		NsLoad,				1, "Load(file)");
 	NewtDefGlobalFunc(NSSYM(Require),	NsRequire,			1, "Require(str)");
+
+	NewtDefGlobalFunc(NSSYM(MakeNSOF),	NsMakeNSOF,			2, "MakeNSOF(obj, ver)");
 
     NewtDefGlobalFunc(NSSYM(GetEnv),	NsGetEnv,			1, "GetEnv(str)");
 
