@@ -263,7 +263,7 @@ newtRef NsSplit(newtRefArg rcvr, newtRefArg r, newtRefArg sep)
 				s = NewtRefToString(r);
 				c = NewtRefToCharacter(sep);
 
-				result = NewtMakeArray(kNewtRefNIL, 0);
+				result = NewtMakeArray(kNewtRefUnbind, 0);
 
 				while (*s)
 				{

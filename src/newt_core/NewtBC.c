@@ -309,13 +309,13 @@ void NBCGenPUSH(newtRefArg r)
             }
             break;
 
-        case kNewtCharacter:
         case kNewtNil:
         case kNewtTrue:
         case kNewtUnbind:
             NBCGenCode(kNBCPushConstant, r);
             break;
 
+        case kNewtCharacter:
         case kNewtSpecial:
         case kNewtMagicPointer:
             if ((r & 0xffff0000) == 0)
