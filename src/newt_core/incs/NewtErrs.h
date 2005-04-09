@@ -128,6 +128,7 @@
 #define kNErrDiv0						(kNErrMiscBase - 0)				///< 0で割り算した
 																		// Newton OS では例外は発生しない？
 #define kNErrRegcomp					(kNErrMiscBase - 1)				///< 正規表現のコンパイルエラー
-#define kNErrNSOFRead					(kNErrMiscBase - 2)				///< NSOFの読込みエラー
+#define kNErrNSOFWrite					(kNErrMiscBase - 2)				///< NSOFの書込みエラー
+#define kNErrNSOFRead					(kNErrMiscBase - 3)				///< NSOFの読込みエラー
 
 #endif /* NEWTERRS_H */

@@ -96,7 +96,9 @@ enum {
     kNSOFPrecedent			= 9,	///< 出現済みデータ
     kNSOFNIL				= 10,   ///< NIL
     kNSOFSmallRect			= 11,   ///< 小さい矩形
-    kNSOFLargeBinary		= 12	///< 大きいバイナリ
+    kNSOFLargeBinary		= 12,	///< 大きいバイナリ
+
+    kNSOFNamedMagicPointer	= 0x10,	///< 名前付マジックポインタ（独自機能）
 };
 
 

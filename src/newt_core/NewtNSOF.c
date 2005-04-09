@@ -21,14 +21,20 @@
 #include "NewtVM.h"
 
 
+/* マクロ */
+#define NSOFIsNOS(verno)	((verno == 1) || (verno == 2))	///< Newton OS　互換の NSOF
+
+
 /* 型宣言 */
+
+/// NSOFストリーム構造体
 typedef struct {
-	int32_t		verno;
-	uint8_t *	data;
-	uint32_t	len;
-	uint32_t	offset;
-	newtRefVar	precedents;
-	newtErr		lastErr;
+	int32_t		verno;			///< NSOFバージョン番号
+	uint8_t *	data;			///< データ
+	uint32_t	len;			///< データの長さ
+	uint32_t	offset;			///< 作業中の位置
+	newtRefVar	precedents;		///< 出現済みオブジェクトのリスト
+	newtErr		lastErr;		///< 最後のエラーコード
 } nsof_stream_t;
 
 
@@ -47,6 +53,7 @@ static newtErr		NSOFWriteImmediate(nsof_stream_t * nsof, newtRefArg r);
 static newtErr		NSOFWriteCharacter(nsof_stream_t * nsof, newtRefArg r);
 static newtErr		NSOFWriteBinary(nsof_stream_t * nsof, newtRefArg r);
 static newtErr		NSOFWriteSymbol(nsof_stream_t * nsof, newtRefArg r);
+static newtErr		NSOFWriteNamedMP(nsof_stream_t * nsof, newtRefArg r);
 static newtErr		NSOFWriteArray(nsof_stream_t * nsof, newtRefArg r);
 static newtErr		NSOFWriteFrame(nsof_stream_t * nsof, newtRefArg r);
 static newtErr		NSOFWriteSmallRect(nsof_stream_t * nsof, newtRefArg r);
@@ -56,6 +63,7 @@ static newtRef		NSOFReadBinary(nsof_stream_t * nsof, int type);
 static newtRef		NSOFReadArray(nsof_stream_t * nsof, int type);
 static newtRef		NSOFReadFrame(nsof_stream_t * nsof);
 static newtRef		NSOFReadSymbol(nsof_stream_t * nsof);
+static newtRef		NSOFReadNamedMP(nsof_stream_t * nsof);
 static newtRef		NSOFReadSmallRect(nsof_stream_t * nsof);
 static newtRef		NewtReadNSOF(nsof_stream_t * nsof);
 
@@ -395,6 +403,48 @@ newtErr NSOFWriteSymbol(nsof_stream_t * nsof, newtRefArg r)
 }
 
 
+#ifdef __NAMED_MAGIC_POINTER__
+/*------------------------------------------------------------------------*/
+/** 名前付マジックポインタを NSOF でバッファに書込む
+ *
+ * @param nsof		[i/o]NSOFバッファ
+ * @param r			[in] 名前付マジックポインタ
+ *
+ * @return			エラーコード
+ *
+ * @note			nsof->data が NULL の場合は nsof->offset のみ更新される
+ */
+
+newtErr NSOFWriteNamedMP(nsof_stream_t * nsof, newtRefArg r)
+{
+	newtRefVar	sym;
+
+	sym = NewtMPToSymbol(r);
+
+	if (NSOFIsNOS(nsof->verno))
+	{
+		// とりあえずシンボルを書込む
+		NSOFWriteSymbol(nsof, sym);
+		nsof->lastErr = kNErrNSOFWrite;
+	}
+	else
+	{
+		uint32_t	size;
+
+		size = NewtSymbolLength(sym);
+
+		NSOFWriteByte(nsof, kNSOFNamedMagicPointer);
+		NSOFWriteXlong(nsof, size);
+
+		if (nsof->data) memcpy(nsof->data + nsof->offset, NewtRefToSymbol(sym)->name, size);
+		nsof->offset += size;
+	}
+
+	return nsof->lastErr;
+}
+#endif /* __NAMED_MAGIC_POINTER__ */
+
+
 /*------------------------------------------------------------------------*/
 /** 配列データを NSOF でバッファに書込む
  *
@@ -523,17 +573,7 @@ newtErr NSOFWriteSmallRect(nsof_stream_t * nsof, newtRefArg r)
 
 newtErr NewtWriteNSOF(nsof_stream_t * nsof, newtRefArg r)
 {
-	if (NewtRefIsMagicPointer(r))
-	{
-		if (nsof->verno == 2)
-		{
-			NSOFWriteImmediate(nsof, r);
-		}
-		else
-		{
-		}
-	}
-	else if (NewtRefIsImmediate(r))
+	if (NewtRefIsImmediate(r))
 	{
 		if (r == kNewtRefNIL)
 			NSOFWriteByte(nsof, kNSOFNIL);
@@ -568,6 +608,12 @@ newtErr NewtWriteNSOF(nsof_stream_t * nsof, newtRefArg r)
 				case kNewtSymbol:
 					NSOFWriteSymbol(nsof, r);
 					break;
+
+#ifdef __NAMED_MAGIC_POINTER__
+				case kNewtMagicPointer:
+					NSOFWriteNamedMP(nsof, r);
+					break;
+#endif /* __NAMED_MAGIC_POINTER__ */
 
 				default:
 					NSOFWriteBinary(nsof, r);
@@ -792,6 +838,39 @@ newtRef NSOFReadSymbol(nsof_stream_t * nsof)
 }
 
 
+#ifdef __NAMED_MAGIC_POINTER__
+/*------------------------------------------------------------------------*/
+/** NSOFバッファを読込んで名前付マジックポインタに変換する
+ *
+ * @param nsof		[i/o]NSOFバッファ
+ *
+ * @return			名前付マジックポインタ
+ */
+
+newtRef NSOFReadNamedMP(nsof_stream_t * nsof)
+{
+	newtRefVar	r;
+
+	r = NSOFReadSymbol(nsof);
+
+	if (NewtRefIsNotNIL(r))
+	{
+		if (NSOFIsNOS(nsof->verno))
+		{
+			nsof->lastErr = kNErrNSOFRead;
+			// とりあえずシンボルのまま
+		}
+		else
+		{
+			r = NewtSymbolToMP(r);
+		}
+	}
+
+	return r;
+}
+#endif /* __NAMED_MAGIC_POINTER__ */
+
+
 /*------------------------------------------------------------------------*/
 /** NSOFバッファを読込んでフレームオブジェクト(smallRect)に変換する
  *
@@ -876,6 +955,12 @@ newtRef NewtReadNSOF(nsof_stream_t * nsof)
 		case kNSOFSmallRect:
 			r = NSOFReadSmallRect(nsof);
 			break;
+
+#ifdef __NAMED_MAGIC_POINTER__
+		case kNSOFNamedMagicPointer:
+			r = NSOFReadNamedMP(nsof);
+			break;
+#endif /* __NAMED_MAGIC_POINTER__ */
 
 		case kNSOFLargeBinary:
 		default:
