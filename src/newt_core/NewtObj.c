@@ -988,6 +988,11 @@ bool NewtRefIsFrameOrArray(newtRefArg r)
 
 bool NewtRefIsImmediate(newtRefArg r)
 {
+#ifdef __NAMED_MAGIC_POINTER__
+    if (NewtRefIsMagicPointer(r))
+		return false;
+#endif /* __NAMED_MAGIC_POINTER__ */
+
     return ! NewtRefIsPointer(r);
 }
 
