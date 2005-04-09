@@ -797,7 +797,7 @@ newtRef NBCMakeFn(nbc_env_t * env)
 	}
 	else
 	{	// 親がなければ新規に定数フレームを作成
-		env->constant = NewtMakeFrame(kNewtRefNIL, 0);
+		env->constant = NcMakeFrame();
 	}
 
     return fn;

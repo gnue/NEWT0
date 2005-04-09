@@ -658,7 +658,7 @@ newtRef NSMakeSymbol(newtRefArg r)
 
 newtRef NSMakeFrame(void)
 {
-	return NewtMakeFrame(kNewtRefUnbind, 0);
+	return NcMakeFrame();
 }
 
 /*------------------------------------------------------------------------*/

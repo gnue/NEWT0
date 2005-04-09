@@ -18,7 +18,7 @@
 #define NEWT_PROTO		"/0"									///< プロト
 #define NEWT_VERSION	"0.1.0"									///< バージョン
 #define NEWT_COPYRIGHT	"Copyright (C) 2003-2005 Makoto Nukui"  ///< コピーライト
-#define NEWT_BUILD		"2005-04-08-3"							///< ビルド番号
+#define NEWT_BUILD		"2005-04-09-1"							///< ビルド番号
 #define NEWT_PARAMS		"[switches] [--] [programfile]"			///< 引数
 
 /// 使用方法

@@ -127,6 +127,7 @@
 // その他のエラー（独自定義）
 #define kNErrDiv0						(kNErrMiscBase - 0)				///< 0で割り算した
 																		// Newton OS では例外は発生しない？
-#define kNErrRegcomp					(kNErrMiscBase - 1)				///< 0で割り算した
+#define kNErrRegcomp					(kNErrMiscBase - 1)				///< 正規表現のコンパイルエラー
+#define kNErrNSOFRead					(kNErrMiscBase - 2)				///< NSOFの読込みエラー
 
 #endif /* NEWTERRS_H */

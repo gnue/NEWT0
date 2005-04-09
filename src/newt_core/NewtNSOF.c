@@ -21,23 +21,43 @@
 #include "NewtVM.h"
 
 
+/* 型宣言 */
+typedef struct {
+	int32_t		verno;
+	uint8_t *	data;
+	uint32_t	len;
+	uint32_t	offset;
+	newtRefVar	precedents;
+	newtErr		lastErr;
+} nsof_stream_t;
+
+
 /* 関数プロトタイプ */
 static bool			NewtRefIsByte(newtRefArg r);
 static bool			NewtRefIsSmallRect(newtRefArg r);
 static int32_t		NewtArraySearch(newtRefArg array, newtRefArg r);
 
-static uint32_t		NewtWriteXlong(uint8_t * data, uint32_t offset, int32_t v);
-static uint32_t		NewtWriteNIL(uint8_t * data, uint32_t offset);
-static uint32_t		NewtWritePrecedent(uint8_t * data, uint32_t offset, int32_t pos);
-static uint32_t		NewtWriteImmediate(uint8_t * data, uint32_t offset, newtRefArg r);
-static uint32_t		NewtWriteCharacter(uint8_t * data, uint32_t offset, newtRefArg r);
-static uint32_t		NewtWriteBinary(int verno, newtRefArg precedents, uint8_t * data, uint32_t offset, newtRefArg r);
-static uint32_t		NewtWriteSymbol(uint8_t * data, uint32_t offset, newtRefArg r);
-static uint32_t		NewtWriteArray(int verno, newtRefArg precedents, uint8_t * data, uint32_t offset, newtRefArg r);
-static uint32_t		NewtWriteFrame(int verno, newtRefArg precedents, uint8_t * data, uint32_t offset, newtRefArg r);
-static uint32_t		NewtWriteSmallRect(uint8_t * data, uint32_t offset, newtRefArg r);
+static newtErr		NSOFWriteByte(nsof_stream_t * nsof, uint8_t value);
+static newtErr		NSOFWriteXlong(nsof_stream_t * nsof, int32_t value);
+static uint8_t		NSOFReadByte(nsof_stream_t * nsof);
+static int32_t		NSOFReadXlong(nsof_stream_t * nsof);
 
-static uint32_t		NewtWriteNSOF(int verno, newtRefArg precedents, uint8_t * data, uint32_t offset, newtRefArg r);
+static newtErr		NSOFWritePrecedent(nsof_stream_t * nsof, int32_t pos);
+static newtErr		NSOFWriteImmediate(nsof_stream_t * nsof, newtRefArg r);
+static newtErr		NSOFWriteCharacter(nsof_stream_t * nsof, newtRefArg r);
+static newtErr		NSOFWriteBinary(nsof_stream_t * nsof, newtRefArg r);
+static newtErr		NSOFWriteSymbol(nsof_stream_t * nsof, newtRefArg r);
+static newtErr		NSOFWriteArray(nsof_stream_t * nsof, newtRefArg r);
+static newtErr		NSOFWriteFrame(nsof_stream_t * nsof, newtRefArg r);
+static newtErr		NSOFWriteSmallRect(nsof_stream_t * nsof, newtRefArg r);
+static newtErr		NewtWriteNSOF(nsof_stream_t * nsof, newtRefArg r);
+
+static newtRef		NSOFReadBinary(nsof_stream_t * nsof, int type);
+static newtRef		NSOFReadArray(nsof_stream_t * nsof, int type);
+static newtRef		NSOFReadFrame(nsof_stream_t * nsof);
+static newtRef		NSOFReadSymbol(nsof_stream_t * nsof);
+static newtRef		NSOFReadSmallRect(nsof_stream_t * nsof);
+static newtRef		NewtReadNSOF(nsof_stream_t * nsof);
 
 
 #pragma mark -
@@ -123,184 +143,205 @@ int32_t NewtArraySearch(newtRefArg array, newtRefArg r)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** データを xlong 形式でバッファに書込む
+/** 1byte を NSOF でバッファに書込む
  *
- * @param data		[out]バッファ
- * @param offset	[in] 書込み位置
- * @param v			[in] データ
+ * @param nsof		[i/o]NSOFバッファ
+ * @param value		[in] 1byte　データ
  *
- * @return			書込まれる長さ
+ * @return			エラーコード
  *
- * @note			data が NULL の場合は長さのみ計算して返す
+ * @note			nsof->data が NULL の場合は nsof->offset のみ更新される
  */
-
-uint32_t NewtWriteXlong(uint8_t * data, uint32_t offset, int32_t v)
+ 
+newtErr NSOFWriteByte(nsof_stream_t * nsof, uint8_t value)
 {
-	uint32_t	len = 0;
-
-	if (0 <= v && v <= 254)
-		len = 1;
-	else
-		len = 5;
-
-	if (data)
+	if (nsof->data)
 	{
-		if (len == 1)
-		{
-			data[offset++] = v;
+		if (nsof->len <= nsof->offset)
+		{	// バッファを越えた
+			nsof->lastErr = kNErrOutOfRange;
+			return nsof->lastErr;
 		}
-		else
-		{
-			data[offset++] = 0xff;
-			data[offset++] = ((uint32_t)v >> 24) & 0xffff;
-			data[offset++] = ((uint32_t)v >> 16) & 0xffff;
-			data[offset++] = ((uint32_t)v >> 8) & 0xffff;
-			data[offset++] = (uint32_t)v & 0xffff;
-		}
+
+		nsof->data[nsof->offset] = value;
 	}
 
-	return len;
+	nsof->offset++;
+
+	return kNErrNone;
 }
 
 
 /*------------------------------------------------------------------------*/
-/** NILデータを NSOF でバッファに書込む
+/** データを xlong 形式でバッファに書込む
  *
- * @param data		[out]バッファ
- * @param offset	[in] 書込み位置
+ * @param nsof		[i/o]NSOFバッファ
+ * @param value		[in] データ
  *
- * @return			書込まれる長さ
+ * @return			エラーコード
  *
- * @note			data が NULL の場合は長さのみ計算して返す
+ * @note			nsof->data が NULL の場合は nsof->offset のみ更新される
  */
- 
-uint32_t NewtWriteNIL(uint8_t * data, uint32_t offset)
-{
-	if (data) data[offset] = kNSOFNIL;
 
-	return 1;
+newtErr NSOFWriteXlong(nsof_stream_t * nsof, int32_t value)
+{
+	if (0 <= value && value <= 254)
+	{
+		NSOFWriteByte(nsof, value);
+	}
+	else
+	{
+		NSOFWriteByte(nsof, 0xff);
+		NSOFWriteByte(nsof, ((uint32_t)value >> 24) & 0xffff);
+		NSOFWriteByte(nsof, ((uint32_t)value >> 16) & 0xffff);
+		NSOFWriteByte(nsof, ((uint32_t)value >> 8) & 0xffff);
+		NSOFWriteByte(nsof, (uint32_t)value & 0xffff);
+	}
+
+	return nsof->lastErr;
 }
 
 
+/*------------------------------------------------------------------------*/
+/** NSOFバッファ からデータを 1byte 読込む
+ *
+ * @param nsof		[i/o]NSOFバッファ
+ *
+ * @return			1byte データ
+ */
+ 
+uint8_t NSOFReadByte(nsof_stream_t * nsof)
+{
+	uint8_t		result;
+
+	if (nsof->len <= nsof->offset)
+	{	// バッファを越えた
+		nsof->lastErr = kNErrNotABinaryObject;
+		return 0;
+	}
+
+	result = nsof->data[nsof->offset];
+	nsof->offset++;
+
+	return result;
+}
+
+
+/*------------------------------------------------------------------------*/
+/** NSOFバッファ からデータを xlong 形式で読込む
+ *
+ * @param nsof		[i/o]NSOFバッファ
+ *
+ * @return			データ
+ */
+
+int32_t NSOFReadXlong(nsof_stream_t * nsof)
+{
+	int32_t		value;
+
+	value = NSOFReadByte(nsof);
+
+	if (value == 0xff)
+	{
+		value  = NSOFReadByte(nsof) << 24;
+		value |= NSOFReadByte(nsof) << 16;
+		value |= NSOFReadByte(nsof) << 8;
+		value |= NSOFReadByte(nsof);
+	}
+
+	return value;
+}
+
+
+#pragma mark -
 /*------------------------------------------------------------------------*/
 /** 出現済みデータを NSOF でバッファに書込む
  *
- * @param data		[out]バッファ
- * @param offset	[in] 書込み位置
+ * @param nsof		[i/o]NSOFバッファ
  * @param pos		[in] 出現位置
  *
- * @return			書込まれる長さ
+ * @return			エラーコード
  *
- * @note			data が NULL の場合は長さのみ計算して返す
+ * @note			nsof->data が NULL の場合は nsof->offset のみ更新される
  */
  
-uint32_t NewtWritePrecedent(uint8_t * data, uint32_t offset, int32_t pos)
+newtErr NSOFWritePrecedent(nsof_stream_t * nsof, int32_t pos)
 {
-	uint32_t	len = 0;
+	NSOFWriteByte(nsof, kNSOFPrecedent);
+	NSOFWriteXlong(nsof, pos);
 
-	if (data) data[offset + len] = kNSOFPrecedent;
-	len++;
-
-	len += NewtWriteXlong(data, offset + len, pos);
-
-	return len;
+	return nsof->lastErr;
 }
 
 
 /*------------------------------------------------------------------------*/
 /** 即値データを NSOF でバッファに書込む
  *
- * @param data		[out]バッファ
- * @param offset	[in] 書込み位置
+ * @param nsof		[i/o]NSOFバッファ
  * @param r			[in] 即値データ
  *
- * @return			書込まれる長さ
+ * @return			エラーコード
  *
- * @note			data が NULL の場合は長さのみ計算して返す
+ * @note			nsof->data が NULL の場合は nsof->offset のみ更新される
  */
  
-uint32_t NewtWriteImmediate(uint8_t * data, uint32_t offset, newtRefArg r)
+newtErr NSOFWriteImmediate(nsof_stream_t * nsof, newtRefArg r)
 {
-	uint32_t	len = 0;
+	NSOFWriteByte(nsof, kNSOFImmediate);
+	NSOFWriteXlong(nsof, r);
 
-	if (data) data[offset + len] = kNSOFImmediate;
-	len++;
-
-	len += NewtWriteXlong(data, offset + len, r);
-
-	return len;
+	return nsof->lastErr;
 }
 
 
 /*------------------------------------------------------------------------*/
 /** 文字データを NSOF でバッファに書込む
  *
- * @param data		[out]バッファ
- * @param offset	[in] 書込み位置
+ * @param nsof		[i/o]NSOFバッファ
  * @param r			[in] 文字データ
  *
- * @return			書込まれる長さ
+ * @return			エラーコード
  *
- * @note			data が NULL の場合は長さのみ計算して返す
+ * @note			nsof->data が NULL の場合は nsof->offset のみ更新される
  */
 
-uint32_t NewtWriteCharacter(uint8_t * data, uint32_t offset, newtRefArg r)
+newtErr NSOFWriteCharacter(nsof_stream_t * nsof, newtRefArg r)
 {
-	uint32_t	len = 1;
-	int			type;
-	int			c;
+	int		c;
 
 	c = NewtRefToCharacter(r);
 
 	if (c < 0x100)
 	{
-		type = kNSOFCharacter;
-		len += 1;
+		NSOFWriteByte(nsof, kNSOFCharacter);
+		NSOFWriteByte(nsof, c);
 	}
 	else
 	{
-		type = kNSOFUnicodeCharacter;
-		len += 2;
+		NSOFWriteByte(nsof, kNSOFUnicodeCharacter);
+		NSOFWriteByte(nsof, (c >> 8) & 0xff);
+		NSOFWriteByte(nsof, c & 0xff);
 	}
 
-	if (data)
-	{
-		data[offset++] = type;
-
-		if (type == kNSOFCharacter)
-		{
-			data[offset++] = c;
-		}
-		else
-		{
-			data[offset++] = (c >> 8) & 0xff;
-			data[offset++] = c & 0xff;
-		}
-	}
-
-	return len;
+	return nsof->lastErr;
 }
 
 
 /*------------------------------------------------------------------------*/
 /** バイナリデータを NSOF でバッファに書込む
  *
- * @param verno		[in] NSOF バージョン番号
- * @param precedents[i/o]出現済みテーブル
- * @param data		[out]バッファ
- * @param offset	[in] 書込み位置
+ * @param nsof		[i/o]NSOFバッファ
  * @param r			[in] バイナリオブジェクト
  *
- * @return			書込まれる長さ
+ * @return			エラーコード
  *
- * @note			data が NULL の場合は長さのみ計算して返す
+ * @note			nsof->data が NULL の場合は nsof->offset のみ更新される
  */
 
-uint32_t NewtWriteBinary(int verno, newtRefArg precedents, uint8_t * data, uint32_t offset, newtRefArg r)
+newtErr NSOFWriteBinary(nsof_stream_t * nsof, newtRefArg r)
 {
 	newtRefVar	klass;
 	uint32_t	size;
-	uint32_t	len = 0;
 	int			type;
 
 	klass = NcClassOf(r);
@@ -312,74 +353,64 @@ uint32_t NewtWriteBinary(int verno, newtRefArg precedents, uint8_t * data, uint3
 
 	size = NewtBinaryLength(r);
 
-	if (data) data[offset + len] = type;
-	len++;
-
-	len += NewtWriteXlong(data, offset + len, size);
+	NSOFWriteByte(nsof, type);
+	NSOFWriteXlong(nsof, size);
 
 	if (type == kNSOFBinaryObject)
 	{
-		len += NewtWriteNSOF(verno, precedents, data, offset + len, klass);
+		NewtWriteNSOF(nsof, klass);
 	}
 
-	if (data) memcpy(data + offset + len, NewtRefToBinary(r), size);
-	len += size;
+	if (nsof->data) memcpy(nsof->data + nsof->offset, NewtRefToBinary(r), size);
+	nsof->offset += size;
 
-	return len;
+	return nsof->lastErr;
 }
 
 
 /*------------------------------------------------------------------------*/
 /** シンボルデータを NSOF でバッファに書込む
  *
- * @param data		[out]バッファ
- * @param offset	[in] 書込み位置
+ * @param nsof		[i/o]NSOFバッファ
  * @param r			[in] シンボルオブジェクト
  *
- * @return			書込まれる長さ
+ * @return			エラーコード
  *
- * @note			data が NULL の場合は長さのみ計算して返す
+ * @note			nsof->data が NULL の場合は nsof->offset のみ更新される
  */
 
-uint32_t NewtWriteSymbol(uint8_t * data, uint32_t offset, newtRefArg r)
+newtErr NSOFWriteSymbol(nsof_stream_t * nsof, newtRefArg r)
 {
 	uint32_t	size;
-	uint32_t	len = 0;
 
 	size = NewtSymbolLength(r);
 
-	if (data) data[offset + len] = kNSOFSymbol;
-	len++;
+	NSOFWriteByte(nsof, kNSOFSymbol);
+	NSOFWriteXlong(nsof, size);
 
-	len += NewtWriteXlong(data, offset + len, size);
+	if (nsof->data) memcpy(nsof->data + nsof->offset, NewtRefToSymbol(r)->name, size);
+	nsof->offset += size;
 
-	if (data) memcpy(data + offset + len, NewtRefToSymbol(r)->name, size);
-	len += size;
-
-	return len;
+	return nsof->lastErr;
 }
 
 
 /*------------------------------------------------------------------------*/
 /** 配列データを NSOF でバッファに書込む
  *
- * @param verno		[in] NSOF バージョン番号
- * @param precedents[i/o]出現済みテーブル
- * @param data		[out]バッファ
- * @param offset	[in] 書込み位置
+ * @param nsof		[i/o]NSOFバッファ
  * @param r			[in] 配列オブジェクト
  *
- * @return			書込まれる長さ
+ * @return			エラーコード
  *
- * @note			data が NULL の場合は長さのみ計算して返す
+ * @note			nsof->data が NULL の場合は nsof->offset のみ更新される
  */
 
-uint32_t NewtWriteArray(int verno, newtRefArg precedents, uint8_t * data, uint32_t offset, newtRefArg r)
+newtErr NSOFWriteArray(nsof_stream_t * nsof, newtRefArg r)
 {
 	newtRefVar	klass;
     newtRef *	slots;
 	uint32_t	numSlots;
-	uint32_t	len = 0;
 	uint32_t	i;
 	int			type;
 
@@ -391,122 +422,112 @@ uint32_t NewtWriteArray(int verno, newtRefArg precedents, uint8_t * data, uint32
 	else
 		type = kNSOFArray;
 
-	if (data) data[offset + len] = type;
-	len++;
+	NSOFWriteByte(nsof, type);
 
-	len += NewtWriteXlong(data, offset + len, numSlots);
+	NSOFWriteXlong(nsof, numSlots);
 
 	if (type == kNSOFArray)
 	{
-		len += NewtWriteNSOF(verno, precedents, data, offset + len, klass);
+		NewtWriteNSOF(nsof, klass);
+		if (nsof->lastErr != kNErrNone) return nsof->lastErr;
 	}
 
     slots = NewtRefToSlots(r);
 
 	for (i = 0; i < numSlots; i++)
 	{
-		len += NewtWriteNSOF(verno, precedents, data, offset + len, slots[i]);
+		NewtWriteNSOF(nsof, slots[i]);
+		if (nsof->lastErr != kNErrNone) return nsof->lastErr;
 	}
 
-	return len;
+	return nsof->lastErr;
 }
 
 
 /*------------------------------------------------------------------------*/
 /** フレームデータを NSOF でバッファに書込む
  *
- * @param verno		[in] NSOF バージョン番号
- * @param precedents[i/o]出現済みテーブル
- * @param data		[out]バッファ
- * @param offset	[in] 書込み位置
+ * @param nsof		[i/o]NSOFバッファ
  * @param r			[in] フレームオブジェクト
  *
- * @return			書込まれる長さ
+ * @return			エラーコード
  *
- * @note			data が NULL の場合は長さのみ計算して返す
+ * @note			nsof->data が NULL の場合は nsof->offset のみ更新される
  */
 
-uint32_t NewtWriteFrame(int verno, newtRefArg precedents, uint8_t * data, uint32_t offset, newtRefArg r)
+newtErr NSOFWriteFrame(nsof_stream_t * nsof, newtRefArg r)
 {
     newtRefVar	map;
     newtRef *	slots;
 	uint32_t	numSlots;
     uint32_t	index;
-	uint32_t	len = 0;
 	uint32_t	i;
 
 	numSlots = NewtFrameLength(r);
     map = NewtFrameMap(r);
 
-	if (data) data[offset + len] = kNSOFFrame;
-	len++;
-
-	len += NewtWriteXlong(data, offset + len, numSlots);
+	NSOFWriteByte(nsof, kNSOFFrame);
+	NSOFWriteXlong(nsof, numSlots);
 
     slots = NewtRefToSlots(r);
 
 	for (i = 0; i < numSlots; i++)
 	{
-		len += NewtWriteNSOF(verno, precedents, data, offset + len, NewtGetMapIndex(map, i, &index));
+		NewtWriteNSOF(nsof, NewtGetMapIndex(map, i, &index));
+		if (nsof->lastErr != kNErrNone) return nsof->lastErr;
 	}
 
 	for (i = 0; i < numSlots; i++)
 	{
-		len += NewtWriteNSOF(verno, precedents, data, offset + len, slots[i]);
+		NewtWriteNSOF(nsof, slots[i]);
+		if (nsof->lastErr != kNErrNone) return nsof->lastErr;
 	}
 
-	return len;
+	return nsof->lastErr;
 }
 
 
 /*------------------------------------------------------------------------*/
 /** フレームデータを NSOF(smallRect) でバッファに書込む
  *
- * @param data		[out]バッファ
- * @param offset	[in] 書込み位置
+ * @param nsof		[i/o]NSOFバッファ
  * @param r			[in] フレームオブジェクト
  *
- * @return			書込まれる長さ
+ * @return			エラーコード
  *
- * @note			data が NULL の場合は長さのみ計算して返す
+ * @note			nsof->data が NULL の場合は nsof->offset のみ更新される
  */
 
-uint32_t NewtWriteSmallRect(uint8_t * data, uint32_t offset, newtRefArg r)
+newtErr NSOFWriteSmallRect(nsof_stream_t * nsof, newtRefArg r)
 {
-	if (data)
-	{
-		data[offset++] = kNSOFSmallRect;
-		data[offset++] = NewtRefToInteger(NcGetSlot(r, NSSYM(top)));
-		data[offset++] = NewtRefToInteger(NcGetSlot(r, NSSYM(left)));
-		data[offset++] = NewtRefToInteger(NcGetSlot(r, NSSYM(bottom)));
-		data[offset++] = NewtRefToInteger(NcGetSlot(r, NSSYM(right)));
-	}
+	NSOFWriteByte(nsof, kNSOFSmallRect);
+	NSOFWriteByte(nsof, NewtRefToInteger(NcGetSlot(r, NSSYM(top))));
+	NSOFWriteByte(nsof, NewtRefToInteger(NcGetSlot(r, NSSYM(left))));
+	NSOFWriteByte(nsof, NewtRefToInteger(NcGetSlot(r, NSSYM(bottom))));
+	NSOFWriteByte(nsof, NewtRefToInteger(NcGetSlot(r, NSSYM(right))));
 
-	return 5;
+	return nsof->lastErr;
 }
 
 
 /*------------------------------------------------------------------------*/
-/** オブジェクトを NSOFバイナリオブジェクト に変換して書込む
+/** オブジェクトを NSOFバイナリオブジェクトに変換して書込む
  *
- * @param verno		[in] NSOF バージョン番号
- * @param precedents[i/o]出現済みテーブル
- * @param data		[out]バッファ
- * @param offset	[in] 書込み位置
+ * @param nsof		[i/o]NSOFバッファ
  * @param r			[in] オブジェクト
  *
- * @return			書込まれる長さ
+ * @return			エラーコード
+ *
+ * @note			nsof->data が NULL の場合は nsof->offset のみ更新される
  */
 
-uint32_t NewtWriteNSOF(int verno, newtRefArg precedents, uint8_t * data, uint32_t offset, newtRefArg r)
+newtErr NewtWriteNSOF(nsof_stream_t * nsof, newtRefArg r)
 {
-	uint32_t	len = 0;
-
 	if (NewtRefIsMagicPointer(r))
 	{
-		if (verno == 2)
+		if (nsof->verno == 2)
 		{
-			len = NewtWriteImmediate(data, offset, r);
+			NSOFWriteImmediate(nsof, r);
 		}
 		else
 		{
@@ -515,57 +536,56 @@ uint32_t NewtWriteNSOF(int verno, newtRefArg precedents, uint8_t * data, uint32_
 	else if (NewtRefIsImmediate(r))
 	{
 		if (r == kNewtRefNIL)
-			len = NewtWriteNIL(data, offset);
+			NSOFWriteByte(nsof, kNSOFNIL);
 		else if (NewtRefIsCharacter(r))
-			len = NewtWriteCharacter(data, offset, r);
+			NSOFWriteCharacter(nsof, r);
 		else
-			len = NewtWriteImmediate(data, offset, r);
+			NSOFWriteImmediate(nsof, r);
 	}
 	else
 	{
 		int32_t	foundPrecedent;
 
-		foundPrecedent = NewtArraySearch(precedents, r);
+		foundPrecedent = NewtArraySearch(nsof->precedents, r);
 
 		if (foundPrecedent < 0)
 		{
-			NcAddArraySlot(precedents, r);
+			NcAddArraySlot(nsof->precedents, r);
 
 			switch (NewtGetRefType(r, true))
 			{
 				case kNewtArray:
-					len = NewtWriteArray(verno, precedents, data, offset, r);
+					NSOFWriteArray(nsof, r);
 					break;
 
 				case kNewtFrame:
 					if (NewtRefIsSmallRect(r))
-						len = NewtWriteSmallRect(data, offset, r);
+						NSOFWriteSmallRect(nsof, r);
 					else
-						len = NewtWriteFrame(verno, precedents, data, offset, r);
+						NSOFWriteFrame(nsof, r);
 					break;
 
 				case kNewtSymbol:
-					len = NewtWriteSymbol(data, offset, r);
+					NSOFWriteSymbol(nsof, r);
 					break;
 
 				default:
-					len = NewtWriteBinary(verno, precedents, data, offset, r);
+					NSOFWriteBinary(nsof, r);
 					break;
 			}
 		}
 		else
 		{
-			len = NewtWritePrecedent(data, offset, foundPrecedent);
+			NSOFWritePrecedent(nsof, foundPrecedent);
 		}
 	}
 
-	return len;
+	return nsof->lastErr;
 }
 
 
-#pragma mark -
 /*------------------------------------------------------------------------*/
-/** オブジェクトを NSOFバイナリオブジェクト に変換する
+/** オブジェクトを NSOFバイナリオブジェクトに変換する
  *
  * @param rcvr		[in] レシーバ
  * @param r			[in] オブジェクト
@@ -576,34 +596,323 @@ uint32_t NewtWriteNSOF(int verno, newtRefArg precedents, uint8_t * data, uint32_
 
 newtRef NsMakeNSOF(newtRefArg rcvr, newtRefArg r, newtRefArg ver)
 {
-	newtRefVar	precedents;
-	newtRefVar	nsof;
-	uint32_t	len = 1;
-	int32_t		verno;
+	nsof_stream_t	nsof;
+	newtRefVar	result;
 
     if (! NewtRefIsInteger(ver))
         return NewtThrow(kNErrNotAnInteger, ver);
 
-	verno = NewtRefToInteger(ver);
-	precedents = NewtMakeArray(kNewtRefUnbind, 0);
+	memset(&nsof, 0, sizeof(nsof));
+	nsof.verno = NewtRefToInteger(ver);
+	nsof.precedents = NewtMakeArray(kNewtRefUnbind, 0);
+	nsof.offset = 1;
 
 	// 必要なサイズの計算
-	len += NewtWriteNSOF(verno, precedents, NULL, len, r);
+	NewtWriteNSOF(&nsof, r);
+
+	if (nsof.lastErr != kNErrNone)
+        return NewtThrow(nsof.lastErr, r);
 
 	// バイナリオブジェクトの作成
-	nsof = NewtMakeBinary(NSSYM(NSOF), NULL, len, false);
+	result = NewtMakeBinary(NSSYM(NSOF), NULL, nsof.offset, false);
 
-	if (NewtRefIsNotNIL(nsof))
+	if (NewtRefIsNotNIL(result))
 	{	// 実際の書込み
-		uint32_t	offset = 0;
-		uint8_t *	data;
+		NewtSetLength(nsof.precedents, 0);
+		nsof.data = NewtRefToBinary(result);
+		nsof.len = nsof.offset;
+		nsof.offset = 0;
 
-		NewtSetLength(precedents, 0);
-		data = NewtRefToBinary(nsof);
-
-		data[offset++] = verno;
-		NewtWriteNSOF(verno, precedents, data, offset, r);
+		NSOFWriteByte(&nsof, nsof.verno);
+		NewtWriteNSOF(&nsof, r);
 	}
 
-    return nsof;
+    return result;
+}
+
+
+#pragma mark -
+/*------------------------------------------------------------------------*/
+/** NSOFバッファを読込んでバイナリオブジェクトに変換する
+ *
+ * @param nsof		[i/o]NSOFバッファ
+ * @param type		[in] NSOFのタイプ
+ *
+ * @return			バイナリオブジェクト
+ */
+
+newtRef NSOFReadBinary(nsof_stream_t * nsof, int type)
+{
+	newtRefVar	klass;
+	newtRefVar	r;
+	int32_t		xlen;
+
+	xlen = NSOFReadXlong(nsof);
+
+	if (type == kNSOFString)
+	{
+		klass = NSSYM0(string);
+	}
+	else
+	{
+		klass = NewtReadNSOF(nsof);
+		if (nsof->lastErr != kNErrNone) return kNewtRefUnbind;
+	}
+
+	r = NewtMakeBinary(klass, nsof->data + nsof->offset, xlen, false); 
+	nsof->offset += xlen;
+
+	NcAddArraySlot(nsof->precedents, r);
+
+	return r;
+}
+
+
+/*------------------------------------------------------------------------*/
+/** NSOFバッファを読込んで配列オブジェクトに変換する
+ *
+ * @param nsof		[i/o]NSOFバッファ
+ * @param type		[in] NSOFのタイプ
+ *
+ * @return			配列オブジェクト
+ */
+
+newtRef NSOFReadArray(nsof_stream_t * nsof, int type)
+{
+	newtRefVar	klass = kNewtRefUnbind;
+	newtRefVar	r;
+	int32_t		xlen;
+
+	xlen = NSOFReadXlong(nsof);
+
+	if (type == kNSOFArray)
+	{
+		klass = NewtReadNSOF(nsof);
+		if (nsof->lastErr != kNErrNone) return kNewtRefUnbind;
+	}
+
+	r = NewtMakeArray(klass, xlen);
+	NcAddArraySlot(nsof->precedents, r);
+
+	if (NewtRefIsNotNIL(r))
+	{
+		newtRef *	slots;
+		int32_t	i;
+
+		slots = NewtRefToSlots(r);
+
+		for (i = 0; i < xlen; i++)
+		{
+			slots[i] = NewtReadNSOF(nsof);
+			if (nsof->lastErr != kNErrNone) break;
+		}
+	}
+
+	return r;
+}
+
+
+/*------------------------------------------------------------------------*/
+/** NSOFバッファを読込んでフレームオブジェクトに変換する
+ *
+ * @param nsof		[i/o]NSOFバッファ
+ *
+ * @return			フレームオブジェクト
+ */
+
+newtRef NSOFReadFrame(nsof_stream_t * nsof)
+{
+	newtRefVar	map;
+	newtRefVar	r;
+	newtRef *	slots;
+	int32_t		xlen;
+	int32_t		i;
+
+	xlen = NSOFReadXlong(nsof);
+
+	if (xlen == 0)
+		return NcMakeFrame();
+
+	map = NewtMakeMap(kNewtRefNIL, xlen, NULL);
+
+	slots = NewtRefToSlots(map);
+
+	for (i = 1; i <= xlen; i++)
+	{
+		slots[i] = NewtReadNSOF(nsof);
+		if (nsof->lastErr != kNErrNone) return kNewtRefUnbind;
+	}
+
+	r = NewtMakeFrame(map, xlen);
+	NcAddArraySlot(nsof->precedents, r);
+
+	slots = NewtRefToSlots(r);
+
+	for (i = 0; i < xlen; i++)
+	{
+		slots[i] = NewtReadNSOF(nsof);
+		if (nsof->lastErr != kNErrNone) break;
+	}
+
+	return r;
+}
+
+
+/*------------------------------------------------------------------------*/
+/** NSOFバッファを読込んでシンボルオブジェクトに変換する
+ *
+ * @param nsof		[i/o]NSOFバッファ
+ *
+ * @return			シンボルオブジェクト
+ */
+
+newtRef NSOFReadSymbol(nsof_stream_t * nsof)
+{
+	newtRefVar	r = kNewtRefUnbind;
+	int32_t		xlen;
+	char *		name;
+
+	xlen = NSOFReadXlong(nsof);
+
+	name = malloc(xlen + 1);
+
+	if (name)
+	{
+		memcpy(name, nsof->data + nsof->offset, xlen);
+		name[xlen] = '\0';
+		r = NewtMakeSymbol(name);
+		free(name);
+	}
+
+	nsof->offset += xlen;
+
+	NcAddArraySlot(nsof->precedents, r);
+
+	return r;
+}
+
+
+/*------------------------------------------------------------------------*/
+/** NSOFバッファを読込んでフレームオブジェクト(smallRect)に変換する
+ *
+ * @param nsof		[i/o]NSOFバッファ
+ *
+ * @return			フレームオブジェクト(smallRect)
+ */
+
+newtRef NSOFReadSmallRect(nsof_stream_t * nsof)
+{
+	newtRefVar	r;
+
+	r = NcMakeFrame();
+	// 将来は map を共有すること
+
+	NcSetSlot(r, NSSYM(top), NewtMakeInteger(NSOFReadByte(nsof)));
+	NcSetSlot(r, NSSYM(left), NewtMakeInteger(NSOFReadByte(nsof)));
+	NcSetSlot(r, NSSYM(bottom), NewtMakeInteger(NSOFReadByte(nsof)));
+	NcSetSlot(r, NSSYM(right), NewtMakeInteger(NSOFReadByte(nsof)));
+
+	return r;
+}
+
+
+/*------------------------------------------------------------------------*/
+/** NSOFバイナリオブジェクトを読込んでオブジェクトに変換する
+ *
+ * @param nsof		[i/o]NSOFバッファ
+ *
+ * @return			オブジェクト
+ */
+
+newtRef NewtReadNSOF(nsof_stream_t * nsof)
+{
+	newtRefVar	r = kNewtRefUnbind;
+	int32_t		xlen;
+	int			type;
+
+	type = NSOFReadByte(nsof);
+
+	switch (type)
+	{
+		case kNSOFImmediate:
+			r = (newtRef)NSOFReadXlong(nsof);
+			break;
+
+		case kNSOFCharacter:
+			r = NewtMakeCharacter(NSOFReadByte(nsof));
+			break;
+
+		case kNSOFUnicodeCharacter:
+			r = NewtMakeCharacter((uint32_t)NSOFReadByte(nsof) << 8 | NSOFReadByte(nsof));
+			break;
+
+		case kNSOFBinaryObject:
+		case kNSOFString:
+			r = NSOFReadBinary(nsof, type);
+			break;
+
+		case kNSOFArray:
+		case kNSOFPlainArray:
+			r = NSOFReadArray(nsof, type);
+			break;
+
+		case kNSOFFrame:
+			r = NSOFReadFrame(nsof);
+			break;
+
+		case kNSOFSymbol:
+			r = NSOFReadSymbol(nsof);
+			break;
+
+		case kNSOFPrecedent:
+			xlen = NSOFReadXlong(nsof);
+			r = NewtGetArraySlot(nsof->precedents, xlen);
+			break;
+
+		case kNSOFNIL:
+			r = kNewtRefNIL;
+			break;
+
+		case kNSOFSmallRect:
+			r = NSOFReadSmallRect(nsof);
+			break;
+
+		case kNSOFLargeBinary:
+		default:
+			// サポートされていません
+			nsof->lastErr = kNErrNSOFRead;
+			break;
+	}
+
+	return r;
+}
+
+
+/*------------------------------------------------------------------------*/
+/** NSOFバイナリオブジェクトを読込む
+ *
+ * @param rcvr		[in] レシーバ
+ * @param r			[in] NSOFバイナリオブジェクト
+ *
+ * @return			オブジェクト
+ */
+
+newtRef NsReadNSOF(newtRefArg rcvr, newtRefArg r)
+{
+	nsof_stream_t	nsof;
+
+    if (! NewtRefIsBinary(r))
+        return NewtThrow(kNErrNotABinaryObject, r);
+
+	memset(&nsof, 0, sizeof(nsof));
+	nsof.len = NewtBinaryLength(r);
+
+	if (nsof.len < 2)
+        return NewtThrow(kNErrOutOfRange, r);
+
+	nsof.precedents = NewtMakeArray(kNewtRefUnbind, 0);
+	nsof.data = NewtRefToBinary(r);
+	nsof.verno = NSOFReadByte(&nsof);
+
+	return NewtReadNSOF(&nsof);
 }

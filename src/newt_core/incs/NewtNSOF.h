@@ -28,6 +28,7 @@ extern "C" {
 
 
 newtRef		NsMakeNSOF(newtRefArg rcvr, newtRefArg r, newtRefArg ver);
+newtRef		NsReadNSOF(newtRefArg rcvr, newtRefArg r);
 
 
 #ifdef __cplusplus
