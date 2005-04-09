@@ -3481,6 +3481,7 @@ void NVMInitExGlobalFns(void)
 	NewtDefGlobalFunc(NSSYM(Require),	NsRequire,			1, "Require(str)");
 
 	NewtDefGlobalFunc(NSSYM(MakeNSOF),	NsMakeNSOF,			2, "MakeNSOF(obj, ver)");
+	NewtDefGlobalFunc(NSSYM(ReadNSOF),	NsReadNSOF,			1, "ReadNSOF(nsof)");
 
     NewtDefGlobalFunc(NSSYM(GetEnv),	NsGetEnv,			1, "GetEnv(str)");
 
