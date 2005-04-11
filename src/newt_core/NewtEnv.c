@@ -44,9 +44,9 @@ char *	replacechr(char * str, char srch, char repl);
 
 static void		NewtInitSYM(void);
 static void		NewtInitSysEnv(void);
-static void		NewtInitARGV(int argc, const char * argv[]);
+static void		NewtInitARGV(int argc, const char * argv[], int n);
 static void		NewtInitVersInfo(void);
-static void		NewtInitEnv(int argc, const char * argv[]);
+static void		NewtInitEnv(int argc, const char * argv[], int n);
 
 
 #pragma mark -
@@ -240,22 +240,24 @@ void NewtInitSysEnv(void)
  *
  * @param argc		[in] コマンドライン引数の数
  * @param argv		[in] コマンドライン引数の配列
+ * @param n			[in] コマンドライン引数の位置
  *
  * @return			なし
  */
  
-void NewtInitARGV(int argc, const char * argv[])
+void NewtInitARGV(int argc, const char * argv[], int n)
 {
 	newtRefVar  exepath = kNewtRefUnbind;
 	newtRefVar  r;
+	uint16_t	j;
 	uint16_t	i;
 
-	r = NewtMakeArray(kNewtRefUnbind, argc - 1);
+	r = NewtMakeArray(kNewtRefUnbind, argc - n);
     NcSetSlot(GLOBALS, NSSYM0(_ARGV_), r);
 
-	for (i = 1; i < argc; i++)
+	for (i = n, j = 0; i < argc; i++, j++)
 	{
-		NewtSetArraySlot(r, i - 1, NewtMakeString(argv[i], true));
+		NewtSetArraySlot(r, j, NewtMakeString(argv[i], true));
 	}
 
 #ifdef __WIN32__
@@ -326,11 +328,12 @@ void NewtInitVersInfo(void)
  *
  * @param argc		[in] コマンドライン引数の数
  * @param argv		[in] コマンドライン引数の配列
+ * @param n			[in] コマンドライン引数の位置
  *
  * @return			なし
  */
 
-void NewtInitEnv(int argc, const char * argv[])
+void NewtInitEnv(int argc, const char * argv[], int n)
 {
 	// シンボルテーブルの作成
     SYM_TABLE = NewtMakeArray(kNewtRefUnbind, 0);
@@ -358,7 +361,7 @@ void NewtInitEnv(int argc, const char * argv[])
 	// 環境変数の初期化
 	NewtInitSysEnv();
 	// ARGV の初期化
-	NewtInitARGV(argc, argv);
+	NewtInitARGV(argc, argv, n);
 	// バージョン情報の初期化
 	NewtInitVersInfo();
 }
@@ -369,16 +372,17 @@ void NewtInitEnv(int argc, const char * argv[])
  *
  * @param argc		[in] コマンドライン引数の数
  * @param argv		[in] コマンドライン引数の配列
+ * @param n			[in] コマンドライン引数の位置
  *
  * @return			なし
  */
 
-void NewtInit(int argc, const char * argv[])
+void NewtInit(int argc, const char * argv[], int n)
 {
 	// メモリプールの確保
     NEWT_POOL = NewtPoolAlloc(NEWT_POOL_EXPANDSPACE);
 	// 実行環境の初期化
-    NewtInitEnv(argc, argv);
+    NewtInitEnv(argc, argv, n);
 }
 
 

@@ -2,13 +2,15 @@
 
 Require("protoFILE");
 
-if 1 < length(_ARGV_) then
+
+foreach path in _ARGV_ do
 begin
 	file := {_proto: @protoFILE};
 
-	file:open(_ARGV_[1], "r");
+	file:open(path, "r");
 	while line := file:gets() do print(line);
 	file:close();
 end;
+
 
 true;
