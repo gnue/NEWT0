@@ -226,7 +226,7 @@ extern "C" {
 #endif
 
 
-void		NewtInit(int argc, const char * argv[]);
+void		NewtInit(int argc, const char * argv[], int n);
 void		NewtCleanup(void);
 
 newtRef		NewtLookupSymbolTable(const char * name);

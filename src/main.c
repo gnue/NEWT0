@@ -122,7 +122,7 @@ newtErr newt_info(int argc, const char * argv[], int n)
     newtErr	err = kNErrNone;
     int		i;
 
-    NewtInit(argc, argv);
+    NewtInit(argc, argv, argc);
 	newt_chdir();
 
     if (n < argc)
@@ -160,7 +160,7 @@ newtErr newt_interpret_str(int argc, const char * argv[], int n)
     newtRefVar	result;
     newtErr	err;
 
-    NewtInit(argc, argv);
+    NewtInit(argc, argv, n + 1);
 	newt_chdir();
     result = NVMInterpretStr(argv[n], &err);
     newt_result_message(result, err);
@@ -191,7 +191,7 @@ newtErr newt_interpret_file(int argc, const char * argv[], int n)
         path = argv[n];
     }
 
-    NewtInit(argc, argv);
+    NewtInit(argc, argv, n + 1);
 	newt_chdir();
     result = NVMInterpretFile(path, &err);
     newt_result_message(result, err);
