@@ -452,222 +452,6 @@ bool NewtHasGlobalVar(newtRefArg r)
 }
 
 
-#ifdef __USE_OBSOLETE_STYLE__
-#pragma mark -
-/*------------------------------------------------------------------------*/
-/** グローバル関数の有無を調べる
- *
- * @param r			[in] シンボルオブジェクト
- *
- * @retval			TRUE	グローバル関数が存在する
- * @retval			NIL		グローバル関数が存在しない
- *
- * @note			スクリプトからの呼出し用
- */
-
-newtRef NSHasGlobalFn(newtRefArg r)
-{
-    return NewtMakeBoolean(NewtHasGlobalFn(r));
-}
-
-
-/*------------------------------------------------------------------------*/
-/** グローバル関数の取得
- *
- * @param r			[in] シンボルオブジェクト
- *
- * @return			関数オブジェクト
- */
-
-newtRef NSGetGlobalFn(newtRefArg r)
-{
-    return NSGetSlot(GLOBAL_FNS, r);
-}
-
-
-/*------------------------------------------------------------------------*/
-/** グローバル関数の定義
- *
- * @param r			[in] シンボルオブジェクト
- * @param fn		[in] 関数オブジェクト
- *
- * @return			関数オブジェクト
- */
-
-newtRef NSDefGlobalFn(newtRefArg r, newtRefArg fn)
-{
-    return NSSetSlot(GLOBAL_FNS, r, fn);
-}
-
-
-/*------------------------------------------------------------------------*/
-/** Undefine a global function.
- *
- * @param r			[in] シンボルオブジェクト
- *
- * @return			NIL
- */
-
-newtRef NSUndefGlobalFn(newtRefArg r)
-{
-    (void) NSRemoveSlot(GLOBAL_FNS, r);
-    return kNewtRefNIL;
-}
-
-
-/*------------------------------------------------------------------------*/
-/** グローバル変数の有無を調べる
- *
- * @param r			[in] シンボルオブジェクト
- *
- * @retval			TRUE	グローバル変数が存在する
- * @retval			NIL		グローバル変数が存在しない
- *
- * @note			スクリプトからの呼出し用
- */
-
-newtRef NSHasGlobalVar(newtRefArg r)
-{
-    return NsGlobalVarExists(kNewtRefNIL, r);
-}
-
-
-/*------------------------------------------------------------------------*/
-/** グローバル変数の取得
- *
- * @param r			[in] シンボルオブジェクト
- *
- * @return			オブジェクト
- */
-
-newtRef NSGetGlobalVar(newtRefArg r)
-{
-    return NSGetSlot(GLOBALS, r);
-}
-
-
-/*------------------------------------------------------------------------*/
-/** グローバル変数に値をセットする
- *
- * @param r			[in] シンボルオブジェクト
- * @param v			[in] 値オブジェクト
- *
- * @return			オブジェクト
- */
-
-newtRef NSSetGlobalVar(newtRefArg r, newtRefArg v)
-{
-    return NSSetSlot(GLOBALS, r, v);
-}
-
-
-/*------------------------------------------------------------------------*/
-/** Undefine a global variable.
- *
- * @param r			[in] シンボルオブジェクト
- *
- * @return			NIL
- */
-
-newtRef NSUndefGlobalVar(newtRefArg r)
-{
-    (void) NcRemoveSlot(GLOBALS, r);
-    return kNewtRefNIL;
-}
-
-
-/*------------------------------------------------------------------------*/
-/** マジックポインタの参照を解決する
- *
- * @param r			[in] マジックポインタ
- *
- * @return			オブジェクト
- */
-
-newtRef NSResolveMagicPointer(newtRefArg r)
-{
-	return NcResolveMagicPointer(r);
-}
-
-
-/*------------------------------------------------------------------------*/
-/** マジックポインタの定義
- *
- * @param r			[in] マジックポインタ
- * @param v			[in] オブジェクト
- *
- * @return			オブジェクト
- */
-
-newtRef NSDefMagicPointer(newtRefArg r, newtRefArg v)
-{
-	return NcDefMagicPointer(r, v);
-}
-
-
-#pragma mark -
-/*------------------------------------------------------------------------*/
-/** ルートオブジェクトの取得
- *
- * @return			ルートオブジェクト
- */
-
-newtRef NSGetRoot(void)
-{
-    return ROOT;
-}
-
-
-/*------------------------------------------------------------------------*/
-/** グローバル変数テーブルの取得
- *
- * @return			グローバル変数テーブル
- */
-
-newtRef NSGetGlobals(void)
-{
-    return GLOBALS;
-}
-
-
-/*------------------------------------------------------------------------*/
-/** グローバル関数テーブルの取得
- *
- * @return			グローバル関数テーブル
- */
-
-newtRef NSGetGlobalFns(void)
-{
-    return GLOBAL_FNS;
-}
-
-
-/*------------------------------------------------------------------------*/
-/** マジックポインタ関数テーブルの取得
- *
- * @return			マジックポインタ関数テーブル
- */
-
-newtRef NSGetMagicPointers(void)
-{
-    return MAGIC_POINTERS;
-}
-
-
-/*------------------------------------------------------------------------*/
-/** シンボルテーブルの取得
- *
- * @return			シンボルテーブル
- */
-
-newtRef NSGetSymTable(void)
-{
-    return SYM_TABLE;
-}
-
-#endif /* __USE_OBSOLETE_STYLE__ */
-
-
 #pragma mark -
 /*------------------------------------------------------------------------*/
 /** グローバル関数の有無を調べる
@@ -687,6 +471,7 @@ newtRef NsGlobalFnExists(newtRefArg rcvr, newtRefArg r)
 }
 
 
+#ifdef __USE_OBSOLETE_STYLE__
 /*------------------------------------------------------------------------*/
 /** グローバル関数の有無を調べる (OBSOLETE)
  *
@@ -703,6 +488,7 @@ newtRef NsHasGlobalFn(newtRefArg rcvr, newtRefArg r)
 {
     return NewtMakeBoolean(NewtHasGlobalFn(r));
 }
+#endif /* __USE_OBSOLETE_STYLE__ */
 
 
 /*------------------------------------------------------------------------*/
@@ -770,6 +556,7 @@ newtRef NsGlobalVarExists(newtRefArg rcvr, newtRefArg r)
 }
 
 
+#ifdef __USE_OBSOLETE_STYLE__
 /*------------------------------------------------------------------------*/
 /** グローバル変数の有無を調べる (OBSOLETE)
  *
@@ -786,6 +573,7 @@ newtRef NsHasGlobalVar(newtRefArg rcvr, newtRefArg r)
 {
     return NsGlobalVarExists(rcvr, r);
 }
+#endif /* __USE_OBSOLETE_STYLE__ */
 
 
 /*------------------------------------------------------------------------*/
@@ -819,6 +607,7 @@ newtRef NsDefGlobalVar(newtRefArg rcvr, newtRefArg r, newtRefArg v)
 }
 
 
+#ifdef __USE_OBSOLETE_STYLE__
 /*------------------------------------------------------------------------*/
 /** グローバル変数に値をセットする (OBSOLETE)
  *
@@ -833,6 +622,7 @@ newtRef NsSetGlobalVar(newtRefArg rcvr, newtRefArg r, newtRefArg v)
 {
     return NcSetSlot(GLOBALS, r, v);
 }
+#endif /* __USE_OBSOLETE_STYLE__ */
 
 
 /*------------------------------------------------------------------------*/

@@ -54,71 +54,11 @@
 #define NcPrint(r)					NsPrint(kNewtRefNIL, r)
 
 
-#ifdef __USE_OBSOLETE_STYLE__
-
-#define NSSelf()					NVMSelf()						///< self を取得
-#define NSCurrentException			NVMCurrentException				///< 現在の例外エラー
-
-#endif /* __USE_OBSOLETE_STYLE__ */
-
-
-
 /* 関数プロトタイプ */
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#ifdef __USE_OBSOLETE_STYLE__
-// NewtonScript native functions(old style)
-newtRef		NSProtoLookup(newtRefArg start, newtRefArg name);
-newtRef		NSLexicalLookup(newtRefArg start, newtRef name);
-newtRef		NSFullLookup(newtRefArg start, newtRefArg name);
-
-newtRef		NSLookupSymbol(newtRefArg r, newtRefArg name);
-
-newtRef		NSThrow(newtRefArg name, newtRefArg data);
-newtRef		NSRethrow(void);
-
-newtRef		NSClone(newtRefArg r);
-newtRef		NSTotalClone(newtRefArg r);
-newtRef		NSLength(newtRefArg r);
-newtRef		NSDeeplyLength(newtRefArg r);
-newtRef		NSHasSlot(newtRefArg frame, newtRefArg slot);
-newtRef		NSGetSlot(newtRefArg frame, newtRefArg slot);
-newtRef		NSSetSlot(newtRefArg frame, newtRefArg slot, newtRefArg v);
-newtRef		NSRemoveSlot(newtRefArg frame, newtRefArg slot);
-newtRef		NSSetArraySlot(newtRefArg r, newtRefArg p, newtRefArg v);
-newtRef		NSHasPath(newtRefArg r, newtRefArg p);
-newtRef		NSGetPath(newtRefArg r, newtRefArg p);
-newtRef		NSSetPath(newtRefArg r, newtRefArg p, newtRefArg v);
-newtRef		NSARef(newtRefArg r, newtRefArg p);
-newtRef		NSSetARef(newtRefArg r, newtRefArg p, newtRefArg v);
-newtRef		NSHasVariable(newtRefArg r, newtRefArg name);
-newtRef		NSHasVar(newtRefArg name);
-
-newtRef		NSClassOf(newtRefArg r);
-newtRef		NSSetClass(newtRefArg r, newtRefArg c);
-newtRef		NSRefEqual(newtRefArg r1, newtRefArg r2);
-newtRef		NSObjectEqual(newtRefArg r1, newtRefArg r2);
-newtRef		NSHasSubclass(newtRefArg sub, newtRefArg supr);
-newtRef		NSIsSubclass(newtRefArg sub, newtRefArg supr);
-newtRef		NSIsInstance(newtRefArg obj, newtRefArg rr);
-newtRef		NSIsArray(newtRefArg r);
-newtRef		NSIsFrame(newtRefArg r);
-newtRef		NSIsSymbol(newtRefArg r);
-newtRef		NSIsString(newtRefArg r);
-newtRef		NSIsCharacter(newtRefArg r);
-newtRef		NSIsInteger(newtRefArg r);
-newtRef		NSIsReal(newtRefArg r);
-
-newtRef		NSAddArraySlot(newtRefArg r, newtRefArg v);
-newtRef		NSStringer(newtRefArg r);
-newtRef		NSStrCat(newtRefArg str, newtRefArg v);
-newtRef		NSMakeSymbol(newtRefArg r);
-newtRef		NSMakeFrame(void);
-newtRef		NSMakeBinary(newtRefArg length, newtRefArg klass);
-#endif /* __USE_OBSOLETE_STYLE__ */
 
 // NewtonScript native functions(new style)
 newtRef		NcProtoLookupFrame(newtRefArg start, newtRefArg name);
