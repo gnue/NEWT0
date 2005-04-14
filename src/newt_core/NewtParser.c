@@ -139,6 +139,8 @@ void NPSInit(newtPool pool)
 {
 	nps_yyinit();
 
+	nps_env.numwarns = 0;
+	nps_env.numerrs = 0;
 	nps_env.fname = NULL;
 	nps_env.lineno = 1;
 	nps_env.tokenpos = 0;
@@ -168,7 +170,7 @@ newtErr NPSParse(const char * path, nps_syntax_node_t ** streeP, uint32_t * size
 	nps_env.fname = path;
 	nps_env.first_time = is_file;
 
-    if (yyparse() != 0)
+    if (yyparse() != 0 || 0 < nps_env.numerrs)
         err = kNErrSyntaxError;
 
 	nps_yycleanup();
@@ -996,6 +998,18 @@ newtRef NPSAddARef(newtRefArg r, newtRefArg v)
 void NPSErrorStr(char c, char * s)
 {
     NewtFprintf(stderr, "%c:", c);
+
+	switch (c)
+	{
+		case 'W':
+			nps_env.numwarns++;
+			break;
+
+		case 'E':
+		default:
+			nps_env.numerrs++;
+			break;
+	}
 
 	if (nps_env.fname != NULL)
 		NewtFprintf(stderr, "\"%s\" ", nps_env.fname);
