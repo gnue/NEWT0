@@ -234,37 +234,14 @@ newtRef		NewtLookupSymbolTable(const char * name);
 bool		NewtHasGlobalFn(newtRefArg r);
 bool		NewtHasGlobalVar(newtRefArg r);
 
-#ifdef __USE_OBSOLETE_STYLE__
-// NewtonScript native functions(old style)
-newtRef		NSHasGlobalFn(newtRefArg r);
-newtRef		NSGetGlobalFn(newtRefArg r);
-newtRef		NSDefGlobalFn(newtRefArg r, newtRefArg fn);
-newtRef		NSUndefGlobalFn(newtRefArg r);
-newtRef		NSHasGlobalVar(newtRefArg r);
-newtRef		NSGetGlobalVar(newtRefArg r);
-newtRef		NSSetGlobalVar(newtRefArg r, newtRefArg v);
-newtRef		NSUndefGlobalVar(newtRefArg r);
-newtRef		NSResolveMagicPointer(newtRefArg r);
-newtRef		NSDefMagicPointer(newtRefArg r, newtRefArg v);
-
-newtRef		NSGetRoot(void);
-newtRef		NSGetGlobals(void);
-newtRef		NSGetGlobalFns(void);
-newtRef		NSGetMagicPointers(void);
-newtRef		NSGetSymTable(void);
-#endif /* __USE_OBSOLETE_STYLE__ */
-
 // NewtonScript native functions(new style)
 newtRef		NsGlobalFnExists(newtRefArg rcvr, newtRefArg r);
-newtRef		NsHasGlobalFn(newtRefArg rcvr, newtRefArg r);					// OBSOLETE
 newtRef		NsGetGlobalFn(newtRefArg rcvr, newtRefArg r);
 newtRef		NsDefGlobalFn(newtRefArg rcvr, newtRefArg r, newtRefArg fn);
 newtRef		NsUndefGlobalFn(newtRefArg rcvr, newtRefArg r);
 newtRef		NsGlobalVarExists(newtRefArg rcvr, newtRefArg r);
-newtRef		NsHasGlobalVar(newtRefArg rcvr, newtRefArg r);					// OBSOLETE
 newtRef		NsGetGlobalVar(newtRefArg rcvr, newtRefArg r);
 newtRef		NsDefGlobalVar(newtRefArg rcvr, newtRefArg r, newtRefArg v);
-newtRef		NsSetGlobalVar(newtRefArg rcvr, newtRefArg r, newtRefArg v);	// OBSOLETE
 newtRef		NsUndefGlobalVar(newtRefArg rcvr, newtRefArg r);
 newtRef		NcResolveMagicPointer(newtRefArg r);
 newtRef		NsDefMagicPointer(newtRefArg rcvr, newtRefArg r, newtRefArg v);
@@ -274,6 +251,12 @@ newtRef		NsGetGlobals(newtRefArg rcvr);
 newtRef		NsGetGlobalFns(newtRefArg rcvr);
 newtRef		NsGetMagicPointers(newtRefArg rcvr);
 newtRef		NsGetSymTable(newtRefArg rcvr);
+
+#ifdef __USE_OBSOLETE_STYLE__
+newtRef		NsHasGlobalFn(newtRefArg rcvr, newtRefArg r);					// OBSOLETE
+newtRef		NsHasGlobalVar(newtRefArg rcvr, newtRefArg r);					// OBSOLETE
+newtRef		NsSetGlobalVar(newtRefArg rcvr, newtRefArg r, newtRefArg v);	// OBSOLETE
+#endif /* __USE_OBSOLETE_STYLE__ */
 
 
 #ifdef __cplusplus
