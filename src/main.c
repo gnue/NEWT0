@@ -189,9 +189,10 @@ newtErr newt_interpret_file(int argc, const char * argv[], int n)
     if (n < argc)
     {
         path = argv[n];
+		n++;
     }
 
-    NewtInit(argc, argv, n + 1);
+    NewtInit(argc, argv, n);
 	newt_chdir();
     result = NVMInterpretFile(path, &err);
     newt_result_message(result, err);

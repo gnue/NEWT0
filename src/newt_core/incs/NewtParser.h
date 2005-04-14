@@ -188,6 +188,9 @@ typedef struct {
 typedef struct {
 	bool			first_time;			///< 字句解析の初回判別用フラグ
 
+	uint16_t		numwarns;			///< 発生したワーニング数
+	uint16_t		numerrs;			///< 発生したエラー数
+
 	const char *	fname;				///< 入力中のファイル名
 	uint32_t		lineno;				///< 字句解析の行番号
 	uint32_t		tokenpos;			///< トークンの位置
