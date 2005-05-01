@@ -2544,7 +2544,7 @@ bool NewtMapIsSorted(newtRefArg r)
 
 newtRef NewtObjSetSlot(newtObjRef obj, newtRefArg slot, newtRefArg v)
 {
-    int32_t	i;
+    uint32_t	i;
 
 /*
     if (NewtObjIsReadonly(obj))
@@ -2712,7 +2712,7 @@ newtRef NewtDeeplyCloneMap(newtRefArg map, int32_t len)
 
 void NewtObjRemoveFrameSlot(newtObjRef obj, newtRefArg slot)
 {
-    int32_t	i;
+    uint32_t	i;
 
     if (NewtObjIsReadonly(obj))
     {
@@ -2946,7 +2946,7 @@ newtRef NewtFrameMap(newtRefArg r)
 int32_t NewtFindSlotIndex(newtRefArg frame, newtRefArg slot)
 {
     newtRefVar	map;
-    int32_t	i;
+    uint32_t	i;
 
     map = NewtFrameMap(frame);
 
@@ -2991,7 +2991,7 @@ bool NewtHasProto(newtRefArg frame)
 bool NewtHasSlot(newtRefArg frame, newtRefArg slot)
 {
     newtRefVar	map;
-    int32_t	i;
+    uint32_t	i;
 
     map = NewtFrameMap(frame);
 
