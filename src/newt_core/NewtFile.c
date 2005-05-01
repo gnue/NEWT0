@@ -29,6 +29,23 @@
 #include "NewtFile.h"
 
 
+/* 定数 */
+
+enum {
+	typeScript,
+	typeDylib,
+};
+
+
+/* 型宣言 */
+
+/// ファイル拡張子
+typedef struct {
+	newtRefVar  ext;	///< 拡張子
+	int			type;	///< タイプ
+} file_ext_t;
+
+
 /*------------------------------------------------------------------------*/
 /** 動的ライブラリをインストールする
  *
@@ -464,15 +481,15 @@ newtRef NcRequire0(newtRefArg r)
 		return kNewtRefNIL;
 
 	{
-		newtRefVar	initObj[] = {kNewtRefUnbind, NSSTR("."), kNewtRefUnbind};
-		struct {
-			newtRefVar  exts;
-			bool		dylib;
-		} lib_exts[] = {
-			{NSSTR("dylib"),	true},
-			{NSSTR("so"),		true},
-			{NSSTR("dll"),		true},
-			{NSSTR("newt"),		false},
+		newtRefVar	initObj[] = {kNewtRefUnbind, kNewtRefUnbind};
+		file_ext_t	lib_exts[] = {
+/*
+			{NSSTR(".dylib"),			typeDylib},
+			{NSSTR(".so"),				typeDylib},
+			{NSSTR(".dll"),				typeDylib},
+*/
+			{NSSTR(__DYLIBSUFFIX__),	typeDylib},
+			{NSSTR("newt"),				typeScript},
 		};
 
 		newtRefVar  lib;
@@ -504,12 +521,12 @@ newtRef NcRequire0(newtRefArg r)
 
 			for (j = 0; j < sizeof(lib_exts) / sizeof(lib_exts[0]); j++)
 			{
-				NewtSetArraySlot(patharray, 2, lib_exts[j].exts);
+				NewtSetArraySlot(patharray, 1, lib_exts[j].ext);
 				path = NcStringer(patharray);
 
 				if (NewtFileExists(NewtRefToString(path)))
 				{
-					if (lib_exts[j].dylib)
+					if (lib_exts[j].type == typeDylib)
 					{
 						lib = NcLoadLib(path);
 						NcSetSlot(requires, sym, lib);
