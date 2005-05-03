@@ -15,10 +15,10 @@
 
 
 /* ヘッダファイル */
-#if defined(__BEOS__) || defined(__FREEBSD__)
-	#include <inttypes.h>
+#if HAVE_STDINT_H
+#	include <stdint.h>
 #else
-	#include <stdint.h>
+#	include <inttypes.h>
 #endif
 
 #include <stdbool.h>
