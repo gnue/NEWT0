@@ -14,43 +14,13 @@
 #define	PLATFORM_H
 
 
-#ifdef __DARWIN__
-	#define __PLATFORM__		"Darwin"
-	#define __DYLIBSUFFIX__		".dylib"
-	#define	HAVE_STDINT_H		1
-#endif
-
-#ifdef __linux__
-	#define __PLATFORM__		"Linux"
-	#define __DYLIBSUFFIX__		".so"
-	#define	HAVE_STDINT_H		1
-#endif
-
-#ifdef __FREEBSD__
-	#define __PLATFORM__		"FreeBSD"
-	#define __DYLIBSUFFIX__		".so"
-#endif
-
-#ifdef __MINGW32__
-	#define __PLATFORM__		"WIN32"
-	#define __DYLIBSUFFIX__		".dll"
-	#define	HAVE_STDINT_H		1
-#endif
-
-#ifdef __BEOS__
-	#define __PLATFORM__		"BeOS"
-	#define __DYLIBSUFFIX__		".so"
-#endif
-
-
-#ifndef HAVE_STDINT_H
-	#define	HAVE_STDINT_H		0
-#endif
+/* ヘッダファイル */
+#include "config.h"
 
 
 // 未定義の場合はデフォルト値を設定する
 #ifndef	__PLATFORM__
-	#define __PLATFORM__		NULL
+	#define __PLATFORM__			NULL
 #endif
 
 #ifndef	__DYLIBSUFFIX__

@@ -1,0 +1,86 @@
+#                                               -*- Autoconf -*-
+# Process this file with autoconf to produce a configure script.
+
+AC_PREREQ(2.57)
+AC_INIT(FULL-PACKAGE-NAME, VERSION, BUG-REPORT-ADDRESS)
+AC_CONFIG_SRCDIR([src/main.c])
+AC_CONFIG_HEADER([config.h])
+
+# Checks for programs.
+AC_PROG_CC
+AC_PROG_YACC
+AC_PROG_LEX
+
+# Checks for libraries.
+
+# Checks for header files.
+AC_HEADER_STDC
+AC_CHECK_HEADERS([inttypes.h memory.h stdint.h stdlib.h string.h unistd.h])
+
+# Checks for typedefs, structures, and compiler characteristics.
+AC_HEADER_STDBOOL
+AC_C_CONST
+AC_TYPE_SIZE_T
+
+# Checks for library functions.
+AC_FUNC_MALLOC
+AC_FUNC_MEMCMP
+AC_FUNC_REALLOC
+AC_FUNC_VPRINTF
+AC_CHECK_FUNCS([getcwd memchr memmove memset regcomp strcasecmp strchr strdup strncasecmp])
+
+
+AC_CANONICAL_SYSTEM
+
+
+
+case "$target_os" in
+  darwin*)
+    LIBNEWT_LDSHARED='$(CC) -dynamic -bundle -undefined suppress -flat_namespace'
+    DLEXT='dylib'
+    ;;
+  cygwin*|mingw*)
+	AC_DEFINE(__WIN32__)
+    NEWT_LDIMPORT='$(build)/libnewt.a'
+    NEWT_LDFLAGS='-Wl,--export-all-symbols,--out-implib=$(LDIMPORT)'
+    LIBNEWT_LDSHARED='$(CC) -shared'
+    LIBREGEX='$(libdir)/libregex.a'
+    DLEXT='dll'
+    ;;
+  linux*)
+    NEWT_LDFLAGS='-ldl -rdynamic'
+    LIBNEWT_LDSHARED='$(CC) -shared'
+    DLEXT='so'
+    ;;
+  freebsd*)
+    NEWT_LDFLAGS='-rdynamic'
+    LIBNEWT_LDSHARED='$(CC) -shared'
+    DLEXT='so'
+    ;;
+  beos*)
+    NEWT_LDFLAGS=''
+    LIBNEWT_LDSHARED='$(CC) -nostart $(build)/_APP_'
+    DLEXT='so'
+    ;;
+  *)
+    NEWT_LDFLAGS='-rdynamic'
+    LIBNEWT_LDSHARED='$(CC) -shared'
+    DLEXT='so'
+    ;;
+esac
+
+
+AC_DEFINE_UNQUOTED(__PLATFORM__, "$target_os")
+AC_DEFINE_UNQUOTED(__DYLIBSUFFIX__, ".$DLEXT")
+
+AC_SUBST(LIBREGEX)
+AC_SUBST(NEWT_LDIMPORT)
+AC_SUBST(NEWT_LDFLAGS)
+AC_SUBST(LIBNEWT_LDSHARED)
+AC_SUBST(DLEXT)
+
+
+AC_CONFIG_FILES([Makefile
+                 ext/protoFILE/Makefile
+                 ext/protoREGEX/Makefile])
+AC_OUTPUT

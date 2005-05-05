@@ -1,0 +1,58 @@
+DEBUG = # -g
+
+
+proj = ../..
+srcdir = $(proj)/src
+build = $(proj)/build
+parser = $(srcdir)/parser
+core = $(srcdir)/newt_core
+objdir = $(build)/obj
+
+
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+libdir = @libdir@
+
+CC = @CC@
+YACC = @YACC@ -d
+LEX = @LEX@
+DEFS = @DEFS@
+LIBS = @LIBS@
+DLEXT = @DLEXT@
+EXEEXT = @EXEEXT@
+LDIMPORT = @NEWT_LDIMPORT@
+LDFLAGS = $(DEBUG) -O2 @NEWT_LDFLAGS@
+LDSHARED = @LIBNEWT_LDSHARED@
+
+
+INCS = -I$(proj) -I$(srcdir) -I$(core)/incs
+CFLAGS = $(DEBUG) $(DEFS) -O2 -pipe
+
+
+NEWTLIBNAME	= protoREGEX
+NEWTEXLIB	= $(build)/$(NEWTLIBNAME).$(DLEXT)
+
+LIBOBJ		= $(objdir)/$(NEWTLIBNAME).o
+
+
+.c.o:
+	$(CC) $(CFLAGS) $(INCS) -c -o $@ $<
+
+
+all: $(build) $(objdir) $(NEWTEXLIB)
+
+$(build):
+	mkdir -p $@
+
+$(objdir):
+	mkdir -p $@
+
+$(NEWTEXLIB): $(LIBOBJ)
+	$(LDSHARED) $(LDIMPORT) @LIBREGEX@ -o $@ $(LIBOBJ)
+
+$(LIBOBJ): $(NEWTLIBNAME).c
+	$(CC) $(CFLAGS) $(INCS) -c -o $@ $(NEWTLIBNAME).c
+
+clean:
+	rm -rf $(NEWTEXLIB)
+	rm -rf $(LIBOBJ)
