@@ -126,6 +126,8 @@
 				F55B6AE0067844EB008DC1BF,
 				F55A5B0407264A2F002A520F,
 				F558616B07E0A4270080D223,
+				F5DE13C2082AD7E100BB42A5,
+				F5DE13C5082AD7EC00BB42A5,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -237,6 +239,8 @@
 				F5203BFF07246088002722B0,
 				F55A5B0307264A2F002A520F,
 				F558616C07E0A4270080D223,
+				F5DE13C3082AD7E100BB42A5,
+				F5DE13C6082AD7EC00BB42A5,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -471,6 +475,8 @@
 		};
 		F55B6AC2067844EB008DC1BF = {
 			children = (
+				F5DE13C0082AD7E100BB42A5,
+				F5DE13C4082AD7EC00BB42A5,
 				F55B6AC3067844EB008DC1BF,
 				F55B6AC4067844EB008DC1BF,
 				F55B6AC5067844EB008DC1BF,
@@ -731,6 +737,55 @@
 			path = protoFILE.c;
 			refType = 4;
 			sourceTree = "<group>";
+		};
+		F5DE13C0082AD7E100BB42A5 = {
+			children = (
+				F5DE13C1082AD7E100BB42A5,
+			);
+			isa = PBXGroup;
+			path = darwin;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5DE13C1082AD7E100BB42A5 = {
+			fileEncoding = "-2147483647";
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = config.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5DE13C2082AD7E100BB42A5 = {
+			fileRef = F5DE13C1082AD7E100BB42A5;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5DE13C3082AD7E100BB42A5 = {
+			fileRef = F5DE13C1082AD7E100BB42A5;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5DE13C4082AD7EC00BB42A5 = {
+			fileEncoding = "-2147483647";
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = platform.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5DE13C5082AD7EC00BB42A5 = {
+			fileRef = F5DE13C4082AD7EC00BB42A5;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5DE13C6082AD7EC00BB42A5 = {
+			fileRef = F5DE13C4082AD7EC00BB42A5;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 	};
 	rootObject = 08FB7793FE84155DC02AAC07;

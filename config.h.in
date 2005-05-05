@@ -1,0 +1,25 @@
+/*------------------------------------------------------------------------*/
+/**
+ * @file	config.h
+ * @brief   コンフィグ設定
+ *
+ * @author  M.Nukui
+ * @date	2005-04-30
+ *
+ * Copyright (C) 2005 M.Nukui All rights reserved.
+ */
+
+
+#ifndef	CONFIG_H
+#define	CONFIG_H
+
+
+/* マクロ定義 */
+#undef HAVE_INTTYPES_H
+#undef HAVE_STDINT_H
+
+#undef __PLATFORM__
+#undef __DYLIBSUFFIX__
+
+
+#endif /* CONFIG_H */

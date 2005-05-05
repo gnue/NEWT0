@@ -316,8 +316,7 @@ newtRef NewtExpandPath(const char *	s)
 	}
 
 	if (dir == NULL)
-		dir = wd = getcwd(NULL, 0); // for Mac OS X 10.2
-//		dir = wd = getwd(NULL);
+		dir = wd = getcwd(NULL, 0);
 
 	if (subdir != NULL)
 	{

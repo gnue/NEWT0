@@ -127,7 +127,7 @@
 				GCC_ENABLE_TRIGRAPHS = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				GCC_PREPROCESSOR_DEFINITIONS = __DARWIN__;
+				GCC_PREPROCESSOR_DEFINITIONS = "";
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
 				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
@@ -186,6 +186,7 @@
 				F55860FA07E09F800080D223,
 				F5F69C0207E8F36E0086BCEA,
 				F57E7A0D07FD362400256511,
+				F5DE1346082AD4A500BB42A5,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -567,6 +568,7 @@
 		};
 		F5ACB05206412D4900DB6CF9 = {
 			children = (
+				F5DE1344082AD4A500BB42A5,
 				F5F69C0107E8F36E0086BCEA,
 				F541CF5007D8582D0071DCE6,
 				F5ACB05306412D4900DB6CF9,
@@ -978,6 +980,29 @@
 			path = libnewtyy.a;
 			refType = 3;
 			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F5DE1344082AD4A500BB42A5 = {
+			children = (
+				F5DE1345082AD4A500BB42A5,
+			);
+			isa = PBXGroup;
+			path = darwin;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5DE1345082AD4A500BB42A5 = {
+			fileEncoding = "-2147483647";
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = config.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5DE1346082AD4A500BB42A5 = {
+			fileRef = F5DE1345082AD4A500BB42A5;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 		F5E14ADA057984FA009742A2 = {
 			fileEncoding = "-2147483647";

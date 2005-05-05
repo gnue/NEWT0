@@ -1,3 +1,6 @@
+DEBUG = # -g
+
+
 srcdir = ./src
 build = ./build
 ext = ./ext
@@ -9,19 +12,25 @@ tardir = $(shell basename `pwd`)_$(shell uname)
 docdir = $(build)/html
 
 
+CC = @CC@
+YACC = @YACC@ -d
+LEX = @LEX@
+DEFS = @DEFS@
+LIBS = @LIBS@
+DLEXT = @DLEXT@
+EXEEXT = @EXEEXT@
+LDIMPORT = @NEWT_LDIMPORT@
+LDFLAGS = $(DEBUG) -O2 @NEWT_LDFLAGS@
+LDSHARED = @LIBNEWT_LDSHARED@
+
+
 VPATH = $(core)
-DEBUG = # -g
-INCS = -I$(srcdir) -I$(core)/incs -I$(srcdir)/parser -I$(yytmp)
-EXTLIBS = 
+INCS = -I. -I$(srcdir) -I$(core)/incs -I$(srcdir)/parser -I$(yytmp)
 STRIP = strip -x
+CFLAGS = $(DEBUG) $(DEFS) -O2 -pipe
 
-include platform/$(shell uname)
 
-
-ifndef NEWT
-	NEWT         = $(build)/newt
-endif
-
+NEWT          = $(build)/newt$(EXEEXT)
 
 MAINOBJ       = $(objdir)/main.o
 
@@ -50,7 +59,7 @@ NEWTLIBS	  = $(ext)/protoFILE \
 ######
 
 .c.o:
-	$(CC) $(CFLAGS) $(INCS) -c $< -o $@
+	$(CC) $(CFLAGS) $(INCS) -c -o $@ $<
 
 
 ### all
@@ -81,25 +90,25 @@ $(NEWT): $(MAINOBJ) $(PARSEROBJS) $(COREOBJS)
 ### MAIN
 
 $(MAINOBJ): $(srcdir)/main.c $(srcdir)/version.h
-	$(CC) $(CFLAGS) $(INCS) -c $< -o $@
+	$(CC) $(CFLAGS) $(INCS) -c -o $@ $(srcdir)/main.c
 
 
 ### PARSER
 
 $(yytmp)/y.tab.c $(yytmp)/y.tab.h: $(parser)/newt.y
-	$(YACC) -o $@ $<
+	$(YACC) -o $@ $(parser)/newt.y
 
 $(yytmp)/lex.yy.c: $(parser)/newt.l $(yytmp)/y.tab.h
-	$(LEX) -o$@ $<
+	$(LEX) -o$@ $(parser)/newt.l
 
 $(objdir)/lookup_words.o: $(parser)/lookup_words.c $(parser)/lookup_words.h
-	$(CC) $(CFLAGS) $(INCS) -c $< -o $@
+	$(CC) $(CFLAGS) $(INCS) -c -o $@ $(parser)/lookup_words.c
 
 
 ### CORE
 
 $(COREOBJS)::
-	$(CC) $(CFLAGS) $(INCS) -c $(core)/$(notdir $*.c) -o $@
+	$(CC) $(CFLAGS) $(INCS) -c -o $@ $(core)/$(*F).c
 
 
 ### ext
@@ -113,7 +122,7 @@ $(NEWTLIBS)::
 ### strip (for win)
 
 strip:
-	$(STRIP) $(NEWT) $(build)/*.$(NEWTLIBSUFFIX)
+	$(STRIP) $(NEWT) $(build)/*.$(DLEXT)
 
 
 ### ARCHIVE
@@ -122,7 +131,7 @@ copy:
 	rm -rf $(build)/$(tardir)
 	mkdir -p $(build)/$(tardir)
 	cp $(NEWT) $(build)/$(tardir)
-	cp $(build)/*.$(NEWTLIBSUFFIX) $(build)/$(tardir)
+	cp $(build)/*.$(DLEXT) $(build)/$(tardir)
 	cp -Rp COPYING README.* documents sample $(build)/$(tardir)
 
 

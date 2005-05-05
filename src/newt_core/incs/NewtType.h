@@ -15,16 +15,17 @@
 
 
 /* ヘッダファイル */
+#include "platform.h"
+
 #if HAVE_STDINT_H
-#	include <stdint.h>
+	#include <stdint.h>
 #else
-#	include <inttypes.h>
+	#include <inttypes.h>
 #endif
 
 #include <stdbool.h>
 #include <stdlib.h>
 
-#include "platform.h"
 #include "NewtConf.h"
 
 
