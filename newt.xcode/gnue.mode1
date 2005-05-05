@@ -219,8 +219,6 @@
 			<key>Layout</key>
 			<array>
 				<dict>
-					<key>BecomeActive</key>
-					<true/>
 					<key>ContentConfiguration</key>
 					<dict>
 						<key>PBXBottomSmartGroupGIDs</key>
@@ -266,8 +264,7 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>3</integer>
-									<integer>2</integer>
+									<integer>19</integer>
 									<integer>1</integer>
 									<integer>0</integer>
 								</array>
@@ -337,6 +334,8 @@
 							<string>0pt</string>
 						</dict>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -373,9 +372,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>F5DE13D1082AD81F00BB42A5</string>
+				<string>F52C5589082ADB29008C03AA</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>F5DE13D2082AD81F00BB42A5</string>
+				<string>F52C558A082ADB29008C03AA</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -509,7 +508,6 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>1C0AD2B3069F1EA900FABCE6</string>
 		<string>/Volumes/Pawn/User/Development/Newt/NEWT0/newt.xcode</string>
 	</array>
 	<key>WindowString</key>
