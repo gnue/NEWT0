@@ -25,7 +25,7 @@ LDFLAGS = $(DEBUG) -O2 @NEWT_LDFLAGS@
 LDSHARED = @LIBNEWT_LDSHARED@
 
 
-INCS = -I$(proj) -I$(srcdir) -I$(core)/incs
+INCS = -I$(srcdir) -I$(core)/incs
 CFLAGS = $(DEBUG) $(DEFS) -O2 -pipe
 
 
