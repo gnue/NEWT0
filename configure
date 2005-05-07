@@ -311,7 +311,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT YACC LEX LEXLIB LEX_OUTPUT_ROOT CPP EGREP LIBOBJS build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os LIBREGEX NEWT_LDIMPORT NEWT_LDFLAGS LIBNEWT_LDSHARED DLEXT LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT YACC LEX LEXLIB LEX_OUTPUT_ROOT CPP EGREP LIBOBJS build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os LIBREGEX NEWT_LDIMPORT NEWT_LDFLAGS LIBNEWT_LDSHARED LINK_NEWT_APP_ DLEXT LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -4530,8 +4530,9 @@ _ACEOF
     DLEXT='so'
     ;;
   beos*)
-    NEWT_LDFLAGS=''
+    NEWT_LDFLAGS='-ldl'
     LIBNEWT_LDSHARED='$(CC) -nostart $(build)/_APP_'
+    LINK_NEWT_APP_='cd $@; ln -s newt _APP_'
     DLEXT='so'
     ;;
   *)
@@ -4549,6 +4550,7 @@ _ACEOF
 cat >>confdefs.h <<_ACEOF
 #define __DYLIBSUFFIX__ ".$DLEXT"
 _ACEOF
+
 
 
 
@@ -5202,6 +5204,7 @@ s,@LIBREGEX@,$LIBREGEX,;t t
 s,@NEWT_LDIMPORT@,$NEWT_LDIMPORT,;t t
 s,@NEWT_LDFLAGS@,$NEWT_LDFLAGS,;t t
 s,@LIBNEWT_LDSHARED@,$LIBNEWT_LDSHARED,;t t
+s,@LINK_NEWT_APP_@,$LINK_NEWT_APP_,;t t
 s,@DLEXT@,$DLEXT,;t t
 s,@LTLIBOBJS@,$LTLIBOBJS,;t t
 CEOF
