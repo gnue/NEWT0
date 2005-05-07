@@ -3854,8 +3854,9 @@ newtRef NVMInterpretStr(const char * s, newtErr * errP)
 /**
  * Execute a function as if it was a method of an object.
  *
+ * @param inImpl		implementor.
  * @param inRcvr		object.
- * @param inFn			function to execute.
+ * @param inFunction	function to execute.
  * @param inArgs		array of arguments.
  * @return the result of the call.
  */
@@ -3866,14 +3867,15 @@ NVMMessageSendWithArgArray(
 	newtRefArg inFunction,
 	newtRefArg inArgs)
 {
-	vm_env_t saveVM;
-	int indexArgs;
-	newtRefVar result;
+	newtRefVar	result;
+	vm_env_t	saveVM;
+	int16_t		nbArgs;
+	int			indexArgs;
 
 	/* save the VM */
 	saveVM = vm_env;
 	
-	int16_t nbArgs = NewtArrayLength(inArgs);
+	nbArgs = NewtArrayLength(inArgs);
 	/* Push the arguments on the stack */
 	for (indexArgs = 0; indexArgs < nbArgs; indexArgs++)
 	{

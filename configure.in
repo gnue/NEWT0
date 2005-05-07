@@ -58,8 +58,9 @@ case "$target_os" in
     DLEXT='so'
     ;;
   beos*)
-    NEWT_LDFLAGS=''
+    NEWT_LDFLAGS='-ldl'
     LIBNEWT_LDSHARED='$(CC) -nostart $(build)/_APP_'
+    LINK_NEWT_APP_='cd $@; ln -s newt _APP_'
     DLEXT='so'
     ;;
   *)
@@ -77,6 +78,7 @@ AC_SUBST(LIBREGEX)
 AC_SUBST(NEWT_LDIMPORT)
 AC_SUBST(NEWT_LDFLAGS)
 AC_SUBST(LIBNEWT_LDSHARED)
+AC_SUBST(LINK_NEWT_APP_)
 AC_SUBST(DLEXT)
 
 
