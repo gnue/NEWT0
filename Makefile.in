@@ -71,6 +71,7 @@ all: newt ext
 
 $(build):
 	mkdir -p $@
+	@LINK_NEWT_APP_@
 
 $(objdir):
 	mkdir -p $@

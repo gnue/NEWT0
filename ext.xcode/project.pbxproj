@@ -353,20 +353,11 @@
 		};
 		F5203C080724611C002722B0 = {
 			children = (
-				F5203C090724611C002722B0,
 				F5203C0A0724611C002722B0,
 			);
 			isa = PBXGroup;
 			name = protoREGEX;
 			path = ext/protoREGEX;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		F5203C090724611C002722B0 = {
-			fileEncoding = "-2147483647";
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.make;
-			path = Makefile;
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -713,20 +704,11 @@
 		};
 		F59E6B29067D0F8400818CDC = {
 			children = (
-				F59E6B2A067D0F8400818CDC,
 				F59E6B2D067D0F8500818CDC,
 			);
 			isa = PBXGroup;
 			name = protoFILE;
 			path = ext/protoFILE;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		F59E6B2A067D0F8400818CDC = {
-			fileEncoding = "-2147483647";
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.make;
-			path = Makefile;
 			refType = 4;
 			sourceTree = "<group>";
 		};
