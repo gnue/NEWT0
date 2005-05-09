@@ -48,7 +48,7 @@ $(objdir):
 	mkdir -p $@
 
 $(NEWTEXLIB): $(LIBOBJ)
-	$(LDSHARED) $(LDIMPORT) @LIBREGEX@ -o $@ $(LIBOBJ)
+	$(LDSHARED) $(LIBOBJ) $(LDIMPORT) @LIBREGEX@ -o $@
 
 $(LIBOBJ): $(NEWTLIBNAME).c
 	$(CC) $(CFLAGS) $(INCS) -c -o $@ $(NEWTLIBNAME).c
