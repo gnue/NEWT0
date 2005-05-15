@@ -369,6 +369,28 @@ char * NewtBaseName(char * s, uint32_t len)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
+/** ソースファイルのコンパイル
+ *
+ * @param rcvr		[in] レシーバ
+ * @param r			[in] コンパイルするソースファイルのパス
+ *
+ * @return			引数 0 の関数オブジェクト
+ */
+
+newtRef NsCompileFile(newtRefArg rcvr, newtRefArg r)
+{
+    char *	fname;
+
+    if (! NewtRefIsString(r))
+        return NewtThrow(kNErrNotAString, r);
+
+    fname = NewtRefToString(r);
+
+    return NBCCompileFile(fname, true);
+}
+
+
+/*------------------------------------------------------------------------*/
 /** ライブラリのロード
  *
  * @param rcvr		[in] レシーバ
@@ -421,13 +443,8 @@ newtRef NsLoad(newtRefArg rcvr, newtRefArg r)
 {
 	newtRefVar  result = kNewtRefUnbind;
     newtRefVar	fn;
-    char *	fname;
 
-    if (! NewtRefIsString(r))
-        return NewtThrow(kNErrNotAString, r);
-
-    fname = NewtRefToString(r);
-    fn = NBCCompileFile(fname, true);
+    fn = NsCompileFile(rcvr, r);
 
     if (NewtRefIsNotNIL(fn))
         result = NVMCall(fn, 0, NULL);
