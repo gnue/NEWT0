@@ -3476,6 +3476,7 @@ void NVMInitExGlobalFns(void)
     NewtDefGlobalFunc(NSSYM(P),			NsPrintObject,		1, "P(obj)");
     NewtDefGlobalFunc(NSSYM(Print),		NsPrint,			1, "Print(obj)");
 
+    NewtDefGlobalFunc(NSSYM(CompileFile),NsCompileFile,		1, "CompileFile(file)");
     NewtDefGlobalFunc(NSSYM(LoadLib),	NsLoadLib,			1, "LoadLib(file)");
     NewtDefGlobalFunc(NSSYM(Load),		NsLoad,				1, "Load(file)");
 	NewtDefGlobalFunc(NSSYM(Require),	NsRequire,			1, "Require(str)");

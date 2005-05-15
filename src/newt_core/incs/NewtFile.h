@@ -48,6 +48,7 @@ newtRef		NewtExpandPath(const char * s);
 
 char *		NewtBaseName(char * s, uint32_t len);
 
+newtRef		NsCompileFile(newtRefArg rcvr, newtRefArg r);
 newtRef		NsLoadLib(newtRefArg rcvr, newtRefArg r);
 newtRef		NsLoad(newtRefArg rcvr, newtRefArg r);
 newtRef		NcRequire0(newtRefArg r);
