@@ -488,7 +488,7 @@ newtRef NcRequire0(newtRefArg r)
 			{NSSTR(".dll"),				typeDylib},
 */
 			{NSSTR(__DYLIBSUFFIX__),	typeDylib},
-			{NSSTR("newt"),				typeScript},
+			{NSSTR(".newt"),			typeScript},
 		};
 
 		newtRefVar  lib;
