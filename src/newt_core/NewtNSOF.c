@@ -523,6 +523,7 @@ newtErr NSOFWriteFrame(nsof_stream_t * nsof, newtRefArg r)
 
 	for (i = 0; i < numSlots; i++)
 	{
+		index = 0;
 		NewtWriteNSOF(nsof, NewtGetMapIndex(map, i, &index));
 		if (nsof->lastErr != kNErrNone) return nsof->lastErr;
 	}
@@ -708,8 +709,6 @@ newtRef NSOFReadBinary(nsof_stream_t * nsof, int type)
 	r = NewtMakeBinary(klass, nsof->data + nsof->offset, xlen, false); 
 	nsof->offset += xlen;
 
-	NcAddArraySlot(nsof->precedents, r);
-
 	return r;
 }
 
@@ -780,6 +779,8 @@ newtRef NSOFReadFrame(nsof_stream_t * nsof)
 		return NcMakeFrame();
 
 	map = NewtMakeMap(kNewtRefNIL, xlen, NULL);
+	r = NewtMakeFrame(map, xlen);
+	NcAddArraySlot(nsof->precedents, r);
 
 	slots = NewtRefToSlots(map);
 
@@ -788,9 +789,6 @@ newtRef NSOFReadFrame(nsof_stream_t * nsof)
 		slots[i] = NewtReadNSOF(nsof);
 		if (nsof->lastErr != kNErrNone) return kNewtRefUnbind;
 	}
-
-	r = NewtMakeFrame(map, xlen);
-	NcAddArraySlot(nsof->precedents, r);
 
 	slots = NewtRefToSlots(r);
 
@@ -831,8 +829,6 @@ newtRef NSOFReadSymbol(nsof_stream_t * nsof)
 	}
 
 	nsof->offset += xlen;
-
-	NcAddArraySlot(nsof->precedents, r);
 
 	return r;
 }
@@ -928,6 +924,7 @@ newtRef NewtReadNSOF(nsof_stream_t * nsof)
 		case kNSOFBinaryObject:
 		case kNSOFString:
 			r = NSOFReadBinary(nsof, type);
+			NcAddArraySlot(nsof->precedents, r);
 			break;
 
 		case kNSOFArray:
@@ -941,6 +938,7 @@ newtRef NewtReadNSOF(nsof_stream_t * nsof)
 
 		case kNSOFSymbol:
 			r = NSOFReadSymbol(nsof);
+			NcAddArraySlot(nsof->precedents, r);
 			break;
 
 		case kNSOFPrecedent:
@@ -954,11 +952,13 @@ newtRef NewtReadNSOF(nsof_stream_t * nsof)
 
 		case kNSOFSmallRect:
 			r = NSOFReadSmallRect(nsof);
+			NcAddArraySlot(nsof->precedents, r);
 			break;
 
 #ifdef __NAMED_MAGIC_POINTER__
 		case kNSOFNamedMagicPointer:
 			r = NSOFReadNamedMP(nsof);
+			NcAddArraySlot(nsof->precedents, r);
 			break;
 #endif /* __NAMED_MAGIC_POINTER__ */
 
