@@ -149,7 +149,7 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 137908235;
+			PBXPerProjectTemplateStateSaveDate = 137934611;
 			PBXPrepackagedSmartGroups_v2 = (
 				{
 					PBXTransientLocationAtTop = bottom;
@@ -828,7 +828,13 @@
 				PBXModuleWindowStatusBarHidden = YES;
 				RubberWindowFrame = "374 174 745 468 0 0 1024 746 ";
 			};
-			PBXWorkspaceStateSaveDate = 137908235;
+			PBXWorkspaceStateSaveDate = 137934611;
+		};
+		perUserProjectItems = {
+			F55100A90838B72000C35ACB = F55100A90838B72000C35ACB;
+			F55100B40838B72B00C35ACB = F55100B40838B72B00C35ACB;
+			F55100B50838B72B00C35ACB = F55100B50838B72B00C35ACB;
+			F5B230FC0838B648009D5D86 = F5B230FC0838B648009D5D86;
 		};
 		sourceControlManager = F5AFECA0055CDC00002C8506;
 		userBuildSettings = {
@@ -893,6 +899,30 @@
 			sepNavVisRect = "{{0, 0}, {601, 374}}";
 			sepNavWindowFrame = "{{404, 112}, {750, 558}}";
 		};
+	};
+	F55100A90838B72000C35ACB = {
+		fRef = F5E14ADB057984FA009742A2;
+		isa = PBXBookmark;
+	};
+	F55100B40838B72B00C35ACB = {
+		fRef = F5E14ADB057984FA009742A2;
+		isa = PBXTextBookmark;
+		name = "version.h: NEWT_BUILD";
+		rLen = 0;
+		rLoc = 528;
+		rType = 0;
+		vrLen = 1337;
+		vrLoc = 250;
+	};
+	F55100B50838B72B00C35ACB = {
+		fRef = F5ACB06A06412D4900DB6CF9;
+		isa = PBXTextBookmark;
+		name = "NewtVM.c: 3501";
+		rLen = 0;
+		rLoc = 70751;
+		rType = 0;
+		vrLen = 1460;
+		vrLoc = 69455;
 	};
 	F55860F307E09F5F0080D223 = {
 		uiCtxt = {
@@ -995,9 +1025,9 @@
 	};
 	F5ACB05706412D4900DB6CF9 = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {740, 1875}}";
-			sepNavSelRange = "{2030, 14}";
-			sepNavVisRect = "{{0, 681}, {740, 180}}";
+			sepNavIntBoundsRect = "{{0, 0}, {747, 1875}}";
+			sepNavSelRange = "{2249, 15}";
+			sepNavVisRect = "{{0, 588}, {747, 369}}";
 			sepNavWindowFrame = "{{38, 162}, {750, 558}}";
 		};
 	};
@@ -1011,9 +1041,9 @@
 	};
 	F5ACB05906412D4900DB6CF9 = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {740, 2245}}";
-			sepNavSelRange = "{2594, 7}";
-			sepNavVisRect = "{{0, 1028}, {740, 180}}";
+			sepNavIntBoundsRect = "{{0, 0}, {747, 2273}}";
+			sepNavSelRange = "{2953, 6}";
+			sepNavVisRect = "{{0, 934}, {747, 369}}";
 			sepNavWindowFrame = "{{290, 81}, {750, 558}}";
 		};
 	};
@@ -1099,10 +1129,10 @@
 	};
 	F5ACB06406412D4900DB6CF9 = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {747, 28434}}";
-			sepNavSelRange = "{2577, 17}";
-			sepNavVisRect = "{{0, 1545}, {747, 369}}";
-			sepNavWindowFrame = "{{330, 169}, {750, 558}}";
+			sepNavIntBoundsRect = "{{0, 0}, {748, 28756}}";
+			sepNavSelRange = "{39610, 0}";
+			sepNavVisRect = "{{0, 28499}, {748, 237}}";
+			sepNavWindowFrame = "{{204, 188}, {750, 558}}";
 		};
 	};
 	F5ACB06506412D4900DB6CF9 = {
@@ -1123,9 +1153,9 @@
 	};
 	F5ACB06706412D4900DB6CF9 = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {747, 56151}}";
-			sepNavSelRange = "{48478, 14}";
-			sepNavVisRect = "{{0, 34764}, {747, 369}}";
+			sepNavIntBoundsRect = "{{0, 0}, {728, 56151}}";
+			sepNavSelRange = "{66969, 41}";
+			sepNavVisRect = "{{0, 47978}, {711, 429}}";
 			sepNavWindowFrame = "{{355, 125}, {750, 558}}";
 		};
 	};
@@ -1147,10 +1177,10 @@
 	};
 	F5ACB06A06412D4900DB6CF9 = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {711, 54496}}";
-			sepNavSelRange = "{69364, 18}";
-			sepNavVisRect = "{{0, 48367}, {711, 429}}";
-			sepNavWindowFrame = "{{109, 88}, {750, 558}}";
+			sepNavIntBoundsRect = "{{0, 0}, {711, 54524}}";
+			sepNavSelRange = "{70751, 0}";
+			sepNavVisRect = "{{0, 48621}, {711, 429}}";
+			sepNavWindowFrame = "{{229, 166}, {750, 558}}";
 		};
 	};
 	F5AFEC99055CDBEC002C8506 = {
@@ -1204,6 +1234,16 @@
 	F5AFECA4055CDC21002C8506 = {
 		activeExec = 0;
 	};
+	F5B230FC0838B648009D5D86 = {
+		fRef = F5ACB06A06412D4900DB6CF9;
+		isa = PBXTextBookmark;
+		name = "NewtVM.c: 3501";
+		rLen = 0;
+		rLoc = 70751;
+		rType = 0;
+		vrLen = 1524;
+		vrLoc = 69391;
+	};
 	F5DE1345082AD4A500BB42A5 = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {711, 429}}";
@@ -1223,8 +1263,8 @@
 	F5E14ADB057984FA009742A2 = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {711, 725}}";
-			sepNavSelRange = "{240, 7}";
-			sepNavVisRect = "{{0, 0}, {711, 429}}";
+			sepNavSelRange = "{528, 0}";
+			sepNavVisRect = "{{0, 195}, {711, 429}}";
 			sepNavWindowFrame = "{{84, 120}, {750, 558}}";
 		};
 	};

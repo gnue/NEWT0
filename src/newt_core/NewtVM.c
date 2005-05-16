@@ -3497,6 +3497,8 @@ void NVMInitExGlobalFns(void)
     NewtDefGlobalFunc(NSSYM(ParamStr),	NsParamStr,			2, "ParamStr(baseString, paramStrArray)");
     NewtDefGlobalFunc(NSSYM(StrCat),	NsStrCat,			2, "StrCat(str1, str2)");
 
+    NewtDefGlobalFunc(NSSYM(ExtractByte),NsExtractByte,		2, "NsExtractByte(data, offset)");
+
     NewtDefGlobalFunc(NSSYM(Gets),		NsGets,				0, "Gets()");
 }
 
