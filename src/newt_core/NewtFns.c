@@ -2028,3 +2028,26 @@ newtRef NsGetEnv(newtRefArg rcvr, newtRefArg r)
 
     return NewtGetEnv(NewtRefToString(r));
 }
+
+
+#pragma mark -
+/*------------------------------------------------------------------------*/
+/** オフセット位置から符号付きの1バイトを取り出す。 
+ *
+ * @param rcvr		[in] レシーバ
+ * @param r			[in] バイナリオブジェクト
+ * @param offset	[in] オフセット
+ *
+ * @return			符号付きの1バイト
+ */
+
+newtRef NsExtractByte(newtRefArg rcvr, newtRefArg r, newtRefArg offset)
+{
+    if (! NewtRefIsBinary(r))
+        return NewtThrow(kNErrNotABinaryObject, r);
+
+    if (! NewtRefIsInteger(offset))
+        return NewtThrow(kNErrNotAnInteger, offset);
+
+    return NewtGetBinarySlot(r, NewtRefToInteger(offset));
+}

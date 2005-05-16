@@ -150,6 +150,8 @@ newtRef		NsDumpStacks(newtRefArg rcvr);
 newtRef		NsCompile(newtRefArg rcvr, newtRefArg r);
 newtRef		NsGetEnv(newtRefArg rcvr, newtRefArg r);
 
+newtRef		NsExtractByte(newtRefArg rcvr, newtRefArg r, newtRefArg offset);
+
 
 #ifdef __cplusplus
 }
