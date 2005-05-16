@@ -3,7 +3,7 @@
 
 global Map(obj, fn)
 begin
-	foreach slot,value in obj do call fn with (slot,value);
+	foreach slot, value in obj do call fn with (slot,value);
 end;
 
 
@@ -22,3 +22,6 @@ global GetFunctionArgCount(fn)
 begin
 	return fn.numArgs;
 end;
+
+
+true;
