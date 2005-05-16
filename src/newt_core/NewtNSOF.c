@@ -65,7 +65,7 @@ static newtRef		NSOFReadFrame(nsof_stream_t * nsof);
 static newtRef		NSOFReadSymbol(nsof_stream_t * nsof);
 static newtRef		NSOFReadNamedMP(nsof_stream_t * nsof);
 static newtRef		NSOFReadSmallRect(nsof_stream_t * nsof);
-static newtRef		NewtReadNSOF(nsof_stream_t * nsof);
+static newtRef		NSOFReadNSOF(nsof_stream_t * nsof);
 
 
 #pragma mark -
@@ -702,7 +702,7 @@ newtRef NSOFReadBinary(nsof_stream_t * nsof, int type)
 	}
 	else
 	{
-		klass = NewtReadNSOF(nsof);
+		klass = NSOFReadNSOF(nsof);
 		if (nsof->lastErr != kNErrNone) return kNewtRefUnbind;
 	}
 
@@ -732,7 +732,7 @@ newtRef NSOFReadArray(nsof_stream_t * nsof, int type)
 
 	if (type == kNSOFArray)
 	{
-		klass = NewtReadNSOF(nsof);
+		klass = NSOFReadNSOF(nsof);
 		if (nsof->lastErr != kNErrNone) return kNewtRefUnbind;
 	}
 
@@ -748,7 +748,7 @@ newtRef NSOFReadArray(nsof_stream_t * nsof, int type)
 
 		for (i = 0; i < xlen; i++)
 		{
-			slots[i] = NewtReadNSOF(nsof);
+			slots[i] = NSOFReadNSOF(nsof);
 			if (nsof->lastErr != kNErrNone) break;
 		}
 	}
@@ -786,7 +786,7 @@ newtRef NSOFReadFrame(nsof_stream_t * nsof)
 
 	for (i = 1; i <= xlen; i++)
 	{
-		slots[i] = NewtReadNSOF(nsof);
+		slots[i] = NSOFReadNSOF(nsof);
 		if (nsof->lastErr != kNErrNone) return kNewtRefUnbind;
 	}
 
@@ -794,7 +794,7 @@ newtRef NSOFReadFrame(nsof_stream_t * nsof)
 
 	for (i = 0; i < xlen; i++)
 	{
-		slots[i] = NewtReadNSOF(nsof);
+		slots[i] = NSOFReadNSOF(nsof);
 		if (nsof->lastErr != kNErrNone) break;
 	}
 
@@ -899,7 +899,7 @@ newtRef NSOFReadSmallRect(nsof_stream_t * nsof)
  * @return			オブジェクト
  */
 
-newtRef NewtReadNSOF(nsof_stream_t * nsof)
+newtRef NSOFReadNSOF(nsof_stream_t * nsof)
 {
 	newtRefVar	r = kNewtRefUnbind;
 	int32_t		xlen;
@@ -976,6 +976,30 @@ newtRef NewtReadNSOF(nsof_stream_t * nsof)
 /*------------------------------------------------------------------------*/
 /** NSOFバイナリオブジェクトを読込む
  *
+ * @param data		[in] NSOFデータ
+ * @param size		[in] NSOFデータサイズ
+ *
+ * @return			オブジェクト
+ */
+
+newtRef NewtReadNSOF(uint8_t * data, size_t size)
+{
+	nsof_stream_t	nsof;
+
+	memset(&nsof, 0, sizeof(nsof));
+
+	nsof.data = data;
+	nsof.len = size;
+	nsof.precedents = NewtMakeArray(kNewtRefUnbind, 0);
+	nsof.verno = NSOFReadByte(&nsof);
+
+	return NSOFReadNSOF(&nsof);
+}
+
+
+/*------------------------------------------------------------------------*/
+/** NSOFバイナリオブジェクトを読込む
+ *
  * @param rcvr		[in] レシーバ
  * @param r			[in] NSOFバイナリオブジェクト
  *
@@ -984,20 +1008,15 @@ newtRef NewtReadNSOF(nsof_stream_t * nsof)
 
 newtRef NsReadNSOF(newtRefArg rcvr, newtRefArg r)
 {
-	nsof_stream_t	nsof;
+	uint32_t	len;
 
     if (! NewtRefIsBinary(r))
         return NewtThrow(kNErrNotABinaryObject, r);
 
-	memset(&nsof, 0, sizeof(nsof));
-	nsof.len = NewtBinaryLength(r);
+	len = NewtBinaryLength(r);
 
-	if (nsof.len < 2)
+	if (len < 2)
         return NewtThrow(kNErrOutOfRange, r);
 
-	nsof.precedents = NewtMakeArray(kNewtRefUnbind, 0);
-	nsof.data = NewtRefToBinary(r);
-	nsof.verno = NSOFReadByte(&nsof);
-
-	return NewtReadNSOF(&nsof);
+	return NewtReadNSOF(NewtRefToBinary(r), len);
 }

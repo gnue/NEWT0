@@ -219,6 +219,8 @@
 			<key>Layout</key>
 			<array>
 				<dict>
+					<key>BecomeActive</key>
+					<true/>
 					<key>ContentConfiguration</key>
 					<dict>
 						<key>PBXBottomSmartGroupGIDs</key>
@@ -257,6 +259,7 @@
 								<string>08FB7794FE84155DC02AAC07</string>
 								<string>08FB7795FE84155DC02AAC07</string>
 								<string>F5ACB05106412D4900DB6CF9</string>
+								<string>F5ACB05206412D4900DB6CF9</string>
 								<string>1C37FBAC04509CD000000102</string>
 								<string>1C37FAAC04509CD000000102</string>
 								<string>1C37FABC05509CD000000102</string>
@@ -264,13 +267,14 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>19</integer>
+									<integer>32</integer>
+									<integer>2</integer>
 									<integer>1</integer>
 									<integer>0</integer>
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-							<string>{{0, 0}, {186, 403}}</string>
+							<string>{{0, 393}, {186, 403}}</string>
 						</dict>
 						<key>PBXTopSmartGroupGIDs</key>
 						<array/>
@@ -334,8 +338,6 @@
 							<string>0pt</string>
 						</dict>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -372,9 +374,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>F5FC889A0837B27300369EB9</string>
+				<string>F5271D11083845C70092BC90</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>F5FC889B0837B27300369EB9</string>
+				<string>F5271D12083845C70092BC90</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -728,7 +730,7 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CDD528C0622207200134675</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>NewtFns.c</string>
+										<string>NewtNSOF.h</string>
 										<key>StatusBarVisibility</key>
 										<true/>
 									</dict>
@@ -786,8 +788,8 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C530D57069F1CE1000CFCEE</string>
-				<string>F5FC88900837B25B00369EB9</string>
-				<string>F5FC88910837B25B00369EB9</string>
+				<string>F5271CEC08383C690092BC90</string>
+				<string>F5271CED08383C690092BC90</string>
 				<string>1CDD528C0622207200134675</string>
 				<string>1CD0528E0623707200166675</string>
 			</array>
@@ -889,8 +891,8 @@
 										<string>yes</string>
 										<key>sizes</key>
 										<array>
-											<string>{{0, 0}, {491, 168}}</string>
-											<string>{{0, 173}, {491, 270}}</string>
+											<string>{{0, 0}, {367, 168}}</string>
+											<string>{{0, 173}, {367, 270}}</string>
 										</array>
 									</dict>
 									<key>VerticalSplitView</key>
@@ -939,9 +941,9 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C0AD2B3069F1EA900FABCE6</string>
-				<string>F5FC88980837B26E00369EB9</string>
+				<string>F5271D0B083845BF0092BC90</string>
 				<string>1CD0528B0623707200166675</string>
-				<string>F5FC88990837B26E00369EB9</string>
+				<string>F5271D0C083845BF0092BC90</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.run</string>

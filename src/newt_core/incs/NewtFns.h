@@ -23,6 +23,7 @@
   Nc******	NewtonScript ネイティブコード（第一引数に rcvr なし、C言語から使用）
   NVM*****	VM関連
   NPS*****	パーサー関連
+  NSOF*****	NSOF関連
   Newt*****	オブジェクト関連、その他
 
 使わないように：(OBSOLETE)
