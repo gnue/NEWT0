@@ -2494,6 +2494,9 @@ newtRef NewtObjGetSlot(newtObjRef obj, newtRefArg slot)
 {
     uint32_t	i;
 
+	if (! NewtObjIsFrame(obj))
+		return kNewtRefUnbind;
+
     if (slot == NSSYM0(_proto) && ! NewtObjHasProto(obj))
         return kNewtRefUnbind;
 

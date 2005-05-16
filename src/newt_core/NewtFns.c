@@ -126,6 +126,9 @@ newtRef NcFullLookupFrame(newtRefArg start, newtRefArg name)
     newtRefVar	current;
     newtRefVar	left = start;
 
+	if (! NewtRefIsFrame(start))
+		return kNewtRefUnbind;
+
     while (NewtRefIsNotNIL(left))
     {
         current = left;
