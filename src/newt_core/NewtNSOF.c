@@ -12,6 +12,7 @@
 
 /* ヘッダファイル */
 #include <string.h>
+#include "utils/endian_utils.h"
 
 #include "NewtNSOF.h"
 #include "NewtErrs.h"
@@ -51,7 +52,7 @@ static int32_t		NSOFReadXlong(nsof_stream_t * nsof);
 static newtErr		NSOFWritePrecedent(nsof_stream_t * nsof, int32_t pos);
 static newtErr		NSOFWriteImmediate(nsof_stream_t * nsof, newtRefArg r);
 static newtErr		NSOFWriteCharacter(nsof_stream_t * nsof, newtRefArg r);
-static newtErr		NSOFWriteBinary(nsof_stream_t * nsof, newtRefArg r);
+static newtErr		NSOFWriteBinary(nsof_stream_t * nsof, newtRefArg r, uint16_t objtype);
 static newtErr		NSOFWriteSymbol(nsof_stream_t * nsof, newtRefArg r);
 static newtErr		NSOFWriteNamedMP(nsof_stream_t * nsof, newtRefArg r);
 static newtErr		NSOFWriteArray(nsof_stream_t * nsof, newtRefArg r);
@@ -340,13 +341,14 @@ newtErr NSOFWriteCharacter(nsof_stream_t * nsof, newtRefArg r)
  *
  * @param nsof		[i/o]NSOFバッファ
  * @param r			[in] バイナリオブジェクト
+ * @param objtype	[in] オブジェクトタイプ
  *
  * @return			エラーコード
  *
  * @note			nsof->data が NULL の場合は nsof->offset のみ更新される
  */
 
-newtErr NSOFWriteBinary(nsof_stream_t * nsof, newtRefArg r)
+newtErr NSOFWriteBinary(nsof_stream_t * nsof, newtRefArg r, uint16_t objtype)
 {
 	newtRefVar	klass;
 	uint32_t	size;
@@ -369,7 +371,45 @@ newtErr NSOFWriteBinary(nsof_stream_t * nsof, newtRefArg r)
 		NewtWriteNSOF(nsof, klass);
 	}
 
-	if (nsof->data) memcpy(nsof->data + nsof->offset, NewtRefToBinary(r), size);
+	if (nsof->data)
+	{
+		uint8_t *	data;
+
+		data = nsof->data + nsof->offset;
+
+		switch (objtype)
+		{
+			case kNewtInt32:
+				if (NSOFIsNOS(nsof->verno))
+				{
+					nsof->lastErr = kNErrNSOFWrite;
+				}
+				else
+				{
+					int32_t	n;
+
+					n = NewtRefToInteger(r);
+					n = htonl(n);
+					memcpy(data, (uint8_t *)&n, sizeof(n));
+				}
+				break;
+
+			case kNewtReal:
+				{
+					double	n;
+
+					n = NewtRefToReal(r);
+					n = htond(n);
+					memcpy(data, (uint8_t *)&n, sizeof(n));
+				}
+				break;
+
+			default:
+				memcpy(data, NewtRefToBinary(r), size);
+				break;
+		}
+	}
+
 	nsof->offset += size;
 
 	return nsof->lastErr;
@@ -591,9 +631,12 @@ newtErr NewtWriteNSOF(nsof_stream_t * nsof, newtRefArg r)
 
 		if (foundPrecedent < 0)
 		{
-			NcAddArraySlot(nsof->precedents, r);
+			uint16_t	objtype;
 
-			switch (NewtGetRefType(r, true))
+			NcAddArraySlot(nsof->precedents, r);
+			objtype = NewtGetRefType(r, true);
+
+			switch (objtype)
 			{
 				case kNewtArray:
 					NSOFWriteArray(nsof, r);
@@ -617,7 +660,7 @@ newtErr NewtWriteNSOF(nsof_stream_t * nsof, newtRefArg r)
 #endif /* __NAMED_MAGIC_POINTER__ */
 
 				default:
-					NSOFWriteBinary(nsof, r);
+					NSOFWriteBinary(nsof, r, objtype);
 					break;
 			}
 		}
@@ -691,8 +734,9 @@ newtRef NsMakeNSOF(newtRefArg rcvr, newtRefArg r, newtRefArg ver)
 newtRef NSOFReadBinary(nsof_stream_t * nsof, int type)
 {
 	newtRefVar	klass;
-	newtRefVar	r;
+	newtRefVar	r = kNewtRefUnbind;
 	int32_t		xlen;
+	uint8_t *	data;
 
 	xlen = NSOFReadXlong(nsof);
 
@@ -706,7 +750,36 @@ newtRef NSOFReadBinary(nsof_stream_t * nsof, int type)
 		if (nsof->lastErr != kNErrNone) return kNewtRefUnbind;
 	}
 
-	r = NewtMakeBinary(klass, nsof->data + nsof->offset, xlen, false); 
+	data = nsof->data + nsof->offset;
+
+	if (klass == NSSYM0(int32))
+	{
+		if (NSOFIsNOS(nsof->verno))
+		{
+			nsof->lastErr = kNErrNSOFRead;
+		}
+		else
+		{
+			int32_t	n;
+
+			memcpy(&n, data, sizeof(n));
+			n = ntohl(n);
+			r= NewtMakeInteger(n);
+		}
+	}
+	else if (klass == NSSYM0(real))
+	{
+		double	n;
+
+		memcpy(&n, data, sizeof(n));
+		n = ntohd(n);
+		r= NewtMakeReal(n);
+	}
+	else
+	{
+		r = NewtMakeBinary(klass, data, xlen, false);
+	}
+
 	nsof->offset += xlen;
 
 	return r;

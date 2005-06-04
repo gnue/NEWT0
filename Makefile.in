@@ -4,6 +4,7 @@ DEBUG = # -g
 srcdir = ./src
 build = ./build
 ext = ./ext
+utils = $(srcdir)/utils
 parser = $(srcdir)/parser
 core = $(srcdir)/newt_core
 objdir = $(build)/obj
@@ -34,6 +35,8 @@ NEWT          = $(build)/newt$(EXEEXT)
 
 MAINOBJ       = $(objdir)/main.o
 
+UTILSOBJS     = $(objdir)/endian_utils.o
+
 COREOBJS      = $(objdir)/NewtBC.o \
                 $(objdir)/NewtEnv.o \
                 $(objdir)/NewtFile.o \
@@ -52,8 +55,8 @@ PARSEROBJS    = $(yytmp)/y.tab.o \
                 $(yytmp)/lex.yy.o \
                 $(objdir)/lookup_words.o
 
-NEWTLIBS	  = $(ext)/protoFILE \
-				$(ext)/protoREGEX
+NEWTLIBS      = $(ext)/protoFILE \
+                $(ext)/protoREGEX
 
 
 ######
@@ -83,8 +86,8 @@ $(yytmp):
 
 newt: $(build) $(objdir) $(yytmp) $(NEWT) $(LDIMPORT)
 
-$(NEWT): $(MAINOBJ) $(PARSEROBJS) $(COREOBJS)
-	$(CC) $(LDFLAGS) $(LIBS) $(MAINOBJ) $(PARSEROBJS) $(COREOBJS) $(LIBS) -o $@
+$(NEWT): $(MAINOBJ) $(UTILSOBJS) $(PARSEROBJS) $(COREOBJS)
+	$(CC) $(LDFLAGS) $(LIBS) $(MAINOBJ) $(UTILSOBJS) $(PARSEROBJS) $(COREOBJS) $(LIBS) -o $@
 
 
 
@@ -92,6 +95,12 @@ $(NEWT): $(MAINOBJ) $(PARSEROBJS) $(COREOBJS)
 
 $(MAINOBJ): $(srcdir)/main.c $(srcdir)/version.h
 	$(CC) $(CFLAGS) $(INCS) -c -o $@ $(srcdir)/main.c
+
+
+### UTILITIES
+
+$(objdir)/endian_utils.o: $(utils)/endian_utils.c $(utils)/endian_utils.h
+	$(CC) $(CFLAGS) $(INCS) -c -o $@ $(utils)/endian_utils.c
 
 
 ### PARSER
