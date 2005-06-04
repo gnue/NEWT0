@@ -1069,19 +1069,40 @@ bool NewtRefIsNativeFunc(newtRefArg r)
 
 bool NewtRefIsFunction(newtRefArg r)
 {
+	return (NewtRefFunctionType(r) != kNewtNotFunction);
+}
+
+
+/*------------------------------------------------------------------------*/
+/** 関数オブジェクトのタイプを取得する
+ *
+ * @param r			[in] オブジェクト
+ *
+ * @retval			kNewtNotFunction	関数オブジェクトでない
+ * @retval			kNewtCodeBlock		バイトコード関数
+ * @retval			kNewtNativeFn		ネイティブ関数（rcvrなし、Old Style）
+ * @retval			kNewtNativeFunc		ネイティブ関数（rcvrあり、New Style）
+ */
+
+int NewtRefFunctionType(newtRefArg r)
+{
     if (NewtRefIsFrame(r))
     {
         newtRefVar	klass;
 
         klass = NcClassOf(r);
 
-        if (NewtRefEqual(klass, NSSYM0(CodeBlock)) ||
-            NewtRefEqual(klass, NSSYM0(_function.native0)) ||
-            NewtRefEqual(klass, NSSYM0(_function.native)))
-            return true;
+        if (NewtRefEqual(klass, NSSYM0(CodeBlock)))
+			return kNewtCodeBlock;
+
+		if (NewtRefEqual(klass, NSSYM0(_function.native0)))
+			return kNewtNativeFn;
+
+		if (NewtRefEqual(klass, NSSYM0(_function.native)))
+			return kNewtNativeFunc;
     }
 
-    return false;
+    return kNewtNotFunction;
 }
 
 
