@@ -93,6 +93,16 @@
 #define NewtDefGlobalFunc(sym, funcPtr, numArgs, doc)	NewtDefGlobalFunc0(sym, funcPtr, numArgs, false, doc)	
 
 
+/* 定数 */
+
+enum {
+	kNewtNotFunction			= 0,
+	kNewtCodeBlock,						// バイトコード関数
+	kNewtNativeFn,						// ネイティブ関数（rcvrなし、old style）
+	kNewtNativeFunc						// ネイティブ関数（rcvrあり、new style）
+};
+
+
 /* 型宣言 */
 
 /// 拡張ライブラリのインストール用エントリ関数
@@ -142,6 +152,7 @@ bool		NewtRefIsCodeBlock(newtRefArg r);
 bool		NewtRefIsNativeFn(newtRefArg r);
 bool		NewtRefIsNativeFunc(newtRefArg r);
 bool		NewtRefIsFunction(newtRefArg r);
+int			NewtRefFunctionType(newtRefArg r);
 bool		NewtRefIsRegex(newtRefArg r);
 void *		NewtRefToAddress(newtRefArg r);
 

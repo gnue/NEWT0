@@ -1641,6 +1641,7 @@ void NVMCallNativeFunc(newtRefArg fn, newtRefArg rcvr, int16_t numArgs)
 void NVMFuncCall(newtRefArg fn, int16_t numArgs)
 {
     newtErr	err;
+	int		type;
 
     // 1. 関数オブジェクトでなければ例外を発生
     // 2. 引数の数が一致さなければ WrongNumberOfArgs 例外を発生
@@ -1653,29 +1654,29 @@ void NVMFuncCall(newtRefArg fn, int16_t numArgs)
         return;
     }
 
-    if (NewtRefIsNativeFn(fn))
-    {	// ネイティブ関数（rcvrなし）の呼出し
-    	// Save CALLSP to know if an exception occurred.
-    	uint32_t saveCALLSP;
-		reg_save(SP - numArgs + 1);
-		FUNC = fn;
-		saveCALLSP = CALLSP;
-        NVMCallNativeFn(fn, numArgs);
-        if (saveCALLSP == CALLSP)
-        {
-			reg_pop();
-		}
-        return;
-    }
+	type = NewtRefFunctionType(fn);
 
-    if (NewtRefIsNativeFunc(fn))
-    {	// ネイティブ関数（rcvrあり）の呼出し
+    if (type == kNewtNativeFn || type == kNewtNativeFunc)
+    {	// ネイティブ関数の呼出し
     	// Save CALLSP to know if an exception occurred.
     	uint32_t saveCALLSP;
 		reg_save(SP - numArgs + 1);
 		FUNC = fn;
 		saveCALLSP = CALLSP;
-        NVMCallNativeFunc(fn, kNewtRefUnbind, numArgs);
+
+		switch (type)
+		{
+			case kNewtNativeFn:
+				// rcvrなし(old style)
+				NVMCallNativeFn(fn, numArgs);
+				break;
+
+			case kNewtNativeFunc:
+				// rcvrあり(new style)
+				NVMCallNativeFunc(fn, kNewtRefUnbind, numArgs);
+				break;
+		}
+
         if (saveCALLSP == CALLSP)
         {
 			reg_pop();
@@ -1718,6 +1719,7 @@ void NVMFuncCall(newtRefArg fn, int16_t numArgs)
 void NVMMessageSend(newtRefArg impl, newtRefArg receiver, newtRefArg fn, int16_t numArgs)
 {
     newtErr	err;
+	int		type;
 
     // 1. メソッドが関数オブジェクトでなければ例外を発生
     // 2. 引数の数が一致さなければ WrongNumberOfArgs 例外を発生
@@ -1730,25 +1732,10 @@ void NVMMessageSend(newtRefArg impl, newtRefArg receiver, newtRefArg fn, int16_t
         return;
     }
 
-    if (NewtRefIsNativeFn(fn))
-    {	// ネイティブ関数（rcvrなし）の呼出し
-    	// Save CALLSP to know if an exception occurred.
-    	uint32_t saveCALLSP;
-		reg_save(SP - numArgs + 1);
-		FUNC = fn;
-		RCVR = receiver;
-		IMPL = impl;
-		saveCALLSP = CALLSP;
-        NVMCallNativeFn(fn, numArgs);
-        if (saveCALLSP == CALLSP)
-        {
-			reg_pop();
-		}
-        return;
-    }
+	type = NewtRefFunctionType(fn);
 
-    if (NewtRefIsNativeFunc(fn))
-    {	// ネイティブ関数（rcvrあり）の呼出し
+    if (type == kNewtNativeFn || type == kNewtNativeFunc)
+    {	// ネイティブ関数の呼出し
     	// Save CALLSP to know if an exception occurred.
     	uint32_t saveCALLSP;
 		reg_save(SP - numArgs + 1);
@@ -1756,9 +1743,22 @@ void NVMMessageSend(newtRefArg impl, newtRefArg receiver, newtRefArg fn, int16_t
 		RCVR = receiver;
 		IMPL = impl;
 		saveCALLSP = CALLSP;
-        NVMCallNativeFunc(fn, receiver, numArgs);
-        if (saveCALLSP == CALLSP)
-        {
+
+		switch (type)
+		{
+			case kNewtNativeFn:
+				// rcvrなし(old style)
+				NVMCallNativeFn(fn, numArgs);
+				break;
+
+			case kNewtNativeFunc:
+				// rcvrあり(new style)
+				NVMCallNativeFunc(fn, receiver, numArgs);
+				break;
+		}
+
+		if (saveCALLSP == CALLSP)
+		{
 			reg_pop();
 		}
         return;
