@@ -1,0 +1,118 @@
+#!newt
+
+Require("NativeCalls");
+
+// This is an example for the NativeCalls interface.
+// Cf README file for more details and documentation.
+
+begin
+	// In this example, we'll access three functions of libc, one
+	// of libm and four of libcurses.
+	// (you therefore need libc, libm and libcurses for it to work).
+
+	local libc := OpenNativeLibrary("libc");
+	libc:DefineGlobalFn({
+		name: "gethostname",
+		symbol: '|libc.gethostname|,
+		args: ['string, 'sint32],
+		result: 'sint32});
+	libc:DefineGlobalFn({
+		name: "socket",
+		symbol: '|libc.socket|,
+		args: ['sint32, 'sint32, 'sint32],
+		result: 'sint32});
+	libc:DefineGlobalFn({
+		name: "close",
+		symbol: '|libc.close|,
+		args: ['sint32],
+		result: 'sint32});
+
+	local libm := OpenNativeLibrary("libm");
+	libm:DefineGlobalFn({
+		name: "cos",
+		symbol: '|libm.cos|,
+		args: ['double],
+		result: 'double});
+
+	local libcurses := OpenNativeLibrary("libcurses");
+	libcurses:DefineGlobalFn({
+		name: "initscr",
+		symbol: '|libcurses.initscr|,
+		args: [],
+		result: 'pointer});
+	libcurses:DefineGlobalFn({
+		name: "cbreak",
+		symbol: '|libcurses.cbreak|,
+		args: [],
+		result: 'sint32});
+	libcurses:DefineGlobalFn({
+		name: "noecho",
+		symbol: '|libcurses.noecho|,
+		args: [],
+		result: 'sint32});
+	libcurses:DefineGlobalFn({
+		name: "flash",
+		symbol: '|libcurses.flash|,
+		args: [],
+		result: 'sint32});
+	libcurses:DefineGlobalFn({
+		name: "endwin",
+		symbol: '|libcurses.endwin|,
+		args: [],
+		result: 'sint32});
+
+	// strings aren't in unicode??
+	local hostname := MakeBinary(256, 'string);
+
+	// Get the hostname using gethostname.
+	local result := |libc.gethostname|(hostname, Length(hostname));
+
+	if (result = 0) then
+		Print("hostname: " & hostname & "\n")
+	else
+		Print("gethostname returned an error (" & GetErrno() & ")\n");
+
+	// Open a socket.
+	constant AF_INET := 2;
+	constant SOCK_STREAM := 1;
+	constant PF_UNSPEC := 0;
+	local socket := |libc.socket|(AF_INET, SOCK_STREAM, PF_UNSPEC);
+
+	if (socket < 0)
+	then begin
+		Print("socket returned an error (" & GetErrno() & ")\n");
+	end else begin
+		// To bind the socket, I need to support structures.
+		// ...
+		Print("socket fd: " & socket & "\n");
+
+		// Close the socket.
+		result := |libc.close|(socket);
+		
+		if (result < 0) then
+		begin
+			Print("close returned an error (" & errno & ")\n");
+		end;
+	end;
+
+	Print("Cos 0.0 is:\n");
+	Print(|libm.cos|(0.0));
+	Print("\n");
+
+	// init ncurses
+	|libcurses.initscr|();
+	|libcurses.noecho|();
+	|libcurses.cbreak|();
+	
+	// flash
+	|libcurses.flash|();
+	
+	// end of ncurses
+	|libcurses.endwin|();
+
+	libm:Close();
+	libc:Close();
+	libcurses:Close();
+
+	return nil;
+end;

@@ -1,0 +1,100 @@
+#!newt
+
+Require("NewtObjC");
+Require("NativeCalls");
+
+// This is an example for the NewtObjC interface.
+// Cf README file for documentation.
+
+begin
+	local MyResponder :=
+		CreateObjCClass(
+			{
+				name: "MyResponder",
+				super: "NSResponder",
+				instanceMethods:
+					{
+						someAction_: func(inObject)
+							begin
+								Print("someAction_(a "
+									& inObject:class():description() & ")\n");
+								Print("self.slotX is " & self.slotX & "\n");
+							end,
+						description: func()
+							begin
+								Print("being asked for the description\n");
+								return "I'm just a" && inherited:description();
+							end,
+					},
+//				classMethods: nil,
+				instanceVariables:
+					[
+						{
+							name: "foo",
+							type: kObjCOutletType
+						}
+					],
+//				classVariables: nil
+			});
+
+	local NSCalendarDate := GetObjCClass("NSCalendarDate");
+	foreach s, v in NSCalendarDate._proto._proto._proto do
+		Print( s & "\n" );
+	local theDate := NSCalendarDate:calendarDate();
+	local theDescription := theDate:description();
+	Print(theDescription & "\n");
+
+	local someResponder := MyResponder:new();
+
+	// The following calls the method directly.
+	someResponder.slotX := "direct call";
+	someResponder:someAction_(theDate);
+	// This calls the method via ObjC.
+	someResponder.slotX := "call via objc";
+	someResponder:performSelector_withObject_('someAction_, theDate);
+
+	// Test of the inherited:? call.
+	Print(someResponder:description() & "\n");
+	Print(someResponder:performSelector_('description) & "\n");
+	Print(someResponder:performSelector_withObject_('performSelector_, 'description) & "\n");
+
+	// Test of some structures.
+	local NSMutableArray := GetObjCClass("NSMutableArray");
+	local myNSArray := NSMutableArray:arrayWithCapacity_(5);
+	myNSArray:insertObject_atIndex_(theDate, 0);
+	myNSArray:insertObject_atIndex_(theDescription, 1);
+	myNSArray:insertObject_atIndex_(someResponder, 2);
+	myNSArray:insertObject_atIndex_(theDate, 3);
+	myNSArray:insertObject_atIndex_(someResponder, 4);
+	Print( "First occurence of theDate : " & myNSArray:indexOfObject_(theDate) & "\n");
+	Print( "Second occurence of theDate : " & myNSArray:indexOfObject_inRange_(theDate, {location: 2, length: 2}) & "\n");
+
+	local NSSound := GetObjCClass("NSSound");
+
+	// The sound is played asynchronously, so I need to wait.
+	// I'll use libc's sleep for that purpose.
+	local libc := OpenNativeLibrary("libc");
+	libc:DefineGlobalFn({
+		name: "sleep",
+		symbol: '|libc.sleep|,
+		args: ['uint32],
+		result: 'uint32});
+	
+	local playSound := func (inName)
+	begin
+		local theSound := NSSound:soundNamed_(inName);
+		theSound:play();
+
+		repeat
+			|libc.sleep|(1);
+		until (theSound:isPlaying() <> kObjCFalse);
+	end;
+	
+	call playSound with ("Submarine");
+	call playSound with ("Sosumi");
+	call playSound with ("Funk");
+	
+	libc:Close();
+
+	return nil;
+end;
