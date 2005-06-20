@@ -1,0 +1,213 @@
+README for NewtObjC
+
+Introduction
+------------
+NewtObjC is a bridge to call ObjC code from NEWT/0.
+It is authored by Paul Guyot and licensed under the MIT license.
+It requires objc-runtime-x.dylib (put both dylibs next to newt binary).
+
+Definitions
+-----------
+This library defines the following global functions:
+
+CreateObjCClass
+GetObjCClass
+NSLog
+NSApplicationMain
+
+It also defines the following global constants:
+kObjCTrue (equal to chr(1))
+kObjCFalse (equal to chr(0))
+kObjCOutletType
+kObjCActionFuncType
+
+Everything else should be considered private.
+
+Usage
+-----
+NewtObjC is used by adding Require("NewtObjC") to your NEWT/0 script.
+You can then call the global functions.
+
+Basics: getting an ObjC class and sending messages
+--------------------------------------------------
+
+GetObjCClass lets you access a Cocoa class. This is probably the first function
+to invoke.
+
+Example:
+
+local NSCalendarDate := GetObjCClass("NSCalendarDate");
+
+This function returns nil or a frame representing the class.
+You can send invoke class methods by sending messages to the frame.
+
+Example:
+
+local theDate := NSCalendarDate:calendarDate();
+
+The result is another Cocoa object. You can also send messages to it, the way
+you normally do with NewtonScript objects.
+
+Example:
+
+local theDescription := theDate:description();
+
+Cocoa methods selectors include colons (:) (to separate arguments). With
+NewtObjC, the colons are replaced by underscores (_) and reciprocally, would a
+method include an underscore, you could call it by replacing it with a colon.
+
+Example:
+
+local NSSound := GetObjCClass("NSSound");
+local submarineSound := NSSound:soundNamed_("Submarine");
+submarineSound:play();
+
+In the previous example, NewtonScript strings are used instead of NSStrings.
+They are indeed bridged. Likewise, symbols are converted to selectors when
+appropriate and reciprocally, selectors are converted to strings.
+
+Definining a new ObjC class
+---------------------------
+
+You can define a new ObjC class with CreateObjCClass global function.
+This function takes a single parameter which is a definition frame.
+The frame has the following slots:
+
+name				Required. The name of the class to create.
+super				Required. The name of the super class.
+instanceMethods		Optional. Frame of instance methods.
+classMethods		Optional. Frame of class methods.
+instanceVariables	Optional. Array of instance variables.
+classVariables		Optional. Array of instance variables.
+
+By default, methods have the same signature as the super class method, if they
+are overridden, or have one of the default types if they are not, depending
+on the number of parameters. You can define the actual type of the method by
+adding a slot to the method frame, objc_type. The value of this slot (a string)
+is used directly to define the type. Action functions are of type
+kObjCActionFuncType. The table below lists the default types.
+
+# parameters	signature						type
+0 parameter		id foo							"@8@0:4"
+1 parameter		void foo:(id)					"v12@0:4@8" (kObjCActionFuncTypeStr)
+2 parameters	id foo:(id)bar:(id)				"@16@0:4@8@12"
+3 parameters	id foo:(id)bar:(id)foobar:(id)	"@24@0:4@8@12@16"
+
+Variable definitions (instanceVariables and classVariables) are arrays of
+frames. The name slot of the frame defines the name of the variable (it is a
+string), the type slot defines the type. Outlets (in fact, any id) have type
+kObjCOutletType.
+
+Example:
+	local MyResponder :=
+		CreateObjCClass(
+			{
+				name: "MyResponder",
+				super: "NSResponder",
+				instanceMethods:
+					{
+						someAction_: func(inObject)
+							begin
+								// self is the instance
+								Print("self.slotX");
+							end,
+						description: func()
+							begin
+								return "I'm just a" && inherited:description();
+							end,
+					},
+				instanceVariables:
+					[
+						{
+							name: "foo",
+							type: kObjCOutletType
+						}
+					],
+			});
+
+You can access instance variables with the following methods (of ObjC Classes/
+Objects):
+
+InstanceVariableExists(name)
+GetInstanceVariable(name)
+
+Example:
+
+local someResponder := MyResponder:new();
+someResponder:GetInstanceVariable("foo"); // returns nil because foo wasn't set
+someResponder:InstanceVariableExists("foo"); // returns true
+
+You can access slots of instances from instance methods (and of classes from
+class methods).
+
+Example:
+
+someResponder.slotX := "foobar";
+someResponder:someAction_(nil);
+someResponder:performSelector_withObject_('someAction_, someResponder);
+
+super methods can be called with the inherited keyword.
+
+Creating a Cocoa Application
+----------------------------
+
+Thanks to NewtObjC, you can create a full Cocoa application entirely coded in
+NewtonScript. Cf NEWT0CurrencyConverter example.
+
+Limitations
+-----------
+
+The current version has some limitations, including:
+- you cannot change instance/class variables
+- you cannot declare that a class conforms to a protocol
+- NSLog doesn't handle additional parameters
+- only (some) Foundation structures are handled yet, and not everywhere.
+- NewtonScript-defined ObjC class methods cannot return doubles/floats.
+
+Change History
+--------------
+2005/06/18
+- fixed an issue with Tiger by better parsing method arrays.
+
+2005/03/25
+- conversion of exceptions
+- fixed a bug in sending parameters to NS implementations.
+- NS objects are now represented by a Cocoa object (that might one day get
+  dealloc calls).
+
+2005/03/20
+- conversion of selectors and strings
+- made inherited calls to work.
+- NewtonScript method return values are now cast to ObjC (except floats, doubles
+  and structures).
+- limited support for Foundation structures (NSRect, NSRange, NSSize, NSPoint).
+
+2005/03/16
+- one can now call super (inherited) methods (actually doesn't work yet)
+- calling a NewtonScript method of a NewtonScript-defined ObjC class no longer
+  goes through ObjC.
+- arguments of methods called from ObjC code are now parsed properly.
+- fixed a bug that prevented one to override a method, causing a wrong number
+  of argument error to be thrown.
+- instances of NewtonScript defined classes returned by ObjC code have a single
+  NewtonScript frame associated with them.
+- selectors are now cast as NewtonScript symbols and reciprocally.
+- one can now derive classes with specialized init method (i.e. init no longer
+  is the place where the mapping between NewtonScript and ObjC is done).
+- sample code was updated to reflect this change.
+
+2005/03/14		Creation of the documentation.
+
+License
+-------
+NewtObjC is copyright 2005 by Paul Guyot.
+
+The use of binaries and source code is subject to the Mozilla Public License
+Version 1.1 (the "License"); you may not use NewtObjC except in compliance
+with the License. You may obtain a copy of the License at
+http://www.mozilla.org/MPL/
+
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+for the specific language governing rights and limitations under the
+License.

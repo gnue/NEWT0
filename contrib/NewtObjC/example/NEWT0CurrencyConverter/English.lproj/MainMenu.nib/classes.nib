@@ -1,0 +1,13 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {convert = id; }; 
+            CLASS = ConverterController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {euroField = id; rateField = id; yenField = id; }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }
+    ); 
+    IBVersion = 1; 
+}

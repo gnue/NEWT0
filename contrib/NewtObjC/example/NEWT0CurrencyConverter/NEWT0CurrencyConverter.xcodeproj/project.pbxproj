@@ -1,0 +1,294 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
+		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
+		DA6E8B3B07E57943007F101D /* newt in CopyFiles */ = {isa = PBXBuildFile; fileRef = DA6E8B3407E5791F007F101D /* newt */; };
+		DA6E8B3C07E57943007F101D /* NewtObjC.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = DA6E8B3507E5791F007F101D /* NewtObjC.dylib */; };
+		DA6E8B3D07E57943007F101D /* NEWT0CurrencyConverter.newt in CopyFiles */ = {isa = PBXBuildFile; fileRef = DA6E8B2807E578BF007F101D /* NEWT0CurrencyConverter.newt */; };
+		DA6E8B5707E57C9C007F101D /* NEWT0AppRuntime.sh in CopyFiles */ = {isa = PBXBuildFile; fileRef = DA6E8B5407E57C4A007F101D /* NEWT0AppRuntime.sh */; };
+		DA73137C07ED7FD700CF5354 /* objc-runtime-x.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = DA73137907ED7F8100CF5354 /* objc-runtime-x.dylib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXBuildStyle section */
+		4A9504CCFFE6A4B311CA0CBA /* Development */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		4A9504CDFFE6A4B311CA0CBA /* Deployment */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+/* End PBXBuildStyle section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		DA6E8B3A07E57931007F101D /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 6;
+			files = (
+				DA73137C07ED7FD700CF5354 /* objc-runtime-x.dylib in CopyFiles */,
+				DA6E8B3B07E57943007F101D /* newt in CopyFiles */,
+				DA6E8B3C07E57943007F101D /* NewtObjC.dylib in CopyFiles */,
+				DA6E8B5707E57C9C007F101D /* NEWT0AppRuntime.sh in CopyFiles */,
+				DA6E8B3D07E57943007F101D /* NEWT0CurrencyConverter.newt in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		29B97319FDCFA39411CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
+		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		8D1107320486CEB800E47090 /* NEWT0CurrencyConverter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NEWT0CurrencyConverter.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA6E8B2807E578BF007F101D /* NEWT0CurrencyConverter.newt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = NEWT0CurrencyConverter.newt; sourceTree = "<group>"; };
+		DA6E8B3407E5791F007F101D /* newt */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = newt; sourceTree = "<group>"; };
+		DA6E8B3507E5791F007F101D /* NewtObjC.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.bundle"; path = NewtObjC.dylib; sourceTree = "<group>"; };
+		DA6E8B5407E57C4A007F101D /* NEWT0AppRuntime.sh */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.sh; path = NEWT0AppRuntime.sh; sourceTree = "<group>"; };
+		DA73137907ED7F8100CF5354 /* objc-runtime-x.dylib */ = {isa = PBXFileReference; explicitFileType = file; path = "objc-runtime-x.dylib"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8D11072E0486CEB800E47090 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		19C28FACFE9D520D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8D1107320486CEB800E47090 /* NEWT0CurrencyConverter.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		29B97314FDCFA39411CA2CEA /* NEWT0CurrencyConverter */ = {
+			isa = PBXGroup;
+			children = (
+				DA6E8B2707E578B3007F101D /* Sources */,
+				29B97317FDCFA39411CA2CEA /* Resources */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
+			);
+			name = NEWT0CurrencyConverter;
+			sourceTree = "<group>";
+		};
+		29B97317FDCFA39411CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				8D1107310486CEB800E47090 /* Info.plist */,
+				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
+				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		DA6E8B2707E578B3007F101D /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				DA6E8B3307E5790C007F101D /* NEWT/0 Runtime */,
+				DA6E8B2807E578BF007F101D /* NEWT0CurrencyConverter.newt */,
+				DA6E8B5407E57C4A007F101D /* NEWT0AppRuntime.sh */,
+			);
+			name = Sources;
+			sourceTree = "<group>";
+		};
+		DA6E8B2C07E578C4007F101D /* build */ = {
+			isa = PBXGroup;
+			children = (
+				DA73137907ED7F8100CF5354 /* objc-runtime-x.dylib */,
+				DA6E8B3407E5791F007F101D /* newt */,
+				DA6E8B3507E5791F007F101D /* NewtObjC.dylib */,
+			);
+			name = build;
+			sourceTree = "<group>";
+		};
+		DA6E8B3307E5790C007F101D /* NEWT/0 Runtime */ = {
+			isa = PBXGroup;
+			children = (
+				DA6E8B2C07E578C4007F101D /* build */,
+			);
+			name = "NEWT/0 Runtime";
+			path = /Users/paul/Projets/Unix/NEWT0/build;
+			sourceTree = "<absolute>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8D1107260486CEB800E47090 /* NEWT0CurrencyConverter */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DAD393AF0863DDEE00A77FBE /* Build configuration list for PBXNativeTarget "NEWT0CurrencyConverter" */;
+			buildPhases = (
+				8D1107290486CEB800E47090 /* Resources */,
+				8D11072C0486CEB800E47090 /* Sources */,
+				8D11072E0486CEB800E47090 /* Frameworks */,
+				DA6E8B3A07E57931007F101D /* CopyFiles */,
+				DA6E8B4207E57952007F101D /* ShellScript */,
+			);
+			buildRules = (
+			);
+			buildSettings = {
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = NEWT0CurrencyConverter_Prefix.pch;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = /Users/paul/Projets/Unix/NEWT0/build;
+				PRODUCT_NAME = NEWT0CurrencyConverter;
+				WRAPPER_EXTENSION = app;
+			};
+			dependencies = (
+			);
+			name = NEWT0CurrencyConverter;
+			productInstallPath = "$(HOME)/Applications";
+			productName = NEWT0CurrencyConverter;
+			productReference = 8D1107320486CEB800E47090 /* NEWT0CurrencyConverter.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = DAD393B30863DDEE00A77FBE /* Build configuration list for PBXProject "NEWT0CurrencyConverter" */;
+			buildSettings = {
+			};
+			buildStyles = (
+				4A9504CCFFE6A4B311CA0CBA /* Development */,
+				4A9504CDFFE6A4B311CA0CBA /* Deployment */,
+			);
+			hasScannedForEncodings = 1;
+			mainGroup = 29B97314FDCFA39411CA2CEA /* NEWT0CurrencyConverter */;
+			projectDirPath = "";
+			targets = (
+				8D1107260486CEB800E47090 /* NEWT0CurrencyConverter */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8D1107290486CEB800E47090 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */,
+				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		DA6E8B4207E57952007F101D /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "# Rename the runtime script and make it executable.\n# (the magic here is that the runtime script with .newt suffix is the name of the NEWT/0 script).\nSCRIPTNAME=NEWT0CurrencyConverter\nSCRIPTPATH=$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/MacOS/\nmv $SCRIPTPATH/NEWT0AppRuntime.sh $SCRIPTPATH/$SCRIPTNAME && chmod +x $SCRIPTPATH/$SCRIPTNAME\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8D11072C0486CEB800E47090 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		089C165CFE840E0CC02AAC07 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				089C165DFE840E0CC02AAC07 /* English */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		29B97318FDCFA39411CA2CEA /* MainMenu.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				29B97319FDCFA39411CA2CEA /* English */,
+			);
+			name = MainMenu.nib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		DAD393B20863DDEE00A77FBE /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = NEWT0CurrencyConverter_Prefix.pch;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = /Users/paul/Projets/Unix/NEWT0/build;
+				PRODUCT_NAME = NEWT0CurrencyConverter;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Default;
+		};
+		DAD393B60863DDEE00A77FBE /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Default;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		DAD393AF0863DDEE00A77FBE /* Build configuration list for PBXNativeTarget "NEWT0CurrencyConverter" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DAD393B20863DDEE00A77FBE /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		DAD393B30863DDEE00A77FBE /* Build configuration list for PBXProject "NEWT0CurrencyConverter" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DAD393B60863DDEE00A77FBE /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}

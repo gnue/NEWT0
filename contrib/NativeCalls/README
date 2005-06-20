@@ -1,0 +1,149 @@
+README for NativeCalls
+
+Introduction
+------------
+NativeCalls is a library to call native functions from NEWT/0 programs.
+It is authored by Paul Guyot and licensed under the MIT license.
+
+Compiling
+---------
+NativeCalls can be compiled using GNU Make and libffi.
+It was compiled with libffi-20030921 available from the pyobjc project.
+http://prdownloads.sourceforge.net/pyobjc/libffi-src-20030921.tar.gz?download
+
+By default, NativeCalls considers that libffi is in /opt/local (as installed
+by DarwinPorts). You can select another location with LIBFFI_PREFIX variable.
+For example, if libffi was installed with --prefix=/home/pguyot/unix, you can
+compile NativeCalls with:
+make LIBFFI_PREFIX=/home/pguyot/unix
+
+Opening a library
+-----------------
+NativeCalls defines a global function called OpenNativeLibrary. It returns an
+object that can further be used to define native functions.
+
+OpenNativeLibrary takes a single argument which is the name of the native
+library to open. If you would link your native code with -lFOO, you need to
+pass libFOO to OpenNativeLibrary.
+
+OpenNativeLibrary is based on dlopen(3). It has an algorithm that makes it
+working as expected on Linux (where ld.so(8) has a different behavior than
+dlopen(3)) and on platforms where dlopen isn't problematic:
+
+If the library name is not an absolute path, OpenNativeLibrary will try to get
+the library with dlopen(3) in the following order:
+/lib/<name>
+/lib/<name><suffix>
+/lib/<name><suffix><anything>
+/usr/lib/<name>
+/usr/lib/<name><suffix>
+/usr/lib/<name><suffix><anything>
+<name>
+<name><suffix>
+
+If the library name is an absolute path, it will only try:
+<name>
+<name><suffix>
+
+<suffix> is the suffix for native libraries (as provided by the DYLIBSUFFIX
+variable on compilation). It is the suffix of NativeLibrary shared library
+itself.
+
+Example:
+local libc := OpenNativeLibrary("libc");
+local libcurses := OpenNativeLibrary("libcurses");
+
+Defining and calling global functions
+-------------------------------------
+Once you have open a native library, you can define functions it includes as
+NewtonScript native functions and then call them.
+
+To define a native function, call the DefineGlobalFn method of the library
+object. This method takes a single argument which is a specification frame for
+the native function to define.
+
+This frame has the following slots:
+name	the name of the native function (a string), as passed to dlsym(3). If
+		you want to call a function with a mangled name (e.g. a C++ function),
+		pass the mangled name.
+symbol	the symbol of the NewtonScript function that will be defined. This
+		should not conflict with another global function already defined.
+		This symbol can be omitted, in which case name will be used.
+args	an array of symbols representing the types of the function, from left
+		to right in C syntax.
+result	a symbol representing the type of the result.
+
+The number of arguments and the types are extremely important as a mistake will
+yield to a crash.
+The following list summarizes the supported types:
+
+Type		Newton type			ffi type
+'void		nil					ffi_type_void			not available for params
+'uint8		int					ffi_type_uint8
+'sint8		int					ffi_type_sint8
+'uint16		int					ffi_type_uint16
+'sint16		int					ffi_type_sint16
+'uint32		int (or binary)		ffi_type_uint32
+'sint32		int (or binary)		ffi_type_sint32
+'uint64		int (or binary)		ffi_type_uint64
+'sint64		int (or binary)		ffi_type_sint64
+'float		real				ffi_type_float
+'double		real				ffi_type_double
+'longdouble	real				ffi_type_longdouble
+'string		string				ffi_type_pointer
+'binary		binary				ffi_type_pointer		not available for result
+'pointer	int	or binary		ffi_type_pointer
+
+Remark: structures and some types aren't available yet.
+
+DefineGlobalFn method will throw an exception if a global function with the
+symbol you want already exists or if the function doesn't exist in the library.
+
+Example:
+libm:DefineGlobalFn({
+	name: "cos",
+	symbol: '|libm.cos|,
+	args: ['double],
+	result: 'double});
+
+|libm.cos|(0.0);
+
+Closing libraries
+-----------------
+You can close native libraries with the :Close() method. This undefines all the
+native function imported from the library.
+
+Example:
+libm:Close();
+
+errno
+-----
+Many native functions set errno. errno is said to be like a global variable,
+but on modern system, it rather is a function. To access errno, NativeCalls
+defines a global function called GetErrno() that returns the value of errno
+(an integer).
+
+Limitations
+-----------
+
+The current version has many limitations, including:
+- some types aren't handled as documented
+- structures aren't handled
+
+Change History
+--------------
+2005/03/16		Creation of the documentation.
+
+License
+-------
+NativeCalls is copyright 2005 by Paul Guyot.
+
+The use of binaries and source code is subject to the Mozilla Public License
+Version 1.1 (the "License"); you may not use NewtObjC except in compliance
+with the License. You may obtain a copy of the License at
+http://www.mozilla.org/MPL/
+
+Software distributed under the License is distributed on an "AS IS" basis,
+WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+for the specific language governing rights and limitations under the
+License.

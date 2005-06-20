@@ -1,0 +1,93 @@
+#!newt
+// ==============================
+// Fichier:			currencyconverter.newt
+// Projet:			(NEWT/0 NewtObjC Sample code)
+// Ecrit par:		Paul Guyot (pguyot@kallisys.net)
+// 
+// Cr��éé le:			13/3/2005
+// Tabulation:		4 espaces
+// 
+// ***** BEGIN LICENSE BLOCK *****
+// Version: MPL 1.1
+// 
+// The contents of this file are subject to the Mozilla Public License Version
+// 1.1 (the "License"); you may not use this file except in compliance with
+// the License. You may obtain a copy of the License at
+// http://www.mozilla.org/MPL/
+// 
+// Software distributed under the License is distributed on an "AS IS" basis,
+// WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+// for the specific language governing rights and limitations under the
+// License.
+// 
+// The Original Code is currencyconverter.newt.
+// 
+// The Initial Developer of the Original Code is Paul Guyot.
+// Portions created by the Initial Developer are Copyright (C) 2005 the
+// Initial Developer. All Rights Reserved.
+// 
+// Contributor(s):
+//   Paul Guyot <pguyot@kallisys.net> (original author)
+// 
+// ***** END LICENSE BLOCK *****
+// ===========
+// $Id$
+// ===========
+
+// we need NewtObjC
+Require("NewtObjC");
+
+// create a new class (ConverterController) matching what was defined in
+// InterfaceBuilder
+begin
+	local CurrencyConverter :=
+		CreateObjCClass(
+			{
+				name: "ConverterController",
+				super: "NSObject",
+				instanceMethods:
+					{
+						convert_: func(inObject)
+							begin
+								// Multiply yenField = rateField * euroField
+								local rateField := :GetInstanceVariable("rateField");
+								local euroField := :GetInstanceVariable("euroField");
+								local yenField := :GetInstanceVariable("yenField");
+
+								yenField:setFloatValue_(
+									(
+										euroField:floatValue()
+										* rateField:floatValue()
+									));
+							end,
+						awakeFromNib: func()
+							begin
+								local rateField := :GetInstanceVariable("rateField");
+								rateField:window():makeKeyAndOrderFront_(self);
+								rateField:selectText_(self);
+							end
+					},
+				instanceVariables:
+					[
+						{
+							name: "rateField",
+							type: kObjCOutletType
+						},
+						{
+							name: "euroField",
+							type: kObjCOutletType
+						},
+						{
+							name: "yenField",
+							type: kObjCOutletType
+						}
+					]
+			});
+
+	// Start the Cocoa event loop.
+	NSApplicationMain(_ARGV_);
+end
+
+// ============================================================= //
+// C++ is the best example of second-system effect since OS/360. //
+// ============================================================= //
