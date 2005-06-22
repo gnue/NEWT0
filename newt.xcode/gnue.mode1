@@ -268,8 +268,7 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>41</integer>
-									<integer>5</integer>
+									<integer>48</integer>
 									<integer>1</integer>
 									<integer>0</integer>
 								</array>
@@ -294,7 +293,7 @@
 							<real>186</real>
 						</array>
 						<key>RubberWindowFrame</key>
-						<string>130 166 815 565 0 0 1024 746 </string>
+						<string>271 135 815 565 0 0 1024 746 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -312,7 +311,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>NewtVM.c</string>
+								<string>NewtObj.h</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -320,29 +319,19 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>NewtVM.c</string>
+										<string>NewtObj.h</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>F5497A350852162400D86A6E</string>
+										<string>F5F9B42108696A5D006C7E5E</string>
 										<key>history</key>
 										<array>
-											<string>F5771E4F085213E10044A04D</string>
-											<string>F5771E50085213E10044A04D</string>
-											<string>F50FDA670852144600393B81</string>
-											<string>F5497A1C0852158C00D86A6E</string>
-											<string>F5497A310852162400D86A6E</string>
-											<string>F5497A320852162400D86A6E</string>
+											<string>F5F9B41E08696A5D006C7E5E</string>
+											<string>F5F9B41F08696A5D006C7E5E</string>
 										</array>
 										<key>prevStack</key>
 										<array>
-											<string>F5771E53085213E10044A04D</string>
-											<string>F5771E54085213E10044A04D</string>
-											<string>F5771E55085213E10044A04D</string>
-											<string>F5771E56085213E10044A04D</string>
-											<string>F50FDA690852144600393B81</string>
-											<string>F5497A330852162400D86A6E</string>
-											<string>F5497A340852162400D86A6E</string>
+											<string>F5F9B42008696A5D006C7E5E</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -356,7 +345,7 @@
 								<key>Frame</key>
 								<string>{{0, 0}, {607, 429}}</string>
 								<key>RubberWindowFrame</key>
-								<string>130 166 815 565 0 0 1024 746 </string>
+								<string>271 135 815 565 0 0 1024 746 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
@@ -376,7 +365,7 @@
 								<key>Frame</key>
 								<string>{{0, 434}, {607, 90}}</string>
 								<key>RubberWindowFrame</key>
-								<string>130 166 815 565 0 0 1024 746 </string>
+								<string>271 135 815 565 0 0 1024 746 </string>
 							</dict>
 							<key>Module</key>
 							<string>XCDetailModule</string>
@@ -400,9 +389,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>F5497A360852162400D86A6E</string>
+				<string>F5F9B40D086969C9006C7E5E</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>F5497A370852162400D86A6E</string>
+				<string>F5F9B40E086969C9006C7E5E</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -536,12 +525,12 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>1C0AD2B3069F1EA900FABCE6</string>
 		<string>F55FF12C083848EC006E6FFF</string>
-		<string>/Volumes/Pawn/User/Development/Newt/NEWT0/newt.xcode</string>
+		<string>1C0AD2B3069F1EA900FABCE6</string>
+		<string>/Users/gnue/Desktop/NEWT0/newt.xcode</string>
 	</array>
 	<key>WindowString</key>
-	<string>130 166 815 565 0 0 1024 746 </string>
+	<string>271 135 815 565 0 0 1024 746 </string>
 	<key>WindowTools</key>
 	<array>
 		<dict>
@@ -917,8 +906,8 @@
 										<string>yes</string>
 										<key>sizes</key>
 										<array>
-											<string>{{0, 0}, {493, 168}}</string>
-											<string>{{0, 173}, {493, 270}}</string>
+											<string>{{0, 0}, {367, 168}}</string>
+											<string>{{0, 173}, {367, 270}}</string>
 										</array>
 									</dict>
 									<key>VerticalSplitView</key>
@@ -967,9 +956,9 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1C0AD2B3069F1EA900FABCE6</string>
-				<string>F5497A2F0852161E00D86A6E</string>
+				<string>F5F9B411086969F0006C7E5E</string>
 				<string>1CD0528B0623707200166675</string>
-				<string>F5497A300852161E00D86A6E</string>
+				<string>F5F9B412086969F0006C7E5E</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.run</string>
@@ -1052,7 +1041,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>F55FF12C083848EC006E6FFF</string>
-				<string>F5497A2C0852161800D86A6E</string>
+				<string>F5F9B41D08696A56006C7E5E</string>
 				<string>1C78EAB2065D492600B07095</string>
 				<string>1CD052920623707200166675</string>
 			</array>

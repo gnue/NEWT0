@@ -26,15 +26,15 @@
 
 #define NewtRefIsInt30(r)			((r & 3) == 0)						///< 30bit整数オブジェクトか？
 #define	NewtRefToInt30(r)			(int32_t)((int32_t)r >> 2)			///< オブジェクトを 30bit整数に変換
-#define	NewtMakeInt30(v)			(newtRef)((int32_t)v << 2)			///< 30bit整数オブジェクトを作成
+#define	NewtMakeInt30(v)			(newtRef)((int32_t)(v) << 2)		///< 30bit整数オブジェクトを作成
 
 #define	NewtRefIsPointer(r)			((r & 3) == 1)						///< ポインタオブジェクトか？
 #define	NewtRefToPointer(r)			(newtObjRef)((uint32_t)r - 1)		///< オブジェクト参照をポインタに変換
-#define	NewtMakePointer(v)			(newtRef)((uint32_t)v + 1)			///< ポインタオブジェクトを作成
+#define	NewtMakePointer(v)			(newtRef)((uint32_t)(v) + 1)		///< ポインタオブジェクトを作成
 
 #define	NewtRefIsCharacter(r)		((r & 0xF) == 6)					///< 文字オブジェクトか？
-#define	NewtRefToCharacter(r)		(int)(((uint32_t)r >> 4) & 0xFFFF)  ///< オブジェクト参照を文字に変換
-#define	NewtMakeCharacter(v)		(newtRef)(((uint32_t)v << 4) | 6)   ///< 文字オブジェクトを作成
+#define	NewtRefToCharacter(r)		(int)(((uint32_t)r >> 4) & 0xFFFF)	///< オブジェクト参照を文字に変換
+#define	NewtMakeCharacter(v)		(newtRef)(((uint32_t)(v) << 4) | 6)	///< 文字オブジェクトを作成
 
 #define	NewtRefIsSpecial(r)			((r & 0xF) == 2)					///< 特殊オブジェクトか？
 #define	NewtRefToSpecial(r)			(int32_t)((uint32_t)r >> 2)			///< オブジェクト参照を特殊値に変換
