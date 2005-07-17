@@ -197,7 +197,7 @@
 			<key>ChosenToolbarItems</key>
 			<array>
 				<string>active-target-popup</string>
-				<string>action</string>
+				<string>active-buildstyle-popup</string>
 				<string>NSToolbarFlexibleSpaceItem</string>
 				<string>buildOrClean</string>
 				<string>build-and-runOrDebug</string>
@@ -367,9 +367,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>F5A1C521082C3C6D006F0B48</string>
+				<string>F59B846C0867E55200683824</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>F5A1C522082C3C6D006F0B48</string>
+				<string>F59B846D0867E55200683824</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -503,7 +503,7 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>/Users/gnue/Desktop/NEWT0/ext.xcode</string>
+		<string>/Volumes/Pawn/User/Development/Newt/NEWT0/ext.xcode</string>
 	</array>
 	<key>WindowString</key>
 	<string>138 150 690 397 0 0 1024 746 </string>

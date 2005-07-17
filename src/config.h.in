@@ -18,6 +18,8 @@
 #undef HAVE_INTTYPES_H
 #undef HAVE_STDINT_H
 
+#undef HAVE_LIBICONV
+
 #undef __PLATFORM__
 #undef __DYLIBSUFFIX__
 

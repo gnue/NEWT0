@@ -40,7 +40,7 @@ newt_sym_t	newt_sym;		///< よく使うシンボルの保管場所
 
 
 /* 関数プロトタイプ */
-char *	replacechr(char * str, char srch, char repl);
+static char *	replacechr(char * str, char srch, char repl);
 
 static void		NewtInitSYM(void);
 static void		NewtInitSysEnv(void);
@@ -70,6 +70,31 @@ char * replacechr(char * str, char src, char dest)
 	}
 
 	return str;
+}
+
+
+#pragma mark -
+/*------------------------------------------------------------------------*/
+/** 環境変数からデフォルトエンコーディングを取得
+ *
+ * @return			デフォルトエンコーディング（文字列）
+ */
+
+char * NewtDefaultEncoding(void)
+{
+	char *	encoding = NULL;
+	char *	lang;
+
+	lang = (char *)getenv("LANG");
+	if (! lang) lang = (char *)getenv("LC_ALL");
+	if (lang) encoding = strchr(lang, '.');
+
+	if (encoding)
+		encoding++;
+	else
+		encoding = NEWT_DEFAULT_ENCODING;
+
+	return encoding;
 }
 
 

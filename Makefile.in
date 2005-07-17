@@ -21,14 +21,14 @@ LIBS = @LIBS@
 DLEXT = @DLEXT@
 EXEEXT = @EXEEXT@
 LDIMPORT = @NEWT_LDIMPORT@
-LDFLAGS = $(DEBUG) -O2 @NEWT_LDFLAGS@
+LDFLAGS = $(DEBUG) -O2 @LDFLAGS@ @NEWT_LDFLAGS@
 LDSHARED = @LIBNEWT_LDSHARED@
 
 
 VPATH = $(core)
-INCS = -I. -I$(srcdir) -I$(core)/incs -I$(srcdir)/parser -I$(yytmp)
 STRIP = strip -x
 CFLAGS = $(DEBUG) $(DEFS) -O2 -pipe
+CPPFLAGS = -I. -I$(srcdir) -I$(core)/incs -I$(srcdir)/parser -I$(yytmp) @CPPFLAGS@
 
 
 NEWT          = $(build)/newt$(EXEEXT)
@@ -62,7 +62,7 @@ NEWTLIBS      = $(ext)/protoFILE \
 ######
 
 .c.o:
-	$(CC) $(CFLAGS) $(INCS) -c -o $@ $<
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<
 
 
 ### all
@@ -94,13 +94,13 @@ $(NEWT): $(MAINOBJ) $(UTILSOBJS) $(PARSEROBJS) $(COREOBJS)
 ### MAIN
 
 $(MAINOBJ): $(srcdir)/main.c $(srcdir)/version.h
-	$(CC) $(CFLAGS) $(INCS) -c -o $@ $(srcdir)/main.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $(srcdir)/main.c
 
 
 ### UTILITIES
 
 $(objdir)/endian_utils.o: $(utils)/endian_utils.c $(utils)/endian_utils.h
-	$(CC) $(CFLAGS) $(INCS) -c -o $@ $(utils)/endian_utils.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $(utils)/endian_utils.c
 
 
 ### PARSER
@@ -112,13 +112,13 @@ $(yytmp)/lex.yy.c: $(parser)/newt.l $(yytmp)/y.tab.h
 	$(LEX) -o$@ $(parser)/newt.l
 
 $(objdir)/lookup_words.o: $(parser)/lookup_words.c $(parser)/lookup_words.h
-	$(CC) $(CFLAGS) $(INCS) -c -o $@ $(parser)/lookup_words.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $(parser)/lookup_words.c
 
 
 ### CORE
 
 $(COREOBJS)::
-	$(CC) $(CFLAGS) $(INCS) -c -o $@ $(core)/$(*F).c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $(core)/$(*F).c
 
 
 ### ext

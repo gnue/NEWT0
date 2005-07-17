@@ -226,6 +226,7 @@ extern "C" {
 #endif
 
 
+char *		NewtDefaultEncoding(void);
 void		NewtInit(int argc, const char * argv[], int n);
 void		NewtCleanup(void);
 

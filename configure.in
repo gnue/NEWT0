@@ -11,7 +11,33 @@ AC_PROG_CC
 AC_PROG_YACC
 AC_PROG_LEX
 
+
+#
+AC_CANONICAL_SYSTEM
+
+case "$target_os" in
+  freebsd*)
+	export LDFLAGS=-L/usr/local/lib
+	export CPPFLAGS=-I/usr/local/include
+    ;;
+esac
+
+
 # Checks for libraries.
+#AC_CHECK_LIB(iconv, iconv_open)
+
+SAVE_LIBS="$LIBS"
+LIBS="$LIBS -liconv"
+AC_TRY_LINK([
+	#include <stdlib.h>
+	#include <iconv.h>
+	], [
+	iconv_t	cd = iconv_open("", "");
+	iconv(cd, NULL, NULL, NULL, NULL);
+	iconv_close(cd);
+	],
+	AC_DEFINE(HAVE_LIBICONV),
+	LIBS="$SAVE_LIBS")
 
 # Checks for header files.
 AC_HEADER_STDC
@@ -30,9 +56,8 @@ AC_FUNC_VPRINTF
 AC_CHECK_FUNCS([getcwd memchr memmove memset regcomp strcasecmp strchr strdup strncasecmp])
 
 
-AC_CANONICAL_SYSTEM
-
-
+#
+# AC_CANONICAL_SYSTEM
 
 case "$target_os" in
   darwin*)
