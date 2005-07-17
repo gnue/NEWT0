@@ -19,6 +19,8 @@
 #define HAVE_INTTYPES_H 1
 #define HAVE_STDINT_H 1
 
+#define HAVE_LIBICONV 1
+
 #define __PLATFORM__ "darwin"
 #define __DYLIBSUFFIX__ ".dylib"
 

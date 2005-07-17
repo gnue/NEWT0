@@ -138,7 +138,7 @@
 				LIBRARY_SEARCH_PATHS = "";
 				LIBRARY_STYLE = STATIC;
 				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
+				OTHER_LDFLAGS = "-liconv";
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = newt;
@@ -189,6 +189,7 @@
 				F57E7A0D07FD362400256511,
 				F5DE1346082AD4A500BB42A5,
 				F503AC6D0851DFD9009BA497,
+				F5547417088A7486001E9DDF,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -213,6 +214,7 @@
 				F55860F407E09F5F0080D223,
 				F57E7A1407FD365100256511,
 				F503AC6C0851DFD9009BA497,
+				F554741D088A750B001E9DDF,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -453,6 +455,34 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
+		F5547416088A7486001E9DDF = {
+			fileEncoding = "-2147483647";
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			path = NewtIconv.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5547417088A7486001E9DDF = {
+			fileRef = F5547416088A7486001E9DDF;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F554741C088A750B001E9DDF = {
+			fileEncoding = "-2147483647";
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			path = NewtIconv.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F554741D088A750B001E9DDF = {
+			fileRef = F554741C088A750B001E9DDF;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		F55860F307E09F5F0080D223 = {
 			fileEncoding = "-2147483647";
 			isa = PBXFileReference;
@@ -588,6 +618,7 @@
 				F5ACB06306412D4900DB6CF9,
 				F5ACB06406412D4900DB6CF9,
 				F5ACB06506412D4900DB6CF9,
+				F554741C088A750B001E9DDF,
 				F53BCC6C0670CDBD0013103E,
 				F5ACB06606412D4900DB6CF9,
 				F57E7A1307FD365100256511,
@@ -616,6 +647,7 @@
 				F5ACB05806412D4900DB6CF9,
 				F5ACB05906412D4900DB6CF9,
 				F5ACB05A06412D4900DB6CF9,
+				F5547416088A7486001E9DDF,
 				F53BCC700670CDF00013103E,
 				F55A5AF70726499E002A520F,
 				F5ACB05B06412D4900DB6CF9,

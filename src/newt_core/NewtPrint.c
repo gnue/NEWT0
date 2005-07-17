@@ -363,10 +363,10 @@ void NIOPrintObjCharacter(newtStream_t * f, newtRefArg r)
 
 	if (s != NULL)
 		NIOFputs(s, f);
+	else if (0xff00 & c)
+		NIOFprintf(f, "\\u%04x", c);
 	else if (isprint(c))
 		NIOFputc(c, f);
-	else if (0xff < c)
-		NIOFprintf(f, "\\u%04x", c);
 	else
 		NIOFprintf(f, "\\%02x", c);
 }

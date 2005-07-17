@@ -41,6 +41,9 @@
 // lex
 #define	NEWT_LEX_LINEBUFFSIZE	500				///< 字句解析の行バッファサイズ
 
+// text encoding
+#define NEWT_DEFAULT_ENCODING	"UTF-8"			///< デフォルトエンコーディング
+
 
 // for old style compatible
 //#define __USE_OBSOLETE_STYLE__
