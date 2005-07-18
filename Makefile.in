@@ -42,6 +42,7 @@ COREOBJS      = $(objdir)/NewtBC.o \
                 $(objdir)/NewtFile.o \
                 $(objdir)/NewtFns.o \
                 $(objdir)/NewtGC.o \
+                $(objdir)/NewtIconv.o \
                 $(objdir)/NewtIO.o \
                 $(objdir)/NewtMem.o \
                 $(objdir)/NewtNSOF.o \
