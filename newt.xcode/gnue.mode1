@@ -323,7 +323,7 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>F55475AD088A83B6001E9DDF</string>
+										<string>F5602EB5088A86E40034033E</string>
 										<key>history</key>
 										<array>
 											<string>F5547480088A7A9B001E9DDF</string>
@@ -340,50 +340,22 @@
 											<string>F5547567088A81DE001E9DDF</string>
 											<string>F554759F088A8347001E9DDF</string>
 											<string>F55475AA088A83B6001E9DDF</string>
-											<string>F55475AB088A83B6001E9DDF</string>
+											<string>F521E958088A8667006E0C15</string>
 										</array>
 										<key>prevStack</key>
 										<array>
 											<string>F5547487088A7A9B001E9DDF</string>
 											<string>F5547488088A7A9B001E9DDF</string>
-											<string>F5547489088A7A9B001E9DDF</string>
-											<string>F554748A088A7A9B001E9DDF</string>
 											<string>F554748B088A7A9B001E9DDF</string>
-											<string>F554748C088A7A9B001E9DDF</string>
-											<string>F554748D088A7A9B001E9DDF</string>
-											<string>F554748E088A7A9B001E9DDF</string>
 											<string>F554748F088A7A9B001E9DDF</string>
-											<string>F5547490088A7A9B001E9DDF</string>
-											<string>F5547491088A7A9B001E9DDF</string>
 											<string>F5547492088A7A9B001E9DDF</string>
 											<string>F5547493088A7A9B001E9DDF</string>
 											<string>F5547494088A7A9B001E9DDF</string>
-											<string>F5547495088A7A9B001E9DDF</string>
-											<string>F5547496088A7A9B001E9DDF</string>
-											<string>F5547497088A7A9B001E9DDF</string>
-											<string>F5547498088A7A9B001E9DDF</string>
-											<string>F5547499088A7A9B001E9DDF</string>
-											<string>F554749A088A7A9B001E9DDF</string>
-											<string>F554750F088A7E98001E9DDF</string>
-											<string>F5547510088A7E98001E9DDF</string>
-											<string>F5547511088A7E98001E9DDF</string>
-											<string>F5547512088A7E98001E9DDF</string>
-											<string>F5547513088A7E98001E9DDF</string>
-											<string>F5547514088A7E98001E9DDF</string>
 											<string>F5547515088A7E98001E9DDF</string>
 											<string>F5547516088A7E98001E9DDF</string>
-											<string>F5547517088A7E98001E9DDF</string>
-											<string>F5547518088A7E98001E9DDF</string>
 											<string>F5547519088A7E98001E9DDF</string>
-											<string>F554751A088A7E98001E9DDF</string>
-											<string>F5547569088A81DE001E9DDF</string>
-											<string>F554756A088A81DE001E9DDF</string>
-											<string>F554756B088A81DE001E9DDF</string>
-											<string>F554756C088A81DE001E9DDF</string>
 											<string>F554756D088A81DE001E9DDF</string>
-											<string>F554756E088A81DE001E9DDF</string>
 											<string>F55475A0088A8347001E9DDF</string>
-											<string>F55475AC088A83B6001E9DDF</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -441,9 +413,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>F5547414088A746F001E9DDF</string>
+				<string>F5602EB3088A86E10034033E</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>F5547415088A746F001E9DDF</string>
+				<string>F5602EB4088A86E10034033E</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -577,9 +549,6 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>F5AE5683082409020043A79D</string>
-		<string>1C530D57069F1CE1000CFCEE</string>
-		<string>1C0AD2B3069F1EA900FABCE6</string>
 		<string>/Volumes/Pawn/User/Development/Newt/NEWT0/newt.xcode</string>
 	</array>
 	<key>WindowString</key>
