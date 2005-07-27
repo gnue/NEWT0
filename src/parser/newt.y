@@ -136,20 +136,20 @@ and or			論理AND, 論理OR				→
 :=				代入							←
 */
 
-%right		<op>	kASNOP		// 代入							←
-%left		<op>	kANDOP		// 論理AND, 論理OR				→
-%left		<op>	kNOTOP		// 論理否定						→
-%left		<op>	kRELOP		// 比較							→
-%left		<op>	kEXISTS		// 変数・スロットの存在確認			なし
-%left		<op>	kSTROP		// 文字列合成、文字列スペース入り合成	→
-%left		<op>	kADDOP		// 加算、減算						→
-%left		<op>	kMULOP		// 乗算、除算、整数除算、余り			→
-%left		<op>	kSFTOP		// 左シフト右シフト					→
-%nonassoc			kUMINUS		// 単項マイナス					→
-%left				'[' ']'		// 配列要素						→
-%left		<op>	kSNDOP		// (条件付)メッセージ送信			→
+%right		<op>	kASNOP			// 代入							←
+%left		<op>	kANDOP, kOROP	// 論理AND, 論理OR				→
+%left		<op>	kNOTOP			// 論理否定						→
+%left		<op>	kRELOP			// 比較							→
+%left		<op>	kEXISTS			// 変数・スロットの存在確認			なし
+%left		<op>	kSTROP			// 文字列合成、文字列スペース入り合成	→
+%left		<op>	kADDOP			// 加算、減算						→
+%left		<op>	kMULOP			// 乗算、除算、整数除算、余り			→
+%left		<op>	kSFTOP			// 左シフト右シフト					→
+%nonassoc			kUMINUS			// 単項マイナス					→
+%left				'[' ']'			// 配列要素						→
+%left		<op>	kSNDOP			// (条件付)メッセージ送信			→
 					':'
-%left				'.'			// スロットアクセス					→
+%left				'.'				// スロットアクセス					→
 
     /* 括弧 */
 
@@ -217,12 +217,13 @@ lvalue
 
 simple_expr
 		// binary_operator
-		: expr kADDOP expr   { $$ = NPSGenOP2($2, $1, $3); }
-		| expr kMULOP expr   { $$ = NPSGenOP2($2, $1, $3); }
-		| expr kSFTOP expr   { $$ = NPSGenOP2($2, $1, $3); }
-		| expr kRELOP expr   { $$ = NPSGenOP2($2, $1, $3); }
-		| expr kANDOP expr   { $$ = NPSGenOP2($2, $1, $3); }
-		| expr kSTROP expr   { $$ = NPSGenOP2($2, $1, $3); }
+		: expr kADDOP expr	{ $$ = NPSGenOP2($2, $1, $3); }
+		| expr kMULOP expr	{ $$ = NPSGenOP2($2, $1, $3); }
+		| expr kSFTOP expr	{ $$ = NPSGenOP2($2, $1, $3); }
+		| expr kRELOP expr	{ $$ = NPSGenOP2($2, $1, $3); }
+		| expr kANDOP expr	{ $$ = NPSGenNode2(kNPSAnd, $1, $3); }
+		| expr kOROP expr	{ $$ = NPSGenNode2(kNPSOr, $1, $3); }
+		| expr kSTROP expr	{ $$ = NPSGenOP2($2, $1, $3); }
 
 		// unary_operator
 		| kADDOP expr %prec kUMINUS

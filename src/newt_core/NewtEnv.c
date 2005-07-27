@@ -40,7 +40,7 @@ newt_sym_t	newt_sym;		///< よく使うシンボルの保管場所
 
 
 /* 関数プロトタイプ */
-static char *	replacechr(char * str, char srch, char repl);
+char *	replacechr(char * str, char srch, char repl);
 
 static void		NewtInitSYM(void);
 static void		NewtInitSysEnv(void);
@@ -153,8 +153,8 @@ void NewtInitSYM(void)
     INITSYM(hasVar);
     INITSYM(defGlobalFn);
     INITSYM(defGlobalVar);
-    INITSYM(and);
-    INITSYM(or);
+//    INITSYM(and);
+//    INITSYM(or);
     INITSYM(mod);
     INITSYM(shiftLeft);
     INITSYM(shiftRight);

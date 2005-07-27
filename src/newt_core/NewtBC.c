@@ -141,6 +141,8 @@ static int16_t			NBCGenTryPre(nps_syntax_node_t * stree, nps_node_t r);
 static int16_t			NBCGenTryPost(nps_syntax_node_t * stree, nps_node_t r, uint32_t * onexcpspP);
 static void				NBCGenTry(nps_syntax_node_t * stree, nps_node_t expr, nps_node_t onexception_list);
 static void				NBCGenIfThenElse(nps_syntax_node_t * stree, nps_node_t cond, nps_node_t thenelse, bool ret);
+static void				NBCGenAnd(nps_syntax_node_t * stree, nps_node_t op1, nps_node_t op2);
+static void				NBCGenOr(nps_syntax_node_t * stree, nps_node_t op1, nps_node_t op2);
 static void				NBCGenLoop(nps_syntax_node_t * stree, nps_node_t expr);
 static newtRef			NBCMakeTempSymbol(newtRefArg index, newtRefArg val, char * s);
 static void				NBCGenFor(nps_syntax_node_t * stree, nps_node_t r, nps_node_t expr);
@@ -1299,6 +1301,81 @@ void NBCGenIfThenElse(nps_syntax_node_t * stree, nps_node_t cond,
 
 
 /*------------------------------------------------------------------------*/
+/** 論理AND のバイトコードを生成する
+ *
+ * @param stree		[in] 構文木
+ * @param code		[in] 構文コード（kNPSAnd or kNPSOr）
+ * @param op1		[in] オペランド１の構文木ノード
+ * @param op2		[in] オペランド２の構文木ノード
+ *
+ * @return			なし
+ */
+
+void NBCGenAnd(nps_syntax_node_t * stree, nps_node_t op1, nps_node_t op2)
+{
+    uint32_t	cx1;
+    uint32_t	cx2;
+
+	// オペランド１
+    NBCGenBC_op(stree, op1);
+
+	// NIL なら分岐
+    cx1 = NBCGenBranch(kNBCBranchIfFalse);
+
+    // オペランド２
+    NBCGenBC_op(stree, op2);
+	// 式の最後へ分岐
+    cx2 = NBCGenBranch(kNBCBranch);
+
+	// 戻り値をプッシュ
+	NBCBackPatch(cx1, CX);		// 分岐をバックパッチ
+    NBCGenPUSH(kNewtRefNIL);	// 戻り値は NIL
+
+	// 式の最後
+	NBCBackPatch(cx2, CX);		// 分岐をバックパッチ
+}
+
+
+/*------------------------------------------------------------------------*/
+/** 論理OR のバイトコードを生成する
+ *
+ * @param stree		[in] 構文木
+ * @param op1		[in] オペランド１の構文木ノード
+ * @param op2		[in] オペランド２の構文木ノード
+ *
+ * @return			なし
+ */
+
+void NBCGenOr(nps_syntax_node_t * stree, nps_node_t op1, nps_node_t op2)
+{
+    uint32_t	cx1;
+    uint32_t	cx2;
+
+	// オペランド１
+    NBCGenBC_op(stree, op1);
+
+	// TRUE なら分岐
+    cx1 = NBCGenBranch(kNBCBranchIfTrue);
+
+    // オペランド２
+    NBCGenBC_op(stree, op2);
+	// 式の最後へ分岐
+    cx2 = NBCGenBranch(kNBCBranch);
+
+	// 戻り値をプッシュ
+	NBCBackPatch(cx1, CX);		// 分岐をバックパッチ
+
+	if (NPSRefIsSyntaxNode(op1))
+		NBCGenPUSH(kNewtRefTRUE);
+	else
+		NBCGenPUSH(op1);
+
+	// 式の最後
+	NBCBackPatch(cx2, CX);		// 分岐をバックパッチ
+}
+
+
+/*------------------------------------------------------------------------*/
 /** LOOP文のバイトコードを生成する
  *
  * @param stree		[in] 構文木
@@ -2217,12 +2294,12 @@ void NBCGenSyntaxCode(nps_syntax_node_t * stree, nps_syntax_node_t * node, bool 
             break;
 
         case kNPSAnd:
-            NBCGenFunc2(stree, NSSYM0(and), node->op1, node->op2);
+            NBCGenAnd(stree, node->op1, node->op2);
             NVCGenNoResult(ret);
             break;
 
         case kNPSOr:
-            NBCGenFunc2(stree, NSSYM0(or), node->op1, node->op2);
+            NBCGenOr(stree, node->op1, node->op2);
             NVCGenNoResult(ret);
             break;
 
