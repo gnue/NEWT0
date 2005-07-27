@@ -147,8 +147,8 @@ typedef struct {
     newtRefVar	hasVar;				///< hasVar
     newtRefVar	defGlobalFn;		///< defGlobalFn
     newtRefVar	defGlobalVar;		///< defGlobalVar
-    newtRefVar	and;				///< and
-    newtRefVar	or;					///< or
+//    newtRefVar	and;				///< and
+//    newtRefVar	or;					///< or
     newtRefVar	mod;				///< mod
     newtRefVar	shiftLeft;			///< <<
     newtRefVar	shiftRight;			///< >>

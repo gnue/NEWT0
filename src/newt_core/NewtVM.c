@@ -3386,8 +3386,8 @@ void NVMInitGlobalFns0(void)
     NewtDefGlobalFunc(NSSYM0(hasVar),		NsHasVar,			1, "HasVar(name)");
     NewtDefGlobalFunc(NSSYM0(defGlobalFn),	NsDefGlobalFn,		2, "DefGlobalFn(name, fn)");
     NewtDefGlobalFunc(NSSYM0(defGlobalVar),	NsDefGlobalVar,		2, "DefGlobalVar(name, value)");
-    NewtDefGlobalFunc(NSSYM0(and),			NsAnd,				2, "And(n1, n2)");
-    NewtDefGlobalFunc(NSSYM0(or),			NsOr,				2, "Or(n1, n2)");
+//    NewtDefGlobalFunc(NSSYM0(and),			NsAnd,				2, "And(n1, n2)");
+//    NewtDefGlobalFunc(NSSYM0(or),			NsOr,				2, "Or(n1, n2)");
     NewtDefGlobalFunc(NSSYM0(mod),			NsMod,				2, "Mod(n1, n2)");
     NewtDefGlobalFunc(NSSYM0(shiftLeft),	NsShiftLeft,		2, "ShiftLeft(n1, n2)");
     NewtDefGlobalFunc(NSSYM0(shiftRight),	NsShiftRight,		2, "ShiftRight(n1, n2)");

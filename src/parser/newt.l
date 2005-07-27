@@ -230,7 +230,7 @@ static keyword_t	reserved_words[] = {
         {"NIL",			kNIL},
         {"NOT",			kNOTOP},		// —\–ñŒê
         {"ONEXCEPTION",	kONEXCEPTION},	// —\–ñŒê
-        {"OR",			kANDOP},		// —\–ñŒê
+        {"OR",			kOROP},			// —\–ñŒê
         {"REPEAT",		kREPEAT},		// —\–ñŒê
         {"RETURN",		kRETURN},		// —\–ñŒê
         {"SELF",		kSELF},			// —\–ñŒê
@@ -506,13 +506,6 @@ int lex_reserveword(int tokn, char *s)
                 yylval.op = kNPS_DIV;
             else if (strcasecmp(s, "mod") == 0)
                 yylval.op = kNPS_MOD;
-            break;
-
-        case kANDOP:
-            if (strcasecmp(s, "and") == 0)
-                yylval.op = kNPS_AND;
-            else if (strcasecmp(s, "or") == 0)
-                yylval.op = kNPS_OR;
             break;
 
         case kNOTOP:

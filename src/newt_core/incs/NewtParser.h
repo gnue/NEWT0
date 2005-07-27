@@ -42,8 +42,6 @@
 /// オペレータコード
 enum {
 	kNPS_NOT				= 256,  ///< not
-	kNPS_AND,						///< and
-	kNPS_OR,						///< or
 	kNPS_DIV,						///< div
 	kNPS_MOD,						///< mod
 	kNPS_SHIFT_LEFT,				///< <<
@@ -145,10 +143,10 @@ enum {
     kNPSSlot,
     kNPSConcat,								///< &
     kNPSConcat2,							///< &&
-
-    // function
     kNPSAnd,								///< and
     kNPSOr,									///< or
+
+    // function
     kNPSMod,								///< mod
 	kNPSShiftLeft,							///< <<
 	kNPSShiftRight,							///< >>

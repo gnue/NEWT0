@@ -585,14 +585,6 @@ nps_node_t NPSGenOP2(uint32_t op, nps_node_t op1, nps_node_t op2)
             b = kNPSLessOrEqual;
             break;
 
-        case kNPS_AND:
-            b = kNPSAnd;
-            break;
-
-        case kNPS_OR:
-            b = kNPSOr;
-            break;
-
         case '*':
             b = kNPSMultiply;
             break;
