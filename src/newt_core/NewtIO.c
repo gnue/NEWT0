@@ -263,11 +263,11 @@ int NewtDebugMsg(const char * title, const char * format, ...)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** 入力ストリームから文字を取出す
+/** 入力ストリームから文字列を取出す
  *
  * @param stream	[in] 入力ストリーム
  *
- * @retval			文字オブジェクト		入力データが存在する場合
+ * @retval			文字列オブジェクト	入力データが存在する場合
  * @retval			NIL				入力データが存在しない場合
  *
  * @note			制限 NEWT_FGETS_BUFFSIZE (NewtConf.h)
@@ -337,15 +337,52 @@ newtRef NewtFgets(FILE * stream)
 
 
 /*------------------------------------------------------------------------*/
-/** 標準入力から文字を取出す
+/** 標準入力から文字列を取出す
  *
  * @param rcvr		[in] レシーバ
  *
- * @retval			文字オブジェクト		入力データが存在する場合
+ * @retval			文字列オブジェクト	入力データが存在する場合
  * @retval			NIL				入力データが存在しない場合
  */
 
 newtRef NsGets(newtRefArg rcvr)
 {
 	return NewtFgets(stdin);
+}
+
+
+/*------------------------------------------------------------------------*/
+/** 入力ストリームから文字を取出す
+ *
+ * @param stream	[in] 入力ストリーム
+ *
+ * @retval			文字オブジェクト	入力データが存在する場合
+ * @retval			NIL				EOF
+ */
+
+newtRef NewtFgetc(FILE * stream)
+{
+	int		c;
+
+	c = fgetc(stream);
+
+	if (c == EOF)
+		return kNewtRefNIL;
+	else
+		return NewtMakeCharacter(c);
+}
+
+
+/*------------------------------------------------------------------------*/
+/** 標準入力から文字を取出す
+ *
+ * @param rcvr		[in] レシーバ
+ *
+ * @retval			文字オブジェクト	入力データが存在する場合
+ * @retval			NIL				入力データが存在しない場合
+ */
+
+newtRef NsGetc(newtRefArg rcvr)
+{
+	return NewtFgetc(stdin);
 }

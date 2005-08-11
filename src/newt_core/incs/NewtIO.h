@@ -22,6 +22,7 @@
 
 /* マクロ */
 #define NcGets()				NsGets(kNewtRefNIL)
+#define NcGetc()				NsGetc(kNewtRefNIL)
 
 
 /// 入出力ストリーム
@@ -52,6 +53,8 @@ int			NewtDebugMsg(const char * title, const char * format, ...);
 
 newtRef		NewtFgets(FILE * stream);
 newtRef		NsGets(newtRefArg rcvr);
+newtRef		NewtFgetc(FILE * stream);
+newtRef		NsGetc(newtRefArg rcvr);
 
 
 #ifdef __cplusplus
