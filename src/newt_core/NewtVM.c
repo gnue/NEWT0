@@ -3505,6 +3505,7 @@ void NVMInitExGlobalFns(void)
 
     NewtDefGlobalFunc(NSSYM(Gets),		NsGets,				0, "Gets()");
     NewtDefGlobalFunc(NSSYM(Getc),		NsGetc,				0, "Getc()");
+    NewtDefGlobalFunc(NSSYM(Getch),		NsGetch,			0, "Getch()");
 }
 
 
