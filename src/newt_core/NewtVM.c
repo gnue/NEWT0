@@ -3477,7 +3477,11 @@ void NVMInitExGlobalFns(void)
     NewtDefGlobalFunc(NSSYM(Print),		NsPrint,			1, "Print(obj)");
 
     NewtDefGlobalFunc(NSSYM(CompileFile),NsCompileFile,		1, "CompileFile(file)");
+
+#ifdef HAVE_DLOPEN
     NewtDefGlobalFunc(NSSYM(LoadLib),	NsLoadLib,			1, "LoadLib(file)");
+#endif /* HAVE_DLOPEN */
+
     NewtDefGlobalFunc(NSSYM(Load),		NsLoad,				1, "Load(file)");
 	NewtDefGlobalFunc(NSSYM(Require),	NsRequire,			1, "Require(str)");
 

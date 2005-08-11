@@ -311,7 +311,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT YACC LEX LEXLIB LEX_OUTPUT_ROOT build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os CPP EGREP LIBOBJS LIBREGEX NEWT_LDIMPORT NEWT_LDFLAGS LIBNEWT_LDSHARED LINK_NEWT_APP_ DLEXT LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT YACC LEX LEXLIB LEX_OUTPUT_ROOT build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os CPP EGREP LIBOBJS LIBREGEX NEWT_LDIMPORT NEWT_LDFLAGS LIBNEWT_LDSHARED LINK_NEWT_APP_ DLEXT MAKE_EXT LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -2736,6 +2736,120 @@ fi
 rm -f conftest.err conftest.$ac_objext \
       conftest$ac_exeext conftest.$ac_ext
 
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+	#include <dlfcn.h>
+
+int
+main ()
+{
+
+    void *	install_call;
+    void *	lib;
+
+    lib = dlopen("", RTLD_LAZY);
+	install_call = dlsym(lib, "");
+	dlclose(lib);
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  HAVE_DLOPEN='yes'
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+SAVE_LIBS="$LIBS"
+	LIBS="$LIBS -ldl"
+	cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+		#include <dlfcn.h>
+
+int
+main ()
+{
+
+	    void *	install_call;
+    	void *	lib;
+
+	    lib = dlopen("", RTLD_LAZY);
+		install_call = dlsym(lib, "");
+		dlclose(lib);
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  HAVE_DLOPEN='yes'
+		LIBDL=" -ldl"
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+	LIBS="$SAVE_LIBS"
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+
+
 # Checks for header files.
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
@@ -4584,6 +4698,7 @@ case "$target_os" in
 #define __WIN32__ 1
 _ACEOF
 
+	HAVE_DLOPEN='yes'
     NEWT_LDIMPORT='$(build)/libnewt.a'
     NEWT_LDFLAGS='-Wl,--export-all-symbols,--out-implib=$(LDIMPORT)'
     LIBNEWT_LDSHARED='$(CC) -shared'
@@ -4591,7 +4706,8 @@ _ACEOF
     DLEXT='dll'
     ;;
   linux*)
-    NEWT_LDFLAGS='-ldl -rdynamic'
+#    NEWT_LDFLAGS='-ldl -rdynamic'
+    NEWT_LDFLAGS='-rdynamic'
     LIBNEWT_LDSHARED='$(CC) -shared'
     DLEXT='so'
     ;;
@@ -4601,7 +4717,7 @@ _ACEOF
     DLEXT='so'
     ;;
   beos*)
-    NEWT_LDFLAGS='-ldl'
+#    NEWT_LDFLAGS='-ldl'
     LIBNEWT_LDSHARED='$(CC) -nostart $(build)/_APP_'
     LINK_NEWT_APP_='cd $@; ln -s newt _APP_'
     DLEXT='so'
@@ -4614,6 +4730,30 @@ _ACEOF
 esac
 
 
+case "$target_vendor" in
+  *ipod*)
+	cat >>confdefs.h <<\_ACEOF
+#define __IPOD__ 1
+_ACEOF
+
+    NEWT_LDFLAGS=
+    ;;
+esac
+
+
+case "$HAVE_DLOPEN" in
+  yes)
+	cat >>confdefs.h <<\_ACEOF
+#define HAVE_DLOPEN 1
+_ACEOF
+
+	MAKE_EXT='ext'
+    ;;
+esac
+
+
+NEWT_LDFLAGS="$NEWT_LDFLAGS $LIBDL"
+
 cat >>confdefs.h <<_ACEOF
 #define __PLATFORM__ "$target_os"
 _ACEOF
@@ -4621,6 +4761,8 @@ _ACEOF
 cat >>confdefs.h <<_ACEOF
 #define __DYLIBSUFFIX__ ".$DLEXT"
 _ACEOF
+
+
 
 
 
@@ -5277,6 +5419,7 @@ s,@NEWT_LDFLAGS@,$NEWT_LDFLAGS,;t t
 s,@LIBNEWT_LDSHARED@,$LIBNEWT_LDSHARED,;t t
 s,@LINK_NEWT_APP_@,$LINK_NEWT_APP_,;t t
 s,@DLEXT@,$DLEXT,;t t
+s,@MAKE_EXT@,$MAKE_EXT,;t t
 s,@LTLIBOBJS@,$LTLIBOBJS,;t t
 CEOF
 

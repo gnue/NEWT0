@@ -15,12 +15,19 @@
 #include <string.h>
 #include <unistd.h>
 
-#ifdef __WIN32__
+#include "NewtType.h"
+
+
+#if defined(__WIN32__)
 	#include "win/dlfcn.h"
-#else
+#elif defined(HAVE_DLOPEN)
 	#include <dlfcn.h>
+#endif
+
+#ifndef __WIN32__
 	#include <pwd.h>
 #endif
+
 
 #include "NewtCore.h"
 #include "NewtVM.h"
@@ -46,6 +53,7 @@ typedef struct {
 } file_ext_t;
 
 
+#ifdef HAVE_DLOPEN
 /*------------------------------------------------------------------------*/
 /** 動的ライブラリをインストールする
  *
@@ -76,6 +84,8 @@ void * NewtDylibInstall(const char * fname)
 
     return lib;
 }
+
+#endif /* HAVE_DLOPEN */
 
 
 /*------------------------------------------------------------------------*/
@@ -399,6 +409,8 @@ newtRef NsCompileFile(newtRefArg rcvr, newtRefArg r)
  * @return			動的ライブラリのデスクプリタ
  */
 
+#ifdef HAVE_DLOPEN
+
 newtRef NsLoadLib(newtRefArg rcvr, newtRefArg r)
 {
     char *	fname;
@@ -428,6 +440,9 @@ newtRef NsLoadLib(newtRefArg rcvr, newtRefArg r)
         return NewtThrow(kNErrDylibNotOpen, r);
 	}
 }
+
+#endif /* HAVE_DLOPEN */
+
 
 
 /*------------------------------------------------------------------------*/
@@ -499,12 +514,16 @@ newtRef NcRequire0(newtRefArg r)
 	{
 		newtRefVar	initObj[] = {kNewtRefUnbind, kNewtRefUnbind};
 		file_ext_t	lib_exts[] = {
+
+#ifdef HAVE_DLOPEN
 /*
 			{NSSTR(".dylib"),			typeDylib},
 			{NSSTR(".so"),				typeDylib},
 			{NSSTR(".dll"),				typeDylib},
 */
 			{NSSTR(__DYLIBSUFFIX__),	typeDylib},
+#endif /* HAVE_DLOPEN */
+
 			{NSSTR(".newt"),			typeScript},
 		};
 
@@ -542,12 +561,14 @@ newtRef NcRequire0(newtRefArg r)
 
 				if (NewtFileExists(NewtRefToString(path)))
 				{
+#ifdef HAVE_DLOPEN
 					if (lib_exts[j].type == typeDylib)
 					{
 						lib = NcLoadLib(path);
 						NcSetSlot(requires, sym, lib);
 					}
 					else
+#endif /* HAVE_DLOPEN */
 					{
 						NcSetSlot(requires, sym, path);
 						NcLoad(path);

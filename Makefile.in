@@ -68,7 +68,7 @@ NEWTLIBS      = $(ext)/protoFILE \
 
 ### all
 
-all: newt ext
+all: newt @MAKE_EXT@
 
 
 ### make directory
