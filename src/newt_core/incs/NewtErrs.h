@@ -26,6 +26,7 @@
 #define kNErrCompilerBase				(kNErrBase - 600)		///< コンパイラエラー
 #define kNErrInterpreterBase			(kNErrBase - 800)		///< インタプリタエラー
 #define kNErrFileBase					(kNErrBase - 1000)		///< ファイルエラー（独自定義）
+#define kNErrSystemBase					(kNErrBase - 1100)		///< システムエラー（独自定義）
 #define kNErrMiscBase					(kNErrBase - 2000)		///< その他のエラー（独自定義）
 
 // オブジェクトエラー
@@ -123,6 +124,9 @@
 #define kNErrFileNotFound				(kNErrFileBase - 0)				///< ファイルが存在しない
 #define kNErrFileNotOpen				(kNErrFileBase - 1)				///< ファイルがオープンできない
 #define kNErrDylibNotOpen				(kNErrFileBase - 2)				///< 動的ライブラリがオープンできない
+
+// システムエラー（独自定義）
+#define kNErrSystemError				(kNErrSystemBase - 0)			///< システムエラー
 
 // その他のエラー（独自定義）
 #define kNErrDiv0						(kNErrMiscBase - 0)				///< 0で割り算した

@@ -13,6 +13,15 @@
 /* ヘッダファイル */
 #include <string.h>
 #include <stdio.h>
+#include <errno.h>
+
+#ifdef __WIN32__
+	#include <conio.h>
+#else
+	#include <termios.h>
+	#include <unistd.h>
+#endif
+
 
 #include "NewtCore.h"
 #include "NewtIO.h"
@@ -386,3 +395,62 @@ newtRef NsGetc(newtRefArg rcvr)
 {
 	return NewtFgetc(stdin);
 }
+
+
+/*------------------------------------------------------------------------*/
+/** キーボードから入力文字を１文字取得
+ *
+ * @param rcvr		[in] レシーバ
+ *
+ * @retval			文字オブジェクト	入力データが存在する場合
+ * @retval			NIL				入力データが存在しない場合
+ */
+
+#ifdef __WIN32__
+
+newtRef NsGetch(newtRefArg rcvr)
+{
+	int		c;
+
+	c = getch();
+
+	if (c)
+		return NewtMakeCharacter(c);
+	else
+		return kNewtRefNIL;
+}
+
+#else
+
+newtRef NsGetch(newtRefArg rcvr)
+{
+	struct termios tios_save;
+	struct termios tios;
+	int		fd;
+	int		c = 0;
+	char	buf[1];
+
+	fd = 0;	// STDIN
+
+	if (tcgetattr(fd, &tios_save) == -1)
+		return NewtThrow(kNErrSystemError, NewtRefToInteger(errno));
+
+	tios = tios_save;
+
+	tios.c_lflag &= ~ (ICANON | ECHO);
+    tios.c_cc[VTIME] = 0;
+    tios.c_cc[VMIN] = 1;
+	tcsetattr(fd, TCSANOW, &tios);
+
+	if (0 < read(fd, buf, sizeof(buf)))
+		c = buf[0];
+
+	tcsetattr(fd, TCSANOW, &tios_save);
+
+	if (c)
+		return NewtMakeCharacter(c);
+	else
+		return kNewtRefNIL;
+}
+
+#endif
