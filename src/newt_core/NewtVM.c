@@ -3504,6 +3504,7 @@ void NVMInitExGlobalFns(void)
     NewtDefGlobalFunc(NSSYM(ExtractByte),NsExtractByte,		2, "NsExtractByte(data, offset)");
 
     NewtDefGlobalFunc(NSSYM(Gets),		NsGets,				0, "Gets()");
+    NewtDefGlobalFunc(NSSYM(Getc),		NsGetc,				0, "Getc()");
 }
 
 
