@@ -39,6 +39,35 @@ AC_TRY_LINK([
 	AC_DEFINE(HAVE_LIBICONV),
 	LIBS="$SAVE_LIBS")
 
+AC_TRY_LINK([
+	#include <dlfcn.h>
+	], [
+    void *	install_call;
+    void *	lib;
+
+    lib = dlopen("", RTLD_LAZY);
+	install_call = dlsym(lib, "");
+	dlclose(lib);
+	],
+	HAVE_DLOPEN='yes',
+
+	SAVE_LIBS="$LIBS"
+	LIBS="$LIBS -ldl"
+	AC_TRY_LINK([
+		#include <dlfcn.h>
+		], [
+	    void *	install_call;
+    	void *	lib;
+
+	    lib = dlopen("", RTLD_LAZY);
+		install_call = dlsym(lib, "");
+		dlclose(lib);
+		],
+		HAVE_DLOPEN='yes'
+		LIBDL=" -ldl")
+	LIBS="$SAVE_LIBS")
+
+
 # Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS([inttypes.h memory.h stdint.h stdlib.h string.h unistd.h])
@@ -66,6 +95,7 @@ case "$target_os" in
     ;;
   cygwin*|mingw*)
 	AC_DEFINE(__WIN32__)
+	HAVE_DLOPEN='yes'
     NEWT_LDIMPORT='$(build)/libnewt.a'
     NEWT_LDFLAGS='-Wl,--export-all-symbols,--out-implib=$(LDIMPORT)'
     LIBNEWT_LDSHARED='$(CC) -shared'
@@ -73,7 +103,8 @@ case "$target_os" in
     DLEXT='dll'
     ;;
   linux*)
-    NEWT_LDFLAGS='-ldl -rdynamic'
+#    NEWT_LDFLAGS='-ldl -rdynamic'
+    NEWT_LDFLAGS='-rdynamic'
     LIBNEWT_LDSHARED='$(CC) -shared'
     DLEXT='so'
     ;;
@@ -83,7 +114,7 @@ case "$target_os" in
     DLEXT='so'
     ;;
   beos*)
-    NEWT_LDFLAGS='-ldl'
+#    NEWT_LDFLAGS='-ldl'
     LIBNEWT_LDSHARED='$(CC) -nostart $(build)/_APP_'
     LINK_NEWT_APP_='cd $@; ln -s newt _APP_'
     DLEXT='so'
@@ -96,8 +127,27 @@ case "$target_os" in
 esac
 
 
+case "$target_vendor" in
+  *ipod*)
+	AC_DEFINE(__IPOD__)
+    NEWT_LDFLAGS=
+    ;;
+esac
+
+
+case "$HAVE_DLOPEN" in
+  yes)
+	AC_DEFINE(HAVE_DLOPEN)
+	MAKE_EXT='ext'
+    ;;
+esac
+
+
+NEWT_LDFLAGS="$NEWT_LDFLAGS $LIBDL"
+
 AC_DEFINE_UNQUOTED(__PLATFORM__, "$target_os")
 AC_DEFINE_UNQUOTED(__DYLIBSUFFIX__, ".$DLEXT")
+
 
 AC_SUBST(LIBREGEX)
 AC_SUBST(NEWT_LDIMPORT)
@@ -105,6 +155,7 @@ AC_SUBST(NEWT_LDFLAGS)
 AC_SUBST(LIBNEWT_LDSHARED)
 AC_SUBST(LINK_NEWT_APP_)
 AC_SUBST(DLEXT)
+AC_SUBST(MAKE_EXT)
 
 
 AC_CONFIG_FILES([Makefile

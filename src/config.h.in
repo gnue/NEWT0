@@ -19,9 +19,12 @@
 #undef HAVE_STDINT_H
 
 #undef HAVE_LIBICONV
+#undef HAVE_DLOPEN
 
 #undef __PLATFORM__
 #undef __DYLIBSUFFIX__
+
+#undef __IPOD__
 
 
 #endif /* CONFIG_H */
