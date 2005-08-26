@@ -2182,6 +2182,14 @@ int16_t NewtObjectCompare(newtRefArg r1, newtRefArg r2)
     switch (NewtArgsType(r1, r2))
     {
         case kNewtInt30:
+            if ((int32_t)r1 < (int32_t)r2)
+                r = -1;
+            else if ((int32_t)r1 > (int32_t)r2)
+                r = 1;
+            else
+                r = 0;
+            break;
+
         case kNewtCharacter:
             if (r1 < r2)
                 r = -1;
