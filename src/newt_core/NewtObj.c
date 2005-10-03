@@ -46,7 +46,7 @@ static void			NewtObjRemoveArraySlot(newtObjRef obj, int32_t n);
 static void			NewtDeeplyCopyMap(newtRef * dst, int32_t * pos, newtRefArg src);
 static newtRef		NewtDeeplyCloneMap(newtRefArg map, int32_t len);
 static void			NewtObjRemoveFrameSlot(newtObjRef obj, newtRefArg slot);
-static bool			NewtStrNBeginsWidth(char * str, uint32_t len, char * sub, uint32_t sublen);
+static bool			NewtStrNBeginsWith(char * str, uint32_t len, char * sub, uint32_t sublen);
 static bool			NewtStrIsSubclass(char * sub, uint32_t sublen, char * supr, uint32_t suprlen);
 static bool			NewtStrHasSubclass(char * sub, uint32_t sublen, char * supr, uint32_t suprlen);
 
@@ -3811,7 +3811,7 @@ newtRef NewtDefGlobalFunc0(newtRefArg sym, void * funcPtr, uint32_t numArgs, boo
  * @retval			false	‘O”¼•”‚ª•”•ª•¶Žš—ñ‚Æˆê’v‚µ‚È‚¢
  */
 
-bool NewtStrNBeginsWidth(char * str, uint32_t len, char * sub, uint32_t sublen)
+bool NewtStrNBeginsWith(char * str, uint32_t len, char * sub, uint32_t sublen)
 {
     while (0 < len && 0 < sublen && *str != '\0' && *sub != '\0')
     {
@@ -3849,7 +3849,7 @@ bool NewtStrIsSubclass(char * sub, uint32_t sublen, char * supr, uint32_t suprle
     if (sub[suprlen] != '.')
         return false;
 
-    return NewtStrNBeginsWidth(sub, sublen, supr, suprlen);
+    return NewtStrNBeginsWith(sub, sublen, supr, suprlen);
 }
 
 
