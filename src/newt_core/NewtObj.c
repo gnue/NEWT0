@@ -3813,16 +3813,10 @@ newtRef NewtDefGlobalFunc0(newtRefArg sym, void * funcPtr, uint32_t numArgs, boo
 
 bool NewtStrNBeginsWith(char * str, uint32_t len, char * sub, uint32_t sublen)
 {
-    while (0 < len && 0 < sublen && *str != '\0' && *sub != '\0')
-    {
-        if (*str != *sub)
-            return false;
-
-        str++; len--;
-        sub++; sublen--;
-    }
-
-    return (sublen == 0 || *sub == '\0');
+	if (len < sublen)
+		return false;
+	else
+		return (strncasecmp(str, sub, sublen) == 0);
 }
 
 
