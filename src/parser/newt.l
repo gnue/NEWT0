@@ -89,7 +89,7 @@ TRUNCATED-ESCAPE		"\\u"({HEX-DIGIT}{4})*
 CHARACTER-SEQUENCE		({STRING-CHARACTER}|{ESCAPE-SEQUENCE})*{TRUNCATED-ESCAPE}?
 SYMBOL					({ALPHA}|"_")({ALPHA}|{DIGIT}|"_")*
 SYMBOL-SEQUENCE			("\\"[|\\]|{SYMBOL-CHARACTER})*
-REGEX-SEQUENCE			({REGEX-CHARACTER}|{ESCAPE-SEQUENCE})*{TRUNCATED-ESCAPE}?
+REGEX-SEQUENCE			([^*/]|{ESCAPE-SEQUENCE})({REGEX-CHARACTER}|{ESCAPE-SEQUENCE})*{TRUNCATED-ESCAPE}?
 
 %%
 
@@ -104,10 +104,18 @@ REGEX-SEQUENCE			({REGEX-CHARACTER}|{ESCAPE-SEQUENCE})*{TRUNCATED-ESCAPE}?
 
 "//".*$
 
-"/*"							BEGIN COMMENT;
-<COMMENT>"*/"					BEGIN INITIAL;
+"/*"							{
+									BEGIN COMMENT;
+									lex_update_tokenpos(0);
+								}
+
+<COMMENT>"*/"					{
+									BEGIN INITIAL;
+									lex_update_tokenpos(0);
+								}
+
 <COMMENT>{NEWLINE}				lex_newline();
-<COMMENT>(.|{SPACE})			;
+<COMMENT>(.|{SPACE})			lex_update_tokenpos(0);
 
 "<#"							{
 									BEGIN BINARY;
