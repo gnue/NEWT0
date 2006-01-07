@@ -3,79 +3,79 @@
 */
 
 (
-    {
-        Identifier = newt;
-        Name = "NewtonScript";
-        Description = "NewtonScript";
+	{
+		Identifier = newt;
+		Name = "NewtonScript";
+		Description = "NewtonScript";
 		BasedOn = "pbx_root_language";
-        SourceScannerClassName = PBXCPPSourceScanner;
-        SupportsIndentation = YES;
-        Indentation = {
-        };
-        SyntaxColoring = {
-            CaseSensitive = NO;
-            UnicodeSymbols = NO; // accept \uXXXX anywhere in a file, and return a single character (not yet supported!)
-            IndexedSymbols = YES;
-            CommentsCanBeNested = YES;
-            IdentifierStartChars = "_";
-            IdentifierChars = "_";
-            MultiLineComment = (
-                ( "/*", "*/" ),
-            );
-            String = (
-                ( "\"", "\"" )
-            );
-            EscapeCharacter = "\\";
-            SingleLineComment = (  "//" );
-            DocComment = "///";
-            DocCommentKeywordStart = "@";
-            DocCommentKeywords = (
+		SourceScannerClassName = PBXCPPSourceScanner;
+		SupportsIndentation = YES;
+		Indentation = {
+		};
+		SyntaxColoring = {
+			CaseSensitive = NO;
+			UnicodeSymbols = NO; // accept \uXXXX anywhere in a file, and return a single character (not yet supported!)
+			IndexedSymbols = YES;
+			CommentsCanBeNested = YES;
+			IdentifierStartChars = "_";
+			IdentifierChars = "_";
+			MultiLineComment = (
+				( "/*", "*/" ),
+			);
+			String = (
+				( "\"", "\"" )
+			);
+			EscapeCharacter = "\\";
+			SingleLineComment = (  "//" );
+			DocComment = "///";
+			DocCommentKeywordStart = "@";
+			DocCommentKeywords = (
 				"param",
 				"returns"
 			);
-            Keywords = (
-                "and",
-                "begin",
-                "break",
-                "by",
-                "call",
-                "collect",
-                "constant",
-                "depply",
-                "div",
-                "do",
-                "else",
-                "end",
-                "exists",
-                "for",
-                "foreach",
-                "func",
-                "global",
-                "if",
-                "in",
-                "inherited",
-                "local",
-                "loop",
-                "mod",
-                "native",
-                "not",
-                "onexception",
-                "or",
-                "repeat",
-                "return",
-                "self",
-                "then",
-                "to",
-                "try",
-                "until",
-                "while",
-                "with"
-            );
-            AltKeywords = (
-                "nil",
-                "true",
-                "@"
-            );
-        };
-    },
+			Keywords = (
+				"and",
+				"begin",
+				"break",
+				"by",
+				"call",
+				"collect",
+				"constant",
+				"depply",
+				"div",
+				"do",
+				"else",
+				"end",
+				"exists",
+				"for",
+				"foreach",
+				"func",
+				"global",
+				"if",
+				"in",
+				"inherited",
+				"local",
+				"loop",
+				"mod",
+				"native",
+				"not",
+				"onexception",
+				"or",
+				"repeat",
+				"return",
+				"self",
+				"then",
+				"to",
+				"try",
+				"until",
+				"while",
+				"with"
+			);
+			AltKeywords = (
+				"nil",
+				"true",
+				"@"
+			);
+		};
+	},
 )
