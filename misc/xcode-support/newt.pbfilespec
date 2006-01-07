@@ -1,0 +1,14 @@
+/**
+	NewtonScript source file specs
+*/
+(
+    {
+		Identifier = sourcecode.newt;
+		BasedOn = sourcecode;
+		Extensions = (newt);
+        Name = "NewtonScript";
+		ComputerLanguage = newt;
+        AppliesToBuildRules = NO;
+    },
+
+)
