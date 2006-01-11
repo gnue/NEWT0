@@ -456,10 +456,9 @@
 				GCC_WARN_UNKNOWN_PRAGMAS = NO;
 				INSTALL_PATH = "";
 				LIBRARY_STYLE = BUNDLE;
-				MACH_O_TYPE = mh_bundle;
+				MACH_O_TYPE = mh_dylib;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
-					"-bundle",
 					"-undefined",
 					suppress,
 					"-flat_namespace",
@@ -482,10 +481,9 @@
 				GCC_WARN_UNKNOWN_PRAGMAS = NO;
 				INSTALL_PATH = "";
 				LIBRARY_STYLE = BUNDLE;
-				MACH_O_TYPE = mh_bundle;
+				MACH_O_TYPE = mh_dylib;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
-					"-bundle",
 					"-undefined",
 					suppress,
 					"-flat_namespace",
@@ -542,7 +540,7 @@
 				GCC_WARN_UNKNOWN_PRAGMAS = NO;
 				INSTALL_PATH = "";
 				LIBRARY_STYLE = BUNDLE;
-				MACH_O_TYPE = mh_bundle;
+				MACH_O_TYPE = mh_dylib;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					"-undefined",
@@ -568,7 +566,7 @@
 				GCC_WARN_UNKNOWN_PRAGMAS = NO;
 				INSTALL_PATH = "";
 				LIBRARY_STYLE = BUNDLE;
-				MACH_O_TYPE = mh_bundle;
+				MACH_O_TYPE = mh_dylib;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					"-undefined",

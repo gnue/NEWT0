@@ -264,6 +264,7 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
+									<integer>7</integer>
 									<integer>6</integer>
 								</array>
 							</array>
@@ -368,9 +369,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>F5A9AA01096D1F8600E30E7C</string>
+				<string>F598266009755AE500166A74</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>F5A9AA02096D1F8600E30E7C</string>
+				<string>F598266109755AE500166A74</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -504,7 +505,6 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>F5DE13BC082AD7C700BB42A5</string>
 		<string>/Volumes/Pawn/User/Development/Newt/NEWT0/ext.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
@@ -585,7 +585,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>F5DE13BC082AD7C700BB42A5</string>
-				<string>F5A9AA03096D1F8600E30E7C</string>
+				<string>F598265809755A9100166A74</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
