@@ -101,11 +101,11 @@ newtRef MyFseek(newtRefArg stream, newtRefArg offset, newtRefArg whence)
     if (! NewtRefIsSymbol(whence))
         return NewtThrow(kNErrNotASymbol, whence);
 
-	if (whence == NSSYM("set"))
+	if (NewtRefEqual(whence, NSSYM(seek_set)))
 		wh = SEEK_SET;
-	else if (whence == NSSYM("curr"))
+	else if (NewtRefEqual(whence, NSSYM(seek_cur)))
 		wh = SEEK_CUR;
-	else if (whence == NSSYM("end"))
+	else if (NewtRefEqual(whence, NSSYM(seek_end)))
 		wh = SEEK_END;
 	else
 		wh = SEEK_SET;
@@ -394,6 +394,57 @@ newtRef MyGets(newtRefArg rcvr)
 	return r;
 }
 
+newtRef MyGetc(newtRefArg rcvr)
+{
+	newtRefVar stream;
+	FILE* theFile;
+	int theResult;
+	
+	stream = NcGetSlot(rcvr, NSSYM(_stream));
+	if (NewtRefIsNIL(stream))
+		return kNewtRefUnbind;
+
+	theFile = NewtRefToFILE(stream);
+	theResult = fgetc(theFile);
+	return NewtMakeInteger(theResult);
+}
+
+newtRef MyPutc(newtRefArg rcvr, newtRefArg byte)
+{
+	newtRefVar stream;
+	FILE* theFile;
+	char theByte;
+	int theResult;
+	
+	stream = NcGetSlot(rcvr, NSSYM(_stream));
+	if (NewtRefIsNIL(stream))
+		return kNewtRefUnbind;
+
+	theFile = NewtRefToFILE(stream);
+	theByte = NewtRefToInteger(byte);
+	theResult = fputc(theByte, theFile);
+	return NewtMakeInteger(theResult);
+}
+
+newtRef MyWrite(newtRefArg rcvr, newtRefArg binary)
+{
+	newtRefVar stream;
+	FILE* theFile;
+	void* data;
+	int len;
+	int theResult;
+	
+	stream = NcGetSlot(rcvr, NSSYM(_stream));
+	if (NewtRefIsNIL(stream))
+		return kNewtRefUnbind;
+
+	theFile = NewtRefToFILE(stream);
+	data = NewtRefToBinary(binary);
+	len = NewtBinaryLength(binary);
+	theResult = fwrite(data, len, 1, theFile);
+
+	return NewtMakeInteger(theResult);
+}
 
 /*------------------------------------------------------------------------*/
 /** 拡張ライブラリのインストール
@@ -426,6 +477,9 @@ void newt_install(void)
 	NcSetSlot(r, NSSYM(Read),		NewtMakeNativeFunc(MyRead,		1, "Read(len)"));
 	NcSetSlot(r, NSSYM(Print),		NewtMakeNativeFunc(MyPrint,		1, "Print(str)"));
 	NcSetSlot(r, NSSYM(Gets),		NewtMakeNativeFunc(MyGets,		0, "Gets()"));
+	NcSetSlot(r, NSSYM(Getc),		NewtMakeNativeFunc(MyGetc,		0, "Getc()"));
+	NcSetSlot(r, NSSYM(Putc),		NewtMakeNativeFunc(MyPutc,		1, "Putc(byte)"));
+	NcSetSlot(r, NSSYM(Write),		NewtMakeNativeFunc(MyWrite,		1, "Write(binary)"));
 
 	NcSetSlot(r, NSSYM(_stream),	kNewtRefNIL);
 	NcSetSlot(r, NSSYM(_lineno),	kNewtRefNIL);

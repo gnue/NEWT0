@@ -1,0 +1,58 @@
+#!newt
+
+Require("protoFILE");
+Require("NativeCalls");
+
+DefGlobalFn('GetWalterSmithStructure, func ()
+begin
+	x := {name: "Walter Smith",
+		cats: 2,
+		bounds: {left: 10, top: 14, right: 40, bottom: 100},
+		uChar: $\u2022,
+		phones: ["408-996-1010", nil]};
+	x.phones[1] := SetClass("408-974-9094", 'faxPhone);
+	x.nameAgain := x.name;
+	return x;
+end );
+
+// This function gets the size of a file using ftell(3)
+// It takes an open file (based on protoFILE).
+DefGlobalFn('GetFileSizeUsingTell, func (file)
+begin
+	local pos := file:tell();
+	file:seek(0, 'seek_end);
+	local size := file:tell();
+	file:seek(pos, 'set);
+	return size;
+end );
+
+local path := "/tmp/test.nsof";
+
+// Transform into NSOF and back the Walter Smith sample structure.
+local file := {_proto: @protoFILE};
+file:open(path, "w");
+local binary := MakeNSOF(GetWalterSmithStructure(), 2);
+file:write(binary);
+file:close();
+
+// Open the file again, for reading.
+file := {_proto: @protoFILE};
+file:open(path, "r");
+local size := GetFileSizeUsingTell(file);
+binary := file:read(size);
+local frame := ReadNSOF(binary);
+P(frame);
+
+// Delete the file using NativeCalls.
+local libc := OpenNativeLibrary("libc");
+
+libc:DefineGlobalFn({
+	name: "unlink",
+	symbol: '|libc.unlink|,
+	args: ['string],
+	result: 'sint32});
+|libc.unlink|(path);
+
+libc:Close();
+
+true;
