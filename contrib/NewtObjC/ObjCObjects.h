@@ -41,7 +41,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-newtRef CreateClassObject(id);
+newtRef CreateClassObject(Class);
 newtRef GetClassFromName(const char*);
 newtRef GetInstanceVariable(newtRefArg, newtRefArg);
 newtRef InstanceVariableExists(newtRefArg, newtRefArg);
