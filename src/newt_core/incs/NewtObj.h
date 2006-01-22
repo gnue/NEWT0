@@ -71,6 +71,8 @@
 #define NewtObjIsLiteral(v)			((v->header.h & kNewtObjLiteral) == kNewtObjLiteral)		///< リテラルか？
 #define NewtObjIsSweep(v, mark)		(((v->header.h & kNewtObjSweep) == kNewtObjSweep) == mark)  ///< スウィープ対象か？
 #define	NewtObjSize(v)				(v->header.h >> 8)					///< オブジェクトデータのサイズを取得
+#define NewtObjBinaryClass(v)		(v->as.klass)						///< Low-level API. Use NewtObjClassOf when needed.
+#define NewtObjArrayClass(v)		(v->as.klass)						///< Low-level API. Use NewtObjClassOf when needed.
 #define	NewtObjToBinary(v)			((uint8_t *)NewtObjData(v))			///< バイナリデータ部へのポインタ
 #define	NewtObjToSymbol(v)			((newtSymDataRef)NewtObjData(v))	///< シンボルデータ部へのポインタ
 #define	NewtObjToString(v)			((char *)NewtObjData(v))			///< 文字列データ部へのポインタ
