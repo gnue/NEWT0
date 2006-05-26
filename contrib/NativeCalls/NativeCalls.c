@@ -494,7 +494,8 @@ CastTypeAndValue(
 			(void) NewtThrow(kNErrNotAReal, inNSValue);
 			theResult = false;
 		}
-	} else if (NewtSymbolEqual(inNSType, NSSYM(string))) {
+	} else if ((NewtSymbolEqual(inNSType, NSSYM(string)))
+		|| (NewtSymbolEqual(inNSType, NSSYM(iostring)))) {
 		*outFFIType = &ffi_type_pointer;
 		if (NewtRefIsString(inNSValue))
 		{
@@ -504,14 +505,15 @@ CastTypeAndValue(
 			(void) NewtThrow(kNErrNotAString, inNSValue);
 			theResult = false;
 		}
-	} else if (NewtSymbolEqual(inNSType, NSSYM(binary))) {
+	} else if ((NewtSymbolEqual(inNSType, NSSYM(binary)))
+		|| (NewtSymbolEqual(inNSType, NSSYM(iobinary)))) {
 		*outFFIType = &ffi_type_pointer;
 		if (NewtRefIsBinary(inNSValue))
 		{
 			outFFIValue->fPointer =
 				(void*) NewtRefToBinary(inNSValue);
 		} else {
-			(void) NewtThrow(kNErrNotAString, inNSValue);
+			(void) NewtThrow(kNErrNotABinaryObject, inNSValue);
 			theResult = false;
 		}
 	} else if (NewtSymbolEqual(inNSType, NSSYM(pointer))) {
@@ -735,16 +737,12 @@ OpenNativeLibrary(
 }
 
 /**
- * Native function lib:DefineGlobalFn(specs)
+ * Native function lib:GetFunction(specs)
  *
  * specs is a frame defining the native function. It includes the following
  * slots:
  *
  * name			(string) name of the native function to call
- * symbol		(symbol) optional name of the global function to define. If not
- *				present (or nil), the global function will have the same name as
- *				the native function. Use this when names conflicts (e.g. strlen
- *				and StrLen)
  * args			(array of symbols) types of the arguments.
  * result		(symbol) type of the result.
  * 
@@ -766,29 +764,28 @@ OpenNativeLibrary(
  *  'double		real				ffi_type_double
  *  'longdouble	real				ffi_type_longdouble
  *  'string		string				ffi_type_pointer
+ *  'iostring	string				ffi_type_pointer		not available for result
  *	'binary		binary				ffi_type_pointer		not available for result
+ *	'iobinary	binary				ffi_type_pointer		not available for result
  *	'pointer	int	or binary		ffi_type_pointer
  *
  * Structures aren't supported yet.
- *
- * The symbol of the function is added to a list of the library object to allow
- * Close to undefine the function.
+ * string and iostring are identical (strings are I/O). Same with binary and
+ * iobinary. This may change in the future.
  *
  * @param inRcvr	self
  * @param inSpec	specification frame
  * @return NIL
  */
 newtRef
-DefineGlobalFn(
+GetFunction(
 	newtRefArg inRcvr,
 	newtRefArg inSpec)
 {
 	newtRefVar argTypes;
 	newtRefVar resultType;
 	newtRefVar functionName;
-	newtRefVar functionSymbol;
 	newtRefVar functionObject;
-	newtRefVar libList;
 
 	/* check self */
 	if (!NewtRefIsFrame(inRcvr))
@@ -820,21 +817,6 @@ DefineGlobalFn(
 	{
 		return NewtThrow(kNErrNotAString, functionName);
 	}
-	functionSymbol = NcGetSlot(inSpec, NSSYM(symbol));
-	if (NewtRefIsNIL(functionSymbol))
-	{
-		functionSymbol = NewtMakeSymbol(NewtRefToString(functionName));
-	} else if (!NewtRefIsSymbol(functionSymbol)) {
-		return NewtThrow(kNErrNotASymbol, functionSymbol);
-	}
-	
-	/* check the function doesn't exist yet */
-	if (NewtHasGlobalFn(functionSymbol))
-	{
-		return NewtThrow(
-				kNErrNative,
-				NewtMakeString("Global function already exists", true));
-	}
 	
 	/* create the function object */
 	functionObject = 
@@ -846,6 +828,43 @@ DefineGlobalFn(
 	NcSetSlot(functionObject, NSSYM(_resultType), resultType);
 	NcSetSlot(functionObject, NSSYM(_argTypes), argTypes);
 	
+	return functionObject;
+}
+
+/**
+ * Native function lib:DefGlobalFn(symbol, specs)
+ *
+ * symbol is the symbol of the function to define.
+ * specs is a frame defining the native function. It is passed to GetFunction.
+ *
+ * The symbol of the function is added to a list of the library object to allow
+ * Close to undefine the function.
+ *
+ * @param inRcvr	self
+ * @param inSymbol	function symbol
+ * @param inSpec	specification frame
+ * @return NIL
+ */
+newtRef
+DefGlobalFn(
+	newtRefArg inRcvr,
+	newtRefArg inSymbol,
+	newtRefArg inSpec)
+{
+	newtRefVar functionObject;
+	newtRefVar libList;
+	
+	/* check the function doesn't exist yet */
+	if (NewtHasGlobalFn(inSymbol))
+	{
+		return NewtThrow(
+				kNErrNative,
+				NewtMakeString("Global function already exists", true));
+	}
+	
+	/* Get the object */
+	functionObject = GetFunction(inRcvr, inSpec);
+	
 	/* add the function to the list */
 	libList = NcGetSlot(inRcvr, NSSYM(_globalFns));
 	if (NewtRefIsNIL(libList))
@@ -853,12 +872,12 @@ DefineGlobalFn(
 		libList = NewtMakeArray(kNewtRefNIL, 0);
 		NcSetSlot(inRcvr, NSSYM(_globalFns), libList);
 	}
-	NcAddArraySlot(libList, functionSymbol);
+	NcAddArraySlot(libList, inSymbol);
 	
 	/* define the global function */
-	NcDefGlobalFn(functionSymbol, functionObject);
-
-	return kNewtRefNIL;
+	NcDefGlobalFn(inSymbol, functionObject);
+	
+	return inSymbol;
 }
 
 /**
@@ -958,9 +977,13 @@ void newt_install(void)
 		NewtMakeNativeFunc(
 			Close, 0, "Close()"));
 	NcSetSlot(magicPtr,
-		NSSYM(DefineGlobalFn),
+		NSSYM(GetFunction),
 		NewtMakeNativeFunc(
-			DefineGlobalFn, 1, "DefineGlobalFn(specs)"));
+			GetFunction, 1, "GetFunction(spec)"));
+	NcSetSlot(magicPtr,
+		NSSYM(DefGlobalFn),
+		NewtMakeNativeFunc(
+			DefGlobalFn, 2, "DefGlobalFn(symbol, spec)"));
 
 	NcDefMagicPointer(kLibParentMagicPtrKey, magicPtr);
 }

@@ -11,53 +11,63 @@ begin
 	// (you therefore need libc, libm and libcurses for it to work).
 
 	local libc := OpenNativeLibrary("libc");
-	libc:DefineGlobalFn({
-		name: "gethostname",
-		symbol: '|libc.gethostname|,
+	libc:DefGlobalFn(
+		'|libc.gethostname|,
+		{name: "gethostname",
 		args: ['string, 'sint32],
 		result: 'sint32});
-	libc:DefineGlobalFn({
-		name: "socket",
-		symbol: '|libc.socket|,
+	libc:DefGlobalFn(
+		'|libc.socket|,
+		{name: "socket",
 		args: ['sint32, 'sint32, 'sint32],
 		result: 'sint32});
-	libc:DefineGlobalFn({
-		name: "close",
-		symbol: '|libc.close|,
+	libc:DefGlobalFn(
+		'|libc.close|,
+		{name: "close",
+		args: ['sint32],
+		result: 'sint32});
+	libc:DefGlobalFn(
+		'|libc.popen|,
+		{name: "popen",
+		args: ['string, 'string],
+		result: 'sint32});
+	libc:DefGlobalFn(
+		'|libc.pclose|,
+		{name: "pclose",
 		args: ['sint32],
 		result: 'sint32});
 
 	local libm := OpenNativeLibrary("libm");
-	libm:DefineGlobalFn({
-		name: "cos",
-		symbol: '|libm.cos|,
+	libm:DefGlobalFn(
+		'|libm.cos|,
+		{name: "cos",
 		args: ['double],
 		result: 'double});
 
 	local libcurses := OpenNativeLibrary("libcurses");
-	libcurses:DefineGlobalFn({
-		name: "initscr",
-		symbol: '|libcurses.initscr|,
+	libcurses:DefGlobalFn(
+		'|libcurses.initscr|,
+		{name: "initscr",
 		args: [],
 		result: 'pointer});
-	libcurses:DefineGlobalFn({
-		name: "cbreak",
-		symbol: '|libcurses.cbreak|,
+	libcurses:DefGlobalFn(
+		'|libcurses.cbreak|,
+		{name: "cbreak",
 		args: [],
 		result: 'sint32});
-	libcurses:DefineGlobalFn({
-		name: "noecho",
-		symbol: '|libcurses.noecho|,
+	libcurses:DefGlobalFn(
+		'|libcurses.noecho|,
+		{name: "noecho",
 		args: [],
 		result: 'sint32});
-	libcurses:DefineGlobalFn({
-		name: "flash",
-		symbol: '|libcurses.flash|,
+	libcurses:DefGlobalFn(
+		'|libcurses.flash|,
+		{name: "flash",
 		args: [],
 		result: 'sint32});
-	libcurses:DefineGlobalFn({
-		name: "endwin",
-		symbol: '|libcurses.endwin|,
+	libcurses:DefGlobalFn(
+		'|libcurses.endwin|,
+		{name: "endwin",
 		args: [],
 		result: 'sint32});
 
@@ -109,6 +119,10 @@ begin
 	
 	// end of ncurses
 	|libcurses.endwin|();
+
+	// call open(1)
+	local popenref := |libc.popen|("open /Applications/TextEdit.app/", "r");
+	|libc.pclose|(popenref);
 
 	libm:Close();
 	libc:Close();
