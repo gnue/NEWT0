@@ -11,7 +11,12 @@
 
 
 /* ヘッダファイル */
-#include <memory.h>
+#ifdef HAVE_MEMORY_H
+	#include <memory.h>
+#else
+	#include <string.h>
+#endif
+
 
 #include "NewtGC.h"
 #include "NewtObj.h"

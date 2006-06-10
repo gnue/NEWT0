@@ -136,7 +136,7 @@ static void				NBCGenBC_stmt(nps_syntax_node_t * stree, nps_node_t r, bool ret);
 static void				NBCGenConstant(nps_syntax_node_t * stree, nps_node_t r);
 static void				NBCGenGlobalVar(nps_syntax_node_t * stree, nps_node_t r);
 static void				NBCGenLocalVar(nps_syntax_node_t * stree, nps_node_t type, nps_node_t r);
-static bool				NBCTypeValid(nps_node_t node);
+static bool				NBCTypeValid(nps_node_t type);
 static int16_t			NBCGenTryPre(nps_syntax_node_t * stree, nps_node_t r);
 static int16_t			NBCGenTryPost(nps_syntax_node_t * stree, nps_node_t r, uint32_t * onexcpspP);
 static void				NBCGenTry(nps_syntax_node_t * stree, nps_node_t expr, nps_node_t onexception_list);
@@ -1100,15 +1100,15 @@ void NBCGenLocalVar(nps_syntax_node_t * stree, nps_node_t type, nps_node_t r)
  * @retval			false	正しくない型
  */
 
-bool NBCTypeValid(nps_node_t node)
+bool NBCTypeValid(nps_node_t type)
 {
-    if (node == kNewtRefUnbind)
+    if (type == kNewtRefUnbind)
         return true;
 
-    if (node == NS_INT)
+    if (type == NS_INT)
         return true;
 
-    if (node == NSSYM0(array))
+    if (type == NSSYM0(array))
         return true;
 
     NBError(kNErrSyntaxError);
@@ -1304,7 +1304,6 @@ void NBCGenIfThenElse(nps_syntax_node_t * stree, nps_node_t cond,
 /** 論理AND のバイトコードを生成する
  *
  * @param stree		[in] 構文木
- * @param code		[in] 構文コード（kNPSAnd or kNPSOr）
  * @param op1		[in] オペランド１の構文木ノード
  * @param op2		[in] オペランド２の構文木ノード
  *
@@ -2018,7 +2017,7 @@ void NBCGenCall(nps_syntax_node_t * stree, nps_node_t name, nps_node_t args)
 /** 関数オブジェクト実行のバイトコードを生成する
  *
  * @param stree		[in] 構文木
- * @param name		[in] 関数オブジェクト
+ * @param fn		[in] 関数オブジェクト
  * @param args		[in] 引数
  *
  * @return			なし
@@ -2041,6 +2040,7 @@ void NBCGenInvoke(nps_syntax_node_t * stree, nps_node_t fn, nps_node_t args)
 /** ２項関数の呼出しバイトコードを生成する
  *
  * @param stree		[in] 構文木
+ * @param name		[in] 関数名
  * @param op1		[in] 引数１
  * @param op2		[in] 引数２
  *
@@ -2473,7 +2473,7 @@ newtRef NBCGenMakeFrameSlots(nps_syntax_node_t * stree, nps_node_t r)
 /** バイトコードの生成（再帰呼出し用）
  *
  * @param stree		[in] 構文木
- * @param size		[in] 構文木の長さ
+ * @param n			[in] 構文木の長さ
  * @param ret		[in] 戻り値の有無
  *
  * @return			なし

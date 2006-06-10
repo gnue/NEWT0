@@ -15,16 +15,23 @@
 
 
 /* ヘッダファイル */
-#include "config.h"
+#ifdef HAVE_CONFIG_H
+	#include "config.h"
+#endif
 
-#if HAVE_STDINT_H
+
+#ifdef HAVE_STDINT_H
 	#include <stdint.h>
 #else
 	#include <inttypes.h>
 #endif
 
 
-#if defined(__WIN32__)
+#if defined(HAVE_ENDIAN_H)
+	#include <endian.h>
+#elif defined(HAVE_MACHINE_ENDIAN_H)
+	#include <machine/endian.h>
+#else
 	#ifdef ntohs
 	#undef ntohs
 	#endif
@@ -40,10 +47,6 @@
 	#ifdef htonl
 	#undef htonl
 	#endif
-#elif defined(__linux__) || defined(__BEOS__)
-	#include <endian.h>
-#else
-	#include <machine/endian.h>
 #endif
 
 

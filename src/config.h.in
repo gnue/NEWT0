@@ -17,9 +17,18 @@
 /* É}ÉNÉçíËã` */
 #undef HAVE_INTTYPES_H
 #undef HAVE_STDINT_H
+#undef HAVE_MEMORY_H
+#undef HAVE_UNISTD_H
+#undef HAVE_ENDIAN_H
+#undef HAVE_MACHINE_ENDIAN_H
+#undef HAVE_TERMIOS_H
 
 #undef HAVE_LIBICONV
 #undef HAVE_DLOPEN
+#undef HAVE_MMAP
+#undef HAVE_CHDIR
+#undef HAVE_GETCWD
+#undef HAVE_GETPWNAM
 
 #undef __PLATFORM__
 #undef __DYLIBSUFFIX__
