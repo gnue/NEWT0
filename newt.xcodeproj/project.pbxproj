@@ -70,7 +70,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		8DD76FB20486AB0100D96B5E /* newt */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "compiled.mach-o.executable"; path = newt; sourceTree = BUILT_PRODUCTS_DIR; };
+		8DD76FB20486AB0100D96B5E /* newt */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = newt; sourceTree = BUILT_PRODUCTS_DIR; };
 		F503AC6A0851DFD9009BA497 /* endian_utils.c */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.c; path = endian_utils.c; sourceTree = "<group>"; };
 		F503AC6B0851DFD9009BA497 /* endian_utils.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = endian_utils.h; sourceTree = "<group>"; };
 		F51B87450714CD1100D01694 /* 03_problem.txt */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = text; path = 03_problem.txt; sourceTree = "<group>"; };
