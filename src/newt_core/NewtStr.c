@@ -18,7 +18,8 @@
 
 /* 関数プロトタイプ */
 static newtRef  NewtParamStr(char * baseStr, size_t baseStrLen, newtRefArg paramStrArray, bool ifthen);
-
+static bool		NewtBeginsWith(const char * str, const char * sub);
+static bool		NewtEndsWith(const char * str, const char * sub);
 
 
 #pragma mark -
@@ -144,6 +145,54 @@ newtRef NewtParamStr(char * baseStr, size_t baseStrLen, newtRefArg paramStrArray
 	}
 
 	return dstStr;
+}
+
+
+/*------------------------------------------------------------------------*/
+/** 文字列の前半部が部分文字列と一致するかチェックする
+ *
+ * @param str		[in] 文字列
+ * @param sub		[in] 部分文字列
+ *
+ * @retval			true	前半部が部分文字列と一致する
+ * @retval			false	前半部が部分文字列と一致しない
+ */
+
+bool NewtBeginsWith(const char * str, const char * sub)
+{
+	int32_t	len;
+	int32_t	sublen;
+
+	len = strlen(str);
+	sublen = strlen(sub);
+
+	if (len < sublen)
+		return false;
+	else
+		return (strncasecmp(str, sub, sublen) == 0);
+}
+
+
+/*------------------------------------------------------------------------*/
+/** 文字列の最後尾が部分文字列と一致するかチェックする
+ *
+ * @param str		[in] 文字列
+ * @param sub		[in] 部分文字列
+ *
+ * @retval			true	最後尾が部分文字列と一致する
+ * @retval			false	最後尾が部分文字列と一致しない
+ */
+
+bool NewtEndsWith(const char * str, const char * sub)
+{
+	int32_t	st;
+
+	st = strlen(str) - strlen(sub);
+
+	if (st < 0)
+		return false;
+	else
+		return (strcasecmp(str + st, sub) == 0);
 }
 
 
@@ -457,4 +506,58 @@ newtRef NsStrExactCompare(newtRefArg rcvr, newtRefArg a, newtRefArg b)
 	}
 	
 	return theResult;
+}
+
+
+/*------------------------------------------------------------------------*/
+/** 文字列の前半部が部分文字列と一致するかチェックする
+ *
+ * @param rcvr		[in] レシーバ
+ * @param str		[in] 文字列
+ * @param sub		[in] 部分文字列
+ *
+ * @retval			TRUE	前半部が部分文字列と一致する
+ * @retval			NIL		前半部が部分文字列と一致しない
+ */
+
+newtRef NsBeginsWith(newtRefArg rcvr, newtRefArg str, newtRefArg sub)
+{
+	bool	result;
+
+    if (! NewtRefIsString(str))
+        return NewtThrow(kNErrNotAString, str);
+
+    if (! NewtRefIsString(sub))
+        return NewtThrow(kNErrNotAString, sub);
+
+	result = NewtBeginsWith(NewtRefToString(str), NewtRefToString(sub));
+
+	return NewtMakeBoolean(result);
+}
+
+
+/*------------------------------------------------------------------------*/
+/** 文字列の最後尾が部分文字列と一致するかチェックする
+ *
+ * @param rcvr		[in] レシーバ
+ * @param str		[in] 文字列
+ * @param sub		[in] 部分文字列
+ *
+ * @retval			TRUE	最後尾が部分文字列と一致する
+ * @retval			NIL		最後尾が部分文字列と一致しない
+ */
+
+newtRef NsEndsWith(newtRefArg rcvr, newtRefArg str, newtRefArg sub)
+{
+	bool	result;
+
+    if (! NewtRefIsString(str))
+        return NewtThrow(kNErrNotAString, str);
+
+    if (! NewtRefIsString(sub))
+        return NewtThrow(kNErrNotAString, sub);
+
+	result = NewtEndsWith(NewtRefToString(str), NewtRefToString(sub));
+
+	return NewtMakeBoolean(result);
 }

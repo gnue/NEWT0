@@ -41,6 +41,8 @@ newtRef		NsStrLen(newtRefArg rcvr, newtRefArg r);
 newtRef		NsSubStr(newtRefArg rcvr, newtRefArg r, newtRefArg start, newtRefArg count);
 newtRef		NsStrEqual(newtRefArg rcvr, newtRefArg a, newtRefArg b);
 newtRef		NsStrExactCompare(newtRefArg rcvr, newtRefArg a, newtRefArg b);
+newtRef		NsBeginsWith(newtRefArg rcvr, newtRefArg str, newtRefArg sub);
+newtRef		NsEndsWith(newtRefArg rcvr, newtRefArg str, newtRefArg sub);
 
 newtRef		NsSPrintObject(newtRefArg rcvr, newtRefArg r);
 newtRef		NsSplit(newtRefArg rcvr, newtRefArg r, newtRefArg sep);

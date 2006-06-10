@@ -3460,6 +3460,8 @@ void NVMInitGlobalFns1(void)
     NewtDefGlobalFunc(NSSYM(SubStr),		NsSubStr,			3, "SubStr(str, start, count)");
     NewtDefGlobalFunc(NSSYM(StrEqual),		NsStrEqual,			2, "StrEqual(a, b)");
     NewtDefGlobalFunc(NSSYM(StrExactCompare),NsStrExactCompare,	2, "StrExactCompare(a, b)");
+    NewtDefGlobalFunc(NSSYM(BeginsWith),	NsBeginsWith,		2, "BeginsWith(str, sub)");
+    NewtDefGlobalFunc(NSSYM(EndsWith),		NsEndsWith,			2, "EndsWith(str, sub)");
     NewtDefGlobalFunc(NSSYM(SPrintObject),	NsSPrintObject,		1, "SPrintObject(obj)");
     NewtDefGlobalFunc(NSSYM(SymbolCompareLex),	NsSymbolCompareLex,	2, "SymbolCompareLex(symbol1, symbol2)");
 }
