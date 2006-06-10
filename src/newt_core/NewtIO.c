@@ -15,16 +15,31 @@
 #include <stdio.h>
 #include <errno.h>
 
-#ifdef __WIN32__
-	#include <conio.h>
-#else
+#include "NewtCore.h"
+#include "NewtIO.h"
+
+#if defined(HAVE_TERMIOS_H)
 	#include <termios.h>
 	#include <unistd.h>
+	#include <sys/select.h>
+#elif defined(__WIN32__)
+	#include <conio.h>
 #endif
 
 
-#include "NewtCore.h"
-#include "NewtIO.h"
+/* マクロ */
+#if defined(HAVE_TERMIOS_H)
+	#define	newt_getch()	tcgetch(0)
+#elif defined(__WIN32__)
+	#define	newt_getch()	getch()
+#else
+	#define	newt_getch()	(0)
+#endif
+
+
+/* 関数プロトタイプ */
+static int	cbreak_and_noecho(int fd, int vmin, struct termios *tiosp);
+static int	tcgetch(int fd);
 
 
 /*------------------------------------------------------------------------*/
@@ -397,6 +412,69 @@ newtRef NsGetc(newtRefArg rcvr)
 }
 
 
+#ifdef HAVE_TERMIOS_H
+
+/*------------------------------------------------------------------------*/
+/** ターミナルを非カノニカルモードおよびエコーなしに設定する
+ *
+ * @param fd		[in] ターミナル
+ * @param vmin		[in] 非カノニカル読み込み時の最小文字数
+ * @param tiosp		[out]変更前の termios構造体
+ *
+ * @retval			0			正常終了
+ * @retval			0以外		エラー
+ */
+
+int cbreak_and_noecho(int fd, int vmin, struct termios *tiosp)
+{
+	struct termios	tios;
+	int		err;
+
+	err = tcgetattr(fd, &tios);
+	if (err) return err;
+
+	if (tiosp) *tiosp = tios;
+
+	tios.c_lflag &= ~ (ICANON | ECHO);
+    tios.c_cc[VTIME] = 0;
+    tios.c_cc[VMIN] = vmin;
+	err = tcsetattr(fd, TCSANOW, &tios);
+
+	return err;
+}
+
+
+/*------------------------------------------------------------------------*/
+/** ターミナルから入力文字を１文字取得
+ *
+ * @param fd		[in] ターミナル
+ *
+ * @retval			文字データ	入力データが存在する場合
+ * @retval			0			入力データが存在しない場合
+ */
+
+int tcgetch(int fd)
+{
+	struct termios	tios;
+	char	buf[1];
+	int		c = 0;
+	int		err;
+
+	err = cbreak_and_noecho(fd, 1, &tios);
+	if (err) return -1;
+
+	if (0 < read(fd, buf, sizeof(buf)))
+		c = buf[0];
+
+	tcsetattr(fd, TCSANOW, &tios);
+
+	return c;
+}
+
+
+#endif /* HAVE_TERMIOS_H */
+
+
 /*------------------------------------------------------------------------*/
 /** キーボードから入力文字を１文字取得
  *
@@ -406,51 +484,14 @@ newtRef NsGetc(newtRefArg rcvr)
  * @retval			NIL				入力データが存在しない場合
  */
 
-#ifdef __WIN32__
-
 newtRef NsGetch(newtRefArg rcvr)
 {
 	int		c;
 
-	c = getch();
+	c = newt_getch();
 
 	if (c)
 		return NewtMakeCharacter(c);
 	else
 		return kNewtRefNIL;
 }
-
-#else
-
-newtRef NsGetch(newtRefArg rcvr)
-{
-	struct termios tios_save;
-	struct termios tios;
-	int		fd;
-	int		c = 0;
-	char	buf[1];
-
-	fd = 0;	// STDIN
-
-	if (tcgetattr(fd, &tios_save) == -1)
-		return NewtThrow(kNErrSystemError, NewtRefToInteger(errno));
-
-	tios = tios_save;
-
-	tios.c_lflag &= ~ (ICANON | ECHO);
-    tios.c_cc[VTIME] = 0;
-    tios.c_cc[VMIN] = 1;
-	tcsetattr(fd, TCSANOW, &tios);
-
-	if (0 < read(fd, buf, sizeof(buf)))
-		c = buf[0];
-
-	tcsetattr(fd, TCSANOW, &tios_save);
-
-	if (c)
-		return NewtMakeCharacter(c);
-	else
-		return kNewtRefNIL;
-}
-
-#endif

@@ -13,11 +13,16 @@ prefix = @prefix@
 exec_prefix = @exec_prefix@
 libdir = @libdir@
 
+LIBREGEX='$(libdir)/libregex.a'
+
+
 CC = @CC@
+AR = @AR@
+RANLIB = @RANLIB@
 YACC = @YACC@ -d
 LEX = @LEX@
 DEFS = @DEFS@
-LIBS =
+LIBS = @LIBREGEX@
 DLEXT = @DLEXT@
 EXEEXT = @EXEEXT@
 LDIMPORT = @NEWT_LDIMPORT@
@@ -25,7 +30,7 @@ LDFLAGS = $(DEBUG) -O2 @NEWT_LDFLAGS@
 LDSHARED = @LIBNEWT_LDSHARED@
 
 
-INCS = -I$(srcdir) -I$(core)/incs
+CPPFLAGS = -I$(srcdir) -I$(core)/incs
 CFLAGS = $(DEBUG) $(DEFS) -O2 -pipe
 
 
@@ -36,7 +41,7 @@ LIBOBJ		= $(objdir)/$(NEWTLIBNAME).o
 
 
 .c.o:
-	$(CC) $(CFLAGS) $(INCS) -c -o $@ $<
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $<
 
 
 all: $(build) $(objdir) $(NEWTEXLIB)
@@ -51,7 +56,7 @@ $(NEWTEXLIB): $(LIBOBJ)
 	$(LDSHARED) $(LIBOBJ) $(LDIMPORT) @LIBREGEX@ -o $@
 
 $(LIBOBJ): $(NEWTLIBNAME).c
-	$(CC) $(CFLAGS) $(INCS) -c -o $@ $(NEWTLIBNAME).c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $(NEWTLIBNAME).c
 
 clean:
 	rm -rf $(NEWTEXLIB)

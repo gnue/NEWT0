@@ -11,6 +11,8 @@ AC_PROG_CC
 AC_PROG_YACC
 AC_PROG_LEX
 
+AC_CHECK_TOOL(AR, ar)
+AC_CHECK_TOOL(RANLIB, ranlib, :)
 
 #
 AC_CANONICAL_SYSTEM
@@ -28,6 +30,8 @@ esac
 
 SAVE_LIBS="$LIBS"
 LIBS="$LIBS -liconv"
+result='no'
+AC_MSG_CHECKING(checking for libiconv)
 AC_TRY_LINK([
 	#include <stdlib.h>
 	#include <iconv.h>
@@ -36,9 +40,14 @@ AC_TRY_LINK([
 	iconv(cd, NULL, NULL, NULL, NULL);
 	iconv_close(cd);
 	],
-	AC_DEFINE(HAVE_LIBICONV),
+	AC_DEFINE(HAVE_LIBICONV)
+	result='yes',
 	LIBS="$SAVE_LIBS")
+AC_MSG_RESULT($result)
 
+
+HAVE_DLOPEN='no'
+AC_MSG_CHECKING(checking for dlopen)
 AC_TRY_LINK([
 	#include <dlfcn.h>
 	], [
@@ -66,11 +75,12 @@ AC_TRY_LINK([
 		HAVE_DLOPEN='yes'
 		LIBDL=" -ldl")
 	LIBS="$SAVE_LIBS")
+AC_MSG_RESULT($HAVE_DLOPEN)
 
 
 # Checks for header files.
 AC_HEADER_STDC
-AC_CHECK_HEADERS([inttypes.h memory.h stdint.h stdlib.h string.h unistd.h])
+AC_CHECK_HEADERS([inttypes.h memory.h stdint.h stdlib.h string.h unistd.h termios.h endian.h machine/endian.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_HEADER_STDBOOL
@@ -82,7 +92,7 @@ AC_FUNC_MALLOC
 AC_FUNC_MEMCMP
 AC_FUNC_REALLOC
 AC_FUNC_VPRINTF
-AC_CHECK_FUNCS([getcwd memchr memmove memset regcomp strcasecmp strchr strdup strncasecmp])
+AC_CHECK_FUNCS([getcwd memchr memmove memset regcomp strcasecmp strchr strdup strncasecmp mmap chdir getpwnam])
 
 
 #
@@ -99,7 +109,7 @@ case "$target_os" in
     NEWT_LDIMPORT='$(build)/libnewt.a'
     NEWT_LDFLAGS='-Wl,--export-all-symbols,--out-implib=$(LDIMPORT)'
     LIBNEWT_LDSHARED='$(CC) -shared'
-    LIBREGEX='$(libdir)/libregex.a'
+    LIBREGEX='$(LIBREGEX)'
     DLEXT='dll'
     ;;
   linux*)
@@ -148,8 +158,6 @@ NEWT_LDFLAGS="$NEWT_LDFLAGS $LIBDL"
 AC_DEFINE_UNQUOTED(__PLATFORM__, "$target_os")
 AC_DEFINE_UNQUOTED(__DYLIBSUFFIX__, ".$DLEXT")
 
-
-AC_SUBST(LIBREGEX)
 AC_SUBST(NEWT_LDIMPORT)
 AC_SUBST(NEWT_LDFLAGS)
 AC_SUBST(LIBNEWT_LDSHARED)
@@ -157,6 +165,7 @@ AC_SUBST(LINK_NEWT_APP_)
 AC_SUBST(DLEXT)
 AC_SUBST(MAKE_EXT)
 
+AC_SUBST(LIBREGEX)
 
 AC_CONFIG_FILES([Makefile
                  ext/protoFILE/Makefile

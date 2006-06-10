@@ -24,9 +24,9 @@
 	#include <dlfcn.h>
 #endif
 
-#ifndef __WIN32__
+#ifdef HAVE_GETPWNAM
 	#include <pwd.h>
-#endif
+#endif /* HAVE_GETPWNAM */
 
 
 #include "NewtCore.h"
@@ -137,14 +137,7 @@ char NewtGetFileSeparator(void)
  * @note			取得されたホームディレクトリの文字列は free する必要がある
  */
 
-#ifdef __WIN32__
-
-char * NewtGetHomeDir(const char * s, char ** subdir)
-{	// Windows の場合
-	return NULL;
-}
-
-#else
+#ifdef HAVE_GETPWNAM
 
 char * NewtGetHomeDir(const char * s, char ** subdir)
 {	// UNIX の場合
@@ -170,7 +163,7 @@ char * NewtGetHomeDir(const char * s, char ** subdir)
 		login = (char *)s + 1;
 	}
 
-	if (*login != '\0')
+	if (*login)
 		pswd = getpwnam(login);
 	else
 		pswd = getpwuid(getuid());
@@ -187,7 +180,14 @@ char * NewtGetHomeDir(const char * s, char ** subdir)
 	return dir;
 }
 
-#endif
+#else
+
+char * NewtGetHomeDir(const char * s, char ** subdir)
+{	// Windows の場合
+	return NULL;
+}
+
+#endif /* HAVE_GETPWNAM */
 
 
 /*------------------------------------------------------------------------*/
@@ -242,11 +242,11 @@ char * NewtRelToAbsPath(char * s)
 
 	sep = NewtGetFileSeparator();
 
-	for (src = dst = s; *src != '\0';)
+	for (src = dst = s; *src;)
 	{
 		if (src[0] == sep && src[1] == '.')
 		{
-			if (src[2] == sep || src[2] == '\0')
+			if (src[2] == sep || ! src[2])
 			{
 				src += 2;
 				continue;
@@ -315,7 +315,7 @@ newtRef NewtExpandPath(const char *	s)
 	{
 		dir = NewtGetHomeDir(s, &subdir);
 
-		if (subdir != NULL && subdir[1] != '\0')
+		if (subdir != NULL && subdir[1])
 			subdir++;
 		else
 			subdir = NULL;
@@ -326,7 +326,11 @@ newtRef NewtExpandPath(const char *	s)
 	}
 
 	if (dir == NULL)
+#ifdef HAVE_GETCWD
 		dir = wd = getcwd(NULL, 0);
+#else
+		dir = "";
+#endif /* HAVE_GETCWD */
 
 	if (subdir != NULL)
 	{

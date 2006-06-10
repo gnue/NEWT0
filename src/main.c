@@ -207,8 +207,10 @@ newtErr newt_interpret_file(int argc, const char * argv[], int n)
 /** 作業ディレクトリを変更 */
 void newt_chdir(void)
 {
+#ifdef HAVE_CHDIR 
 	if (newt_currdir != NULL)
 		chdir(newt_currdir);
+#endif /* HAVE_CHDIR */
 }
 
 
@@ -248,7 +250,7 @@ void newt_show_usage(void)
 /*------------------------------------------------------------------------*/
 /** オプションエラーを表示
  *
- * @param s			[in] オプション文字
+ * @param c			[in] オプション文字
  *
  * @return			なし
  */

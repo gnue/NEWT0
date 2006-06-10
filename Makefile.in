@@ -59,6 +59,8 @@ PARSEROBJS    = $(yytmp)/y.tab.o \
 NEWTLIBS      = $(ext)/protoFILE \
                 $(ext)/protoREGEX
 
+OBJS          = $(MAINOBJ) $(UTILSOBJS) $(PARSEROBJS) $(COREOBJS)
+
 
 ######
 
@@ -87,8 +89,8 @@ $(yytmp):
 
 newt: $(build) $(objdir) $(yytmp) $(NEWT) $(LDIMPORT)
 
-$(NEWT): $(MAINOBJ) $(UTILSOBJS) $(PARSEROBJS) $(COREOBJS)
-	$(CC) $(LDFLAGS) $(LIBS) $(MAINOBJ) $(UTILSOBJS) $(PARSEROBJS) $(COREOBJS) $(LIBS) -o $@
+$(NEWT): $(OBJS)
+	$(CC) $(LDFLAGS) $(LIBS) $(OBJS) $(LIBS) -o $@
 
 
 
