@@ -366,7 +366,9 @@ GenericMethod(newtRef inRcvr, newtRef inArgs)
 
 	// Convert and stuff the arguments
 	storage = (void**) malloc( nbOfArguments * sizeof( void * ) );
+#if defined(__ppc__) || defined(ppc)
 	int indexDoubles = 0;
+#endif
 	for (indexArgs = 0; indexArgs < nbOfArguments; indexArgs++)
 	{
 		storage[indexArgs] = NULL;
