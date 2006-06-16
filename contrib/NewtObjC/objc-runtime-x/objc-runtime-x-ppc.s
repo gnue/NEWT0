@@ -1,5 +1,5 @@
 /*
- * objc-runtime extension based on Apple's objc4-237.
+ * objc-runtime extension based on Apple s objc4-237.
  *
  * Copyright (c) 1999-2003 Apple Computer, Inc.  All Rights Reserved.
  * Copyright (c) 2005 Paul Guyot.  All Rights Reserved.
@@ -135,7 +135,7 @@ CallIt:
  * 
  * An equally correct way to prototype this routine is:
  *
- * void objc_msgSendv_stret(void	*structStorage,
+ * void objc_methodCallv_stret(void	*structStorage,
  *			id		self,
  *			SEL		op,
  *			IMP			method,

@@ -22,7 +22,7 @@
  * The Original Code is objc-runtime-x.s.
  * 
  * The Initial Developer of the Original Code is Paul Guyot.
- * Portions created by the Initial Developer are Copyright (C) 2005 the
+ * Portions created by the Initial Developer are Copyright (C) 2005-2006 the
  * Initial Developer. All Rights Reserved.
  * 
  * Contributor(s):
@@ -35,6 +35,8 @@
 
 #if defined (__ppc__) || defined(ppc)
     #include "objc-runtime-x-ppc.s"
+#elif defined (__i386__) || defined (i386)
+    #include "objc-runtime-x-i386.s"
 #else
     #error Architecture not supported
 #endif
