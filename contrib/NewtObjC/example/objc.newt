@@ -38,8 +38,8 @@ begin
 			});
 
 	local NSCalendarDate := GetObjCClass("NSCalendarDate");
-	foreach s, v in NSCalendarDate._proto._proto._proto do
-		Print( s & "\n" );
+//	foreach s, v in NSCalendarDate._proto._proto._proto do
+//		Print( s & "\n" );
 	local theDate := NSCalendarDate:calendarDate();
 	local theDescription := theDate:description();
 	Print(theDescription & "\n");
@@ -74,9 +74,8 @@ begin
 	// The sound is played asynchronously, so I need to wait.
 	// I'll use libc's sleep for that purpose.
 	local libc := OpenNativeLibrary("libc");
-	libc:DefineGlobalFn({
+	libc:DefGlobalFn('|libc.sleep|, {
 		name: "sleep",
-		symbol: '|libc.sleep|,
 		args: ['uint32],
 		result: 'uint32});
 	
@@ -87,7 +86,7 @@ begin
 
 		repeat
 			|libc.sleep|(1);
-		until (theSound:isPlaying() <> kObjCFalse);
+		until (theSound:isPlaying() = kObjCFalse);
 	end;
 	
 	call playSound with ("Submarine");
