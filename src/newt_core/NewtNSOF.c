@@ -12,7 +12,6 @@
 
 /* ヘッダファイル */
 #include <string.h>
-#include "utils/endian_utils.h"
 
 #include "NewtNSOF.h"
 #include "NewtErrs.h"
@@ -22,6 +21,7 @@
 #include "NewtVM.h"
 #include "NewtIconv.h"
 
+#include "utils/endian_utils.h"
 
 /* マクロ */
 #define NSOFIsNOS(verno)	((verno == 1) || (verno == 2))	///< Newton OS　互換の NSOF
