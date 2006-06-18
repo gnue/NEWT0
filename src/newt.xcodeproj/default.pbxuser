@@ -46,7 +46,7 @@
 				PBXFileTableDataSourceColumnSortingKey = PBXExecutablesDataSource_NameID;
 				PBXFileTableDataSourceColumnWidthsKey = (
 					22,
-					560,
+					435,
 				);
 				PBXFileTableDataSourceColumnsKey = (
 					PBXExecutablesDataSource_ActiveFlagID,
@@ -149,7 +149,7 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 172321449;
+			PBXPerProjectTemplateStateSaveDate = 172324118;
 			PBXPrepackagedSmartGroups_v2 = (
 				{
 					PBXTransientLocationAtTop = bottom;
@@ -828,7 +828,7 @@
 				PBXModuleWindowStatusBarHidden = YES;
 				RubberWindowFrame = "374 174 745 468 0 0 1024 746 ";
 			};
-			PBXWorkspaceStateSaveDate = 172321449;
+			PBXWorkspaceStateSaveDate = 172324118;
 		};
 		sourceControlManager = F5AFECA0055CDC00002C8506 /* Source Control */;
 		userBuildSettings = {
@@ -1166,7 +1166,7 @@
 		);
 		argumentStrings = (
 			"-C sample",
-			"-C $(SRCROOT)/sample",
+			"-C $(PROJECT_DIR)/../sample",
 			test_all.newt,
 		);
 		autoAttachOnCrash = 1;
