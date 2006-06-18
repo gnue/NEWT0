@@ -1,0 +1,767 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		DA16688F0A438DE6005937AA /* All */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = DA16689B0A438E15005937AA /* Build configuration list for PBXAggregateTarget "All" */;
+			buildPhases = (
+			);
+			dependencies = (
+				DA1668970A438DED005937AA /* PBXTargetDependency */,
+				DA1668990A438DED005937AA /* PBXTargetDependency */,
+			);
+			name = All;
+			productName = All;
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXBuildFile section */
+		DAE3D3790A42A6F200FE1B1F /* darwin_closure.S in Sources */ = {isa = PBXBuildFile; fileRef = DAE3D36F0A42A66700FE1B1F /* darwin_closure.S */; };
+		DAE3D37A0A42A6F300FE1B1F /* darwin.S in Sources */ = {isa = PBXBuildFile; fileRef = DAE3D3750A42A66700FE1B1F /* darwin.S */; };
+		DAE3D37B0A42A6F400FE1B1F /* darwin.S in Sources */ = {isa = PBXBuildFile; fileRef = DAE3D36E0A42A66700FE1B1F /* darwin.S */; };
+		DAE3D37C0A42A6FA00FE1B1F /* ffi_darwin.c in Sources */ = {isa = PBXBuildFile; fileRef = DAE3D3700A42A66700FE1B1F /* ffi_darwin.c */; };
+		DAE3D37D0A42A6FA00FE1B1F /* ffi_darwin.c in Sources */ = {isa = PBXBuildFile; fileRef = DAE3D3760A42A66700FE1B1F /* ffi_darwin.c */; };
+		DAE3D37E0A42A6FA00FE1B1F /* prep_cif.c in Sources */ = {isa = PBXBuildFile; fileRef = DAE3D3720A42A66700FE1B1F /* prep_cif.c */; };
+		DAE3D37F0A42A6FA00FE1B1F /* types.c in Sources */ = {isa = PBXBuildFile; fileRef = DAE3D3730A42A66700FE1B1F /* types.c */; };
+		DAE3D4080A42A9D400FE1B1F /* NativeCalls.c in Sources */ = {isa = PBXBuildFile; fileRef = DAE3D3040A429D9000FE1B1F /* NativeCalls.c */; };
+		DAE3D43D0A42ADD700FE1B1F /* AppKitFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE3D3090A429D9000FE1B1F /* AppKitFunctions.m */; };
+		DAE3D43E0A42ADD800FE1B1F /* FoundationFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE3D31D0A429D9000FE1B1F /* FoundationFunctions.m */; };
+		DAE3D43F0A42ADD900FE1B1F /* NewtObjC.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE3D3200A429D9000FE1B1F /* NewtObjC.m */; };
+		DAE3D4400A42ADDC00FE1B1F /* ObjCObjects.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE3D32C0A429D9000FE1B1F /* ObjCObjects.m */; };
+		DAE3D4410A42ADDD00FE1B1F /* TNewtObjCRef.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE3D3300A429D9000FE1B1F /* TNewtObjCRef.m */; };
+		DAE3D4420A42ADDF00FE1B1F /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE3D3330A429D9000FE1B1F /* Utils.m */; };
+		DAE3D4640A42AE5A00FE1B1F /* objc-runtime-x.s in Sources */ = {isa = PBXBuildFile; fileRef = DAE3D3290A429D9000FE1B1F /* objc-runtime-x.s */; };
+		DAE3D49E0A42B03300FE1B1F /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAE3D49D0A42B03300FE1B1F /* Cocoa.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		DA1668960A438DED005937AA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DAE3D2F10A429D6A00FE1B1F;
+			remoteInfo = NativeCalls;
+		};
+		DA1668980A438DED005937AA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DAE3D42D0A42ADB900FE1B1F;
+			remoteInfo = NewtObjC;
+		};
+		DAE3D48D0A42AF8E00FE1B1F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = DAE3D4560A42AE3A00FE1B1F;
+			remoteInfo = "objc-runtime-x";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		DAE3D2F90A429D6A00FE1B1F /* NativeCalls.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = NativeCalls.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		DAE3D3040A429D9000FE1B1F /* NativeCalls.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = NativeCalls.c; sourceTree = "<group>"; };
+		DAE3D3080A429D9000FE1B1F /* AppKitFunctions.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = AppKitFunctions.h; sourceTree = "<group>"; };
+		DAE3D3090A429D9000FE1B1F /* AppKitFunctions.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = AppKitFunctions.m; sourceTree = "<group>"; };
+		DAE3D30B0A429D9000FE1B1F /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		DAE3D31C0A429D9000FE1B1F /* FoundationFunctions.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FoundationFunctions.h; sourceTree = "<group>"; };
+		DAE3D31D0A429D9000FE1B1F /* FoundationFunctions.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = FoundationFunctions.m; sourceTree = "<group>"; };
+		DAE3D3200A429D9000FE1B1F /* NewtObjC.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = NewtObjC.m; sourceTree = "<group>"; };
+		DAE3D3270A429D9000FE1B1F /* objc-runtime-x.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = "objc-runtime-x.h"; sourceTree = "<group>"; };
+		DAE3D3290A429D9000FE1B1F /* objc-runtime-x.s */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.asm; path = "objc-runtime-x.s"; sourceTree = "<group>"; };
+		DAE3D32B0A429D9000FE1B1F /* ObjCObjects.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ObjCObjects.h; sourceTree = "<group>"; };
+		DAE3D32C0A429D9000FE1B1F /* ObjCObjects.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ObjCObjects.m; sourceTree = "<group>"; };
+		DAE3D32F0A429D9000FE1B1F /* TNewtObjCRef.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TNewtObjCRef.h; sourceTree = "<group>"; };
+		DAE3D3300A429D9000FE1B1F /* TNewtObjCRef.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = TNewtObjCRef.m; sourceTree = "<group>"; };
+		DAE3D3320A429D9000FE1B1F /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
+		DAE3D3330A429D9000FE1B1F /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
+		DAE3D3620A42A66700FE1B1F /* ffi.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ffi.h; sourceTree = "<group>"; };
+		DAE3D3640A42A66700FE1B1F /* ffi_common.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ffi_common.h; sourceTree = "<group>"; };
+		DAE3D3650A42A66700FE1B1F /* fficonfig.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = fficonfig.h; sourceTree = "<group>"; };
+		DAE3D3660A42A66700FE1B1F /* ffitarget.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ffitarget.h; sourceTree = "<group>"; };
+		DAE3D36E0A42A66700FE1B1F /* darwin.S */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.asm; path = darwin.S; sourceTree = "<group>"; };
+		DAE3D36F0A42A66700FE1B1F /* darwin_closure.S */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.asm; path = darwin_closure.S; sourceTree = "<group>"; };
+		DAE3D3700A42A66700FE1B1F /* ffi_darwin.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = ffi_darwin.c; sourceTree = "<group>"; };
+		DAE3D3720A42A66700FE1B1F /* prep_cif.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = prep_cif.c; sourceTree = "<group>"; };
+		DAE3D3730A42A66700FE1B1F /* types.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = types.c; sourceTree = "<group>"; };
+		DAE3D3750A42A66700FE1B1F /* darwin.S */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.asm; path = darwin.S; sourceTree = "<group>"; };
+		DAE3D3760A42A66700FE1B1F /* ffi_darwin.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = ffi_darwin.c; sourceTree = "<group>"; };
+		DAE3D43C0A42ADB900FE1B1F /* NewtObjC.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = NewtObjC.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		DAE3D4630A42AE3A00FE1B1F /* objc-runtime-x.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = "objc-runtime-x.dylib"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DAE3D49D0A42B03300FE1B1F /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		F53BCC700670CDF00013103E /* NewtIO.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = NewtIO.h; sourceTree = "<group>"; };
+		F541CF5107D8582D0071DCE6 /* Newton.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = Newton.h; sourceTree = "<group>"; };
+		F5547416088A7486001E9DDF /* NewtIconv.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = NewtIconv.h; sourceTree = "<group>"; };
+		F55860F907E09F800080D223 /* NewtPrint.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = NewtPrint.h; sourceTree = "<group>"; };
+		F55A5AF70726499E002A520F /* NewtLib.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = NewtLib.h; sourceTree = "<group>"; };
+		F5622ED907E0273B009AAF9A /* Objects.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = Objects.h; sourceTree = "<group>"; };
+		F5622F2307E029FC009AAF9A /* NewtonMemory.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = NewtonMemory.h; sourceTree = "<group>"; };
+		F5622F2407E029FC009AAF9A /* NewtonExceptions.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = NewtonExceptions.h; sourceTree = "<group>"; };
+		F57E7A0C07FD362400256511 /* NewtNSOF.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = NewtNSOF.h; sourceTree = "<group>"; };
+		F5ACB05306412D4900DB6CF9 /* NewtBC.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = NewtBC.h; sourceTree = "<group>"; };
+		F5ACB05406412D4900DB6CF9 /* NewtConf.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = NewtConf.h; sourceTree = "<group>"; };
+		F5ACB05506412D4900DB6CF9 /* NewtCore.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = NewtCore.h; sourceTree = "<group>"; };
+		F5ACB05606412D4900DB6CF9 /* NewtEnv.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = NewtEnv.h; sourceTree = "<group>"; };
+		F5ACB05706412D4900DB6CF9 /* NewtErrs.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = NewtErrs.h; sourceTree = "<group>"; };
+		F5ACB05806412D4900DB6CF9 /* NewtFile.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = NewtFile.h; sourceTree = "<group>"; };
+		F5ACB05906412D4900DB6CF9 /* NewtFns.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = NewtFns.h; sourceTree = "<group>"; };
+		F5ACB05A06412D4900DB6CF9 /* NewtGC.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = NewtGC.h; sourceTree = "<group>"; };
+		F5ACB05B06412D4900DB6CF9 /* NewtMem.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = NewtMem.h; sourceTree = "<group>"; };
+		F5ACB05C06412D4900DB6CF9 /* NewtObj.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = NewtObj.h; sourceTree = "<group>"; };
+		F5ACB05D06412D4900DB6CF9 /* NewtParser.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = NewtParser.h; sourceTree = "<group>"; };
+		F5ACB05E06412D4900DB6CF9 /* NewtStr.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = NewtStr.h; sourceTree = "<group>"; };
+		F5ACB05F06412D4900DB6CF9 /* NewtType.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = NewtType.h; sourceTree = "<group>"; };
+		F5ACB06006412D4900DB6CF9 /* NewtVM.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = NewtVM.h; sourceTree = "<group>"; };
+		F5DE1345082AD4A500BB42A5 /* config.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
+		F5F69C0107E8F36E0086BCEA /* platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = platform.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		DAE3D2F40A429D6A00FE1B1F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DAE3D4370A42ADB900FE1B1F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DAE3D49E0A42B03300FE1B1F /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DAE3D45E0A42AE3A00FE1B1F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		08FB7794FE84155DC02AAC07 /* newt */ = {
+			isa = PBXGroup;
+			children = (
+				F5ACB05206412D4900DB6CF9 /* Headers */,
+				08FB7795FE84155DC02AAC07 /* Sources */,
+				F52FA68F0594745700087763 /* Frameworks */,
+				1AB674ADFE9D54B511CA2CBB /* Products */,
+			);
+			name = newt;
+			sourceTree = "<group>";
+		};
+		08FB7795FE84155DC02AAC07 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				DAE3D3010A429D9000FE1B1F /* NativeCalls */,
+				DAE3D3060A429D9000FE1B1F /* NewtObjC */,
+			);
+			name = Sources;
+			sourceTree = "<group>";
+		};
+		1AB674ADFE9D54B511CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DAE3D2F90A429D6A00FE1B1F /* NativeCalls.dylib */,
+				DAE3D43C0A42ADB900FE1B1F /* NewtObjC.dylib */,
+				DAE3D4630A42AE3A00FE1B1F /* objc-runtime-x.dylib */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		DAE3D3010A429D9000FE1B1F /* NativeCalls */ = {
+			isa = PBXGroup;
+			children = (
+				DAE3D3600A42A66700FE1B1F /* libffi-osx */,
+				DAE3D3040A429D9000FE1B1F /* NativeCalls.c */,
+			);
+			path = NativeCalls;
+			sourceTree = "<group>";
+		};
+		DAE3D3060A429D9000FE1B1F /* NewtObjC */ = {
+			isa = PBXGroup;
+			children = (
+				DAE3D3080A429D9000FE1B1F /* AppKitFunctions.h */,
+				DAE3D3090A429D9000FE1B1F /* AppKitFunctions.m */,
+				DAE3D30B0A429D9000FE1B1F /* Constants.h */,
+				DAE3D31C0A429D9000FE1B1F /* FoundationFunctions.h */,
+				DAE3D31D0A429D9000FE1B1F /* FoundationFunctions.m */,
+				DAE3D3200A429D9000FE1B1F /* NewtObjC.m */,
+				DAE3D3220A429D9000FE1B1F /* objc-runtime-x */,
+				DAE3D32B0A429D9000FE1B1F /* ObjCObjects.h */,
+				DAE3D32C0A429D9000FE1B1F /* ObjCObjects.m */,
+				DAE3D32F0A429D9000FE1B1F /* TNewtObjCRef.h */,
+				DAE3D3300A429D9000FE1B1F /* TNewtObjCRef.m */,
+				DAE3D3320A429D9000FE1B1F /* Utils.h */,
+				DAE3D3330A429D9000FE1B1F /* Utils.m */,
+			);
+			path = NewtObjC;
+			sourceTree = "<group>";
+		};
+		DAE3D3220A429D9000FE1B1F /* objc-runtime-x */ = {
+			isa = PBXGroup;
+			children = (
+				DAE3D3270A429D9000FE1B1F /* objc-runtime-x.h */,
+				DAE3D3290A429D9000FE1B1F /* objc-runtime-x.s */,
+			);
+			path = "objc-runtime-x";
+			sourceTree = "<group>";
+		};
+		DAE3D3600A42A66700FE1B1F /* libffi-osx */ = {
+			isa = PBXGroup;
+			children = (
+				DAE3D3610A42A66700FE1B1F /* include */,
+				DAE3D36B0A42A66700FE1B1F /* src */,
+			);
+			path = "libffi-osx";
+			sourceTree = "<group>";
+		};
+		DAE3D3610A42A66700FE1B1F /* include */ = {
+			isa = PBXGroup;
+			children = (
+				DAE3D3620A42A66700FE1B1F /* ffi.h */,
+				DAE3D3640A42A66700FE1B1F /* ffi_common.h */,
+				DAE3D3650A42A66700FE1B1F /* fficonfig.h */,
+				DAE3D3660A42A66700FE1B1F /* ffitarget.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		DAE3D36B0A42A66700FE1B1F /* src */ = {
+			isa = PBXGroup;
+			children = (
+				DAE3D36C0A42A66700FE1B1F /* powerpc */,
+				DAE3D3720A42A66700FE1B1F /* prep_cif.c */,
+				DAE3D3730A42A66700FE1B1F /* types.c */,
+				DAE3D3740A42A66700FE1B1F /* x86 */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		DAE3D36C0A42A66700FE1B1F /* powerpc */ = {
+			isa = PBXGroup;
+			children = (
+				DAE3D36E0A42A66700FE1B1F /* darwin.S */,
+				DAE3D36F0A42A66700FE1B1F /* darwin_closure.S */,
+				DAE3D3700A42A66700FE1B1F /* ffi_darwin.c */,
+			);
+			path = powerpc;
+			sourceTree = "<group>";
+		};
+		DAE3D3740A42A66700FE1B1F /* x86 */ = {
+			isa = PBXGroup;
+			children = (
+				DAE3D3750A42A66700FE1B1F /* darwin.S */,
+				DAE3D3760A42A66700FE1B1F /* ffi_darwin.c */,
+			);
+			path = x86;
+			sourceTree = "<group>";
+		};
+		F52FA68F0594745700087763 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				DAE3D49D0A42B03300FE1B1F /* Cocoa.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F541CF5007D8582D0071DCE6 /* Newton */ = {
+			isa = PBXGroup;
+			children = (
+				F541CF5107D8582D0071DCE6 /* Newton.h */,
+				F5622F2307E029FC009AAF9A /* NewtonMemory.h */,
+				F5622F2407E029FC009AAF9A /* NewtonExceptions.h */,
+				F5622ED907E0273B009AAF9A /* Objects.h */,
+			);
+			includeInIndex = 1;
+			path = Newton;
+			sourceTree = "<group>";
+		};
+		F5ACB05206412D4900DB6CF9 /* Headers */ = {
+			isa = PBXGroup;
+			children = (
+				F5DE1344082AD4A500BB42A5 /* darwin */,
+				F5F69C0107E8F36E0086BCEA /* platform.h */,
+				F541CF5007D8582D0071DCE6 /* Newton */,
+				F5ACB05306412D4900DB6CF9 /* NewtBC.h */,
+				F5ACB05406412D4900DB6CF9 /* NewtConf.h */,
+				F5ACB05506412D4900DB6CF9 /* NewtCore.h */,
+				F5ACB05606412D4900DB6CF9 /* NewtEnv.h */,
+				F5ACB05706412D4900DB6CF9 /* NewtErrs.h */,
+				F5ACB05806412D4900DB6CF9 /* NewtFile.h */,
+				F5ACB05906412D4900DB6CF9 /* NewtFns.h */,
+				F5ACB05A06412D4900DB6CF9 /* NewtGC.h */,
+				F5547416088A7486001E9DDF /* NewtIconv.h */,
+				F53BCC700670CDF00013103E /* NewtIO.h */,
+				F55A5AF70726499E002A520F /* NewtLib.h */,
+				F5ACB05B06412D4900DB6CF9 /* NewtMem.h */,
+				F57E7A0C07FD362400256511 /* NewtNSOF.h */,
+				F5ACB05C06412D4900DB6CF9 /* NewtObj.h */,
+				F5ACB05D06412D4900DB6CF9 /* NewtParser.h */,
+				F55860F907E09F800080D223 /* NewtPrint.h */,
+				F5ACB05E06412D4900DB6CF9 /* NewtStr.h */,
+				F5ACB05F06412D4900DB6CF9 /* NewtType.h */,
+				F5ACB06006412D4900DB6CF9 /* NewtVM.h */,
+			);
+			name = Headers;
+			path = ../src/newt_core/incs;
+			sourceTree = "<group>";
+		};
+		F5DE1344082AD4A500BB42A5 /* darwin */ = {
+			isa = PBXGroup;
+			children = (
+				F5DE1345082AD4A500BB42A5 /* config.h */,
+			);
+			path = darwin;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		DAE3D2F10A429D6A00FE1B1F /* NativeCalls */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DAE3D2F50A429D6A00FE1B1F /* Build configuration list for PBXNativeTarget "NativeCalls" */;
+			buildPhases = (
+				DAE3D2F20A429D6A00FE1B1F /* Sources */,
+				DAE3D2F40A429D6A00FE1B1F /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NativeCalls;
+			productName = protoFILE;
+			productReference = DAE3D2F90A429D6A00FE1B1F /* NativeCalls.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+		DAE3D42D0A42ADB900FE1B1F /* NewtObjC */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DAE3D4380A42ADB900FE1B1F /* Build configuration list for PBXNativeTarget "NewtObjC" */;
+			buildPhases = (
+				DAE3D42E0A42ADB900FE1B1F /* Sources */,
+				DAE3D4370A42ADB900FE1B1F /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DAE3D48E0A42AF8E00FE1B1F /* PBXTargetDependency */,
+			);
+			name = NewtObjC;
+			productName = protoFILE;
+			productReference = DAE3D43C0A42ADB900FE1B1F /* NewtObjC.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+		DAE3D4560A42AE3A00FE1B1F /* objc-runtime-x */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DAE3D45F0A42AE3A00FE1B1F /* Build configuration list for PBXNativeTarget "objc-runtime-x" */;
+			buildPhases = (
+				DAE3D4570A42AE3A00FE1B1F /* Sources */,
+				DAE3D45E0A42AE3A00FE1B1F /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "objc-runtime-x";
+			productName = protoFILE;
+			productReference = DAE3D4630A42AE3A00FE1B1F /* objc-runtime-x.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		08FB7793FE84155DC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = F541302B096D1DEB00CFD896 /* Build configuration list for PBXProject "contrib" */;
+			hasScannedForEncodings = 1;
+			mainGroup = 08FB7794FE84155DC02AAC07 /* newt */;
+			projectDirPath = "";
+			targets = (
+				DAE3D2F10A429D6A00FE1B1F /* NativeCalls */,
+				DAE3D42D0A42ADB900FE1B1F /* NewtObjC */,
+				DAE3D4560A42AE3A00FE1B1F /* objc-runtime-x */,
+				DA16688F0A438DE6005937AA /* All */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		DAE3D2F20A429D6A00FE1B1F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DAE3D3790A42A6F200FE1B1F /* darwin_closure.S in Sources */,
+				DAE3D37A0A42A6F300FE1B1F /* darwin.S in Sources */,
+				DAE3D37B0A42A6F400FE1B1F /* darwin.S in Sources */,
+				DAE3D37C0A42A6FA00FE1B1F /* ffi_darwin.c in Sources */,
+				DAE3D37D0A42A6FA00FE1B1F /* ffi_darwin.c in Sources */,
+				DAE3D37E0A42A6FA00FE1B1F /* prep_cif.c in Sources */,
+				DAE3D37F0A42A6FA00FE1B1F /* types.c in Sources */,
+				DAE3D4080A42A9D400FE1B1F /* NativeCalls.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DAE3D42E0A42ADB900FE1B1F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DAE3D43D0A42ADD700FE1B1F /* AppKitFunctions.m in Sources */,
+				DAE3D43E0A42ADD800FE1B1F /* FoundationFunctions.m in Sources */,
+				DAE3D43F0A42ADD900FE1B1F /* NewtObjC.m in Sources */,
+				DAE3D4400A42ADDC00FE1B1F /* ObjCObjects.m in Sources */,
+				DAE3D4410A42ADDD00FE1B1F /* TNewtObjCRef.m in Sources */,
+				DAE3D4420A42ADDF00FE1B1F /* Utils.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DAE3D4570A42AE3A00FE1B1F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DAE3D4640A42AE5A00FE1B1F /* objc-runtime-x.s in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		DA1668970A438DED005937AA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DAE3D2F10A429D6A00FE1B1F /* NativeCalls */;
+			targetProxy = DA1668960A438DED005937AA /* PBXContainerItemProxy */;
+		};
+		DA1668990A438DED005937AA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DAE3D42D0A42ADB900FE1B1F /* NewtObjC */;
+			targetProxy = DA1668980A438DED005937AA /* PBXContainerItemProxy */;
+		};
+		DAE3D48E0A42AF8E00FE1B1F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = DAE3D4560A42AE3A00FE1B1F /* objc-runtime-x */;
+			targetProxy = DAE3D48D0A42AF8E00FE1B1F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		DA16689C0A438E15005937AA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = All;
+			};
+			name = Debug;
+		};
+		DA16689D0A438E15005937AA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				PRODUCT_NAME = All;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		DAE3D2F60A429D6A00FE1B1F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEBUGGING_SYMBOLS = "<Multiple values>";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = "<Multiple values>";
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "DYLIBSUFFIX='\"dylib\"'";
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = NO;
+				LIBRARY_STYLE = BUNDLE;
+				MACH_O_TYPE = mh_dylib;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-undefined",
+					suppress,
+					"-flat_namespace",
+				);
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = NativeCalls;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost";
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		DAE3D2F70A429D6A00FE1B1F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUGGING_SYMBOLS = "<Multiple values>";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = "<Multiple values>";
+				GCC_PREPROCESSOR_DEFINITIONS = "DYLIBSUFFIX='\"dylib\"'";
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = NO;
+				LIBRARY_STYLE = BUNDLE;
+				MACH_O_TYPE = mh_dylib;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-undefined",
+					suppress,
+					"-flat_namespace",
+				);
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = NativeCalls;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost";
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		DAE3D4390A42ADB900FE1B1F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEBUGGING_SYMBOLS = "<Multiple values>";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = "<Multiple values>";
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = NO;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
+				);
+				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SYSTEM_LIBRARY_DIR)/Frameworks/Cocoa.framework\"";
+				LIBRARY_STYLE = BUNDLE;
+				MACH_O_TYPE = mh_dylib;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-undefined",
+					suppress,
+					"-flat_namespace",
+				);
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = NewtObjC;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost";
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		DAE3D43A0A42ADB900FE1B1F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUGGING_SYMBOLS = "<Multiple values>";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = "<Multiple values>";
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = NO;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
+				);
+				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SYSTEM_LIBRARY_DIR)/Frameworks/Cocoa.framework\"";
+				LIBRARY_STYLE = BUNDLE;
+				MACH_O_TYPE = mh_dylib;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-undefined",
+					suppress,
+					"-flat_namespace",
+				);
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = NewtObjC;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost";
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		DAE3D4600A42AE3A00FE1B1F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEBUGGING_SYMBOLS = "<Multiple values>";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = "<Multiple values>";
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = NO;
+				LIBRARY_STYLE = BUNDLE;
+				MACH_O_TYPE = mh_dylib;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-undefined",
+					suppress,
+					"-flat_namespace",
+				);
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = "objc-runtime-x";
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost";
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		DAE3D4610A42AE3A00FE1B1F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUGGING_SYMBOLS = "<Multiple values>";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = "<Multiple values>";
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = NO;
+				LIBRARY_STYLE = BUNDLE;
+				MACH_O_TYPE = mh_dylib;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-undefined",
+					suppress,
+					"-flat_namespace",
+				);
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = "objc-runtime-x";
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost";
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		F541302C096D1DEB00CFD896 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		F541302D096D1DEB00CFD896 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_TRIGRAPHS = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = "";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = NO;
+				INSTALL_PATH = "$(HOME)/bin";
+				LIBRARY_SEARCH_PATHS = "";
+				LIBRARY_STYLE = STATIC;
+				MACOSX_DEPLOYMENT_TARGET = 10.3;
+				OTHER_CFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				REZ_EXECUTABLE = YES;
+				SDKROOT = /Developer/SDKs/MacOSX10.3.9.sdk;
+				SDKROOT_i386 = /Developer/SDKs/MacOSX10.4u.sdk;
+				SDKROOT_ppc = /Developer/SDKs/MacOSX10.3.9.sdk;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		DA16689B0A438E15005937AA /* Build configuration list for PBXAggregateTarget "All" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DA16689C0A438E15005937AA /* Debug */,
+				DA16689D0A438E15005937AA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DAE3D2F50A429D6A00FE1B1F /* Build configuration list for PBXNativeTarget "NativeCalls" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DAE3D2F60A429D6A00FE1B1F /* Debug */,
+				DAE3D2F70A429D6A00FE1B1F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DAE3D4380A42ADB900FE1B1F /* Build configuration list for PBXNativeTarget "NewtObjC" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DAE3D4390A42ADB900FE1B1F /* Debug */,
+				DAE3D43A0A42ADB900FE1B1F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DAE3D45F0A42AE3A00FE1B1F /* Build configuration list for PBXNativeTarget "objc-runtime-x" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DAE3D4600A42AE3A00FE1B1F /* Debug */,
+				DAE3D4610A42AE3A00FE1B1F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F541302B096D1DEB00CFD896 /* Build configuration list for PBXProject "contrib" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F541302C096D1DEB00CFD896 /* Debug */,
+				F541302D096D1DEB00CFD896 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 08FB7793FE84155DC02AAC07 /* Project object */;
+}
