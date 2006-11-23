@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------*/
 /**
  * @file	NewtFns.c
- * @brief   ‘g‚İŠÖ”
+ * @brief   çµ„è¾¼ã¿é–¢æ•°
  *
  * @author  M.Nukui
  * @date	2003-11-07
@@ -10,7 +10,7 @@
  */
 
 
-/* ƒwƒbƒ_ƒtƒ@ƒCƒ‹ */
+/* ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ« */
 #include <string.h>
 
 #include "NewtErrs.h"
@@ -22,7 +22,7 @@
 #include "NewtPrint.h"
 
 
-/* ŠÖ”ƒvƒƒgƒ^ƒCƒv */
+/* é–¢æ•°ãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ— */
 static newtRef		NewtRefTypeToClass(uint16_t type);
 static newtRef		NewtObjClassOf(newtRefArg r);
 static newtRef		NewtObjSetClass(newtRefArg r, newtRefArg c);
@@ -31,12 +31,12 @@ static bool			NewtArgsIsNumber(newtRefArg r1, newtRefArg r2, bool * real);
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ƒvƒƒgŒp³‚ÅƒVƒ“ƒ{ƒ‹‚ğŒŸõiƒtƒŒ[ƒ€‚ğŒ©‚Â‚¯‚éj
+/** ãƒ—ãƒ­ãƒˆç¶™æ‰¿ã§ã‚·ãƒ³ãƒœãƒ«ã‚’æ¤œç´¢ï¼ˆãƒ•ãƒ¬ãƒ¼ãƒ ã‚’è¦‹ã¤ã‘ã‚‹ï¼‰
  *
- * @param start		[in] ŠJnƒIƒuƒWƒFƒNƒg
- * @param name		[in] ƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg
+ * @param start		[in] é–‹å§‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param name		[in] ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			ŒŸõ‚³‚ê‚½ƒIƒuƒWƒFƒNƒg‚ğ‚ÂƒtƒŒ[ƒ€
+ * @return			æ¤œç´¢ã•ã‚ŒãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æŒã¤ãƒ•ãƒ¬ãƒ¼ãƒ 
  */
 
 newtRef NcProtoLookupFrame(newtRefArg start, newtRefArg name)
@@ -61,12 +61,12 @@ newtRef NcProtoLookupFrame(newtRefArg start, newtRefArg name)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒvƒƒgŒp³‚ÅƒVƒ“ƒ{ƒ‹‚ğŒŸõ
+/** ãƒ—ãƒ­ãƒˆç¶™æ‰¿ã§ã‚·ãƒ³ãƒœãƒ«ã‚’æ¤œç´¢
  *
- * @param start		[in] ŠJnƒIƒuƒWƒFƒNƒg
- * @param name		[in] ƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg
+ * @param start		[in] é–‹å§‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param name		[in] ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			ŒŸõ‚³‚ê‚½ƒIƒuƒWƒFƒNƒg
+ * @return			æ¤œç´¢ã•ã‚ŒãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NcProtoLookup(newtRefArg start, newtRefArg name)
@@ -83,12 +83,12 @@ newtRef NcProtoLookup(newtRefArg start, newtRefArg name)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒŒƒLƒVƒJƒ‹ƒXƒR[ƒv‚ÅƒVƒ“ƒ{ƒ‹‚ğŒŸõ
+/** ãƒ¬ã‚­ã‚·ã‚«ãƒ«ã‚¹ã‚³ãƒ¼ãƒ—ã§ã‚·ãƒ³ãƒœãƒ«ã‚’æ¤œç´¢
  *
- * @param start		[in] ŠJnƒIƒuƒWƒFƒNƒg
- * @param name		[in] ƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg
+ * @param start		[in] é–‹å§‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param name		[in] ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			ŒŸõ‚³‚ê‚½ƒIƒuƒWƒFƒNƒg
+ * @return			æ¤œç´¢ã•ã‚ŒãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NcLexicalLookup(newtRefArg start, newtRef name)
@@ -113,12 +113,12 @@ newtRef NcLexicalLookup(newtRefArg start, newtRef name)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒvƒƒgAƒyƒAƒŒƒ“ƒgŒp³‚ÅƒVƒ“ƒ{ƒ‹‚ğŒŸõiƒtƒŒ[ƒ€‚ğŒ©‚Â‚¯‚éj
+/** ãƒ—ãƒ­ãƒˆã€ãƒšã‚¢ãƒ¬ãƒ³ãƒˆç¶™æ‰¿ã§ã‚·ãƒ³ãƒœãƒ«ã‚’æ¤œç´¢ï¼ˆãƒ•ãƒ¬ãƒ¼ãƒ ã‚’è¦‹ã¤ã‘ã‚‹ï¼‰
  *
- * @param start		[in] ŠJnƒIƒuƒWƒFƒNƒg
- * @param name		[in] ƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg
+ * @param start		[in] é–‹å§‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param name		[in] ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			ŒŸõ‚³‚ê‚½ƒIƒuƒWƒFƒNƒg‚ğ‚ÂƒtƒŒ[ƒ€
+ * @return			æ¤œç´¢ã•ã‚ŒãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æŒã¤ãƒ•ãƒ¬ãƒ¼ãƒ 
  */
 
 newtRef NcFullLookupFrame(newtRefArg start, newtRefArg name)
@@ -154,12 +154,12 @@ newtRef NcFullLookupFrame(newtRefArg start, newtRefArg name)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒvƒƒgAƒyƒAƒŒƒ“ƒgŒp³‚ÅƒVƒ“ƒ{ƒ‹‚ğŒŸõ
+/** ãƒ—ãƒ­ãƒˆã€ãƒšã‚¢ãƒ¬ãƒ³ãƒˆç¶™æ‰¿ã§ã‚·ãƒ³ãƒœãƒ«ã‚’æ¤œç´¢
  *
- * @param start		[in] ŠJnƒIƒuƒWƒFƒNƒg
- * @param name		[in] ƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg
+ * @param start		[in] é–‹å§‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param name		[in] ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			ŒŸõ‚³‚ê‚½ƒIƒuƒWƒFƒNƒg
+ * @return			æ¤œç´¢ã•ã‚ŒãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NcFullLookup(newtRefArg start, newtRefArg name)
@@ -177,12 +177,12 @@ newtRef NcFullLookup(newtRefArg start, newtRefArg name)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ƒVƒ“ƒ{ƒ‹ƒe[ƒuƒ‹‚©‚çƒVƒ“ƒ{ƒ‹‚ğŒŸõ
+/** ã‚·ãƒ³ãƒœãƒ«ãƒ†ãƒ¼ãƒ–ãƒ«ã‹ã‚‰ã‚·ãƒ³ãƒœãƒ«ã‚’æ¤œç´¢
  *
- * @param r			[in] ƒVƒ“ƒ{ƒ‹ƒe[ƒuƒ‹
- * @param name		[in] ƒVƒ“ƒ{ƒ‹–¼
+ * @param r			[in] ã‚·ãƒ³ãƒœãƒ«ãƒ†ãƒ¼ãƒ–ãƒ«
+ * @param name		[in] ã‚·ãƒ³ãƒœãƒ«å
  *
- * @return			ŒŸõ‚³‚ê‚½ƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg
+ * @return			æ¤œç´¢ã•ã‚ŒãŸã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NcLookupSymbol(newtRefArg r, newtRefArg name)
@@ -192,15 +192,15 @@ newtRef NcLookupSymbol(newtRefArg r, newtRefArg name)
 
 
 /*------------------------------------------------------------------------*/
-/** —áŠO‚ğ”­¶
+/** ä¾‹å¤–ã‚’ç™ºç”Ÿ
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param name		[in] —áŠOƒVƒ“ƒ{ƒ‹
- * @param data		[in] —áŠOƒf[ƒ^
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param name		[in] ä¾‹å¤–ã‚·ãƒ³ãƒœãƒ«
+ * @param data		[in] ä¾‹å¤–ãƒ‡ãƒ¼ã‚¿
  *
  * @retval			NIL
  *
- * @note			ƒXƒNƒŠƒvƒg‚©‚ç‚ÌŒÄo‚µ—p
+ * @note			ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‹ã‚‰ã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NsThrow(newtRefArg rcvr, newtRefArg name, newtRefArg data)
@@ -211,13 +211,13 @@ newtRef NsThrow(newtRefArg rcvr, newtRefArg name, newtRefArg data)
 
 
 /*------------------------------------------------------------------------*/
-/** rethrow ‚·‚é
+/** rethrow ã™ã‚‹
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
  *
  * @retval			NIL
  *
- * @note			ƒXƒNƒŠƒvƒg‚©‚ç‚ÌŒÄo‚µ—p
+ * @note			ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‹ã‚‰ã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NsRethrow(newtRefArg rcvr)
@@ -228,11 +228,11 @@ newtRef NsRethrow(newtRefArg rcvr)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚ğƒNƒ[ƒ“•¡»‚·‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ã‚¯ãƒ­ãƒ¼ãƒ³è¤‡è£½ã™ã‚‹
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			ƒNƒ[ƒ“•¡»‚³‚ê‚½ƒIƒuƒWƒFƒNƒg
+ * @return			ã‚¯ãƒ­ãƒ¼ãƒ³è¤‡è£½ã•ã‚ŒãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NcClone(newtRefArg r)
@@ -245,12 +245,12 @@ newtRef NcClone(newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚Ì[‚¢ƒNƒ[ƒ“•¡»‚ğ‚·‚éiƒ}ƒWƒbƒNƒ|ƒCƒ“ƒ^‚Í’ÇÕ‚µ‚È‚¢j
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ·±ã„ã‚¯ãƒ­ãƒ¼ãƒ³è¤‡è£½ã‚’ã™ã‚‹ï¼ˆãƒã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿ã¯è¿½è·¡ã—ãªã„ï¼‰
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			ƒNƒ[ƒ“•¡»‚³‚ê‚½ƒIƒuƒWƒFƒNƒg
+ * @return			ã‚¯ãƒ­ãƒ¼ãƒ³è¤‡è£½ã•ã‚ŒãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NsTotalClone(newtRefArg rcvr, newtRefArg r)
@@ -279,13 +279,13 @@ newtRef NsTotalClone(newtRefArg rcvr, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚Ì’·‚³‚ğæ“¾
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®é•·ã•ã‚’å–å¾—
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			ƒIƒuƒWƒFƒNƒg‚Ì’·‚³
+ * @return			ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®é•·ã•
  *
- * @note			ƒXƒNƒŠƒvƒg‚©‚ç‚ÌŒÄo‚µ—p
+ * @note			ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‹ã‚‰ã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NcLength(newtRefArg r)
@@ -295,15 +295,15 @@ newtRef NcLength(newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚Ìi[‚¢j’·‚³‚ğæ“¾
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ï¼ˆæ·±ã„ï¼‰é•·ã•ã‚’å–å¾—
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			ƒIƒuƒWƒFƒNƒg‚Ì’·‚³
+ * @return			ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®é•·ã•
  *
- * @note			ƒtƒŒ[ƒ€‚Ìê‡‚ÍƒvƒƒgŒp³‚Å’·‚³‚ğŒvZ‚·‚é
- *					ƒXƒNƒŠƒvƒg‚©‚ç‚ÌŒÄo‚µ—p
+ * @note			ãƒ•ãƒ¬ãƒ¼ãƒ ã®å ´åˆã¯ãƒ—ãƒ­ãƒˆç¶™æ‰¿ã§é•·ã•ã‚’è¨ˆç®—ã™ã‚‹
+ *					ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‹ã‚‰ã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NsDeeplyLength(newtRefArg rcvr, newtRefArg r)
@@ -313,16 +313,16 @@ newtRef NsDeeplyLength(newtRefArg rcvr, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚Ìi[‚¢j’·‚³‚ğæ“¾
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ï¼ˆæ·±ã„ï¼‰é•·ã•ã‚’å–å¾—
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
- * @param len		[in] ’·‚³
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param len		[in] é•·ã•
  *
- * @return			ƒIƒuƒWƒFƒNƒg‚Ì’·‚³
+ * @return			ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®é•·ã•
  *
- * @note			ƒtƒŒ[ƒ€‚Ìê‡‚ÍƒvƒƒgŒp³‚Å’·‚³‚ğŒvZ‚·‚é
- *					ƒXƒNƒŠƒvƒg‚©‚ç‚ÌŒÄo‚µ—p
+ * @note			ãƒ•ãƒ¬ãƒ¼ãƒ ã®å ´åˆã¯ãƒ—ãƒ­ãƒˆç¶™æ‰¿ã§é•·ã•ã‚’è¨ˆç®—ã™ã‚‹
+ *					ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‹ã‚‰ã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NsSetLength(newtRefArg rcvr, newtRefArg r, newtRefArg len)
@@ -360,16 +360,16 @@ newtRef NsSetLength(newtRefArg rcvr, newtRefArg r, newtRefArg len)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒtƒŒ[ƒ€“à‚ÌƒXƒƒbƒg‚Ì—L–³‚ğ’²‚×‚é
+/** ãƒ•ãƒ¬ãƒ¼ãƒ å†…ã®ã‚¹ãƒ­ãƒƒãƒˆã®æœ‰ç„¡ã‚’èª¿ã¹ã‚‹
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param frame		[in] ƒtƒŒ[ƒ€
- * @param slot		[in] ƒXƒƒbƒgƒVƒ“ƒ{ƒ‹
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param frame		[in] ãƒ•ãƒ¬ãƒ¼ãƒ 
+ * @param slot		[in] ã‚¹ãƒ­ãƒƒãƒˆã‚·ãƒ³ãƒœãƒ«
  *
- * @retval			TRUE	ƒXƒƒbƒg‚ª‘¶İ‚·‚é
- * @retval			NIL		ƒXƒƒbƒg‚ª‘¶İ‚µ‚È‚¢
+ * @retval			TRUE	ã‚¹ãƒ­ãƒƒãƒˆãŒå­˜åœ¨ã™ã‚‹
+ * @retval			NIL		ã‚¹ãƒ­ãƒƒãƒˆãŒå­˜åœ¨ã—ãªã„
  *
- * @note			ƒXƒNƒŠƒvƒg‚©‚ç‚ÌŒÄo‚µ—p
+ * @note			ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‹ã‚‰ã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NsHasSlot(newtRefArg rcvr, newtRefArg frame, newtRefArg slot)
@@ -379,13 +379,13 @@ newtRef NsHasSlot(newtRefArg rcvr, newtRefArg frame, newtRefArg slot)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒtƒŒ[ƒ€‚©‚çƒXƒƒbƒg‚Ì’l‚ğæ“¾
+/** ãƒ•ãƒ¬ãƒ¼ãƒ ã‹ã‚‰ã‚¹ãƒ­ãƒƒãƒˆã®å€¤ã‚’å–å¾—
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param frame		[in] ƒtƒŒ[ƒ€
- * @param slot		[in] ƒXƒƒbƒgƒVƒ“ƒ{ƒ‹
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param frame		[in] ãƒ•ãƒ¬ãƒ¼ãƒ 
+ * @param slot		[in] ã‚¹ãƒ­ãƒƒãƒˆã‚·ãƒ³ãƒœãƒ«
  *
- * @return			ƒXƒƒbƒg‚Ì’l
+ * @return			ã‚¹ãƒ­ãƒƒãƒˆã®å€¤
  */
 
 newtRef NsGetSlot(newtRefArg rcvr, newtRefArg frame, newtRefArg slot)
@@ -402,14 +402,14 @@ newtRef NsGetSlot(newtRefArg rcvr, newtRefArg frame, newtRefArg slot)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒtƒŒ[ƒ€‚ÉƒXƒƒbƒg‚Ì’l‚ğƒZƒbƒg‚·‚é
+/** ãƒ•ãƒ¬ãƒ¼ãƒ ã«ã‚¹ãƒ­ãƒƒãƒˆã®å€¤ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param frame		[in] ƒtƒŒ[ƒ€
- * @param slot		[in] ƒXƒƒbƒgƒVƒ“ƒ{ƒ‹
- * @param v			[in] ’lƒIƒuƒWƒFƒNƒg
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param frame		[in] ãƒ•ãƒ¬ãƒ¼ãƒ 
+ * @param slot		[in] ã‚¹ãƒ­ãƒƒãƒˆã‚·ãƒ³ãƒœãƒ«
+ * @param v			[in] å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			’lƒIƒuƒWƒFƒNƒg
+ * @return			å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NsSetSlot(newtRefArg rcvr, newtRefArg frame, newtRefArg slot, newtRefArg v)
@@ -431,13 +431,13 @@ newtRef NsSetSlot(newtRefArg rcvr, newtRefArg frame, newtRefArg slot, newtRefArg
 
 
 /*------------------------------------------------------------------------*/
-/** ƒtƒŒ[ƒ€‚©‚çƒXƒƒbƒg‚ğíœ‚·‚é
+/** ãƒ•ãƒ¬ãƒ¼ãƒ ã‹ã‚‰ã‚¹ãƒ­ãƒƒãƒˆã‚’å‰Šé™¤ã™ã‚‹
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param frame		[in] ƒtƒŒ[ƒ€
- * @param slot		[in] ƒXƒƒbƒgƒVƒ“ƒ{ƒ‹
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param frame		[in] ãƒ•ãƒ¬ãƒ¼ãƒ 
+ * @param slot		[in] ã‚¹ãƒ­ãƒƒãƒˆã‚·ãƒ³ãƒœãƒ«
  *
- * @return			ƒtƒŒ[ƒ€
+ * @return			ãƒ•ãƒ¬ãƒ¼ãƒ 
  */
 
 newtRef NsRemoveSlot(newtRefArg rcvr, newtRefArg frame, newtRefArg slot)
@@ -452,13 +452,13 @@ newtRef NsRemoveSlot(newtRefArg rcvr, newtRefArg frame, newtRefArg slot)
 
 
 /*------------------------------------------------------------------------*/
-/** ”z—ñ‚É’l‚ğƒZƒbƒg‚·‚é
+/** é…åˆ—ã«å€¤ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
  *
- * @param r			[in] ”z—ñƒIƒuƒWƒFƒNƒg
- * @param p			[in] ˆÊ’u
- * @param v			[in] ’lƒIƒuƒWƒFƒNƒg
+ * @param r			[in] é…åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param p			[in] ä½ç½®
+ * @param v			[in] å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			’lƒIƒuƒWƒFƒNƒg
+ * @return			å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NcSetArraySlot(newtRefArg r, newtRefArg p, newtRefArg v)
@@ -471,15 +471,15 @@ newtRef NcSetArraySlot(newtRefArg r, newtRefArg p, newtRefArg v)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg“à‚ÌƒAƒNƒZƒXƒpƒX‚Ì—L–³‚ğ’²‚×‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå†…ã®ã‚¢ã‚¯ã‚»ã‚¹ãƒ‘ã‚¹ã®æœ‰ç„¡ã‚’èª¿ã¹ã‚‹
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
- * @param p			[in] ƒAƒNƒZƒXƒpƒX
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param p			[in] ã‚¢ã‚¯ã‚»ã‚¹ãƒ‘ã‚¹
  *
- * @retval			TRUE	ƒAƒNƒZƒXƒpƒX‚ª‘¶İ‚·‚é
- * @retval			NIL		ƒAƒNƒZƒXƒpƒX‚ª‘¶İ‚µ‚È‚¢
+ * @retval			TRUE	ã‚¢ã‚¯ã‚»ã‚¹ãƒ‘ã‚¹ãŒå­˜åœ¨ã™ã‚‹
+ * @retval			NIL		ã‚¢ã‚¯ã‚»ã‚¹ãƒ‘ã‚¹ãŒå­˜åœ¨ã—ãªã„
  *
- * @note			ƒXƒNƒŠƒvƒg‚©‚ç‚ÌŒÄo‚µ—p
+ * @note			ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‹ã‚‰ã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NcHasPath(newtRefArg r, newtRefArg p)
@@ -489,14 +489,14 @@ newtRef NcHasPath(newtRefArg r, newtRefArg p)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚ÌƒAƒNƒZƒXƒpƒX‚Ì’l‚ğæ“¾
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚¢ã‚¯ã‚»ã‚¹ãƒ‘ã‚¹ã®å€¤ã‚’å–å¾—
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
- * @param p			[in] ƒAƒNƒZƒXƒpƒX
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param p			[in] ã‚¢ã‚¯ã‚»ã‚¹ãƒ‘ã‚¹
  *
- * @return			’lƒIƒuƒWƒFƒNƒg
+ * @return			å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @note			ƒXƒNƒŠƒvƒg‚©‚ç‚ÌŒÄo‚µ—p
+ * @note			ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‹ã‚‰ã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NcGetPath(newtRefArg r, newtRefArg p)
@@ -506,13 +506,13 @@ newtRef NcGetPath(newtRefArg r, newtRefArg p)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚ÌƒAƒNƒZƒXƒpƒX‚É’l‚ğƒZƒbƒg‚·‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚¢ã‚¯ã‚»ã‚¹ãƒ‘ã‚¹ã«å€¤ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
- * @param p			[in] ƒAƒNƒZƒXƒpƒX
- * @param v			[in] ’lƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param p			[in] ã‚¢ã‚¯ã‚»ã‚¹ãƒ‘ã‚¹
+ * @param v			[in] å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			’lƒIƒuƒWƒFƒNƒg
+ * @return			å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NcSetPath(newtRefArg r, newtRefArg p, newtRefArg v)
@@ -533,14 +533,14 @@ newtRef NcSetPath(newtRefArg r, newtRefArg p, newtRefArg v)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚Ìw’è‚³‚ê‚½ˆÊ’u‚©‚ç’l‚ğæ“¾
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æŒ‡å®šã•ã‚ŒãŸä½ç½®ã‹ã‚‰å€¤ã‚’å–å¾—
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
- * @param p			[in] ˆÊ’u
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param p			[in] ä½ç½®
  *
- * @return			’lƒIƒuƒWƒFƒNƒg
+ * @return			å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @note			ƒXƒNƒŠƒvƒg‚©‚ç‚ÌŒÄo‚µ—p
+ * @note			ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‹ã‚‰ã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NcARef(newtRefArg r, newtRefArg p)
@@ -553,15 +553,15 @@ newtRef NcARef(newtRefArg r, newtRefArg p)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚Ìw’è‚³‚ê‚½ˆÊ’u‚É’l‚ğƒZƒbƒg‚·‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æŒ‡å®šã•ã‚ŒãŸä½ç½®ã«å€¤ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
- * @param p			[in] ˆÊ’u
- * @param v			[in] ’lƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param p			[in] ä½ç½®
+ * @param v			[in] å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			’lƒIƒuƒWƒFƒNƒg
+ * @return			å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @note			ƒXƒNƒŠƒvƒg‚©‚ç‚ÌŒÄo‚µ—p
+ * @note			ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‹ã‚‰ã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NcSetARef(newtRefArg r, newtRefArg p, newtRefArg v)
@@ -574,16 +574,16 @@ newtRef NcSetARef(newtRefArg r, newtRefArg p, newtRefArg v)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒvƒƒgEƒyƒAƒŒƒ“ƒgŒp³‚ÅƒtƒŒ[ƒ€“à‚ÌƒXƒƒbƒg‚Ì—L–³‚ğ’²‚×‚é
+/** ãƒ—ãƒ­ãƒˆãƒ»ãƒšã‚¢ãƒ¬ãƒ³ãƒˆç¶™æ‰¿ã§ãƒ•ãƒ¬ãƒ¼ãƒ å†…ã®ã‚¹ãƒ­ãƒƒãƒˆã®æœ‰ç„¡ã‚’èª¿ã¹ã‚‹
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] ƒtƒŒ[ƒ€
- * @param name		[in] ƒXƒƒbƒgƒVƒ“ƒ{ƒ‹
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] ãƒ•ãƒ¬ãƒ¼ãƒ 
+ * @param name		[in] ã‚¹ãƒ­ãƒƒãƒˆã‚·ãƒ³ãƒœãƒ«
  *
- * @retval			TRUE	ƒXƒƒbƒg‚ª‘¶İ‚·‚é
- * @retval			NIL		ƒXƒƒbƒg‚ª‘¶İ‚µ‚È‚¢
+ * @retval			TRUE	ã‚¹ãƒ­ãƒƒãƒˆãŒå­˜åœ¨ã™ã‚‹
+ * @retval			NIL		ã‚¹ãƒ­ãƒƒãƒˆãŒå­˜åœ¨ã—ãªã„
  *
- * @note			ƒXƒNƒŠƒvƒg‚©‚ç‚ÌŒÄo‚µ—p
+ * @note			ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‹ã‚‰ã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NsHasVariable(newtRefArg rcvr, newtRefArg r, newtRefArg name)
@@ -593,15 +593,15 @@ newtRef NsHasVariable(newtRefArg rcvr, newtRefArg r, newtRefArg name)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒvƒƒgEƒyƒAƒŒƒ“ƒgŒp³‚ÅƒtƒŒ[ƒ€‚©‚çƒXƒƒbƒg‚Ì’l‚ğæ“¾
+/** ãƒ—ãƒ­ãƒˆãƒ»ãƒšã‚¢ãƒ¬ãƒ³ãƒˆç¶™æ‰¿ã§ãƒ•ãƒ¬ãƒ¼ãƒ ã‹ã‚‰ã‚¹ãƒ­ãƒƒãƒˆã®å€¤ã‚’å–å¾—
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param frame		[in] ƒtƒŒ[ƒ€
- * @param slot		[in] ƒXƒƒbƒgƒVƒ“ƒ{ƒ‹
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param frame		[in] ãƒ•ãƒ¬ãƒ¼ãƒ 
+ * @param slot		[in] ã‚¹ãƒ­ãƒƒãƒˆã‚·ãƒ³ãƒœãƒ«
  *
- * @return			ƒXƒƒbƒg‚Ì’l
+ * @return			ã‚¹ãƒ­ãƒƒãƒˆã®å€¤
  *
- * @note			ƒXƒNƒŠƒvƒg‚©‚ç‚ÌŒÄo‚µ—p
+ * @note			ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‹ã‚‰ã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NsGetVariable(newtRefArg rcvr, newtRefArg frame, newtRefArg slot)
@@ -611,16 +611,16 @@ newtRef NsGetVariable(newtRefArg rcvr, newtRefArg frame, newtRefArg slot)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒvƒƒgEƒyƒAƒŒƒ“ƒgŒp³‚ÅƒtƒŒ[ƒ€‚©‚çƒXƒƒbƒg‚Ì’l‚ğæ“¾
+/** ãƒ—ãƒ­ãƒˆãƒ»ãƒšã‚¢ãƒ¬ãƒ³ãƒˆç¶™æ‰¿ã§ãƒ•ãƒ¬ãƒ¼ãƒ ã‹ã‚‰ã‚¹ãƒ­ãƒƒãƒˆã®å€¤ã‚’å–å¾—
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param frame		[in] ƒtƒŒ[ƒ€
- * @param slot		[in] ƒXƒƒbƒgƒVƒ“ƒ{ƒ‹
- * @param v			[in] ’lƒIƒuƒWƒFƒNƒg
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param frame		[in] ãƒ•ãƒ¬ãƒ¼ãƒ 
+ * @param slot		[in] ã‚¹ãƒ­ãƒƒãƒˆã‚·ãƒ³ãƒœãƒ«
+ * @param v			[in] å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			’lƒIƒuƒWƒFƒNƒg
+ * @return			å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @note			ƒXƒNƒŠƒvƒg‚©‚ç‚ÌŒÄo‚µ—p
+ * @note			ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‹ã‚‰ã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NsSetVariable(newtRefArg rcvr, newtRefArg frame, newtRefArg slot, newtRefArg v)
@@ -633,15 +633,15 @@ newtRef NsSetVariable(newtRefArg rcvr, newtRefArg frame, newtRefArg slot, newtRe
 
 
 /*------------------------------------------------------------------------*/
-/** •Ï”‚Ì—L–³‚ğ’²‚×‚é
+/** å¤‰æ•°ã®æœ‰ç„¡ã‚’èª¿ã¹ã‚‹
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param name		[in] •Ï”–¼ƒVƒ“ƒ{ƒ‹
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param name		[in] å¤‰æ•°åã‚·ãƒ³ãƒœãƒ«
  *
- * @retval			TRUE	ƒXƒƒbƒg‚ª‘¶İ‚·‚é
- * @retval			NIL		ƒXƒƒbƒg‚ª‘¶İ‚µ‚È‚¢
+ * @retval			TRUE	ã‚¹ãƒ­ãƒƒãƒˆãŒå­˜åœ¨ã™ã‚‹
+ * @retval			NIL		ã‚¹ãƒ­ãƒƒãƒˆãŒå­˜åœ¨ã—ãªã„
  *
- * @note			ƒXƒNƒŠƒvƒg‚©‚ç‚ÌŒÄo‚µ—p
+ * @note			ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‹ã‚‰ã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NsHasVar(newtRefArg rcvr, newtRefArg name)
@@ -652,11 +652,11 @@ newtRef NsHasVar(newtRefArg rcvr, newtRefArg name)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒgƒ^ƒCƒv‚ğ‘Î‰‚·‚éƒNƒ‰ƒXƒVƒ“ƒ{ƒ‹‚É•ÏŠ·‚·‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¿ã‚¤ãƒ—ã‚’å¯¾å¿œã™ã‚‹ã‚¯ãƒ©ã‚¹ã‚·ãƒ³ãƒœãƒ«ã«å¤‰æ›ã™ã‚‹
  *
- * @param type		[in] ƒIƒuƒWƒFƒNƒgƒ^ƒCƒv
+ * @param type		[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¿ã‚¤ãƒ—
  *
- * @return			ƒNƒ‰ƒXƒVƒ“ƒ{ƒ‹
+ * @return			ã‚¯ãƒ©ã‚¹ã‚·ãƒ³ãƒœãƒ«
  */
 
 newtRef NewtRefTypeToClass(uint16_t type)
@@ -714,11 +714,11 @@ newtRef NewtRefTypeToClass(uint16_t type)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚ÌƒNƒ‰ƒXƒVƒ“ƒ{ƒ‹‚ğæ“¾
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚¯ãƒ©ã‚¹ã‚·ãƒ³ãƒœãƒ«ã‚’å–å¾—
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			ƒNƒ‰ƒXƒVƒ“ƒ{ƒ‹
+ * @return			ã‚¯ãƒ©ã‚¹ã‚·ãƒ³ãƒœãƒ«
  */
 
 newtRef NewtObjClassOf(newtRefArg r)
@@ -754,12 +754,12 @@ newtRef NewtObjClassOf(newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚ÌƒNƒ‰ƒXƒVƒ“ƒ{ƒ‹‚ğƒZƒbƒg‚·‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚¯ãƒ©ã‚¹ã‚·ãƒ³ãƒœãƒ«ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
- * @param c			[in] ƒNƒ‰ƒXƒVƒ“ƒ{ƒ‹
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param c			[in] ã‚¯ãƒ©ã‚¹ã‚·ãƒ³ãƒœãƒ«
  *
- * @return			ƒIƒuƒWƒFƒNƒg
+ * @return			ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtObjSetClass(newtRefArg r, newtRefArg c)
@@ -791,12 +791,12 @@ newtRef NewtObjSetClass(newtRefArg r, newtRefArg c)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚ÌƒvƒŠƒ~ƒeƒBƒuƒNƒ‰ƒX‚ğæ“¾
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ãƒ—ãƒªãƒŸãƒ†ã‚£ãƒ–ã‚¯ãƒ©ã‚¹ã‚’å–å¾—
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			ƒvƒŠƒ~ƒeƒBƒuƒNƒ‰ƒX
+ * @return			ãƒ—ãƒªãƒŸãƒ†ã‚£ãƒ–ã‚¯ãƒ©ã‚¹
  */
 
 newtRef NsPrimClassOf(newtRefArg rcvr, newtRefArg r)
@@ -830,11 +830,11 @@ newtRef NsPrimClassOf(newtRefArg rcvr, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚ÌƒNƒ‰ƒXƒVƒ“ƒ{ƒ‹‚ğæ“¾
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚¯ãƒ©ã‚¹ã‚·ãƒ³ãƒœãƒ«ã‚’å–å¾—
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			ƒNƒ‰ƒXƒVƒ“ƒ{ƒ‹
+ * @return			ã‚¯ãƒ©ã‚¹ã‚·ãƒ³ãƒœãƒ«
  */
 
 newtRef NcClassOf(newtRefArg r)
@@ -847,13 +847,13 @@ newtRef NcClassOf(newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚ÌƒNƒ‰ƒXƒVƒ“ƒ{ƒ‹‚ğƒZƒbƒg‚·‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚¯ãƒ©ã‚¹ã‚·ãƒ³ãƒœãƒ«ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
- * @param c			[in] ƒNƒ‰ƒXƒVƒ“ƒ{ƒ‹
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param c			[in] ã‚¯ãƒ©ã‚¹ã‚·ãƒ³ãƒœãƒ«
  *
- * @retval			ƒIƒuƒWƒFƒNƒg	ƒNƒ‰ƒXƒVƒ“ƒ{ƒ‹‚ğƒZƒbƒg‚Å‚«‚½ê‡
- * @retval			NIL			ƒNƒ‰ƒXƒVƒ“ƒ{ƒ‹‚ğƒZƒbƒg‚Å‚«‚È‚©‚Á‚½ê‡
+ * @retval			ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ	ã‚¯ãƒ©ã‚¹ã‚·ãƒ³ãƒœãƒ«ã‚’ã‚»ãƒƒãƒˆã§ããŸå ´åˆ
+ * @retval			NIL			ã‚¯ãƒ©ã‚¹ã‚·ãƒ³ãƒœãƒ«ã‚’ã‚»ãƒƒãƒˆã§ããªã‹ã£ãŸå ´åˆ
  */
 
 newtRef NcSetClass(newtRefArg r, newtRefArg c)
@@ -866,15 +866,15 @@ newtRef NcSetClass(newtRefArg r, newtRefArg c)
 
 
 /*------------------------------------------------------------------------*/
-/** QÆ‚Ì”äŠr
+/** å‚ç…§ã®æ¯”è¼ƒ
  *
- * @param r1		[in] QÆ‚P
- * @param r2		[in] QÆ‚Q
+ * @param r1		[in] å‚ç…§ï¼‘
+ * @param r2		[in] å‚ç…§ï¼’
  *
- * @retval			TRUE	“¯’l
- * @retval			NIL		“¯’l‚Å‚È‚¢
+ * @retval			TRUE	åŒå€¤
+ * @retval			NIL		åŒå€¤ã§ãªã„
  *
- * @note			ƒXƒNƒŠƒvƒg‚©‚ç‚ÌŒÄo‚µ—p
+ * @note			ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‹ã‚‰ã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NcRefEqual(newtRefArg r1, newtRefArg r2)
@@ -884,16 +884,16 @@ newtRef NcRefEqual(newtRefArg r1, newtRefArg r2)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚Ì”äŠr
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ¯”è¼ƒ
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r1		[in] ƒIƒuƒWƒFƒNƒg‚P
- * @param r2		[in] ƒIƒuƒWƒFƒNƒg‚Q
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r1		[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼‘
+ * @param r2		[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼’
  *
- * @retval			TRUE	“¯’l
- * @retval			NIL		“¯’l‚Å‚È‚¢
+ * @retval			TRUE	åŒå€¤
+ * @retval			NIL		åŒå€¤ã§ãªã„
  *
- * @note			ƒXƒNƒŠƒvƒg‚©‚ç‚ÌŒÄo‚µ—p
+ * @note			ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‹ã‚‰ã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NsObjectEqual(newtRefArg rcvr, newtRefArg r1, newtRefArg r2)
@@ -903,17 +903,17 @@ newtRef NsObjectEqual(newtRefArg rcvr, newtRefArg r1, newtRefArg r2)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒVƒ“ƒ{ƒ‹‚ğš‹å“I‚É”äŠri‘å•¶š¬•¶š‚Í‹æ•Ê‚³‚ê‚È‚¢j
+/** ã‚·ãƒ³ãƒœãƒ«ã‚’å­—å¥çš„ã«æ¯”è¼ƒï¼ˆå¤§æ–‡å­—å°æ–‡å­—ã¯åŒºåˆ¥ã•ã‚Œãªã„ï¼‰
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r1		[in] ƒVƒ“ƒ{ƒ‹‚P
- * @param r2		[in] ƒVƒ“ƒ{ƒ‹‚Q
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r1		[in] ã‚·ãƒ³ãƒœãƒ«ï¼‘
+ * @param r2		[in] ã‚·ãƒ³ãƒœãƒ«ï¼’
  *
- * @retval			•‰‚Ì®”	r1 < r2
+ * @retval			è² ã®æ•´æ•°	r1 < r2
  * @retval			0		r1 = r2
- * @retval			³‚Ì®”	r1 > r2
+ * @retval			æ­£ã®æ•´æ•°	r1 > r2
  *
- * @note			ƒXƒNƒŠƒvƒg‚©‚ç‚ÌŒÄo‚µ—p
+ * @note			ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‹ã‚‰ã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NsSymbolCompareLex(newtRefArg rcvr, newtRefArg r1, newtRefArg r2)
@@ -929,16 +929,16 @@ newtRef NsSymbolCompareLex(newtRefArg rcvr, newtRefArg r1, newtRefArg r2)
 
 
 /*------------------------------------------------------------------------*/
-/** sub ‚ª supr ‚ÌƒTƒuƒNƒ‰ƒX‚ğŠÜ‚Ş‚©ƒ`ƒFƒbƒN‚·‚é
+/** sub ãŒ supr ã®ã‚µãƒ–ã‚¯ãƒ©ã‚¹ã‚’å«ã‚€ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param sub		[in] ƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg‚P
- * @param supr		[in] ƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg‚Q
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param sub		[in] ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼‘
+ * @param supr		[in] ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼’
  *
- * @retval			TRUE	ƒTƒuƒNƒ‰ƒX‚ğŠÜ‚Ş
- * @retval			NIL		ƒTƒuƒNƒ‰ƒX‚ğŠÜ‚Ü‚È‚¢
+ * @retval			TRUE	ã‚µãƒ–ã‚¯ãƒ©ã‚¹ã‚’å«ã‚€
+ * @retval			NIL		ã‚µãƒ–ã‚¯ãƒ©ã‚¹ã‚’å«ã¾ãªã„
  *
- * @note			ƒXƒNƒŠƒvƒg‚©‚ç‚ÌŒÄo‚µ—p
+ * @note			ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‹ã‚‰ã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NsHasSubclass(newtRefArg rcvr, newtRefArg sub, newtRefArg supr)
@@ -948,16 +948,16 @@ newtRef NsHasSubclass(newtRefArg rcvr, newtRefArg sub, newtRefArg supr)
 
 
 /*------------------------------------------------------------------------*/
-/** sub ‚ª supr ‚ÌƒTƒuƒNƒ‰ƒX‚©ƒ`ƒFƒbƒN‚·‚é
+/** sub ãŒ supr ã®ã‚µãƒ–ã‚¯ãƒ©ã‚¹ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param sub		[in] ƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg‚P
- * @param supr		[in] ƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg‚Q
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param sub		[in] ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼‘
+ * @param supr		[in] ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼’
  *
- * @retval			TRUE	ƒTƒuƒNƒ‰ƒX‚Å‚ ‚é
- * @retval			NIL		ƒTƒuƒNƒ‰ƒX‚Å‚È‚¢
+ * @retval			TRUE	ã‚µãƒ–ã‚¯ãƒ©ã‚¹ã§ã‚ã‚‹
+ * @retval			NIL		ã‚µãƒ–ã‚¯ãƒ©ã‚¹ã§ãªã„
  *
- * @note			ƒXƒNƒŠƒvƒg‚©‚ç‚ÌŒÄo‚µ—p
+ * @note			ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‹ã‚‰ã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NsIsSubclass(newtRefArg rcvr, newtRefArg sub, newtRefArg supr)
@@ -967,16 +967,16 @@ newtRef NsIsSubclass(newtRefArg rcvr, newtRefArg sub, newtRefArg supr)
 
 
 /*------------------------------------------------------------------------*/
-/** obj ‚ª r ‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚©ƒ`ƒFƒbƒN‚·‚é
+/** obj ãŒ r ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param obj		[in] ƒIƒuƒWƒFƒNƒg
- * @param r			[in] ƒNƒ‰ƒXƒVƒ“ƒ{ƒ‹
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param obj		[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param r			[in] ã‚¯ãƒ©ã‚¹ã‚·ãƒ³ãƒœãƒ«
  *
- * @retval			TRUE	ƒCƒ“ƒXƒ^ƒ“ƒX‚Å‚ ‚é
- * @retval			NIL		ƒCƒ“ƒXƒ^ƒ“ƒX‚Å‚È‚¢
+ * @retval			TRUE	ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã§ã‚ã‚‹
+ * @retval			NIL		ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã§ãªã„
  *
- * @note			ƒXƒNƒŠƒvƒg‚©‚ç‚ÌŒÄo‚µ—p
+ * @note			ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‹ã‚‰ã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NsIsInstance(newtRefArg rcvr, newtRefArg obj, newtRefArg r)
@@ -987,15 +987,15 @@ newtRef NsIsInstance(newtRefArg rcvr, newtRefArg obj, newtRefArg r)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** r ‚ª”z—ñ‚©ƒ`ƒFƒbƒN‚·‚é
+/** r ãŒé…åˆ—ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @retval			TRUE	”z—ñ‚Å‚ ‚é
- * @retval			NIL		”z—ñ‚Å‚È‚¢
+ * @retval			TRUE	é…åˆ—ã§ã‚ã‚‹
+ * @retval			NIL		é…åˆ—ã§ãªã„
  *
- * @note			ƒXƒNƒŠƒvƒg‚©‚ç‚ÌŒÄo‚µ—p
+ * @note			ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‹ã‚‰ã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NsIsArray(newtRefArg rcvr, newtRefArg r)
@@ -1005,15 +1005,15 @@ newtRef NsIsArray(newtRefArg rcvr, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** r ‚ªƒtƒŒ[ƒ€‚©ƒ`ƒFƒbƒN‚·‚é
+/** r ãŒãƒ•ãƒ¬ãƒ¼ãƒ ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @retval			TRUE	ƒtƒŒ[ƒ€‚Å‚ ‚é
- * @retval			NIL		ƒtƒŒ[ƒ€‚Å‚È‚¢
+ * @retval			TRUE	ãƒ•ãƒ¬ãƒ¼ãƒ ã§ã‚ã‚‹
+ * @retval			NIL		ãƒ•ãƒ¬ãƒ¼ãƒ ã§ãªã„
  *
- * @note			ƒXƒNƒŠƒvƒg‚©‚ç‚ÌŒÄo‚µ—p
+ * @note			ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‹ã‚‰ã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NsIsFrame(newtRefArg rcvr, newtRefArg r)
@@ -1023,15 +1023,15 @@ newtRef NsIsFrame(newtRefArg rcvr, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** r ‚ªƒoƒCƒiƒŠ‚©ƒ`ƒFƒbƒN‚·‚é
+/** r ãŒãƒã‚¤ãƒŠãƒªã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @retval			TRUE	ƒoƒCƒiƒŠ‚Å‚ ‚é
- * @retval			NIL		ƒoƒCƒiƒŠ‚Å‚È‚¢
+ * @retval			TRUE	ãƒã‚¤ãƒŠãƒªã§ã‚ã‚‹
+ * @retval			NIL		ãƒã‚¤ãƒŠãƒªã§ãªã„
  *
- * @note			ƒXƒNƒŠƒvƒg‚©‚ç‚ÌŒÄo‚µ—p
+ * @note			ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‹ã‚‰ã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NsIsBinary(newtRefArg rcvr, newtRefArg r)
@@ -1041,15 +1041,15 @@ newtRef NsIsBinary(newtRefArg rcvr, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** r ‚ªƒVƒ“ƒ{ƒ‹‚©ƒ`ƒFƒbƒN‚·‚é
+/** r ãŒã‚·ãƒ³ãƒœãƒ«ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @retval			TRUE	ƒVƒ“ƒ{ƒ‹‚Å‚ ‚é
- * @retval			NIL		ƒVƒ“ƒ{ƒ‹‚Å‚È‚¢
+ * @retval			TRUE	ã‚·ãƒ³ãƒœãƒ«ã§ã‚ã‚‹
+ * @retval			NIL		ã‚·ãƒ³ãƒœãƒ«ã§ãªã„
  *
- * @note			ƒXƒNƒŠƒvƒg‚©‚ç‚ÌŒÄo‚µ—p
+ * @note			ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‹ã‚‰ã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NsIsSymbol(newtRefArg rcvr, newtRefArg r)
@@ -1059,15 +1059,15 @@ newtRef NsIsSymbol(newtRefArg rcvr, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** r ‚ª•¶š—ñ‚©ƒ`ƒFƒbƒN‚·‚é
+/** r ãŒæ–‡å­—åˆ—ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @retval			TRUE	•¶š—ñ‚Å‚ ‚é
- * @retval			NIL		•¶š—ñ‚Å‚È‚¢
+ * @retval			TRUE	æ–‡å­—åˆ—ã§ã‚ã‚‹
+ * @retval			NIL		æ–‡å­—åˆ—ã§ãªã„
  *
- * @note			ƒXƒNƒŠƒvƒg‚©‚ç‚ÌŒÄo‚µ—p
+ * @note			ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‹ã‚‰ã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NsIsString(newtRefArg rcvr, newtRefArg r)
@@ -1077,15 +1077,15 @@ newtRef NsIsString(newtRefArg rcvr, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** r ‚ª•¶š‚©ƒ`ƒFƒbƒN‚·‚é
+/** r ãŒæ–‡å­—ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @retval			TRUE	•¶š‚Å‚ ‚é
- * @retval			NIL		•¶š‚Å‚È‚¢
+ * @retval			TRUE	æ–‡å­—ã§ã‚ã‚‹
+ * @retval			NIL		æ–‡å­—ã§ãªã„
  *
- * @note			ƒXƒNƒŠƒvƒg‚©‚ç‚ÌŒÄo‚µ—p
+ * @note			ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‹ã‚‰ã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NsIsCharacter(newtRefArg rcvr, newtRefArg r)
@@ -1095,15 +1095,15 @@ newtRef NsIsCharacter(newtRefArg rcvr, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** r ‚ª®”‚©ƒ`ƒFƒbƒN‚·‚é
+/** r ãŒæ•´æ•°ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @retval			TRUE	®”‚Å‚ ‚é
- * @retval			NIL		®”‚Å‚È‚¢
+ * @retval			TRUE	æ•´æ•°ã§ã‚ã‚‹
+ * @retval			NIL		æ•´æ•°ã§ãªã„
  *
- * @note			ƒXƒNƒŠƒvƒg‚©‚ç‚ÌŒÄo‚µ—p
+ * @note			ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‹ã‚‰ã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NsIsInteger(newtRefArg rcvr, newtRefArg r)
@@ -1113,15 +1113,15 @@ newtRef NsIsInteger(newtRefArg rcvr, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** r ‚ª•‚“®¬”“_”‚©ƒ`ƒFƒbƒN‚·‚é
+/** r ãŒæµ®å‹•å°æ•°ç‚¹æ•°ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @retval			TRUE	•‚“®¬”“_”‚Å‚ ‚é
- * @retval			NIL		•‚“®¬”“_”‚Å‚È‚¢
+ * @retval			TRUE	æµ®å‹•å°æ•°ç‚¹æ•°ã§ã‚ã‚‹
+ * @retval			NIL		æµ®å‹•å°æ•°ç‚¹æ•°ã§ãªã„
  *
- * @note			ƒXƒNƒŠƒvƒg‚©‚ç‚ÌŒÄo‚µ—p
+ * @note			ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‹ã‚‰ã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NsIsReal(newtRefArg rcvr, newtRefArg r)
@@ -1131,13 +1131,13 @@ newtRef NsIsReal(newtRefArg rcvr, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** r ‚ª”’lƒf[ƒ^‚©ƒ`ƒFƒbƒN‚·‚é
+/** r ãŒæ•°å€¤ãƒ‡ãƒ¼ã‚¿ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @retval			TRUE	”’lƒf[ƒ^‚Å‚ ‚é
- * @retval			NIL		”’lƒf[ƒ^‚Å‚È‚¢
+ * @retval			TRUE	æ•°å€¤ãƒ‡ãƒ¼ã‚¿ã§ã‚ã‚‹
+ * @retval			NIL		æ•°å€¤ãƒ‡ãƒ¼ã‚¿ã§ãªã„
  */
 
 newtRef NsIsNumber(newtRefArg rcvr, newtRefArg r)
@@ -1147,13 +1147,13 @@ newtRef NsIsNumber(newtRefArg rcvr, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** r ‚ªƒCƒ~ƒfƒBƒGƒCƒgi‘¦’lj‚©ƒ`ƒFƒbƒN‚·‚é
+/** r ãŒã‚¤ãƒŸãƒ‡ã‚£ã‚¨ã‚¤ãƒˆï¼ˆå³å€¤ï¼‰ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @retval			TRUE	ƒCƒ~ƒfƒBƒGƒCƒg‚Å‚ ‚é
- * @retval			NIL		ƒCƒ~ƒfƒBƒGƒCƒg‚Å‚È‚¢
+ * @retval			TRUE	ã‚¤ãƒŸãƒ‡ã‚£ã‚¨ã‚¤ãƒˆã§ã‚ã‚‹
+ * @retval			NIL		ã‚¤ãƒŸãƒ‡ã‚£ã‚¨ã‚¤ãƒˆã§ãªã„
  */
 
 newtRef NsIsImmediate(newtRefArg rcvr, newtRefArg r)
@@ -1163,13 +1163,13 @@ newtRef NsIsImmediate(newtRefArg rcvr, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** r ‚ªŠÖ”ƒIƒuƒWƒFƒNƒg‚©ƒ`ƒFƒbƒN‚·‚é
+/** r ãŒé–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @retval			TRUE	ŠÖ”ƒIƒuƒWƒFƒNƒg‚Å‚ ‚é
- * @retval			NIL		ŠÖ”ƒIƒuƒWƒFƒNƒg‚Å‚È‚¢
+ * @retval			TRUE	é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã§ã‚ã‚‹
+ * @retval			NIL		é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã§ãªã„
  */
 
 newtRef NsIsFunction(newtRefArg rcvr, newtRefArg r)
@@ -1179,13 +1179,13 @@ newtRef NsIsFunction(newtRefArg rcvr, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** r ‚ªƒŠ[ƒhƒIƒ“ƒŠ[‚©ƒ`ƒFƒbƒN‚·‚é
+/** r ãŒãƒªãƒ¼ãƒ‰ã‚ªãƒ³ãƒªãƒ¼ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @retval			TRUE	ƒŠ[ƒhƒIƒ“ƒŠ[‚Å‚ ‚é
- * @retval			NIL		ƒŠ[ƒhƒIƒ“ƒŠ[‚Å‚È‚¢
+ * @retval			TRUE	ãƒªãƒ¼ãƒ‰ã‚ªãƒ³ãƒªãƒ¼ã§ã‚ã‚‹
+ * @retval			NIL		ãƒªãƒ¼ãƒ‰ã‚ªãƒ³ãƒªãƒ¼ã§ãªã„
  */
 
 newtRef NsIsReadonly(newtRefArg rcvr, newtRefArg r)
@@ -1196,12 +1196,12 @@ newtRef NsIsReadonly(newtRefArg rcvr, newtRefArg r)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ”z—ñƒIƒuƒWƒFƒNƒg‚É’l‚ğ’Ç‰Á‚·‚é
+/** é…åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«å€¤ã‚’è¿½åŠ ã™ã‚‹
  *
- * @param r			[in] ”z—ñƒIƒuƒWƒFƒNƒg
- * @param v			[in] ’lƒIƒuƒWƒFƒNƒg
+ * @param r			[in] é…åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param v			[in] å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			’lƒIƒuƒWƒFƒNƒg
+ * @return			å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NcAddArraySlot(newtRefArg r, newtRefArg v)
@@ -1218,11 +1218,11 @@ newtRef NcAddArraySlot(newtRefArg r, newtRefArg v)
 
 
 /*------------------------------------------------------------------------*/
-/** ”z—ñƒIƒuƒWƒFƒNƒg‚Ì—v‘f‚ğ•¶š—ñ‚É‡¬‚·‚é
+/** é…åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®è¦ç´ ã‚’æ–‡å­—åˆ—ã«åˆæˆã™ã‚‹
  *
- * @param r			[in] ”z—ñƒIƒuƒWƒFƒNƒg
+ * @param r			[in] é…åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			•¶š—ñƒIƒuƒWƒFƒNƒg
+ * @return			æ–‡å­—åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NcStringer(newtRefArg r)
@@ -1250,13 +1250,13 @@ newtRef NcStringer(newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** •¶š—ñƒIƒuƒWƒFƒNƒg‚ÌÅŒã‚ÉƒIƒuƒWƒFƒNƒg‚ğ•¶š—ñ‰»‚µ‚Ä’Ç‰Á‚·‚é
+/** æ–‡å­—åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æœ€å¾Œã«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æ–‡å­—åˆ—åŒ–ã—ã¦è¿½åŠ ã™ã‚‹
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param str		[in] •¶š—ñƒIƒuƒWƒFƒNƒg
- * @param v			[in] ƒIƒuƒWƒFƒNƒg
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param str		[in] æ–‡å­—åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param v			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			•¶š—ñƒIƒuƒWƒFƒNƒg
+ * @return			æ–‡å­—åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NsStrCat(newtRefArg rcvr, newtRefArg str, newtRefArg v)
@@ -1319,12 +1319,12 @@ newtRef NsStrCat(newtRefArg rcvr, newtRefArg str, newtRefArg v)
 
 
 /*------------------------------------------------------------------------*/
-/** •¶š—ñƒIƒuƒWƒFƒNƒg‚©‚çƒVƒ“ƒ{ƒ‹‚ğì¬‚·‚é
+/** æ–‡å­—åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‹ã‚‰ã‚·ãƒ³ãƒœãƒ«ã‚’ä½œæˆã™ã‚‹
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] •¶š—ñƒIƒuƒWƒFƒNƒg
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] æ–‡å­—åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			ƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg
+ * @return			ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NsMakeSymbol(newtRefArg rcvr, newtRefArg r)
@@ -1341,11 +1341,11 @@ newtRef NsMakeSymbol(newtRefArg rcvr, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒtƒŒ[ƒ€ƒIƒuƒWƒFƒNƒg‚ğì¬‚·‚é
+/** ãƒ•ãƒ¬ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆã™ã‚‹
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
  *
- * @return			ƒtƒŒ[ƒ€ƒIƒuƒWƒFƒNƒg
+ * @return			ãƒ•ãƒ¬ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NsMakeFrame(newtRefArg rcvr)
@@ -1355,13 +1355,13 @@ newtRef NsMakeFrame(newtRefArg rcvr)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒoƒCƒiƒŠƒIƒuƒWƒFƒNƒg‚ğì¬‚·‚é
+/** ãƒã‚¤ãƒŠãƒªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆã™ã‚‹
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param length	[in] ’·‚³
- * @param klass		[in] ƒNƒ‰ƒX
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param length	[in] é•·ã•
+ * @param klass		[in] ã‚¯ãƒ©ã‚¹
  *
- * @return			ƒoƒCƒiƒŠƒIƒuƒWƒFƒNƒg
+ * @return			ãƒã‚¤ãƒŠãƒªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NsMakeBinary(newtRefArg rcvr, newtRefArg length, newtRefArg klass)
@@ -1375,12 +1375,12 @@ newtRef NsMakeBinary(newtRefArg rcvr, newtRefArg length, newtRefArg klass)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ®”‚ÌƒrƒbƒgAND
+/** æ•´æ•°ã®ãƒ“ãƒƒãƒˆAND
  *
- * @param r1		[in] ®”ƒIƒuƒWƒFƒNƒg‚P
- * @param r2		[in] ®”ƒIƒuƒWƒFƒNƒg‚Q
+ * @param r1		[in] æ•´æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼‘
+ * @param r2		[in] æ•´æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼’
  *
- * @return			”’lƒIƒuƒWƒFƒNƒg
+ * @return			æ•°å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NcBAnd(newtRefArg r1, newtRefArg r2)
@@ -1396,12 +1396,12 @@ newtRef NcBAnd(newtRefArg r1, newtRefArg r2)
 
 
 /*------------------------------------------------------------------------*/
-/** ®”‚ÌƒrƒbƒgOR
+/** æ•´æ•°ã®ãƒ“ãƒƒãƒˆOR
  *
- * @param r1		[in] ®”ƒIƒuƒWƒFƒNƒg‚P
- * @param r2		[in] ®”ƒIƒuƒWƒFƒNƒg‚Q
+ * @param r1		[in] æ•´æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼‘
+ * @param r2		[in] æ•´æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼’
  *
- * @return			”’lƒIƒuƒWƒFƒNƒg
+ * @return			æ•°å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NcBOr(newtRefArg r1, newtRefArg r2)
@@ -1417,11 +1417,11 @@ newtRef NcBOr(newtRefArg r1, newtRefArg r2)
 
 
 /*------------------------------------------------------------------------*/
-/** ®”‚ÌƒrƒbƒgNOT
+/** æ•´æ•°ã®ãƒ“ãƒƒãƒˆNOT
  *
- * @param r		[in] ®”ƒIƒuƒWƒFƒNƒg
+ * @param r		[in] æ•´æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			”’lƒIƒuƒWƒFƒNƒg
+ * @return			æ•°å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NcBNot(newtRefArg r)
@@ -1435,11 +1435,11 @@ newtRef NcBNot(newtRefArg r)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ƒu[ƒ‹‰‰Z AND
+/** ãƒ–ãƒ¼ãƒ«æ¼”ç®— AND
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r1		[in] ƒIƒuƒWƒFƒNƒg‚P
- * @param r2		[in] ƒIƒuƒWƒFƒNƒg‚Q
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r1		[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼‘
+ * @param r2		[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼’
  *
  * @retval			TRUE
  * @retval			NIL
@@ -1456,11 +1456,11 @@ newtRef NsAnd(newtRefArg rcvr, newtRefArg r1, newtRefArg r2)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒu[ƒ‹‰‰Z OR
+/** ãƒ–ãƒ¼ãƒ«æ¼”ç®— OR
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r1		[in] ƒIƒuƒWƒFƒNƒg‚P
- * @param r2		[in] ƒIƒuƒWƒFƒNƒg‚Q
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r1		[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼‘
+ * @param r2		[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼’
  *
  * @retval			TRUE
  * @retval			NIL
@@ -1478,14 +1478,14 @@ newtRef NsOr(newtRefArg rcvr, newtRefArg r1, newtRefArg r2)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ”’lˆø”‚Ìƒ`ƒFƒbƒN
+/** æ•°å€¤å¼•æ•°ã®ãƒã‚§ãƒƒã‚¯
  *
- * @param r1		[in] ƒIƒuƒWƒFƒNƒg‚P
- * @param r2		[in] ƒIƒuƒWƒFƒNƒg‚Q
- * @param real		[out]•‚“®¬”“_‚ğŠÜ‚Ş
+ * @param r1		[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼‘
+ * @param r2		[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼’
+ * @param real		[out]æµ®å‹•å°æ•°ç‚¹ã‚’å«ã‚€
  *
- * @retval			true	ˆø”‚ª”’l
- * @retval			false   ˆø”‚ª”’l‚Å‚È‚¢
+ * @retval			true	å¼•æ•°ãŒæ•°å€¤
+ * @retval			false   å¼•æ•°ãŒæ•°å€¤ã§ãªã„
  */
 
 
@@ -1518,12 +1518,12 @@ bool NewtArgsIsNumber(newtRefArg r1, newtRefArg r2, bool * real)
 
 
 /*------------------------------------------------------------------------*/
-/** ‰ÁZ(r1 + r2)
+/** åŠ ç®—(r1 + r2)
  *
- * @param r1		[in] ”’lƒIƒuƒWƒFƒNƒg‚P
- * @param r2		[in] ”’lƒIƒuƒWƒFƒNƒg‚Q
+ * @param r1		[in] æ•°å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼‘
+ * @param r2		[in] æ•°å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼’
  *
- * @return			”’lƒIƒuƒWƒFƒNƒg
+ * @return			æ•°å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NcAdd(newtRefArg r1, newtRefArg r2)
@@ -1557,12 +1557,12 @@ newtRef NcAdd(newtRefArg r1, newtRefArg r2)
 
 
 /*------------------------------------------------------------------------*/
-/** Œ¸Z(r1 - r2)
+/** æ¸›ç®—(r1 - r2)
  *
- * @param r1		[in] ”’lƒIƒuƒWƒFƒNƒg‚P
- * @param r2		[in] ”’lƒIƒuƒWƒFƒNƒg‚Q
+ * @param r1		[in] æ•°å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼‘
+ * @param r2		[in] æ•°å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼’
  *
- * @return			”’lƒIƒuƒWƒFƒNƒg
+ * @return			æ•°å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NcSubtract(newtRefArg r1, newtRefArg r2)
@@ -1596,12 +1596,12 @@ newtRef NcSubtract(newtRefArg r1, newtRefArg r2)
 
 
 /*------------------------------------------------------------------------*/
-/** æZ(r1 x r2)
+/** ä¹—ç®—(r1 x r2)
  *
- * @param r1		[in] ”’lƒIƒuƒWƒFƒNƒg‚P
- * @param r2		[in] ”’lƒIƒuƒWƒFƒNƒg‚Q
+ * @param r1		[in] æ•°å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼‘
+ * @param r2		[in] æ•°å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼’
  *
- * @return			”’lƒIƒuƒWƒFƒNƒg
+ * @return			æ•°å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NcMultiply(newtRefArg r1, newtRefArg r2)
@@ -1635,12 +1635,12 @@ newtRef NcMultiply(newtRefArg r1, newtRefArg r2)
 
 
 /*------------------------------------------------------------------------*/
-/** Š„Z(r1 / r2)
+/** å‰²ç®—(r1 / r2)
  *
- * @param r1		[in] ”’lƒIƒuƒWƒFƒNƒg‚P
- * @param r2		[in] ”’lƒIƒuƒWƒFƒNƒg‚Q
+ * @param r1		[in] æ•°å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼‘
+ * @param r2		[in] æ•°å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼’
  *
- * @return			”’lƒIƒuƒWƒFƒNƒg
+ * @return			æ•°å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NcDivide(newtRefArg r1, newtRefArg r2)
@@ -1680,12 +1680,12 @@ newtRef NcDivide(newtRefArg r1, newtRefArg r2)
 
 
 /*------------------------------------------------------------------------*/
-/** ®”‚ÌŠ„Z(r1 / r2)
+/** æ•´æ•°ã®å‰²ç®—(r1 / r2)
  *
- * @param r1		[in] ®”ƒIƒuƒWƒFƒNƒg‚P
- * @param r2		[in] ®”ƒIƒuƒWƒFƒNƒg‚Q
+ * @param r1		[in] æ•´æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼‘
+ * @param r2		[in] æ•´æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼’
  *
- * @return			®”ƒIƒuƒWƒFƒNƒg
+ * @return			æ•´æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NcDiv(newtRefArg r1, newtRefArg r2)
@@ -1701,13 +1701,13 @@ newtRef NcDiv(newtRefArg r1, newtRefArg r2)
 
 
 /*------------------------------------------------------------------------*/
-/** r1 ‚ğ r2 ‚ÅŠ„‚Á‚½‚Ì—]‚è‚ğŒvZ
+/** r1 ã‚’ r2 ã§å‰²ã£ãŸã®ä½™ã‚Šã‚’è¨ˆç®—
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r1		[in] ®”ƒIƒuƒWƒFƒNƒg‚P
- * @param r2		[in] ®”ƒIƒuƒWƒFƒNƒg‚Q
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r1		[in] æ•´æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼‘
+ * @param r2		[in] æ•´æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼’
  *
- * @return			®”ƒIƒuƒWƒFƒNƒg
+ * @return			æ•´æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NsMod(newtRefArg rcvr, newtRefArg r1, newtRefArg r2)
@@ -1723,13 +1723,13 @@ newtRef NsMod(newtRefArg rcvr, newtRefArg r1, newtRefArg r2)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒrƒbƒgƒVƒtƒg(r1 << r2)
+/** ãƒ“ãƒƒãƒˆã‚·ãƒ•ãƒˆ(r1 << r2)
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r1		[in] ®”ƒIƒuƒWƒFƒNƒg‚P
- * @param r2		[in] ®”ƒIƒuƒWƒFƒNƒg‚Q
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r1		[in] æ•´æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼‘
+ * @param r2		[in] æ•´æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼’
  *
- * @return			®”ƒIƒuƒWƒFƒNƒg
+ * @return			æ•´æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NsShiftLeft(newtRefArg rcvr, newtRefArg r1, newtRefArg r2)
@@ -1745,13 +1745,13 @@ newtRef NsShiftLeft(newtRefArg rcvr, newtRefArg r1, newtRefArg r2)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒrƒbƒgƒVƒtƒg(r1 >> r2)
+/** ãƒ“ãƒƒãƒˆã‚·ãƒ•ãƒˆ(r1 >> r2)
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r1		[in] ®”ƒIƒuƒWƒFƒNƒg‚P
- * @param r2		[in] ®”ƒIƒuƒWƒFƒNƒg‚Q
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r1		[in] æ•´æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼‘
+ * @param r2		[in] æ•´æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼’
  *
- * @return			®”ƒIƒuƒWƒFƒNƒg
+ * @return			æ•´æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NsShiftRight(newtRefArg rcvr, newtRefArg r1, newtRefArg r2)
@@ -1768,15 +1768,15 @@ newtRef NsShiftRight(newtRefArg rcvr, newtRefArg r1, newtRefArg r2)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚Ì‘å¬”äŠr(r1 < r2)
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å¤§å°æ¯”è¼ƒ(r1 < r2)
  *
- * @param r1		[in] ƒIƒuƒWƒFƒNƒg‚P
- * @param r2		[in] ƒIƒuƒWƒFƒNƒg‚Q
+ * @param r1		[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼‘
+ * @param r2		[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼’
  *
  * @retval			TRUE
  * @retval			NIL
  *
- * @note			ƒXƒNƒŠƒvƒg‚ÌŒÄo‚µ—p
+ * @note			ã‚¹ã‚¯ãƒªãƒ—ãƒˆã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NcLessThan(newtRefArg r1, newtRefArg r2)
@@ -1786,15 +1786,15 @@ newtRef NcLessThan(newtRefArg r1, newtRefArg r2)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚Ì‘å¬”äŠr(r1 > r2)
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å¤§å°æ¯”è¼ƒ(r1 > r2)
  *
- * @param r1		[in] ƒIƒuƒWƒFƒNƒg‚P
- * @param r2		[in] ƒIƒuƒWƒFƒNƒg‚Q
+ * @param r1		[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼‘
+ * @param r2		[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼’
  *
  * @retval			TRUE
  * @retval			NIL
  *
- * @note			ƒXƒNƒŠƒvƒg‚ÌŒÄo‚µ—p
+ * @note			ã‚¹ã‚¯ãƒªãƒ—ãƒˆã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NcGreaterThan(newtRefArg r1, newtRefArg r2)
@@ -1804,15 +1804,15 @@ newtRef NcGreaterThan(newtRefArg r1, newtRefArg r2)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚Ì‘å¬”äŠr(r1 >= r2)
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å¤§å°æ¯”è¼ƒ(r1 >= r2)
  *
- * @param r1		[in] ƒIƒuƒWƒFƒNƒg‚P
- * @param r2		[in] ƒIƒuƒWƒFƒNƒg‚Q
+ * @param r1		[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼‘
+ * @param r2		[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼’
  *
  * @retval			TRUE
  * @retval			NIL
  *
- * @note			ƒXƒNƒŠƒvƒg‚ÌŒÄo‚µ—p
+ * @note			ã‚¹ã‚¯ãƒªãƒ—ãƒˆã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NcGreaterOrEqual(newtRefArg r1, newtRefArg r2)
@@ -1822,15 +1822,15 @@ newtRef NcGreaterOrEqual(newtRefArg r1, newtRefArg r2)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚Ì‘å¬”äŠr(r1 <= r2)
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å¤§å°æ¯”è¼ƒ(r1 <= r2)
  *
- * @param r1		[in] ƒIƒuƒWƒFƒNƒg‚P
- * @param r2		[in] ƒIƒuƒWƒFƒNƒg‚Q
+ * @param r1		[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼‘
+ * @param r2		[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼’
  *
  * @retval			TRUE
  * @retval			NIL
  *
- * @note			ƒXƒNƒŠƒvƒg‚ÌŒÄo‚µ—p
+ * @note			ã‚¹ã‚¯ãƒªãƒ—ãƒˆã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NcLessOrEqual(newtRefArg r1, newtRefArg r2)
@@ -1841,13 +1841,13 @@ newtRef NcLessOrEqual(newtRefArg r1, newtRefArg r2)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ³‹K•\Œ»ƒIƒuƒWƒFƒNƒgiƒtƒŒ[ƒ€j‚Ì¶¬
+/** æ­£è¦è¡¨ç¾ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼ˆãƒ•ãƒ¬ãƒ¼ãƒ ï¼‰ã®ç”Ÿæˆ
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
  *
- * @return			—áŠOƒtƒŒ[ƒ€
+ * @return			ä¾‹å¤–ãƒ•ãƒ¬ãƒ¼ãƒ 
  *
- * @note			ƒXƒNƒŠƒvƒg‚©‚ç‚ÌŒÄo‚µ—p
+ * @note			ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‹ã‚‰ã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NsCurrentException(newtRefArg rcvr)
@@ -1858,11 +1858,11 @@ newtRef NsCurrentException(newtRefArg rcvr)
 
 #ifdef __NAMED_MAGIC_POINTER__
 /*------------------------------------------------------------------------*/
-/** ³‹K•\Œ»ƒIƒuƒWƒFƒNƒgiƒtƒŒ[ƒ€j‚Ì¶¬
+/** æ­£è¦è¡¨ç¾ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼ˆãƒ•ãƒ¬ãƒ¼ãƒ ï¼‰ã®ç”Ÿæˆ
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param pattern	[in] ƒpƒ^[ƒ“•¶š—ñ
- * @param opt		[in] ƒIƒvƒVƒ‡ƒ“•¶š—ñ
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param pattern	[in] ãƒ‘ã‚¿ãƒ¼ãƒ³æ–‡å­—åˆ—
+ * @param opt		[in] ã‚ªãƒ—ã‚·ãƒ§ãƒ³æ–‡å­—åˆ—
  *
  * @return			NIL
  */
@@ -1883,14 +1883,14 @@ newtRef NsMakeRegex(newtRefArg rcvr, newtRefArg pattern, newtRefArg opt)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** •W€o—Í‚ÉƒIƒuƒWƒFƒNƒg‚ğƒvƒŠƒ“ƒg
+/** æ¨™æº–å‡ºåŠ›ã«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒ—ãƒªãƒ³ãƒˆ
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
  * @return			NIL
  *
- * @note			ƒOƒ[ƒoƒ‹ŠÖ”—p
+ * @note			ã‚°ãƒ­ãƒ¼ãƒãƒ«é–¢æ•°ç”¨
  */
 
 newtRef NsPrintObject(newtRefArg rcvr, newtRefArg r)
@@ -1901,14 +1901,14 @@ newtRef NsPrintObject(newtRefArg rcvr, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** •W€o—Í‚ÉƒIƒuƒWƒFƒNƒg‚ğƒvƒŠƒ“ƒg
+/** æ¨™æº–å‡ºåŠ›ã«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒ—ãƒªãƒ³ãƒˆ
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
  * @return			NIL
  *
- * @note			ƒXƒNƒŠƒvƒg‚©‚ç‚ÌŒÄo‚µ—p
+ * @note			ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‹ã‚‰ã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NsPrint(newtRefArg rcvr, newtRefArg r)
@@ -1919,14 +1919,14 @@ newtRef NsPrint(newtRefArg rcvr, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** •W€o—Í‚ÉŠÖ”ƒIƒuƒWƒFƒNƒg‚ğƒ_ƒ“ƒvo—Í
+/** æ¨™æº–å‡ºåŠ›ã«é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒ€ãƒ³ãƒ—å‡ºåŠ›
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] ŠÖ”ƒIƒuƒWƒFƒNƒg
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
  * @return			NIL
  *
- * @note			ƒXƒNƒŠƒvƒg‚©‚ç‚ÌŒÄo‚µ—p
+ * @note			ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‹ã‚‰ã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NsDumpFn(newtRefArg rcvr, newtRefArg r)
@@ -1937,14 +1937,14 @@ newtRef NsDumpFn(newtRefArg rcvr, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** •W€o—Í‚ÉƒoƒCƒgƒR[ƒh‚ğƒ_ƒ“ƒvo—Í
+/** æ¨™æº–å‡ºåŠ›ã«ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ãƒ€ãƒ³ãƒ—å‡ºåŠ›
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] ƒoƒCƒgƒR[ƒh
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰
  *
  * @return			NIL
  *
- * @note			ƒXƒNƒŠƒvƒg‚©‚ç‚ÌŒÄo‚µ—p
+ * @note			ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‹ã‚‰ã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NsDumpBC(newtRefArg rcvr, newtRefArg r)
@@ -1955,13 +1955,13 @@ newtRef NsDumpBC(newtRefArg rcvr, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** •W€o—Í‚ÉƒXƒ^ƒbƒN‚ğƒ_ƒ“ƒvo—Í
+/** æ¨™æº–å‡ºåŠ›ã«ã‚¹ã‚¿ãƒƒã‚¯ã‚’ãƒ€ãƒ³ãƒ—å‡ºåŠ›
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
  *
  * @return			NIL
  *
- * @note			ƒXƒNƒŠƒvƒg‚©‚ç‚ÌŒÄo‚µ—p
+ * @note			ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‹ã‚‰ã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NsDumpStacks(newtRefArg rcvr)
@@ -1972,14 +1972,14 @@ newtRef NsDumpStacks(newtRefArg rcvr)
 
 
 /*------------------------------------------------------------------------*/
-/** •W€o—Í‚ÉŠÖ”î•ñ‚ğ•\¦
+/** æ¨™æº–å‡ºåŠ›ã«é–¢æ•°æƒ…å ±ã‚’è¡¨ç¤º
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
  * @return			NIL
  *
- * @note			ƒXƒNƒŠƒvƒg‚©‚ç‚ÌŒÄo‚µ—p
+ * @note			ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‹ã‚‰ã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NsInfo(newtRefArg rcvr, newtRefArg r)
@@ -1991,14 +1991,14 @@ newtRef NsInfo(newtRefArg rcvr, newtRefArg r)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** •¶š—ñƒIƒuƒWƒFƒNƒg‚ğƒRƒ“ƒpƒCƒ‹
+/** æ–‡å­—åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] •¶š—ñƒIƒuƒWƒFƒNƒg
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] æ–‡å­—åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			ŠÖ”ƒIƒuƒWƒFƒNƒg
+ * @return			é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @note			ƒXƒNƒŠƒvƒg‚©‚ç‚ÌŒÄo‚µ—p
+ * @note			ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‹ã‚‰ã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NsCompile(newtRefArg rcvr, newtRefArg r)
@@ -2011,14 +2011,14 @@ newtRef NsCompile(newtRefArg rcvr, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ŠÂ‹«•Ï”‚Ìæ“¾
+/** ç’°å¢ƒå¤‰æ•°ã®å–å¾—
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] •¶š—ñƒIƒuƒWƒFƒNƒg
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] æ–‡å­—åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			•¶š—ñƒIƒuƒWƒFƒNƒg
+ * @return			æ–‡å­—åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @note			ƒXƒNƒŠƒvƒg‚©‚ç‚ÌŒÄo‚µ—p
+ * @note			ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‹ã‚‰ã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NsGetEnv(newtRefArg rcvr, newtRefArg r)
@@ -2032,13 +2032,13 @@ newtRef NsGetEnv(newtRefArg rcvr, newtRefArg r)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ƒIƒtƒZƒbƒgˆÊ’u‚©‚ç•„†•t‚«‚Ì1ƒoƒCƒg‚ğæ‚èo‚·B 
+/** ã‚ªãƒ•ã‚»ãƒƒãƒˆä½ç½®ã‹ã‚‰ç¬¦å·ä»˜ãã®1ãƒã‚¤ãƒˆã‚’å–ã‚Šå‡ºã™ã€‚ 
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] ƒoƒCƒiƒŠƒIƒuƒWƒFƒNƒg
- * @param offset	[in] ƒIƒtƒZƒbƒg
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] ãƒã‚¤ãƒŠãƒªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param offset	[in] ã‚ªãƒ•ã‚»ãƒƒãƒˆ
  *
- * @return			•„†•t‚«‚Ì1ƒoƒCƒg
+ * @return			ç¬¦å·ä»˜ãã®1ãƒã‚¤ãƒˆ
  */
 
 newtRef NsExtractByte(newtRefArg rcvr, newtRefArg r, newtRefArg offset)

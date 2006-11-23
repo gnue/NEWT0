@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------*/
 /**
  * @file	newt.l
- * @brief   Žš‹å‰ðÍ
+ * @brief   å­—å¥è§£æž
  *
  * @author  M.Nukui
  * @date	2003-11-07
@@ -17,7 +17,7 @@
 
 %{
 
-/* ƒwƒbƒ_ƒtƒ@ƒCƒ‹ */
+/* ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ« */
 #include <string.h>
 
 #include "NewtErrs.h"
@@ -32,7 +32,7 @@
 #include "y.tab.h"
 
 
-/* ŠÖ”ƒvƒƒgƒ^ƒCƒv */
+/* é–¢æ•°ãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ— */
 static int			lex_update_tokenpos(int op);
 static void			lex_newline(void);
 
@@ -57,7 +57,7 @@ static int			lex_makenamedmp(char *s, bool trunc);
 static void			lex_debug(int type);
 
 
-/* ƒ}ƒNƒ */
+/* ãƒžã‚¯ãƒ­ */
 #undef YY_INPUT
 #define YY_INPUT(b, r, ms) (r=nps_yyinput(yyin, b, ms))
 
@@ -95,7 +95,7 @@ REGEX-SEQUENCE			([^*/]|{ESCAPE-SEQUENCE})({REGEX-CHARACTER}|{ESCAPE-SEQUENCE})*
 
 %{
     if (nps_env.first_time)
-    {   //‰‰ñ‹N“®Žž
+    {   //åˆå›žèµ·å‹•æ™‚
         nps_env.first_time = false;
         BEGIN SHELL;
     }
@@ -202,58 +202,58 @@ __LINE__						{ return lex_makeinteger(nps_env.lineno); }
 %%
 
 
-/// ˆê•”‚Ì lex ‚Å YY_FLUSH_BUFFER ‚ª undef ‚³‚ê‚Ä‚µ‚Ü‚¤–â‘è‚É‘Î‰ž
+/// ä¸€éƒ¨ã® lex ã§ YY_FLUSH_BUFFER ãŒ undef ã•ã‚Œã¦ã—ã¾ã†å•é¡Œã«å¯¾å¿œ
 #ifndef YY_FLUSH_BUFFER
 	#define YY_FLUSH_BUFFER yy_flush_buffer(YY_CURRENT_BUFFER )
 #endif
 
 
-/// —\–ñŒê
+/// äºˆç´„èªž
 static keyword_t	reserved_words[] = {
-		// ƒAƒ‹ƒtƒ@ƒxƒbƒg‡‚Éƒ\[ƒg‚µ‚Ä‚¨‚­‚±‚Æ
-		{"AND",			kANDOP},		// —\–ñŒê
-        {"BEGIN",		kBEGIN},		// —\–ñŒê
-        {"BREAK",		kBREAK},		// —\–ñŒê
-        {"BY",			kBY},			// —\–ñŒê
-        {"CALL",		kCALL},			// —\–ñŒê
+		// ã‚¢ãƒ«ãƒ•ã‚¡ãƒ™ãƒƒãƒˆé †ã«ã‚½ãƒ¼ãƒˆã—ã¦ãŠãã“ã¨
+		{"AND",			kANDOP},		// äºˆç´„èªž
+        {"BEGIN",		kBEGIN},		// äºˆç´„èªž
+        {"BREAK",		kBREAK},		// äºˆç´„èªž
+        {"BY",			kBY},			// äºˆç´„èªž
+        {"CALL",		kCALL},			// äºˆç´„èªž
 //		{"COLLECT",		kCOLLECT},
-        {"CONSTANT",	kCONSTANT},		// —\–ñŒê
+        {"CONSTANT",	kCONSTANT},		// äºˆç´„èªž
 //		{"DEEPLY",		kDEEPLY},
-        {"DIV",			kMULOP},		// —\–ñŒê
-        {"DO",			kDO},			// —\–ñŒê
-        {"ELSE",		kELSE},			// —\–ñŒê
-        {"END",			kEND},			// —\–ñŒê
-        {"EXISTS",		kEXISTS},		// —\–ñŒê
-        {"FOR",			kFOR},			// —\–ñŒê
-        {"FOREACH",		kFOREACH},		// —\–ñŒê
-        {"FUNC",		kFUNC},			// —\–ñŒê
-        {"GLOBAL",		kGLOBAL},		// —\–ñŒê
-        {"IF",			kIF},			// —\–ñŒê
-        {"IN",			kIN},			// —\–ñŒê
-        {"INHERITED",	kINHERITED},	// —\–ñŒê
-        {"LOCAL",		kLOCAL},		// —\–ñŒê
-        {"LOOP",		kLOOP},			// —\–ñŒê
-        {"MOD",			kMULOP},		// —\–ñŒê
-        {"NATIVE",		kNATIVE},		// —\–ñŒê
+        {"DIV",			kMULOP},		// äºˆç´„èªž
+        {"DO",			kDO},			// äºˆç´„èªž
+        {"ELSE",		kELSE},			// äºˆç´„èªž
+        {"END",			kEND},			// äºˆç´„èªž
+        {"EXISTS",		kEXISTS},		// äºˆç´„èªž
+        {"FOR",			kFOR},			// äºˆç´„èªž
+        {"FOREACH",		kFOREACH},		// äºˆç´„èªž
+        {"FUNC",		kFUNC},			// äºˆç´„èªž
+        {"GLOBAL",		kGLOBAL},		// äºˆç´„èªž
+        {"IF",			kIF},			// äºˆç´„èªž
+        {"IN",			kIN},			// äºˆç´„èªž
+        {"INHERITED",	kINHERITED},	// äºˆç´„èªž
+        {"LOCAL",		kLOCAL},		// äºˆç´„èªž
+        {"LOOP",		kLOOP},			// äºˆç´„èªž
+        {"MOD",			kMULOP},		// äºˆç´„èªž
+        {"NATIVE",		kNATIVE},		// äºˆç´„èªž
         {"NIL",			kNIL},
-        {"NOT",			kNOTOP},		// —\–ñŒê
-        {"ONEXCEPTION",	kONEXCEPTION},	// —\–ñŒê
-        {"OR",			kOROP},			// —\–ñŒê
-        {"REPEAT",		kREPEAT},		// —\–ñŒê
-        {"RETURN",		kRETURN},		// —\–ñŒê
-        {"SELF",		kSELF},			// —\–ñŒê
-        {"THEN",		kTHEN},			// —\–ñŒê
-        {"TO",			kTO},			// —\–ñŒê
+        {"NOT",			kNOTOP},		// äºˆç´„èªž
+        {"ONEXCEPTION",	kONEXCEPTION},	// äºˆç´„èªž
+        {"OR",			kOROP},			// äºˆç´„èªž
+        {"REPEAT",		kREPEAT},		// äºˆç´„èªž
+        {"RETURN",		kRETURN},		// äºˆç´„èªž
+        {"SELF",		kSELF},			// äºˆç´„èªž
+        {"THEN",		kTHEN},			// äºˆç´„èªž
+        {"TO",			kTO},			// äºˆç´„èªž
         {"TRUE",		kTRUE},
-        {"TRY",			kTRY},			// —\–ñŒê
-        {"UNTIL",		kUNTIL},		// —\–ñŒê
-        {"WHILE",		kWHILE},		// —\–ñŒê
-        {"WITH",		kWITH},			// —\–ñŒê
+        {"TRY",			kTRY},			// äºˆç´„èªž
+        {"UNTIL",		kUNTIL},		// äºˆç´„èªž
+        {"WHILE",		kWHILE},		// äºˆç´„èªž
+        {"WITH",		kWITH},			// äºˆç´„èªž
     };
 
-/// ƒIƒyƒŒ[ƒ^
+/// ã‚ªãƒšãƒ¬ãƒ¼ã‚¿
 static keyword_t	operator_words[] = {
-		// ƒAƒ‹ƒtƒ@ƒxƒbƒg‡‚Éƒ\[ƒg‚µ‚Ä‚¨‚­‚±‚Æ
+		// ã‚¢ãƒ«ãƒ•ã‚¡ãƒ™ãƒƒãƒˆé †ã«ã‚½ãƒ¼ãƒˆã—ã¦ãŠãã“ã¨
         {"&&",			kNPS_CONCAT2},
         {"<<",			kNPS_SHIFT_LEFT},
         {"<=",			kNPS_LESS_EQUAL},
@@ -265,11 +265,11 @@ static keyword_t	operator_words[] = {
 
 
 /*------------------------------------------------------------------------*/
-/** ƒg[ƒNƒ“‚ÌˆÊ’u‚ðXV
+/** ãƒˆãƒ¼ã‚¯ãƒ³ã®ä½ç½®ã‚’æ›´æ–°
  *
- * @param op		[in] ƒIƒyƒŒ[ƒ^
+ * @param op		[in] ã‚ªãƒšãƒ¬ãƒ¼ã‚¿
  *
- * @return			ƒIƒyƒŒ[ƒ^‚ð‚»‚Ì‚Ü‚Ü•Ô‚·
+ * @return			ã‚ªãƒšãƒ¬ãƒ¼ã‚¿ã‚’ãã®ã¾ã¾è¿”ã™
  */
 
 int lex_update_tokenpos(int op)
@@ -283,11 +283,11 @@ int lex_update_tokenpos(int op)
 
 
 /*------------------------------------------------------------------------*/
-/** V‚µ‚¢s‚Ì‰Šú‰»
+/** æ–°ã—ã„è¡Œã®åˆæœŸåŒ–
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  *
- * @note			ƒGƒ‰[‰ÓŠ‚ð“KØ‚É•\Ž¦‚·‚é‚½‚ß‚É“ü—Ís‚ð•ÛŽ‚·‚é
+ * @note			ã‚¨ãƒ©ãƒ¼ç®‡æ‰€ã‚’é©åˆ‡ã«è¡¨ç¤ºã™ã‚‹ãŸã‚ã«å…¥åŠ›è¡Œã‚’ä¿æŒã™ã‚‹
  */
 
 void lex_newline(void)
@@ -306,11 +306,11 @@ void lex_newline(void)
 
 
 /*------------------------------------------------------------------------*/
-/** •¶Žš—ñ‚Ì‘OŒã‚P•¶Žš‚ðØ‚è‹l‚ß‚é
+/** æ–‡å­—åˆ—ã®å‰å¾Œï¼‘æ–‡å­—ã‚’åˆ‡ã‚Šè©°ã‚ã‚‹
  *
- * @param s			[in] •¶Žš—ñ
+ * @param s			[in] æ–‡å­—åˆ—
  *
- * @return			Ø‚è‹l‚ß‚½‚ç‚ê‚½•¶Žš—ñ
+ * @return			åˆ‡ã‚Šè©°ã‚ãŸã‚‰ã‚ŒãŸæ–‡å­—åˆ—
  */
 
 char * lex_truncstr(char *s)
@@ -322,11 +322,11 @@ char * lex_truncstr(char *s)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒGƒXƒP[ƒv‚³‚ê‚½•¶Žš—ñ‚ðˆ—‚·‚é
+/** ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ã•ã‚ŒãŸæ–‡å­—åˆ—ã‚’å‡¦ç†ã™ã‚‹
  *
- * @param s			[in] ƒGƒXƒP[ƒv‚³‚ê‚½•¶Žš—ñ
+ * @param s			[in] ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ã•ã‚ŒãŸæ–‡å­—åˆ—
  *
- * @return			•¶Žš—ñ
+ * @return			æ–‡å­—åˆ—
  */
 
 char * lex_escapestr(char *s)
@@ -387,11 +387,11 @@ char * lex_escapestr(char *s)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒGƒXƒP[ƒv•¶Žš‚ðˆ—‚·‚é
+/** ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—æ–‡å­—ã‚’å‡¦ç†ã™ã‚‹
  *
- * @param c			[in] ƒGƒXƒP[ƒv•¶Žš
+ * @param c			[in] ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—æ–‡å­—
  *
- * @return			•¶Žš
+ * @return			æ–‡å­—
  */
 
 char lex_escapechar(char c)
@@ -416,12 +416,12 @@ char lex_escapechar(char c)
 
 
 /*------------------------------------------------------------------------*/
-/** 16i”•¶Žš—ñ‚ð®”‚É•ÏŠ·
+/** 16é€²æ•°æ–‡å­—åˆ—ã‚’æ•´æ•°ã«å¤‰æ›
  *
- * @param s			[in] 16i”•¶Žš—ñ
- * @param len		[in] 16i”•¶Žš—ñ‚Ì’·‚³
+ * @param s			[in] 16é€²æ•°æ–‡å­—åˆ—
+ * @param len		[in] 16é€²æ•°æ–‡å­—åˆ—ã®é•·ã•
  *
- * @return			®”
+ * @return			æ•´æ•°
  */
 
 int lex_htoi(char *s, int len)
@@ -451,11 +451,11 @@ int lex_htoi(char *s, int len)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒyƒŒ[ƒ^•¶Žš—ñ‚©‚çƒIƒyƒŒ[ƒ^ID‚ð‹‚ß‚é
+/** ã‚ªãƒšãƒ¬ãƒ¼ã‚¿æ–‡å­—åˆ—ã‹ã‚‰ã‚ªãƒšãƒ¬ãƒ¼ã‚¿IDã‚’æ±‚ã‚ã‚‹
  *
- * @param s			[in] ƒIƒyƒŒ[ƒ^•¶Žš—ñ
+ * @param s			[in] ã‚ªãƒšãƒ¬ãƒ¼ã‚¿æ–‡å­—åˆ—
  *
- * @return			ƒIƒyƒŒ[ƒ^ID
+ * @return			ã‚ªãƒšãƒ¬ãƒ¼ã‚¿ID
  */
 
 uint32_t lex_getop(char *s)
@@ -482,11 +482,11 @@ uint32_t lex_getop(char *s)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒyƒŒ[ƒ^ƒg[ƒNƒ“‚Ìì¬
+/** ã‚ªãƒšãƒ¬ãƒ¼ã‚¿ãƒˆãƒ¼ã‚¯ãƒ³ã®ä½œæˆ
  *
- * @param s			[in] ƒIƒyƒŒ[ƒ^•¶Žš—ñ
+ * @param s			[in] ã‚ªãƒšãƒ¬ãƒ¼ã‚¿æ–‡å­—åˆ—
  *
- * @return			ƒg[ƒNƒ“ID
+ * @return			ãƒˆãƒ¼ã‚¯ãƒ³ID
  */
 
 int lex_op(char *s, int op)
@@ -497,12 +497,12 @@ int lex_op(char *s, int op)
 
 
 /*------------------------------------------------------------------------*/
-/** —\–ñŒê‚Ìƒg[ƒNƒ“‚ðì¬
+/** äºˆç´„èªžã®ãƒˆãƒ¼ã‚¯ãƒ³ã‚’ä½œæˆ
  *
- * @param tokn		[in] ƒg[ƒNƒ“ID
- * @param s			[in] ƒIƒyƒŒ[ƒ^•¶Žš—ñ
+ * @param tokn		[in] ãƒˆãƒ¼ã‚¯ãƒ³ID
+ * @param s			[in] ã‚ªãƒšãƒ¬ãƒ¼ã‚¿æ–‡å­—åˆ—
  *
- * @return			ƒg[ƒNƒ“ID
+ * @return			ãƒˆãƒ¼ã‚¯ãƒ³ID
  */
 
 int lex_reserveword(int tokn, char *s)
@@ -526,12 +526,12 @@ int lex_reserveword(int tokn, char *s)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒVƒ“ƒ{ƒ‹ƒg[ƒNƒ“‚Ìì¬
+/** ã‚·ãƒ³ãƒœãƒ«ãƒˆãƒ¼ã‚¯ãƒ³ã®ä½œæˆ
  *
- * @param s			[in] •¶Žš—ñ
- * @param trunc		[in] ‘OŒã‚ÌØ‚è‹l‚ß
+ * @param s			[in] æ–‡å­—åˆ—
+ * @param trunc		[in] å‰å¾Œã®åˆ‡ã‚Šè©°ã‚
  *
- * @return			ƒg[ƒNƒ“ID
+ * @return			ãƒˆãƒ¼ã‚¯ãƒ³ID
  */
 
 int lex_makesymbol(char *s, bool trunc)
@@ -560,12 +560,12 @@ int lex_makesymbol(char *s, bool trunc)
 
 
 /*------------------------------------------------------------------------*/
-/** •¶Žš—ñƒg[ƒNƒ“‚Ìì¬
+/** æ–‡å­—åˆ—ãƒˆãƒ¼ã‚¯ãƒ³ã®ä½œæˆ
  *
- * @param s			[in] •¶Žš—ñ
- * @param trunc		[in] ‘OŒã‚ÌØ‚è‹l‚ß
+ * @param s			[in] æ–‡å­—åˆ—
+ * @param trunc		[in] å‰å¾Œã®åˆ‡ã‚Šè©°ã‚
  *
- * @return			ƒg[ƒNƒ“ID
+ * @return			ãƒˆãƒ¼ã‚¯ãƒ³ID
  */
 
 int lex_makestring(char *s, bool trunc)
@@ -581,12 +581,12 @@ int lex_makestring(char *s, bool trunc)
 
 
 /*------------------------------------------------------------------------*/
-/** ³‹K•\Œ»ƒg[ƒNƒ“‚Ìì¬
+/** æ­£è¦è¡¨ç¾ãƒˆãƒ¼ã‚¯ãƒ³ã®ä½œæˆ
  *
- * @param s			[in] •¶Žš—ñ
- * @param trunc		[in] ‘OŒã‚ÌØ‚è‹l‚ß
+ * @param s			[in] æ–‡å­—åˆ—
+ * @param trunc		[in] å‰å¾Œã®åˆ‡ã‚Šè©°ã‚
  *
- * @return			ƒg[ƒNƒ“ID
+ * @return			ãƒˆãƒ¼ã‚¯ãƒ³ID
  */
 
 int lex_makeregex(char *s, bool trunc)
@@ -602,11 +602,11 @@ int lex_makeregex(char *s, bool trunc)
 
 
 /*------------------------------------------------------------------------*/
-/** •¶Žšƒg[ƒNƒ“‚Ìì¬
+/** æ–‡å­—ãƒˆãƒ¼ã‚¯ãƒ³ã®ä½œæˆ
  *
- * @param c			[in] •¶Žš
+ * @param c			[in] æ–‡å­—
  *
- * @return			ƒg[ƒNƒ“ID
+ * @return			ãƒˆãƒ¼ã‚¯ãƒ³ID
  */
 
 int lex_makechar(int c)
@@ -619,11 +619,11 @@ int lex_makechar(int c)
 
 
 /*------------------------------------------------------------------------*/
-/** ®”ƒg[ƒNƒ“‚Ìì¬
+/** æ•´æ•°ãƒˆãƒ¼ã‚¯ãƒ³ã®ä½œæˆ
  *
- * @param n			[in] ®”
+ * @param n			[in] æ•´æ•°
  *
- * @return			ƒg[ƒNƒ“ID
+ * @return			ãƒˆãƒ¼ã‚¯ãƒ³ID
  */
 
 int lex_makeinteger(int n)
@@ -636,11 +636,11 @@ int lex_makeinteger(int n)
 
 
 /*------------------------------------------------------------------------*/
-/** •‚“®¬”“_ƒg[ƒNƒ“‚Ìì¬
+/** æµ®å‹•å°æ•°ç‚¹ãƒˆãƒ¼ã‚¯ãƒ³ã®ä½œæˆ
  *
- * @param n			[in] •‚“®¬”“_
+ * @param n			[in] æµ®å‹•å°æ•°ç‚¹
  *
- * @return			ƒg[ƒNƒ“ID
+ * @return			ãƒˆãƒ¼ã‚¯ãƒ³ID
  */
 
 int lex_makereal(double n)
@@ -655,11 +655,11 @@ int lex_makereal(double n)
 #ifdef __NAMED_MAGIC_POINTER__
 
 /*------------------------------------------------------------------------*/
-/** ƒ}ƒWƒbƒNƒ|ƒCƒ“ƒ^ƒg[ƒNƒ“‚Ìì¬
+/** ãƒžã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿ãƒˆãƒ¼ã‚¯ãƒ³ã®ä½œæˆ
  *
- * @param n			[in] ƒ}ƒWƒbƒNƒ|ƒCƒ“ƒ^”Ô†
+ * @param n			[in] ãƒžã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿ç•ªå·
  *
- * @return			ƒg[ƒNƒ“ID
+ * @return			ãƒˆãƒ¼ã‚¯ãƒ³ID
  */
 
 int lex_makemagicpointer(int n)
@@ -669,12 +669,12 @@ int lex_makemagicpointer(int n)
 
 
 /*------------------------------------------------------------------------*/
-/** –¼‘O•tƒ}ƒWƒbƒNƒ|ƒCƒ“ƒ^‚Ìì¬
+/** åå‰ä»˜ãƒžã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿ã®ä½œæˆ
  *
- * @param s			[in] •¶Žš—ñ
- * @param trunc		[in] ‘OŒã‚ÌØ‚è‹l‚ß
+ * @param s			[in] æ–‡å­—åˆ—
+ * @param trunc		[in] å‰å¾Œã®åˆ‡ã‚Šè©°ã‚
  *
- * @return			ƒg[ƒNƒ“ID
+ * @return			ãƒˆãƒ¼ã‚¯ãƒ³ID
  */
 
 int lex_makenamedmp(char *s, bool trunc)
@@ -691,7 +691,7 @@ int lex_makenamedmp(char *s, bool trunc)
 
 	pos = lex_update_tokenpos(kMAGICPOINTER);
 
-	// NOS2 ”ñŒÝŠ·
+	// NOS2 éžäº’æ›
 	WORN_NOS2("Named Magic Pinter");
 
 	return pos;
@@ -700,17 +700,17 @@ int lex_makenamedmp(char *s, bool trunc)
 #else
 
 /*------------------------------------------------------------------------*/
-/** ƒ}ƒWƒbƒNƒ|ƒCƒ“ƒ^ƒg[ƒNƒ“‚Ìì¬
+/** ãƒžã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿ãƒˆãƒ¼ã‚¯ãƒ³ã®ä½œæˆ
  *
- * @param n			[in] ƒ}ƒWƒbƒNƒ|ƒCƒ“ƒ^”Ô†
+ * @param n			[in] ãƒžã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿ç•ªå·
  *
- * @return			ƒg[ƒNƒ“ID
+ * @return			ãƒˆãƒ¼ã‚¯ãƒ³ID
  */
 
 int lex_makemagicpointer(int n)
 {
 	if (0x03ff < n)
-	{	// ”’l‚ª”ÍˆÍŠO
+	{	// æ•°å€¤ãŒç¯„å›²å¤–
 		return lex_update_tokenpos(kERROR);
 	}
 
@@ -722,12 +722,12 @@ int lex_makemagicpointer(int n)
 
 
 /*------------------------------------------------------------------------*/
-/** –¼‘O•tƒ}ƒWƒbƒNƒ|ƒCƒ“ƒ^‚Ìì¬
+/** åå‰ä»˜ãƒžã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿ã®ä½œæˆ
  *
- * @param s			[in] •¶Žš—ñ
- * @param trunc		[in] ‘OŒã‚ÌØ‚è‹l‚ß
+ * @param s			[in] æ–‡å­—åˆ—
+ * @param trunc		[in] å‰å¾Œã®åˆ‡ã‚Šè©°ã‚
  *
- * @return			ƒg[ƒNƒ“ID
+ * @return			ãƒˆãƒ¼ã‚¯ãƒ³ID
  */
 
 int lex_makenamedmp(char *s, bool trunc)
@@ -740,11 +740,11 @@ int lex_makenamedmp(char *s, bool trunc)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ƒfƒoƒbƒO•\Ž¦
+/** ãƒ‡ãƒãƒƒã‚°è¡¨ç¤º
  *
- * @param type		[in] ƒg[ƒNƒ“ID
+ * @param type		[in] ãƒˆãƒ¼ã‚¯ãƒ³ID
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void lex_debug(int type)
@@ -784,9 +784,9 @@ void lex_debug(int type)
 
 #pragma mark -
 //--------------------------------------------------------------------------
-/** Žš‹å‰ðÍ‚Ì‚½‚ß‚Ì‰Šú‰»
+/** å­—å¥è§£æžã®ãŸã‚ã®åˆæœŸåŒ–
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void nps_yyinit(void)
@@ -794,7 +794,7 @@ void nps_yyinit(void)
 	static bool inited = false;
 
 	if (! inited)
-	{   //’PŒêƒe[ƒuƒ‹‚Ìƒ\[ƒg
+	{   //å˜èªžãƒ†ãƒ¼ãƒ–ãƒ«ã®ã‚½ãƒ¼ãƒˆ
 		lookup_sorttable(reserved_words, sizeof(reserved_words) / sizeof(keyword_t));
 		lookup_sorttable(operator_words, sizeof(operator_words) / sizeof(keyword_t));
 
@@ -804,9 +804,9 @@ void nps_yyinit(void)
 
 
 //--------------------------------------------------------------------------
-/** Žš‹å‰ðÍ‚ÌŒãŽn––
+/** å­—å¥è§£æžã®å¾Œå§‹æœ«
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 int nps_yycleanup(void)

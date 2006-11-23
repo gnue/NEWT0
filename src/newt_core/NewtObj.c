@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------*/
 /**
  * @file	NewtObj.c
- * @brief   ƒIƒuƒWƒFƒNƒgƒVƒXƒeƒ€
+ * @brief   ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚·ã‚¹ãƒ†ãƒ 
  *
  * @author  M.Nukui
  * @date	2003-11-07
@@ -10,7 +10,7 @@
  */
 
 
-/* ƒwƒbƒ_ƒtƒ@ƒCƒ‹ */
+/* ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ« */
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -20,7 +20,7 @@
 #include "NewtIO.h"
 
 
-/* ŠÖ”ƒvƒƒgƒ^ƒCƒv */
+/* é–¢æ•°ãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ— */
 static newtRef		NewtMakeSymbol0(const char *s);
 static bool			NewtBSearchSymTable(newtRefArg r, const char * name, uint32_t hash, int32_t st, int32_t * indexP);
 static newtObjRef   NewtObjMemAlloc(newtPool pool, uint32_t n, bool literal);
@@ -53,11 +53,11 @@ static bool			NewtStrHasSubclass(char * sub, uint32_t sublen, char * supr, uint3
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ƒVƒ“ƒ{ƒ‹‚ÌƒnƒbƒVƒ…’l‚ğŒvZ
+/** ã‚·ãƒ³ãƒœãƒ«ã®ãƒãƒƒã‚·ãƒ¥å€¤ã‚’è¨ˆç®—
  *
- * @param name		[in] ƒVƒ“ƒ{ƒ‹–¼
+ * @param name		[in] ã‚·ãƒ³ãƒœãƒ«å
  *
- * @return			ƒnƒbƒVƒ…’l
+ * @return			ãƒãƒƒã‚·ãƒ¥å€¤
  */
 
 uint32_t NewtSymbolHashFunction(const char * name)
@@ -82,11 +82,11 @@ uint32_t NewtSymbolHashFunction(const char * name)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg‚Ìì¬
+/** ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ä½œæˆ
  *
- * @param s			[in] •¶š—ñ
+ * @param s			[in] æ–‡å­—åˆ—
  *
- * @return			ƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg
+ * @return			ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtMakeSymbol0(const char *s)
@@ -120,16 +120,16 @@ newtRef NewtMakeSymbol0(const char *s)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒVƒ“ƒ{ƒ‹ƒe[ƒuƒ‹‚ÌˆÊ’uŒŸõ
+/** ã‚·ãƒ³ãƒœãƒ«ãƒ†ãƒ¼ãƒ–ãƒ«ã®ä½ç½®æ¤œç´¢
  *
- * @param r			[in] ƒVƒ“ƒ{ƒ‹ƒe[ƒuƒ‹
- * @param name		[in] ƒVƒ“ƒ{ƒ‹•¶š—ñ
- * @param hash		[in] ƒnƒbƒVƒ…’l
- * @param st		[in] ŠJnˆÊ’u
- * @param indexP	[out]ˆÊ’u
+ * @param r			[in] ã‚·ãƒ³ãƒœãƒ«ãƒ†ãƒ¼ãƒ–ãƒ«
+ * @param name		[in] ã‚·ãƒ³ãƒœãƒ«æ–‡å­—åˆ—
+ * @param hash		[in] ãƒãƒƒã‚·ãƒ¥å€¤
+ * @param st		[in] é–‹å§‹ä½ç½®
+ * @param indexP	[out]ä½ç½®
  *
- * @retval			true	¬Œ÷
- * @retval			false   ¸”s
+ * @retval			true	æˆåŠŸ
+ * @retval			false   å¤±æ•—
  */
 
 bool NewtBSearchSymTable(newtRefArg r, const char * name, uint32_t hash,
@@ -188,16 +188,16 @@ bool NewtBSearchSymTable(newtRefArg r, const char * name, uint32_t hash,
 
 
 /*------------------------------------------------------------------------*/
-/** ƒVƒ“ƒ{ƒ‹‚Ìƒ‹ƒbƒNƒAƒbƒv
+/** ã‚·ãƒ³ãƒœãƒ«ã®ãƒ«ãƒƒã‚¯ã‚¢ãƒƒãƒ—
  *
- * @param r			[in] ƒVƒ“ƒ{ƒ‹ƒe[ƒuƒ‹
- * @param name		[in] ƒVƒ“ƒ{ƒ‹•¶š—ñ
- * @param hash		[in] ƒnƒbƒVƒ…’l
- * @param st		[in] ŠJnˆÊ’u
+ * @param r			[in] ã‚·ãƒ³ãƒœãƒ«ãƒ†ãƒ¼ãƒ–ãƒ«
+ * @param name		[in] ã‚·ãƒ³ãƒœãƒ«æ–‡å­—åˆ—
+ * @param hash		[in] ãƒãƒƒã‚·ãƒ¥å€¤
+ * @param st		[in] é–‹å§‹ä½ç½®
  *
- * @return			ƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg
+ * @return			ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @note			–¢“o˜^‚Ìê‡‚ÍƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg‚ğì¬‚µƒVƒ“ƒ{ƒ‹ƒe[ƒuƒ‹‚É“o˜^‚·‚é
+ * @note			æœªç™»éŒ²ã®å ´åˆã¯ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆã—ã‚·ãƒ³ãƒœãƒ«ãƒ†ãƒ¼ãƒ–ãƒ«ã«ç™»éŒ²ã™ã‚‹
  */
 
 newtRef NewtLookupSymbol(newtRefArg r, const char * name, uint32_t hash, int32_t st)
@@ -216,13 +216,13 @@ newtRef NewtLookupSymbol(newtRefArg r, const char * name, uint32_t hash, int32_t
 
 
 /*------------------------------------------------------------------------*/
-/** ƒVƒ“ƒ{ƒ‹‚Ìƒ‹ƒbƒNƒAƒbƒv
+/** ã‚·ãƒ³ãƒœãƒ«ã®ãƒ«ãƒƒã‚¯ã‚¢ãƒƒãƒ—
  *
- * @param r			[in] ƒVƒ“ƒ{ƒ‹ƒe[ƒuƒ‹
- * @param name		[in] ƒVƒ“ƒ{ƒ‹•¶š—ñ
- * @param st		[in] ŠJnˆÊ’u
+ * @param r			[in] ã‚·ãƒ³ãƒœãƒ«ãƒ†ãƒ¼ãƒ–ãƒ«
+ * @param name		[in] ã‚·ãƒ³ãƒœãƒ«æ–‡å­—åˆ—
+ * @param st		[in] é–‹å§‹ä½ç½®
  *
- * @return			ƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg
+ * @return			ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtLookupSymbolArray(newtRefArg r, newtRefArg name, int32_t st)
@@ -254,12 +254,12 @@ const char*	NewtSymbolGetName(newtRefArg inSymbol)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚ÌƒIƒuƒWƒFƒNƒgƒ^ƒCƒv‚Ìæ“¾
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¿ã‚¤ãƒ—ã®å–å¾—
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
- * @param detail	[in] ƒŠƒeƒ‰ƒ‹ƒtƒ‰ƒO
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param detail	[in] ãƒªãƒ†ãƒ©ãƒ«ãƒ•ãƒ©ã‚°
  *
- * @return			ƒIƒuƒWƒFƒNƒgƒ^ƒCƒv
+ * @return			ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¿ã‚¤ãƒ—
  */
 
 uint16_t NewtGetRefType(newtRefArg r, bool detail)
@@ -317,12 +317,12 @@ uint16_t NewtGetRefType(newtRefArg r, bool detail)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒgƒf[ƒ^‚ÌƒIƒuƒWƒFƒNƒgƒ^ƒCƒv‚Ìæ“¾
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¿ã‚¤ãƒ—ã®å–å¾—
  *
- * @param obj		[in] ƒIƒuƒWƒFƒNƒgƒf[ƒ^
- * @param detail	[in] ƒfƒBƒeƒCƒ‹ƒtƒ‰ƒO
+ * @param obj		[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿
+ * @param detail	[in] ãƒ‡ã‚£ãƒ†ã‚¤ãƒ«ãƒ•ãƒ©ã‚°
  *
- * @return			ƒIƒuƒWƒFƒNƒgƒ^ƒCƒv
+ * @return			ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¿ã‚¤ãƒ—
  */
 
 uint16_t NewtGetObjectType(newtObjRef obj, bool detail)
@@ -364,11 +364,11 @@ uint16_t NewtGetObjectType(newtObjRef obj, bool detail)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒgƒf[ƒ^‚ÌÀƒf[ƒ^ƒTƒCƒY‚ğŒvZ
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿ã®å®Ÿãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’è¨ˆç®—
  *
- * @param n			[in] ƒf[ƒ^ƒTƒCƒY
+ * @param n			[in] ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º
  *
- * @return			Àƒf[ƒ^ƒTƒCƒY
+ * @return			å®Ÿãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º
  */
 
 uint32_t NewtObjCalcDataSize(uint32_t n)
@@ -381,13 +381,13 @@ uint32_t NewtObjCalcDataSize(uint32_t n)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒgƒf[ƒ^‚Ìƒƒ‚ƒŠŠm•Û
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿ã®ãƒ¡ãƒ¢ãƒªç¢ºä¿
  *
- * @param pool		[in] ƒƒ‚ƒŠƒv[ƒ‹
- * @param n			[in] ƒf[ƒ^ƒTƒCƒY
- * @param literal	[in] ƒŠƒeƒ‰ƒ‹ƒtƒ‰ƒO
+ * @param pool		[in] ãƒ¡ãƒ¢ãƒªãƒ—ãƒ¼ãƒ«
+ * @param n			[in] ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º
+ * @param literal	[in] ãƒªãƒ†ãƒ©ãƒ«ãƒ•ãƒ©ã‚°
  *
- * @return			ƒIƒuƒWƒFƒNƒgƒf[ƒ^
+ * @return			ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿
  */
 
 newtObjRef NewtObjMemAlloc(newtPool pool, uint32_t n, bool literal)
@@ -411,14 +411,14 @@ newtObjRef NewtObjMemAlloc(newtPool pool, uint32_t n, bool literal)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚Ìƒƒ‚ƒŠŠm•Û
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ãƒ¡ãƒ¢ãƒªç¢ºä¿
  *
- * @param r			[in] ƒNƒ‰ƒX^ƒ}ƒbƒv
- * @param n			[in] ƒTƒCƒY
- * @param type		[in] ƒIƒuƒWƒFƒNƒgƒ^ƒCƒv
- * @param literal	[in] ƒŠƒeƒ‰ƒ‹ƒtƒ‰ƒO
+ * @param r			[in] ã‚¯ãƒ©ã‚¹ï¼ãƒãƒƒãƒ—
+ * @param n			[in] ã‚µã‚¤ã‚º
+ * @param type		[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¿ã‚¤ãƒ—
+ * @param literal	[in] ãƒªãƒ†ãƒ©ãƒ«ãƒ•ãƒ©ã‚°
  *
- * @return			ƒIƒuƒWƒFƒNƒg
+ * @return			ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtObjRef NewtObjAlloc(newtRefArg r, uint32_t n, uint16_t type, bool literal)
@@ -443,13 +443,13 @@ newtObjRef NewtObjAlloc(newtRefArg r, uint32_t n, uint16_t type, bool literal)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒgƒf[ƒ^‚Ìƒƒ‚ƒŠÄŠm•Û
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿ã®ãƒ¡ãƒ¢ãƒªå†ç¢ºä¿
  *
- * @param pool		[in] ƒƒ‚ƒŠƒv[ƒ‹
- * @param obj		[in] ƒIƒuƒWƒFƒNƒgƒf[ƒ^
- * @param n			[in] ƒTƒCƒY
+ * @param pool		[in] ãƒ¡ãƒ¢ãƒªãƒ—ãƒ¼ãƒ«
+ * @param obj		[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿
+ * @param n			[in] ã‚µã‚¤ã‚º
  *
- * @return			ƒIƒuƒWƒFƒNƒgƒf[ƒ^
+ * @return			ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿
  */
 
 newtObjRef NewtObjRealloc(newtPool pool, newtObjRef obj, uint32_t n)
@@ -483,12 +483,12 @@ newtObjRef NewtObjRealloc(newtPool pool, newtObjRef obj, uint32_t n)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒgƒf[ƒ^‚ÌƒTƒCƒY•ÏX
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿ã®ã‚µã‚¤ã‚ºå¤‰æ›´
  *
- * @param obj		[in] ƒIƒuƒWƒFƒNƒgƒf[ƒ^
- * @param n			[in] ƒTƒCƒY
+ * @param obj		[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿
+ * @param n			[in] ã‚µã‚¤ã‚º
  *
- * @return			ƒIƒuƒWƒFƒNƒgƒf[ƒ^
+ * @return			ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿
  */
 
 newtObjRef NewtObjResize(newtObjRef obj, uint32_t n)
@@ -504,11 +504,11 @@ newtObjRef NewtObjResize(newtObjRef obj, uint32_t n)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒgƒf[ƒ^‚Ìƒf[ƒ^•”‚ğæ“¾
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿ã®ãƒ‡ãƒ¼ã‚¿éƒ¨ã‚’å–å¾—
  *
- * @param obj		[in] ƒIƒuƒWƒFƒNƒgƒf[ƒ^
+ * @param obj		[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿
  *
- * @return			ƒf[ƒ^•”
+ * @return			ãƒ‡ãƒ¼ã‚¿éƒ¨
  */
 
 void * NewtObjData(newtObjRef obj)
@@ -525,11 +525,11 @@ void * NewtObjData(newtObjRef obj)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒN‚ÌƒNƒ[ƒ“•¡»
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ã®ã‚¯ãƒ­ãƒ¼ãƒ³è¤‡è£½
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			ƒNƒ[ƒ“•¡»‚³‚ê‚½ƒIƒuƒWƒFƒNƒg
+ * @return			ã‚¯ãƒ­ãƒ¼ãƒ³è¤‡è£½ã•ã‚ŒãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtObjClone(newtRefArg r)
@@ -589,11 +589,11 @@ newtRef NewtObjClone(newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒN‚ÌƒŠƒeƒ‰ƒ‹‰»
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ã®ãƒªãƒ†ãƒ©ãƒ«åŒ–
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			ƒŠƒeƒ‰ƒ‹‰»‚³‚ê‚½ƒIƒuƒWƒFƒNƒg
+ * @return			ãƒªãƒ†ãƒ©ãƒ«åŒ–ã•ã‚ŒãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtPackLiteral(newtRefArg r)
@@ -650,8 +650,8 @@ newtRef NewtPackLiteral(newtRefArg r)
 
             newObj->header.h |= kNewtObjLiteral;
 
-            // obj ‚ğ free ‚µ‚Ä‚Í‚¢‚¯‚È‚¢
-            // GC ‚É‚Ü‚©‚¹‚é
+            // obj ã‚’ free ã—ã¦ã¯ã„ã‘ãªã„
+            // GC ã«ã¾ã‹ã›ã‚‹
 
             return NewtMakePointer(newObj);
         }
@@ -663,13 +663,13 @@ newtRef NewtPackLiteral(newtRefArg r)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒN‚Ìƒf[ƒ^•”‚ğƒoƒbƒtƒ@‚Éæo‚·
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ã®ãƒ‡ãƒ¼ã‚¿éƒ¨ã‚’ãƒãƒƒãƒ•ã‚¡ã«å–å‡ºã™
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
- * @param data		[out]ƒoƒbƒtƒ@
- * @param len		[in] ƒoƒbƒtƒ@’·
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param data		[out]ãƒãƒƒãƒ•ã‚¡
+ * @param len		[in] ãƒãƒƒãƒ•ã‚¡é•·
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NewtGetObjData(newtRefArg r, uint8_t * data, uint32_t len)
@@ -686,12 +686,12 @@ void NewtGetObjData(newtRefArg r, uint8_t * data, uint32_t len)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚ªƒŠƒeƒ‰ƒ‹‚©ƒ`ƒFƒbƒN‚·‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒãƒªãƒ†ãƒ©ãƒ«ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @retval			true	ƒŠƒeƒ‰ƒ‹
- * @retval			false   ƒŠƒeƒ‰ƒ‹‚Å‚È‚¢
+ * @retval			true	ãƒªãƒ†ãƒ©ãƒ«
+ * @retval			false   ãƒªãƒ†ãƒ©ãƒ«ã§ãªã„
  */
 
 bool NewtRefIsLiteral(newtRefArg r)
@@ -710,13 +710,13 @@ bool NewtRefIsLiteral(newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒN‚ÉƒXƒEƒB[ƒvƒtƒ‰ƒO‚ª—§‚Á‚Ä‚¢‚é‚©ƒ`ƒFƒbƒN‚·‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ã«ã‚¹ã‚¦ã‚£ãƒ¼ãƒ—ãƒ•ãƒ©ã‚°ãŒç«‹ã£ã¦ã„ã‚‹ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
- * @param mark		[in] ƒ}[ƒN
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param mark		[in] ãƒãƒ¼ã‚¯
  *
- * @retval			true	ƒXƒEƒB[ƒvƒtƒ‰ƒO‚ª—§‚Á‚Ä‚¢‚é
- * @retval			false   ƒXƒEƒB[ƒvƒtƒ‰ƒO‚ª—§‚Á‚Ä‚¢‚È‚¢
+ * @retval			true	ã‚¹ã‚¦ã‚£ãƒ¼ãƒ—ãƒ•ãƒ©ã‚°ãŒç«‹ã£ã¦ã„ã‚‹
+ * @retval			false   ã‚¹ã‚¦ã‚£ãƒ¼ãƒ—ãƒ•ãƒ©ã‚°ãŒç«‹ã£ã¦ã„ãªã„
  */
 
 bool NewtRefIsSweep(newtRefArg r, bool mark)
@@ -735,12 +735,12 @@ bool NewtRefIsSweep(newtRefArg r, bool mark)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚ª NIL ‚©ƒ`ƒFƒbƒN‚·‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒ NIL ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @retval			true	NIL ‚Ü‚½‚Í #UNBIND
- * @retval			false   NIL ‚Å‚È‚¢
+ * @retval			true	NIL ã¾ãŸã¯ #UNBIND
+ * @retval			false   NIL ã§ãªã„
  */
 
 bool NewtRefIsNIL(newtRefArg r)
@@ -750,12 +750,12 @@ bool NewtRefIsNIL(newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚ªƒVƒ“ƒ{ƒ‹‚©ƒ`ƒFƒbƒN‚·‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒã‚·ãƒ³ãƒœãƒ«ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @retval			true	ƒVƒ“ƒ{ƒ‹
- * @retval			false   ƒVƒ“ƒ{ƒ‹‚Å‚È‚¢
+ * @retval			true	ã‚·ãƒ³ãƒœãƒ«
+ * @retval			false   ã‚·ãƒ³ãƒœãƒ«ã§ãªã„
  */
 
 bool NewtRefIsSymbol(newtRefArg r)
@@ -765,11 +765,11 @@ bool NewtRefIsSymbol(newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚ÌƒnƒbƒVƒ…’l‚ğæ“¾‚·‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ãƒãƒƒã‚·ãƒ¥å€¤ã‚’å–å¾—ã™ã‚‹
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			ƒnƒbƒVƒ…’l
+ * @return			ãƒãƒƒã‚·ãƒ¥å€¤
  */
 
 uint32_t NewtRefToHash(newtRefArg r)
@@ -786,12 +786,12 @@ uint32_t NewtRefToHash(newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚ª•¶š—ñ‚©ƒ`ƒFƒbƒN‚·‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒæ–‡å­—åˆ—ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @retval			true	•¶š—ñ
- * @retval			false   •¶š—ñ‚Å‚È‚¢
+ * @retval			true	æ–‡å­—åˆ—
+ * @retval			false   æ–‡å­—åˆ—ã§ãªã„
  */
 
 bool NewtRefIsString(newtRefArg r)
@@ -801,12 +801,12 @@ bool NewtRefIsString(newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚ª®”‚©ƒ`ƒFƒbƒN‚·‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒæ•´æ•°ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @retval			true	®”
- * @retval			false   ®”‚Å‚È‚¢
+ * @retval			true	æ•´æ•°
+ * @retval			false   æ•´æ•°ã§ãªã„
  */
 
 bool NewtRefIsInteger(newtRefArg r)
@@ -816,11 +816,11 @@ bool NewtRefIsInteger(newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ®”ƒIƒuƒWƒFƒN‚ğ®”‚É‚·‚é
+/** æ•´æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ã‚’æ•´æ•°ã«ã™ã‚‹
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			®”
+ * @return			æ•´æ•°
  */
 
 int32_t NewtRefToInteger(newtRefArg r)
@@ -837,12 +837,12 @@ int32_t NewtRefToInteger(newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚ª32bit®”‚©ƒ`ƒFƒbƒN‚·‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒ32bitæ•´æ•°ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @retval			true	32bit®”
- * @retval			false   32bit®”‚Å‚È‚¢
+ * @retval			true	32bitæ•´æ•°
+ * @retval			false   32bitæ•´æ•°ã§ãªã„
  */
 
 bool NewtRefIsInt32(newtRefArg r)
@@ -852,12 +852,12 @@ bool NewtRefIsInt32(newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚ª•‚“®¬”“_‚©ƒ`ƒFƒbƒN‚·‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒæµ®å‹•å°æ•°ç‚¹ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @retval			true	•‚“®¬”“_
- * @retval			false   •‚“®¬”“_‚Å‚È‚¢
+ * @retval			true	æµ®å‹•å°æ•°ç‚¹
+ * @retval			false   æµ®å‹•å°æ•°ç‚¹ã§ãªã„
  */
 
 bool NewtRefIsReal(newtRefArg r)
@@ -867,11 +867,11 @@ bool NewtRefIsReal(newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ”’lƒIƒuƒWƒFƒN‚ğ•‚“®¬”“_‚É‚·‚é
+/** æ•°å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ã‚’æµ®å‹•å°æ•°ç‚¹ã«ã™ã‚‹
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			•‚“®¬”“_
+ * @return			æµ®å‹•å°æ•°ç‚¹
  */
 
 double NewtRefToReal(newtRefArg r)
@@ -888,12 +888,12 @@ double NewtRefToReal(newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚ªƒoƒCƒiƒŠƒIƒuƒWƒFƒNƒg‚©ƒ`ƒFƒbƒN‚·‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒãƒã‚¤ãƒŠãƒªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @retval			true	ƒoƒCƒiƒŠƒIƒuƒWƒFƒNƒg
- * @retval			false   ƒoƒCƒiƒŠƒIƒuƒWƒFƒNƒg‚Å‚È‚¢
+ * @retval			true	ãƒã‚¤ãƒŠãƒªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @retval			false   ãƒã‚¤ãƒŠãƒªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã§ãªã„
  */
 
 bool NewtRefIsBinary(newtRefArg r)
@@ -912,11 +912,11 @@ bool NewtRefIsBinary(newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚ÌƒIƒuƒWƒFƒNƒgƒf[ƒ^‚ğæ“¾‚·‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—ã™ã‚‹
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			ƒIƒuƒWƒFƒNƒgƒf[ƒ^
+ * @return			ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿
  */
 
 void * NewtRefToData(newtRefArg r)
@@ -930,12 +930,12 @@ void * NewtRefToData(newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚ª”z—ñƒIƒuƒWƒFƒNƒg‚©ƒ`ƒFƒbƒN‚·‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒé…åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @retval			true	”z—ñƒIƒuƒWƒFƒNƒg
- * @retval			false   ”z—ñƒIƒuƒWƒFƒNƒg‚Å‚È‚¢
+ * @retval			true	é…åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @retval			false   é…åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã§ãªã„
  */
 
 bool NewtRefIsArray(newtRefArg r)
@@ -945,12 +945,12 @@ bool NewtRefIsArray(newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚ªƒtƒŒ[ƒ€ƒIƒuƒWƒFƒNƒg‚©ƒ`ƒFƒbƒN‚·‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒãƒ•ãƒ¬ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @retval			true	ƒtƒŒ[ƒ€ƒIƒuƒWƒFƒNƒg
- * @retval			false   ƒtƒŒ[ƒ€ƒIƒuƒWƒFƒNƒg‚Å‚È‚¢
+ * @retval			true	ãƒ•ãƒ¬ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @retval			false   ãƒ•ãƒ¬ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã§ãªã„
  */
 
 bool NewtRefIsFrame(newtRefArg r)
@@ -960,12 +960,12 @@ bool NewtRefIsFrame(newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚ªƒtƒŒ[ƒ€‚Ü‚½‚Í”z—ñƒIƒuƒWƒFƒNƒg‚©ƒ`ƒFƒbƒN‚·‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒãƒ•ãƒ¬ãƒ¼ãƒ ã¾ãŸã¯é…åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @retval			true	ƒtƒŒ[ƒ€‚Ü‚½‚Í”z—ñƒIƒuƒWƒFƒNƒg
- * @retval			false   ƒtƒŒ[ƒ€‚Ü‚½‚Í”z—ñƒIƒuƒWƒFƒNƒg‚Å‚È‚¢
+ * @retval			true	ãƒ•ãƒ¬ãƒ¼ãƒ ã¾ãŸã¯é…åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @retval			false   ãƒ•ãƒ¬ãƒ¼ãƒ ã¾ãŸã¯é…åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã§ãªã„
  */
 
 bool NewtRefIsFrameOrArray(newtRefArg r)
@@ -978,12 +978,12 @@ bool NewtRefIsFrameOrArray(newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚ªƒCƒ~ƒfƒBƒGƒCƒgi‘¦’lj‚©ƒ`ƒFƒbƒN‚·‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒã‚¤ãƒŸãƒ‡ã‚£ã‚¨ã‚¤ãƒˆï¼ˆå³å€¤ï¼‰ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @retval			true	ƒCƒ~ƒfƒBƒGƒCƒg‚Å‚ ‚é
- * @retval			false   ƒCƒ~ƒfƒBƒGƒCƒg‚Å‚È‚¢
+ * @retval			true	ã‚¤ãƒŸãƒ‡ã‚£ã‚¨ã‚¤ãƒˆã§ã‚ã‚‹
+ * @retval			false   ã‚¤ãƒŸãƒ‡ã‚£ã‚¨ã‚¤ãƒˆã§ãªã„
  */
 
 bool NewtRefIsImmediate(newtRefArg r)
@@ -998,12 +998,12 @@ bool NewtRefIsImmediate(newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚ªƒR[ƒhƒuƒƒbƒNiŠÖ”ƒIƒuƒWƒFƒNƒgj‚©ƒ`ƒFƒbƒN‚·‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒã‚³ãƒ¼ãƒ‰ãƒ–ãƒ­ãƒƒã‚¯ï¼ˆé–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼‰ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @retval			true	ƒR[ƒhƒuƒƒbƒN
- * @retval			false   ƒR[ƒhƒuƒƒbƒN‚Å‚È‚¢
+ * @retval			true	ã‚³ãƒ¼ãƒ‰ãƒ–ãƒ­ãƒƒã‚¯
+ * @retval			false   ã‚³ãƒ¼ãƒ‰ãƒ–ãƒ­ãƒƒã‚¯ã§ãªã„
  */
 
 bool NewtRefIsCodeBlock(newtRefArg r)
@@ -1023,12 +1023,12 @@ bool NewtRefIsCodeBlock(newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚ªƒlƒCƒeƒBƒuŠÖ”ircvr‚È‚µŠÖ”ƒIƒuƒWƒFƒNƒgj‚©ƒ`ƒFƒbƒN‚·‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒãƒã‚¤ãƒ†ã‚£ãƒ–é–¢æ•°ï¼ˆrcvrãªã—é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼‰ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @retval			true	ƒlƒCƒeƒBƒuŠÖ”
- * @retval			false   ƒlƒCƒeƒBƒuŠÖ”‚Å‚È‚¢
+ * @retval			true	ãƒã‚¤ãƒ†ã‚£ãƒ–é–¢æ•°
+ * @retval			false   ãƒã‚¤ãƒ†ã‚£ãƒ–é–¢æ•°ã§ãªã„
  */
 
 bool NewtRefIsNativeFn(newtRefArg r)
@@ -1041,12 +1041,12 @@ bool NewtRefIsNativeFn(newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚ªƒlƒCƒeƒBƒuŠÖ”ircvr‚ ‚èŠÖ”ƒIƒuƒWƒFƒNƒgj‚©ƒ`ƒFƒbƒN‚·‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒãƒã‚¤ãƒ†ã‚£ãƒ–é–¢æ•°ï¼ˆrcvrã‚ã‚Šé–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼‰ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @retval			true	ƒlƒCƒeƒBƒuŠÖ”
- * @retval			false   ƒlƒCƒeƒBƒuŠÖ”‚Å‚È‚¢
+ * @retval			true	ãƒã‚¤ãƒ†ã‚£ãƒ–é–¢æ•°
+ * @retval			false   ãƒã‚¤ãƒ†ã‚£ãƒ–é–¢æ•°ã§ãªã„
  */
 
 bool NewtRefIsNativeFunc(newtRefArg r)
@@ -1059,12 +1059,12 @@ bool NewtRefIsNativeFunc(newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚ªŠÖ”ƒIƒuƒWƒFƒNƒg‚©ƒ`ƒFƒbƒN‚·‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒé–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @retval			true	ŠÖ”ƒIƒuƒWƒFƒNƒg
- * @retval			false   ŠÖ”ƒIƒuƒWƒFƒNƒg‚Å‚È‚¢
+ * @retval			true	é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @retval			false   é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã§ãªã„
  */
 
 bool NewtRefIsFunction(newtRefArg r)
@@ -1074,14 +1074,14 @@ bool NewtRefIsFunction(newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ŠÖ”ƒIƒuƒWƒFƒNƒg‚Ìƒ^ƒCƒv‚ğæ“¾‚·‚é
+/** é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚¿ã‚¤ãƒ—ã‚’å–å¾—ã™ã‚‹
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @retval			kNewtNotFunction	ŠÖ”ƒIƒuƒWƒFƒNƒg‚Å‚È‚¢
- * @retval			kNewtCodeBlock		ƒoƒCƒgƒR[ƒhŠÖ”
- * @retval			kNewtNativeFn		ƒlƒCƒeƒBƒuŠÖ”ircvr‚È‚µAOld Stylej
- * @retval			kNewtNativeFunc		ƒlƒCƒeƒBƒuŠÖ”ircvr‚ ‚èANew Stylej
+ * @retval			kNewtNotFunction	é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã§ãªã„
+ * @retval			kNewtCodeBlock		ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰é–¢æ•°
+ * @retval			kNewtNativeFn		ãƒã‚¤ãƒ†ã‚£ãƒ–é–¢æ•°ï¼ˆrcvrãªã—ã€Old Styleï¼‰
+ * @retval			kNewtNativeFunc		ãƒã‚¤ãƒ†ã‚£ãƒ–é–¢æ•°ï¼ˆrcvrã‚ã‚Šã€New Styleï¼‰
  */
 
 int NewtRefFunctionType(newtRefArg r)
@@ -1107,12 +1107,12 @@ int NewtRefFunctionType(newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚ª³‹K•\Œ»ƒIƒuƒWƒFƒNƒg‚©ƒ`ƒFƒbƒN‚·‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒæ­£è¦è¡¨ç¾ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @retval			true	³‹K•\Œ»ƒIƒuƒWƒFƒNƒg
- * @retval			false   ³‹K•\Œ»ƒIƒuƒWƒFƒNƒg‚Å‚È‚¢
+ * @retval			true	æ­£è¦è¡¨ç¾ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @retval			false   æ­£è¦è¡¨ç¾ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã§ãªã„
  */
 
 bool NewtRefIsRegex(newtRefArg r)
@@ -1132,11 +1132,11 @@ bool NewtRefIsRegex(newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ®”ƒIƒuƒWƒFƒNƒg‚ğƒAƒhƒŒƒX‚É•ÏŠ·‚·‚é
+/** æ•´æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ã‚¢ãƒ‰ãƒ¬ã‚¹ã«å¤‰æ›ã™ã‚‹
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			ƒAƒhƒŒƒX
+ * @return			ã‚¢ãƒ‰ãƒ¬ã‚¹
  */
 
 void * NewtRefToAddress(newtRefArg r)
@@ -1150,14 +1150,14 @@ void * NewtRefToAddress(newtRefArg r)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ƒoƒCƒiƒŠƒIƒuƒWƒFƒNƒg‚ğì¬‚·‚é
+/** ãƒã‚¤ãƒŠãƒªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆã™ã‚‹
  *
- * @param klass		[in] ƒNƒ‰ƒX
- * @param data		[in] ‰Šú‰»ƒf[ƒ^
- * @param size		[in] ƒTƒCƒY
- * @param literal	[in] ƒŠƒeƒ‰ƒ‹ƒtƒ‰ƒO
+ * @param klass		[in] ã‚¯ãƒ©ã‚¹
+ * @param data		[in] åˆæœŸåŒ–ãƒ‡ãƒ¼ã‚¿
+ * @param size		[in] ã‚µã‚¤ã‚º
+ * @param literal	[in] ãƒªãƒ†ãƒ©ãƒ«ãƒ•ãƒ©ã‚°
  *
- * @return			ƒoƒCƒiƒŠƒIƒuƒWƒFƒNƒg
+ * @return			ãƒã‚¤ãƒŠãƒªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtMakeBinary(newtRefArg klass, uint8_t * data, uint32_t size, bool literal)
@@ -1196,12 +1196,12 @@ newtRef NewtMakeBinary(newtRefArg klass, uint8_t * data, uint32_t size, bool lit
 
 
 /*------------------------------------------------------------------------*/
-/** ƒoƒCƒiƒŠƒIƒuƒWƒFƒNƒg‚ÌƒIƒuƒWƒFƒNƒgƒf[ƒ^‚ÌƒTƒCƒY‚ğ•ÏX‚·‚é
+/** ãƒã‚¤ãƒŠãƒªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿ã®ã‚µã‚¤ã‚ºã‚’å¤‰æ›´ã™ã‚‹
  *
- * @param obj		[in] ƒIƒuƒWƒFƒNƒgƒf[ƒ^
- * @param n			[in] ƒTƒCƒY
+ * @param obj		[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿
+ * @param n			[in] ã‚µã‚¤ã‚º
  *
- * @return			ƒTƒCƒY‚Ì•ÏX‚³‚ê‚½ƒIƒuƒWƒFƒNƒgƒf[ƒ^
+ * @return			ã‚µã‚¤ã‚ºã®å¤‰æ›´ã•ã‚ŒãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿
  */
 
 newtObjRef NewtObjBinarySetLength(newtObjRef obj, uint32_t n)
@@ -1211,12 +1211,12 @@ newtObjRef NewtObjBinarySetLength(newtObjRef obj, uint32_t n)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒoƒCƒiƒŠƒIƒuƒWƒFƒNƒg‚ÌƒTƒCƒY‚ğ•ÏX‚·‚é
+/** ãƒã‚¤ãƒŠãƒªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚µã‚¤ã‚ºã‚’å¤‰æ›´ã™ã‚‹
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
- * @param n			[in] ƒTƒCƒY
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param n			[in] ã‚µã‚¤ã‚º
  *
- * @return			ƒIƒuƒWƒFƒNƒg
+ * @return			ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtBinarySetLength(newtRefArg r, uint32_t n)
@@ -1231,13 +1231,13 @@ newtRef NewtBinarySetLength(newtRefArg r, uint32_t n)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg‚ğì¬‚·‚é
+/** ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆã™ã‚‹
  *
- * @param s			[in] •¶š—ñ
+ * @param s			[in] æ–‡å­—åˆ—
  *
- * @return			ƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg
+ * @return			ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @note			ƒVƒ“ƒ{ƒ‹‚ªŠù‚É‘¶İ‚·‚éê‡‚Íì¬‚¹‚¸‚ÉŠù‚É‚ ‚éƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg‚ğ•Ô‚·
+ * @note			ã‚·ãƒ³ãƒœãƒ«ãŒæ—¢ã«å­˜åœ¨ã™ã‚‹å ´åˆã¯ä½œæˆã›ãšã«æ—¢ã«ã‚ã‚‹ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’è¿”ã™
  */
 
 newtRef NewtMakeSymbol(const char *s)
@@ -1247,11 +1247,11 @@ newtRef NewtMakeSymbol(const char *s)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒVƒ“ƒ{ƒ‹‚ÌƒIƒuƒWƒFƒNƒgƒf[ƒ^‚Ì’·‚³‚ğæ“¾‚·‚é
+/** ã‚·ãƒ³ãƒœãƒ«ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿ã®é•·ã•ã‚’å–å¾—ã™ã‚‹
  *
- * @param obj		[in] ƒIƒuƒWƒFƒNƒgƒf[ƒ^
+ * @param obj		[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿
  *
- * @return			’·‚³
+ * @return			é•·ã•
  */
 
 uint32_t NewtObjSymbolLength(newtObjRef obj)
@@ -1264,12 +1264,12 @@ uint32_t NewtObjSymbolLength(newtObjRef obj)
 
 
 /*------------------------------------------------------------------------*/
-/** •¶š—ñƒIƒuƒWƒFƒNƒg‚ğì¬‚·‚é
+/** æ–‡å­—åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆã™ã‚‹
  *
- * @param s			[in] •¶š—ñ
- * @param literal	[in] ƒŠƒeƒ‰ƒ‹ƒtƒ‰ƒO
+ * @param s			[in] æ–‡å­—åˆ—
+ * @param literal	[in] ãƒªãƒ†ãƒ©ãƒ«ãƒ•ãƒ©ã‚°
  *
- * @return			•¶š—ñƒIƒuƒWƒFƒNƒg
+ * @return			æ–‡å­—åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtMakeString(const char *s, bool literal)
@@ -1279,13 +1279,13 @@ newtRef NewtMakeString(const char *s, bool literal)
 
 
 /*------------------------------------------------------------------------*/
-/** ’·‚³‚ğw’è‚µ‚Ä•¶š—ñƒIƒuƒWƒFƒNƒg‚ğì¬‚·‚é
+/** é•·ã•ã‚’æŒ‡å®šã—ã¦æ–‡å­—åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆã™ã‚‹
  *
- * @param s			[in] •¶š—ñ
- * @param len		[in] •¶š—ñ‚Ì’·‚³
- * @param literal	[in] ƒŠƒeƒ‰ƒ‹ƒtƒ‰ƒO
+ * @param s			[in] æ–‡å­—åˆ—
+ * @param len		[in] æ–‡å­—åˆ—ã®é•·ã•
+ * @param literal	[in] ãƒªãƒ†ãƒ©ãƒ«ãƒ•ãƒ©ã‚°
  *
- * @return			•¶š—ñƒIƒuƒWƒFƒNƒg
+ * @return			æ–‡å­—åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtMakeString2(const char *s, uint32_t len, bool literal)
@@ -1316,11 +1316,11 @@ newtRef NewtMakeString2(const char *s, uint32_t len, bool literal)
 
 
 /*------------------------------------------------------------------------*/
-/** •¶š—ñƒIƒuƒWƒFƒNƒg‚ÌƒIƒuƒWƒFƒNƒgƒf[ƒ^‚Ì’·‚³‚ğæ“¾‚·‚é
+/** æ–‡å­—åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿ã®é•·ã•ã‚’å–å¾—ã™ã‚‹
  *
- * @param obj		[in] ƒIƒuƒWƒFƒNƒgƒf[ƒ^
+ * @param obj		[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿
  *
- * @return			’·‚³
+ * @return			é•·ã•
  */
 
 uint32_t NewtObjStringLength(newtObjRef obj)
@@ -1333,12 +1333,12 @@ uint32_t NewtObjStringLength(newtObjRef obj)
 
 
 /*------------------------------------------------------------------------*/
-/** •¶š—ñƒIƒuƒWƒFƒNƒg‚ÌƒIƒuƒWƒFƒNƒgƒf[ƒ^‚Ì’·‚³‚ğ•ÏX‚·‚é
+/** æ–‡å­—åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿ã®é•·ã•ã‚’å¤‰æ›´ã™ã‚‹
  *
- * @param obj		[in] ƒIƒuƒWƒFƒNƒgƒf[ƒ^
- * @param len		[in] ’·‚³
+ * @param obj		[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿
+ * @param len		[in] é•·ã•
  *
- * @return			’·‚³‚ª•ÏX‚³‚ê‚½ƒIƒuƒWƒFƒNƒgƒf[ƒ^
+ * @return			é•·ã•ãŒå¤‰æ›´ã•ã‚ŒãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿
  */
 
 newtObjRef NewtObjStringSetLength(newtObjRef obj, uint32_t n)
@@ -1348,12 +1348,12 @@ newtObjRef NewtObjStringSetLength(newtObjRef obj, uint32_t n)
 
 
 /*------------------------------------------------------------------------*/
-/** •¶š—ñƒIƒuƒWƒFƒNƒg‚Ì’·‚³‚ğ•ÏX‚·‚é
+/** æ–‡å­—åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®é•·ã•ã‚’å¤‰æ›´ã™ã‚‹
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
- * @param n			[in] ’·‚³
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param n			[in] é•·ã•
  *
- * @return			ƒIƒuƒWƒFƒNƒg
+ * @return			ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtStringSetLength(newtRefArg r, uint32_t n)
@@ -1368,17 +1368,17 @@ newtRef NewtStringSetLength(newtRefArg r, uint32_t n)
 
 
 /*------------------------------------------------------------------------*/
-/** ®”ƒIƒuƒWƒFƒNƒg‚ğì¬‚·‚é
+/** æ•´æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆã™ã‚‹
  *
- * @param v			[in] ®”
+ * @param v			[in] æ•´æ•°
  *
- * @return			®”ƒIƒuƒWƒFƒNƒg
+ * @return			æ•´æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtMakeInteger(int32_t v)
 {
 	if (-536870912 <= v && v <= 536870911)
-	{   // 30bit ˆÈ“à‚Ìê‡
+	{   // 30bit ä»¥å†…ã®å ´åˆ
 		return NewtMakeInt30(v);
 	}
 	else
@@ -1389,11 +1389,11 @@ newtRef NewtMakeInteger(int32_t v)
 
 
 /*------------------------------------------------------------------------*/
-/** 32bit®”ƒIƒuƒWƒFƒNƒg‚ğì¬‚·‚é
+/** 32bitæ•´æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆã™ã‚‹
  *
- * @param v			[in] ®”
+ * @param v			[in] æ•´æ•°
  *
- * @return			32bit®”ƒIƒuƒWƒFƒNƒg
+ * @return			32bitæ•´æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtMakeInt32(int32_t v)
@@ -1403,11 +1403,11 @@ newtRef NewtMakeInt32(int32_t v)
 
 
 /*------------------------------------------------------------------------*/
-/** •‚“®¬”“_ƒIƒuƒWƒFƒNƒg‚ğì¬‚·‚é
+/** æµ®å‹•å°æ•°ç‚¹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆã™ã‚‹
  *
- * @param v			[in] •‚“®¬”“_
+ * @param v			[in] æµ®å‹•å°æ•°ç‚¹
  *
- * @return			•‚“®¬”“_ƒIƒuƒWƒFƒNƒg
+ * @return			æµ®å‹•å°æ•°ç‚¹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtMakeReal(double v)
@@ -1417,12 +1417,12 @@ newtRef NewtMakeReal(double v)
 
 
 /*------------------------------------------------------------------------*/
-/** ”z—ñƒIƒuƒWƒFƒNƒg‚ğì¬‚·‚é
+/** é…åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆã™ã‚‹
  *
- * @param klass		[in] ƒNƒ‰ƒX
- * @param n			[in] ’·‚³
+ * @param klass		[in] ã‚¯ãƒ©ã‚¹
+ * @param n			[in] é•·ã•
  *
- * @return			”z—ñƒIƒuƒWƒFƒNƒg
+ * @return			é…åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtMakeArray(newtRefArg klass, uint32_t n)
@@ -1449,13 +1449,13 @@ void NewtMakeInitSlots(newtRefArg r, uint32_t st, uint32_t n, uint32_t step, new
 
 
 /*------------------------------------------------------------------------*/
-/** ”z—ñƒIƒuƒWƒFƒNƒg‚ğì¬‚µ‚Ä‰Šú‰»‚·‚é
+/** é…åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆã—ã¦åˆæœŸåŒ–ã™ã‚‹
  *
- * @param klass		[in] ƒNƒ‰ƒX
- * @param n			[in] ’·‚³
- * @param v			[in] ‰Šú‰»ƒf[ƒ^
+ * @param klass		[in] ã‚¯ãƒ©ã‚¹
+ * @param n			[in] é•·ã•
+ * @param v			[in] åˆæœŸåŒ–ãƒ‡ãƒ¼ã‚¿
  *
- * @return			”z—ñƒIƒuƒWƒFƒNƒg
+ * @return			é…åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtMakeArray2(newtRefArg klass, uint32_t n, newtRefVar v[])
@@ -1472,13 +1472,13 @@ newtRef NewtMakeArray2(newtRefArg klass, uint32_t n, newtRefVar v[])
 
 
 /*------------------------------------------------------------------------*/
-/** ƒ}ƒbƒv‚ğì¬‚µ‚Ä‰Šú‰»‚·‚é
+/** ãƒãƒƒãƒ—ã‚’ä½œæˆã—ã¦åˆæœŸåŒ–ã™ã‚‹
  *
- * @param superMap	[in] ƒX[ƒpƒ}ƒbƒv
- * @param n			[in] ’·‚³
- * @param v			[in] ‰Šú‰»ƒf[ƒ^
+ * @param superMap	[in] ã‚¹ãƒ¼ãƒ‘ãƒãƒƒãƒ—
+ * @param n			[in] é•·ã•
+ * @param v			[in] åˆæœŸåŒ–ãƒ‡ãƒ¼ã‚¿
  *
- * @return			ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg
+ * @return			ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtMakeMap(newtRefArg superMap, uint32_t n, newtRefVar v[])
@@ -1522,12 +1522,12 @@ newtRef NewtMakeMap(newtRefArg superMap, uint32_t n, newtRefVar v[])
 
 
 /*------------------------------------------------------------------------*/
-/** ƒ}ƒbƒv‚Éƒtƒ‰ƒO‚ğƒZƒbƒg‚·‚é
+/** ãƒãƒƒãƒ—ã«ãƒ•ãƒ©ã‚°ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
  *
- * @param map		[in] ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg
- * @param bit		[in] ƒtƒ‰ƒO
+ * @param map		[in] ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param bit		[in] ãƒ•ãƒ©ã‚°
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NewtSetMapFlags(newtRefArg map, int32_t bit)
@@ -1541,12 +1541,12 @@ void NewtSetMapFlags(newtRefArg map, int32_t bit)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒ}ƒbƒv‚Ìƒtƒ‰ƒO‚ğƒNƒŠƒA‚·‚é
+/** ãƒãƒƒãƒ—ã®ãƒ•ãƒ©ã‚°ã‚’ã‚¯ãƒªã‚¢ã™ã‚‹
  *
- * @param map		[in] ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg
- * @param bit		[in] ƒtƒ‰ƒO
+ * @param map		[in] ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param bit		[in] ãƒ•ãƒ©ã‚°
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NewtClearMapFlags(newtRefArg map, int32_t bit)
@@ -1560,11 +1560,11 @@ void NewtClearMapFlags(newtRefArg map, int32_t bit)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒ}ƒbƒv‚Ì’·‚³‚ğæ“¾‚·‚é
+/** ãƒãƒƒãƒ—ã®é•·ã•ã‚’å–å¾—ã™ã‚‹
  *
- * @param map		[in] ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg
+ * @param map		[in] ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			’·‚³
+ * @return			é•·ã•
  */
 
 uint32_t NewtMapLength(newtRefArg map)
@@ -1585,12 +1585,12 @@ uint32_t NewtMapLength(newtRefArg map)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒtƒŒ[ƒ€ƒIƒuƒWƒFƒNƒg‚ğì¬‚·‚é
+/** ãƒ•ãƒ¬ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆã™ã‚‹
  *
- * @param map		[in] ƒ}ƒbƒv
- * @param n			[in] ’·‚³
+ * @param map		[in] ãƒãƒƒãƒ—
+ * @param n			[in] é•·ã•
  *
- * @return			ƒtƒŒ[ƒ€ƒIƒuƒWƒFƒNƒg
+ * @return			ãƒ•ãƒ¬ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtMakeFrame(newtRefArg map, uint32_t n)
@@ -1607,12 +1607,12 @@ newtRef NewtMakeFrame(newtRefArg map, uint32_t n)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒtƒŒ[ƒ€ƒIƒuƒWƒFƒNƒg‚ğì¬‚µ‚Ä‰Šú‰»‚·‚é
+/** ãƒ•ãƒ¬ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆã—ã¦åˆæœŸåŒ–ã™ã‚‹
  *
- * @param n			[in] ’·‚³
- * @param v			[in] ‰Šú‰»ƒf[ƒ^
+ * @param n			[in] é•·ã•
+ * @param v			[in] åˆæœŸåŒ–ãƒ‡ãƒ¼ã‚¿
  *
- * @return			ƒtƒŒ[ƒ€ƒIƒuƒWƒFƒNƒg
+ * @return			ãƒ•ãƒ¬ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtMakeFrame2(uint32_t n, newtRefVar v[])
@@ -1631,13 +1631,13 @@ newtRef NewtMakeFrame2(uint32_t n, newtRefVar v[])
 
 
 /*------------------------------------------------------------------------*/
-/** ƒXƒƒbƒgƒIƒuƒWƒFƒNƒg‚ğì¬‚·‚é
+/** ã‚¹ãƒ­ãƒƒãƒˆã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆã™ã‚‹
  *
- * @param r			[in] ƒNƒ‰ƒX^ƒ}ƒbƒv
- * @param n			[in] ’·‚³
- * @param type		[in] ƒ^ƒCƒv
+ * @param r			[in] ã‚¯ãƒ©ã‚¹ï¼ãƒãƒƒãƒ—
+ * @param n			[in] é•·ã•
+ * @param type		[in] ã‚¿ã‚¤ãƒ—
  *
- * @return			ƒIƒuƒWƒFƒNƒg
+ * @return			ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtMakeSlotsObj(newtRefArg r, uint32_t n, uint16_t type)
@@ -1668,11 +1668,11 @@ newtRef NewtMakeSlotsObj(newtRefArg r, uint32_t n, uint16_t type)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒXƒƒbƒgƒIƒuƒWƒFƒNƒg‚ÌƒIƒuƒWƒFƒNƒgƒf[ƒ^‚Ì’·‚³‚ğæ“¾‚·‚é
+/** ã‚¹ãƒ­ãƒƒãƒˆã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿ã®é•·ã•ã‚’å–å¾—ã™ã‚‹
  *
- * @param obj		[in] ƒIƒuƒWƒFƒNƒgƒf[ƒ^
+ * @param obj		[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿
  *
- * @return			’·‚³
+ * @return			é•·ã•
  */
 
 uint32_t NewtObjSlotsLength(newtObjRef obj)
@@ -1682,13 +1682,13 @@ uint32_t NewtObjSlotsLength(newtObjRef obj)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒXƒƒbƒgƒIƒuƒWƒFƒNƒg‚ÌƒIƒuƒWƒFƒNƒgƒf[ƒ^‚Ì’·‚³‚ğ•ÏX‚·‚é
+/** ã‚¹ãƒ­ãƒƒãƒˆã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿ã®é•·ã•ã‚’å¤‰æ›´ã™ã‚‹
  *
- * @param obj		[in] ƒIƒuƒWƒFƒNƒgƒf[ƒ^
- * @param n			[in] ’·‚³
- * @param v			[in] ‰Šú‰»ƒf[ƒ^
+ * @param obj		[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿
+ * @param n			[in] é•·ã•
+ * @param v			[in] åˆæœŸåŒ–ãƒ‡ãƒ¼ã‚¿
  *
- * @return			’·‚³‚Ì•ÏX‚³‚ê‚½ƒIƒuƒWƒFƒNƒgƒf[ƒ^
+ * @return			é•·ã•ã®å¤‰æ›´ã•ã‚ŒãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿
  */
 
 newtObjRef NewtObjSlotsSetLength(newtObjRef obj, uint32_t n, newtRefArg v)
@@ -1718,12 +1718,12 @@ newtObjRef NewtObjSlotsSetLength(newtObjRef obj, uint32_t n, newtRefArg v)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒXƒƒbƒgƒIƒuƒWƒFƒNƒg‚ÌƒIƒuƒWƒFƒNƒgƒf[ƒ^‚É’l‚ğ’Ç‰Á‚·‚é
+/** ã‚¹ãƒ­ãƒƒãƒˆã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿ã«å€¤ã‚’è¿½åŠ ã™ã‚‹
  *
- * @param obj		[in] ƒIƒuƒWƒFƒNƒgƒf[ƒ^
- * @param v			[in] ’lƒIƒuƒWƒFƒNƒg
+ * @param obj		[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿
+ * @param v			[in] å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			’lƒIƒuƒWƒFƒNƒg
+ * @return			å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtObjAddArraySlot(newtObjRef obj, newtRefArg v)
@@ -1738,13 +1738,13 @@ newtRef NewtObjAddArraySlot(newtObjRef obj, newtRefArg v)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒXƒƒbƒgƒIƒuƒWƒFƒNƒg‚Ì’·‚³‚ğ•ÏX‚·‚é
+/** ã‚¹ãƒ­ãƒƒãƒˆã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®é•·ã•ã‚’å¤‰æ›´ã™ã‚‹
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
- * @param n			[in] ’·‚³
- * @param v			[in] ‰Šú‰»ƒf[ƒ^
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param n			[in] é•·ã•
+ * @param v			[in] åˆæœŸåŒ–ãƒ‡ãƒ¼ã‚¿
  *
- * @return			’·‚³‚Ì•ÏX‚³‚ê‚½ƒIƒuƒWƒFƒNƒg
+ * @return			é•·ã•ã®å¤‰æ›´ã•ã‚ŒãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtSlotsSetLength(newtRefArg r, uint32_t n, newtRefArg v)
@@ -1759,12 +1759,12 @@ newtRef NewtSlotsSetLength(newtRefArg r, uint32_t n, newtRefArg v)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚Ì’·‚³‚ğ•ÏX‚·‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®é•·ã•ã‚’å¤‰æ›´ã™ã‚‹
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
- * @param n			[in] ’·‚³
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param n			[in] é•·ã•
  *
- * @return			’·‚³‚Ì•ÏX‚³‚ê‚½ƒIƒuƒWƒFƒNƒg
+ * @return			é•·ã•ã®å¤‰æ›´ã•ã‚ŒãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtSetLength(newtRefArg r, uint32_t n)
@@ -1794,11 +1794,11 @@ newtRef NewtSetLength(newtRefArg r, uint32_t n)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒAƒhƒŒƒX‚©‚ç®”ƒIƒuƒWƒFƒNƒg‚ğì¬‚·‚é
+/** ã‚¢ãƒ‰ãƒ¬ã‚¹ã‹ã‚‰æ•´æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆã™ã‚‹
  *
- * @param addr		[in] ƒAƒhƒŒƒX
+ * @param addr		[in] ã‚¢ãƒ‰ãƒ¬ã‚¹
  *
- * @return			®”ƒIƒuƒWƒFƒNƒg
+ * @return			æ•´æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtMakeAddress(void * addr)
@@ -1809,9 +1809,9 @@ newtRef NewtMakeAddress(void * addr)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ƒGƒ‰[”Ô†‚Ì—áŠO‚ğ”­¶‚·‚é
+/** ã‚¨ãƒ©ãƒ¼ç•ªå·ã®ä¾‹å¤–ã‚’ç™ºç”Ÿã™ã‚‹
  *
- * @param err		[in] ƒGƒ‰[”Ô†
+ * @param err		[in] ã‚¨ãƒ©ãƒ¼ç•ªå·
  *
  * @return			kNewtRefUnbind
  */
@@ -1823,11 +1823,11 @@ newtRef NewtThrow0(int32_t err)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒGƒ‰[”Ô†‚É‘Î‰‚·‚é—áŠOƒVƒ“ƒ{ƒ‹‚ğì¬‚·‚é
+/** ã‚¨ãƒ©ãƒ¼ç•ªå·ã«å¯¾å¿œã™ã‚‹ä¾‹å¤–ã‚·ãƒ³ãƒœãƒ«ã‚’ä½œæˆã™ã‚‹
  *
- * @param err		[in] ƒGƒ‰[”Ô†
+ * @param err		[in] ã‚¨ãƒ©ãƒ¼ç•ªå·
  *
- * @return			—áŠOƒVƒ“ƒ{ƒ‹
+ * @return			ä¾‹å¤–ã‚·ãƒ³ãƒœãƒ«
  */
 
 newtRef NewtMakeThrowSymbol(int32_t err)
@@ -1871,10 +1871,10 @@ newtRef NewtMakeThrowSymbol(int32_t err)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒGƒ‰[”Ô†‚Æ’lƒIƒuƒWƒFƒNƒg‚ğƒf[ƒ^‚É—áŠO‚ğ”­¶‚·‚é
+/** ã‚¨ãƒ©ãƒ¼ç•ªå·ã¨å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒ‡ãƒ¼ã‚¿ã«ä¾‹å¤–ã‚’ç™ºç”Ÿã™ã‚‹
  *
- * @param err		[in] ƒGƒ‰[”Ô†
- * @param value		[in] ’lƒIƒuƒWƒFƒNƒg
+ * @param err		[in] ã‚¨ãƒ©ãƒ¼ç•ªå·
+ * @param value		[in] å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
  * @return			kNewtRefUnbind
  */
@@ -1897,10 +1897,10 @@ newtRef NewtThrow(int32_t err, newtRefArg value)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒGƒ‰[”Ô†‚ÆƒVƒ“ƒ{ƒ‹‚ğƒf[ƒ^‚É—áŠO‚ğ”­¶‚·‚é
+/** ã‚¨ãƒ©ãƒ¼ç•ªå·ã¨ã‚·ãƒ³ãƒœãƒ«ã‚’ãƒ‡ãƒ¼ã‚¿ã«ä¾‹å¤–ã‚’ç™ºç”Ÿã™ã‚‹
  *
- * @param err		[in] ƒGƒ‰[”Ô†
- * @param symbol	[in] ƒVƒ“ƒ{ƒ‹
+ * @param err		[in] ã‚¨ãƒ©ãƒ¼ç•ªå·
+ * @param symbol	[in] ã‚·ãƒ³ãƒœãƒ«
  *
  * @return			kNewtRefUnbind
  */
@@ -1923,10 +1923,10 @@ newtRef NewtThrowSymbol(int32_t err, newtRefArg symbol)
 
 
 /*------------------------------------------------------------------------*/
-/** Out Of Bounds ƒGƒ‰[‚ğ”­¶‚·‚é
+/** Out Of Bounds ã‚¨ãƒ©ãƒ¼ã‚’ç™ºç”Ÿã™ã‚‹
  *
- * @param value		[in] ’lƒIƒuƒWƒFƒNƒg
- * @param index		[in] ˆÊ’u
+ * @param value		[in] å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param index		[in] ä½ç½®
  *
  * @return			kNewtRefUnbind
  */
@@ -1949,11 +1949,11 @@ newtRef NewtErrOutOfBounds(newtRefArg value, int32_t index)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒGƒ‰[ƒƒbƒZ[ƒW‚ğ•\¦‚·‚é
+/** ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’è¡¨ç¤ºã™ã‚‹
  *
- * @param err		[in] ƒGƒ‰[”Ô†
+ * @param err		[in] ã‚¨ãƒ©ãƒ¼ç•ªå·
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NewtErrMessage(int32_t err)
@@ -1972,10 +1972,10 @@ void NewtErrMessage(int32_t err)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** 32bit®”‚Ì”äŠr
+/** 32bitæ•´æ•°ã®æ¯”è¼ƒ
  *
- * @param r1		[in] 32bit®”‚P
- * @param r2		[in] 32bit®”‚Q
+ * @param r1		[in] 32bitæ•´æ•°ï¼‘
+ * @param r2		[in] 32bitæ•´æ•°ï¼’
  *
  * @retval			-1		r1 < r2
  * @retval			0		r1 = r2
@@ -2000,10 +2000,10 @@ int NewtInt32Compare(newtRefArg r1, newtRefArg r2)
 
 
 /*------------------------------------------------------------------------*/
-/** •‚“®¬”“_‚Ì”äŠr
+/** æµ®å‹•å°æ•°ç‚¹ã®æ¯”è¼ƒ
  *
- * @param r1		[in] •‚“®¬”“_‚P
- * @param r2		[in] •‚“®¬”“_‚Q
+ * @param r1		[in] æµ®å‹•å°æ•°ç‚¹ï¼‘
+ * @param r2		[in] æµ®å‹•å°æ•°ç‚¹ï¼’
  *
  * @retval			-1		r1 < r2
  * @retval			0		r1 = r2
@@ -2028,14 +2028,14 @@ int NewtRealCompare(newtRefArg r1, newtRefArg r2)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒVƒ“ƒ{ƒ‹‚ğš‹å“I‚É”äŠri‘å•¶š¬•¶š‚Í‹æ•Ê‚³‚ê‚È‚¢j
+/** ã‚·ãƒ³ãƒœãƒ«ã‚’å­—å¥çš„ã«æ¯”è¼ƒï¼ˆå¤§æ–‡å­—å°æ–‡å­—ã¯åŒºåˆ¥ã•ã‚Œãªã„ï¼‰
  *
- * @param r1		[in] ƒVƒ“ƒ{ƒ‹‚P
- * @param r2		[in] ƒVƒ“ƒ{ƒ‹‚Q
+ * @param r1		[in] ã‚·ãƒ³ãƒœãƒ«ï¼‘
+ * @param r2		[in] ã‚·ãƒ³ãƒœãƒ«ï¼’
  *
- * @retval			•‰‚Ì®”	r1 < r2
+ * @retval			è² ã®æ•´æ•°	r1 < r2
  * @retval			0		r1 = r2
- * @retval			³‚Ì®”	r1 > r2
+ * @retval			æ­£ã®æ•´æ•°	r1 > r2
  */
 
 int NewtSymbolCompareLex(newtRefArg r1, newtRefArg r2)
@@ -2054,14 +2054,14 @@ int NewtSymbolCompareLex(newtRefArg r1, newtRefArg r2)
 
 
 /*------------------------------------------------------------------------*/
-/** •¶š—ñƒIƒuƒWƒFƒNƒg‚Ì”äŠr
+/** æ–‡å­—åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ¯”è¼ƒ
  *
- * @param r1		[in] •¶š—ñƒIƒuƒWƒFƒNƒg‚P
- * @param r2		[in] •¶š—ñƒIƒuƒWƒFƒNƒg‚Q
+ * @param r1		[in] æ–‡å­—åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼‘
+ * @param r2		[in] æ–‡å­—åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼’
  *
- * @retval			•‰‚Ì®”	r1 < r2
+ * @retval			è² ã®æ•´æ•°	r1 < r2
  * @retval			0		r1 = r2
- * @retval			³‚Ì®”	r1 > r2
+ * @retval			æ­£ã®æ•´æ•°	r1 > r2
  */
 
 int NewtStringCompare(newtRefArg r1, newtRefArg r2)
@@ -2077,10 +2077,10 @@ int NewtStringCompare(newtRefArg r1, newtRefArg r2)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒoƒCƒiƒŠƒIƒuƒWƒFƒNƒg‚Ì”äŠr
+/** ãƒã‚¤ãƒŠãƒªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ¯”è¼ƒ
  *
- * @param r1		[in] ƒoƒCƒiƒŠƒIƒuƒWƒFƒNƒg‚P
- * @param r2		[in] ƒoƒCƒiƒŠƒIƒuƒWƒFƒNƒg‚Q
+ * @param r1		[in] ãƒã‚¤ãƒŠãƒªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼‘
+ * @param r2		[in] ãƒã‚¤ãƒŠãƒªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼’
  *
  * @retval			-1		r1 < r2
  * @retval			0		r1 = r2
@@ -2126,13 +2126,13 @@ int NewtBinaryCompare(newtRefArg r1, newtRefArg r2)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ŒvZ‰Â”\‚Èˆø”‚È‚ç‚ÎŒvZŒ‹‰Ê‚ÌƒIƒuƒWƒFƒNƒgƒ^ƒCƒv‚ğ•Ô‚·
+/** è¨ˆç®—å¯èƒ½ãªå¼•æ•°ãªã‚‰ã°è¨ˆç®—çµæœã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¿ã‚¤ãƒ—ã‚’è¿”ã™
  *
- * @param r1		[in] ƒIƒuƒWƒFƒNƒg‚P
- * @param r2		[in] ƒIƒuƒWƒFƒNƒg‚Q
+ * @param r1		[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼‘
+ * @param r2		[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼’
  *
- * @retval			ƒIƒuƒWƒFƒNƒgƒ^ƒCƒv		ŒvZ‰Â”\
- * @retval			kNewtUnknownType	ŒvZ•s‰Â
+ * @retval			ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¿ã‚¤ãƒ—		è¨ˆç®—å¯èƒ½
+ * @retval			kNewtUnknownType	è¨ˆç®—ä¸å¯
  */
 
 uint16_t NewtArgsType(newtRefArg r1, newtRefArg r2)
@@ -2165,10 +2165,10 @@ uint16_t NewtArgsType(newtRefArg r1, newtRefArg r2)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚Ì‘å¬”äŠr
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å¤§å°æ¯”è¼ƒ
  *
- * @param r1		[in] ƒIƒuƒWƒFƒNƒg‚P
- * @param r2		[in] ƒIƒuƒWƒFƒNƒg‚Q
+ * @param r1		[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼‘
+ * @param r2		[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼’
  *
  * @retval			1		r1 > r2
  * @retval			0		r1 = r2
@@ -2225,13 +2225,13 @@ int16_t NewtObjectCompare(newtRefArg r1, newtRefArg r2)
 
 
 /*------------------------------------------------------------------------*/
-/** QÆ‚Ì”äŠr
+/** å‚ç…§ã®æ¯”è¼ƒ
  *
- * @param r1		[in] QÆ‚P
- * @param r2		[in] QÆ‚Q
+ * @param r1		[in] å‚ç…§ï¼‘
+ * @param r2		[in] å‚ç…§ï¼’
  *
- * @retval			true	“¯’l
- * @retval			false   “¯’l‚Å‚È‚¢
+ * @retval			true	åŒå€¤
+ * @retval			false   åŒå€¤ã§ãªã„
  */
 
 bool NewtRefEqual(newtRefArg r1, newtRefArg r2)
@@ -2262,13 +2262,13 @@ bool NewtRefEqual(newtRefArg r1, newtRefArg r2)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚Ì”äŠr
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ¯”è¼ƒ
  *
- * @param r1		[in] ƒIƒuƒWƒFƒNƒg‚P
- * @param r2		[in] ƒIƒuƒWƒFƒNƒg‚Q
+ * @param r1		[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼‘
+ * @param r2		[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼’
  *
- * @retval			true	“¯’l
- * @retval			false   “¯’l‚Å‚È‚¢
+ * @retval			true	åŒå€¤
+ * @retval			false   åŒå€¤ã§ãªã„
  */
 
 bool NewtObjectEqual(newtRefArg r1, newtRefArg r2)
@@ -2284,13 +2284,13 @@ bool NewtObjectEqual(newtRefArg r1, newtRefArg r2)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg‚Ì”äŠr
+/** ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ¯”è¼ƒ
  *
- * @param r1		[in] ƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg‚P
- * @param r2		[in] ƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg‚Q
+ * @param r1		[in] ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼‘
+ * @param r2		[in] ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼’
  *
- * @retval			true	“¯’l
- * @retval			false   “¯’l‚Å‚È‚¢
+ * @retval			true	åŒå€¤
+ * @retval			false   åŒå€¤ã§ãªã„
  */
 
 bool NewtSymbolEqual(newtRefArg r1, newtRefArg r2)
@@ -2319,11 +2319,11 @@ bool NewtSymbolEqual(newtRefArg r1, newtRefArg r2)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚Ì’·‚³‚ğæ“¾‚·‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®é•·ã•ã‚’å–å¾—ã™ã‚‹
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			’·‚³
+ * @return			é•·ã•
  */
 
 uint32_t NewtLength(newtRefArg r)
@@ -2352,13 +2352,13 @@ uint32_t NewtLength(newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚Ìi[‚¢j’·‚³‚ğæ“¾
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ï¼ˆæ·±ã„ï¼‰é•·ã•ã‚’å–å¾—
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			ƒIƒuƒWƒFƒNƒg‚Ì’·‚³
+ * @return			ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®é•·ã•
  *
- * @note			ƒtƒŒ[ƒ€‚Ìê‡‚ÍƒvƒƒgŒp³‚Å’·‚³‚ğŒvZ‚·‚é
+ * @note			ãƒ•ãƒ¬ãƒ¼ãƒ ã®å ´åˆã¯ãƒ—ãƒ­ãƒˆç¶™æ‰¿ã§é•·ã•ã‚’è¨ˆç®—ã™ã‚‹
  */
 
 uint32_t NewtDeeplyLength(newtRefArg r)
@@ -2381,11 +2381,11 @@ uint32_t NewtDeeplyLength(newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒoƒCƒiƒŠƒIƒuƒWƒFƒNƒg‚Ì’·‚³‚ğæ“¾
+/** ãƒã‚¤ãƒŠãƒªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®é•·ã•ã‚’å–å¾—
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			ƒIƒuƒWƒFƒNƒg‚Ì’·‚³
+ * @return			ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®é•·ã•
  */
 
 uint32_t NewtBinaryLength(newtRefArg r)
@@ -2405,11 +2405,11 @@ uint32_t NewtBinaryLength(newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg‚Ì’·‚³‚ğæ“¾
+/** ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®é•·ã•ã‚’å–å¾—
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			ƒIƒuƒWƒFƒNƒg‚Ì’·‚³
+ * @return			ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®é•·ã•
  */
 
 uint32_t NewtSymbolLength(newtRefArg r)
@@ -2422,11 +2422,11 @@ uint32_t NewtSymbolLength(newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** •¶š—ñƒIƒuƒWƒFƒNƒg‚Ì’·‚³‚ğæ“¾
+/** æ–‡å­—åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®é•·ã•ã‚’å–å¾—
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			ƒIƒuƒWƒFƒNƒg‚Ì’·‚³
+ * @return			ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®é•·ã•
  */
 
 uint32_t NewtStringLength(newtRefArg r)
@@ -2439,11 +2439,11 @@ uint32_t NewtStringLength(newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒXƒƒbƒgƒIƒuƒWƒFƒNƒg‚Ì’·‚³iƒXƒƒbƒg‚Ì”j‚ğæ“¾
+/** ã‚¹ãƒ­ãƒƒãƒˆã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®é•·ã•ï¼ˆã‚¹ãƒ­ãƒƒãƒˆã®æ•°ï¼‰ã‚’å–å¾—
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			ƒIƒuƒWƒFƒNƒg‚Ì’·‚³
+ * @return			ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®é•·ã•
  */
 
 uint32_t NewtSlotsLength(newtRefArg r)
@@ -2456,11 +2456,11 @@ uint32_t NewtSlotsLength(newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒvƒƒgŒp³‚ÅƒtƒŒ[ƒ€ƒIƒuƒWƒFƒNƒg‚Ì’·‚³iƒXƒƒbƒg‚Ì”j‚ğæ“¾
+/** ãƒ—ãƒ­ãƒˆç¶™æ‰¿ã§ãƒ•ãƒ¬ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®é•·ã•ï¼ˆã‚¹ãƒ­ãƒƒãƒˆã®æ•°ï¼‰ã‚’å–å¾—
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			ƒIƒuƒWƒFƒNƒg‚Ì’·‚³
+ * @return			ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®é•·ã•
  */
 
 uint32_t NewtDeeplyFrameLength(newtRefArg r)
@@ -2489,12 +2489,12 @@ uint32_t NewtDeeplyFrameLength(newtRefArg r)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ƒtƒŒ[ƒ€‚ÌƒIƒuƒWƒFƒNƒgƒf[ƒ^‚ª _proto ƒXƒƒbƒg‚ğ‚Â‚©ƒ`ƒFƒbƒN‚·‚é
+/** ãƒ•ãƒ¬ãƒ¼ãƒ ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿ãŒ _proto ã‚¹ãƒ­ãƒƒãƒˆã‚’æŒã¤ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param obj		[in] ƒtƒŒ[ƒ€‚ÌƒIƒuƒWƒFƒNƒgƒf[ƒ^
+ * @param obj		[in] ãƒ•ãƒ¬ãƒ¼ãƒ ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿
  *
- * @retval			true	_proto ƒXƒƒbƒg‚ğ‚Â
- * @retval			false	_proto ƒXƒƒbƒg‚ğ‚½‚È‚¢
+ * @retval			true	_proto ã‚¹ãƒ­ãƒƒãƒˆã‚’æŒã¤
+ * @retval			false	_proto ã‚¹ãƒ­ãƒƒãƒˆã‚’æŒãŸãªã„
  */
 
 bool NewtObjHasProto(newtObjRef obj)
@@ -2511,12 +2511,12 @@ bool NewtObjHasProto(newtObjRef obj)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒtƒŒ[ƒ€‚ÌƒIƒuƒWƒFƒNƒgƒf[ƒ^‚©‚çƒXƒƒbƒg‚Ì’l‚ğæo‚·
+/** ãƒ•ãƒ¬ãƒ¼ãƒ ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿ã‹ã‚‰ã‚¹ãƒ­ãƒƒãƒˆã®å€¤ã‚’å–å‡ºã™
  *
- * @param obj		[in] ƒtƒŒ[ƒ€‚ÌƒIƒuƒWƒFƒNƒgƒf[ƒ^
- * @param slot		[in] ƒXƒƒbƒgƒVƒ“ƒ{ƒ‹
+ * @param obj		[in] ãƒ•ãƒ¬ãƒ¼ãƒ ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿
+ * @param slot		[in] ã‚¹ãƒ­ãƒƒãƒˆã‚·ãƒ³ãƒœãƒ«
  *
- * @return			’lƒIƒuƒWƒFƒNƒg
+ * @return			å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtObjGetSlot(newtObjRef obj, newtRefArg slot)
@@ -2542,12 +2542,12 @@ newtRef NewtObjGetSlot(newtObjRef obj, newtRefArg slot)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒ}ƒbƒv‚Ìƒ\[ƒgƒtƒ‰ƒO‚ğƒ`ƒFƒbƒN‚·‚é
+/** ãƒãƒƒãƒ—ã®ã‚½ãƒ¼ãƒˆãƒ•ãƒ©ã‚°ã‚’ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param r			[in] ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @retval			true	ƒ\[ƒgƒtƒ‰ƒO‚ª ON
- * @retval			false   ƒ\[ƒgƒtƒ‰ƒO‚ª OFF
+ * @retval			true	ã‚½ãƒ¼ãƒˆãƒ•ãƒ©ã‚°ãŒ ON
+ * @retval			false   ã‚½ãƒ¼ãƒˆãƒ•ãƒ©ã‚°ãŒ OFF
  */
 
 bool NewtMapIsSorted(newtRefArg r)
@@ -2565,13 +2565,13 @@ bool NewtMapIsSorted(newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒtƒŒ[ƒ€‚ÌƒIƒuƒWƒFƒNƒgƒf[ƒ^‚ÉƒXƒƒbƒg‚Ì’l‚ğƒZƒbƒg‚·‚é
+/** ãƒ•ãƒ¬ãƒ¼ãƒ ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿ã«ã‚¹ãƒ­ãƒƒãƒˆã®å€¤ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
  *
- * @param obj		[in] ƒtƒŒ[ƒ€‚ÌƒIƒuƒWƒFƒNƒgƒf[ƒ^
- * @param slot		[in] ƒXƒƒbƒgƒVƒ“ƒ{ƒ‹
- * @param v			[in] ’lƒIƒuƒWƒFƒNƒg
+ * @param obj		[in] ãƒ•ãƒ¬ãƒ¼ãƒ ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿
+ * @param slot		[in] ã‚¹ãƒ­ãƒƒãƒˆã‚·ãƒ³ãƒœãƒ«
+ * @param v			[in] å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			’lƒIƒuƒWƒFƒNƒg
+ * @return			å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtObjSetSlot(newtObjRef obj, newtRefArg slot, newtRefArg v)
@@ -2612,7 +2612,7 @@ newtRef NewtObjSetSlot(newtObjRef obj, newtRefArg slot, newtRefArg v)
         {
             if (NewtMapIsSorted(obj->as.map))
             {
-                // ƒ}ƒbƒv‚ªƒ\[ƒg‚³‚ê‚Ä‚¢‚éê‡...
+                // ãƒãƒƒãƒ—ãŒã‚½ãƒ¼ãƒˆã•ã‚Œã¦ã„ã‚‹å ´åˆ...
 
                 newtSymDataRef	sym;
                 int32_t	index;
@@ -2640,12 +2640,12 @@ newtRef NewtObjSetSlot(newtObjRef obj, newtRefArg slot, newtRefArg v)
 
 
 /*------------------------------------------------------------------------*/
-/** ”z—ñ‚ÌƒIƒuƒWƒFƒNƒgƒf[ƒ^‚©‚çw’èˆÊ’u‚Ì—v‘f‚ğíœ‚·‚é
+/** é…åˆ—ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿ã‹ã‚‰æŒ‡å®šä½ç½®ã®è¦ç´ ã‚’å‰Šé™¤ã™ã‚‹
  *
- * @param obj		[in] ”z—ñ‚ÌƒIƒuƒWƒFƒNƒgƒf[ƒ^
- * @param n			[in] ˆÊ’u
+ * @param obj		[in] é…åˆ—ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿
+ * @param n			[in] ä½ç½®
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NewtObjRemoveArraySlot(newtObjRef obj, int32_t n)
@@ -2673,13 +2673,13 @@ void NewtObjRemoveArraySlot(newtObjRef obj, int32_t n)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒ}ƒbƒv‚ğ[‚­ƒRƒs[‚·‚é
+/** ãƒãƒƒãƒ—ã‚’æ·±ãã‚³ãƒ”ãƒ¼ã™ã‚‹
  *
- * @param dst		[out]ƒRƒs[æ
- * @param pos		[i/o]ƒRƒs[ˆÊ’u
- * @param src		[in] ƒRƒs[Œ³
+ * @param dst		[out]ã‚³ãƒ”ãƒ¼å…ˆ
+ * @param pos		[i/o]ã‚³ãƒ”ãƒ¼ä½ç½®
+ * @param src		[in] ã‚³ãƒ”ãƒ¼å…ƒ
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NewtDeeplyCopyMap(newtRef * dst, int32_t * pos, newtRefArg src)
@@ -2709,12 +2709,12 @@ void NewtDeeplyCopyMap(newtRef * dst, int32_t * pos, newtRefArg src)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒ}ƒbƒv‚ğ[‚­ƒNƒ[ƒ“•¡»‚·‚é
+/** ãƒãƒƒãƒ—ã‚’æ·±ãã‚¯ãƒ­ãƒ¼ãƒ³è¤‡è£½ã™ã‚‹
  *
- * @param map		[in] ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg
- * @param len		[in] ’·‚³
+ * @param map		[in] ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param len		[in] é•·ã•
  *
- * @return			ƒNƒ[ƒ“•¡»‚³‚ê‚½ƒIƒuƒWƒFƒNƒg
+ * @return			ã‚¯ãƒ­ãƒ¼ãƒ³è¤‡è£½ã•ã‚ŒãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtDeeplyCloneMap(newtRefArg map, int32_t len)
@@ -2734,12 +2734,12 @@ newtRef NewtDeeplyCloneMap(newtRefArg map, int32_t len)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒtƒŒ[ƒ€‚ÌƒIƒuƒWƒFƒNƒgƒf[ƒ^‚©‚çƒXƒƒbƒg‚ğíœ‚·‚é
+/** ãƒ•ãƒ¬ãƒ¼ãƒ ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿ã‹ã‚‰ã‚¹ãƒ­ãƒƒãƒˆã‚’å‰Šé™¤ã™ã‚‹
  *
- * @param obj		[in] ƒtƒŒ[ƒ€‚ÌƒIƒuƒWƒFƒNƒgƒf[ƒ^
- * @param slot		[in] ƒXƒƒbƒgƒVƒ“ƒ{ƒ‹
+ * @param obj		[in] ãƒ•ãƒ¬ãƒ¼ãƒ ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿
+ * @param slot		[in] ã‚¹ãƒ­ãƒƒãƒˆã‚·ãƒ³ãƒœãƒ«
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NewtObjRemoveFrameSlot(newtObjRef obj, newtRefArg slot)
@@ -2778,12 +2778,12 @@ void NewtObjRemoveFrameSlot(newtObjRef obj, newtRefArg slot)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒtƒŒ[ƒ€‚Ü‚½‚Í”z—ñ‚ÌƒIƒuƒWƒFƒNƒgƒf[ƒ^‚©‚çƒXƒƒbƒg‚Ü‚½‚Íw’èˆÊ’u‚Ì—v‘f‚ğíœ‚·‚é
+/** ãƒ•ãƒ¬ãƒ¼ãƒ ã¾ãŸã¯é…åˆ—ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿ã‹ã‚‰ã‚¹ãƒ­ãƒƒãƒˆã¾ãŸã¯æŒ‡å®šä½ç½®ã®è¦ç´ ã‚’å‰Šé™¤ã™ã‚‹
  *
- * @param obj		[in] ƒtƒŒ[ƒ€‚ÌƒIƒuƒWƒFƒNƒgƒf[ƒ^
- * @param slot		[in] ƒXƒƒbƒgƒVƒ“ƒ{ƒ‹^ˆÊ’u
+ * @param obj		[in] ãƒ•ãƒ¬ãƒ¼ãƒ ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿
+ * @param slot		[in] ã‚¹ãƒ­ãƒƒãƒˆã‚·ãƒ³ãƒœãƒ«ï¼ä½ç½®
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NewtObjRemoveSlot(newtObjRef obj, newtRefArg slot)
@@ -2804,13 +2804,13 @@ void NewtObjRemoveSlot(newtObjRef obj, newtRefArg slot)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ƒ}ƒbƒv‚©‚çw’èˆÊ’u‚ÌƒXƒƒbƒgƒVƒ“ƒ{ƒ‹‚ğæo‚·
+/** ãƒãƒƒãƒ—ã‹ã‚‰æŒ‡å®šä½ç½®ã®ã‚¹ãƒ­ãƒƒãƒˆã‚·ãƒ³ãƒœãƒ«ã‚’å–å‡ºã™
  *
- * @param r			[in] ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg
- * @param index		[in] ˆÊ’u
- * @param indexP	[i/o]ƒ}ƒbƒv‘S‘Ì‚©‚ç‚İ‚½Œ»İ‚ÌŠJnˆÊ’u
+ * @param r			[in] ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param index		[in] ä½ç½®
+ * @param indexP	[i/o]ãƒãƒƒãƒ—å…¨ä½“ã‹ã‚‰ã¿ãŸç¾åœ¨ã®é–‹å§‹ä½ç½®
  *
- * @return			ƒXƒƒbƒgƒVƒ“ƒ{ƒ‹
+ * @return			ã‚¹ãƒ­ãƒƒãƒˆã‚·ãƒ³ãƒœãƒ«
  */
 
 newtRef NewtGetMapIndex(newtRefArg r, uint32_t index, uint32_t * indexP)
@@ -2850,14 +2850,14 @@ newtRef NewtGetMapIndex(newtRefArg r, uint32_t index, uint32_t * indexP)
 
 
 /*------------------------------------------------------------------------*/
-/** ”z—ñ‚©‚ç’l‚ğŒŸõ‚·‚é
+/** é…åˆ—ã‹ã‚‰å€¤ã‚’æ¤œç´¢ã™ã‚‹
  *
- * @param r			[in] ”z—ñ
- * @param v			[in] ’lƒIƒuƒWƒFƒNƒg
- * @param st		[in] ŠJnˆÊ’u
+ * @param r			[in] é…åˆ—
+ * @param v			[in] å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param st		[in] é–‹å§‹ä½ç½®
  *
- * @retval			ˆÊ’u		¬Œ÷
- * @retval			-1		¸”s
+ * @retval			ä½ç½®		æˆåŠŸ
+ * @retval			-1		å¤±æ•—
  */
 
 int32_t NewtFindArrayIndex(newtRefArg r, newtRefArg v, uint16_t st)
@@ -2874,7 +2874,7 @@ int32_t NewtFindArrayIndex(newtRefArg r, newtRefArg v, uint16_t st)
 
         if (NewtMapIsSorted(r))
         {
-            // ƒ}ƒbƒv‚ªƒ\[ƒg‚³‚ê‚Ä‚¢‚éê‡...
+            // ãƒãƒƒãƒ—ãŒã‚½ãƒ¼ãƒˆã•ã‚Œã¦ã„ã‚‹å ´åˆ...
 
             newtSymDataRef	sym;
             int32_t	index;
@@ -2902,14 +2902,14 @@ int32_t NewtFindArrayIndex(newtRefArg r, newtRefArg v, uint16_t st)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒ}ƒbƒv‚©‚ç’l‚ğŒŸõ‚·‚é
+/** ãƒãƒƒãƒ—ã‹ã‚‰å€¤ã‚’æ¤œç´¢ã™ã‚‹
  *
- * @param r			[in] ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg
- * @param v			[in] ƒXƒƒbƒgƒVƒ“ƒ{ƒ‹
- * @param indexP	[out]ˆÊ’u
+ * @param r			[in] ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param v			[in] ã‚¹ãƒ­ãƒƒãƒˆã‚·ãƒ³ãƒœãƒ«
+ * @param indexP	[out]ä½ç½®
  *
- * @retval			true	¬Œ÷
- * @retval			false	¸”s
+ * @retval			true	æˆåŠŸ
+ * @retval			false	å¤±æ•—
  */
 
 bool NewtFindMapIndex(newtRefArg r, newtRefArg v, uint32_t * indexP)
@@ -2944,11 +2944,11 @@ bool NewtFindMapIndex(newtRefArg r, newtRefArg v, uint32_t * indexP)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒtƒŒ[ƒ€ƒIƒuƒWƒFƒNƒg‚Ìƒ}ƒbƒv‚ğæ“¾
+/** ãƒ•ãƒ¬ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ãƒãƒƒãƒ—ã‚’å–å¾—
  *
- * @param r			[in] ƒtƒŒ[ƒ€
+ * @param r			[in] ãƒ•ãƒ¬ãƒ¼ãƒ 
  *
- * @return			ƒ}ƒbƒv
+ * @return			ãƒãƒƒãƒ—
  */
 
 newtRef NewtFrameMap(newtRefArg r)
@@ -2966,13 +2966,13 @@ newtRef NewtFrameMap(newtRefArg r)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ƒtƒŒ[ƒ€ƒIƒuƒWƒFƒNƒg‚©‚çƒXƒƒbƒg‚ÌˆÊ’u‚ğ’T‚·
+/** ãƒ•ãƒ¬ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‹ã‚‰ã‚¹ãƒ­ãƒƒãƒˆã®ä½ç½®ã‚’æ¢ã™
  *
- * @param frame		[in] ƒtƒŒ[ƒ€
- * @param slot		[in] ƒXƒƒbƒgƒVƒ“ƒ{ƒ‹
+ * @param frame		[in] ãƒ•ãƒ¬ãƒ¼ãƒ 
+ * @param slot		[in] ã‚¹ãƒ­ãƒƒãƒˆã‚·ãƒ³ãƒœãƒ«
  *
- * @retval			ƒXƒƒbƒg‚ÌˆÊ’u		‚İ‚Â‚©‚Á‚½ê‡
- * @retval			-1				‚İ‚Â‚©‚ç‚È‚©‚Á‚½ê‡
+ * @retval			ã‚¹ãƒ­ãƒƒãƒˆã®ä½ç½®		ã¿ã¤ã‹ã£ãŸå ´åˆ
+ * @retval			-1				ã¿ã¤ã‹ã‚‰ãªã‹ã£ãŸå ´åˆ
  */
 
 int32_t NewtFindSlotIndex(newtRefArg frame, newtRefArg slot)
@@ -2992,12 +2992,12 @@ int32_t NewtFindSlotIndex(newtRefArg frame, newtRefArg slot)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒtƒŒ[ƒ€ƒIƒuƒWƒFƒNƒg‚ª _proto ƒXƒƒbƒg‚ğ‚Â‚©ƒ`ƒFƒbƒN‚·‚é
+/** ãƒ•ãƒ¬ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒ _proto ã‚¹ãƒ­ãƒƒãƒˆã‚’æŒã¤ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param frame		[in] ƒtƒŒ[ƒ€
+ * @param frame		[in] ãƒ•ãƒ¬ãƒ¼ãƒ 
  *
- * @retval			true	_proto ƒXƒƒbƒg‚ğ‚Â
- * @retval			false	_proto ƒXƒƒbƒg‚ğ‚½‚È‚¢
+ * @retval			true	_proto ã‚¹ãƒ­ãƒƒãƒˆã‚’æŒã¤
+ * @retval			false	_proto ã‚¹ãƒ­ãƒƒãƒˆã‚’æŒãŸãªã„
  */
 
 bool NewtHasProto(newtRefArg frame)
@@ -3011,13 +3011,13 @@ bool NewtHasProto(newtRefArg frame)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒtƒŒ[ƒ€“à‚ÌƒXƒƒbƒg‚Ì—L–³‚ğ’²‚×‚é
+/** ãƒ•ãƒ¬ãƒ¼ãƒ å†…ã®ã‚¹ãƒ­ãƒƒãƒˆã®æœ‰ç„¡ã‚’èª¿ã¹ã‚‹
  *
- * @param frame		[in] ƒtƒŒ[ƒ€
- * @param slot		[in] ƒXƒƒbƒgƒVƒ“ƒ{ƒ‹
+ * @param frame		[in] ãƒ•ãƒ¬ãƒ¼ãƒ 
+ * @param slot		[in] ã‚¹ãƒ­ãƒƒãƒˆã‚·ãƒ³ãƒœãƒ«
  *
- * @retval			true	ƒXƒƒbƒg‚ª‘¶İ‚·‚é
- * @retval			false	ƒXƒƒbƒg‚ª‘¶İ‚µ‚È‚¢
+ * @retval			true	ã‚¹ãƒ­ãƒƒãƒˆãŒå­˜åœ¨ã™ã‚‹
+ * @retval			false	ã‚¹ãƒ­ãƒƒãƒˆãŒå­˜åœ¨ã—ãªã„
  */
 
 bool NewtHasSlot(newtRefArg frame, newtRefArg slot)
@@ -3037,12 +3037,12 @@ bool NewtHasSlot(newtRefArg frame, newtRefArg slot)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒXƒƒbƒgƒIƒuƒWƒFƒNƒg‚ÌƒAƒNƒZƒXƒpƒX‚©‚ç’l‚ğæ“¾‚·‚é
+/** ã‚¹ãƒ­ãƒƒãƒˆã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚¢ã‚¯ã‚»ã‚¹ãƒ‘ã‚¹ã‹ã‚‰å€¤ã‚’å–å¾—ã™ã‚‹
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
- * @param p			[in] ƒAƒNƒZƒXƒpƒX
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param p			[in] ã‚¢ã‚¯ã‚»ã‚¹ãƒ‘ã‚¹
  *
- * @return			’lƒIƒuƒWƒFƒNƒg
+ * @return			å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtSlotsGetPath(newtRefArg r, newtRefArg p)
@@ -3055,13 +3055,13 @@ newtRef NewtSlotsGetPath(newtRefArg r, newtRefArg p)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg“à‚ÌƒAƒNƒZƒXƒpƒX‚Ì—L–³‚ğ’²‚×‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå†…ã®ã‚¢ã‚¯ã‚»ã‚¹ãƒ‘ã‚¹ã®æœ‰ç„¡ã‚’èª¿ã¹ã‚‹
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
- * @param p			[in] ƒAƒNƒZƒXƒpƒX
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param p			[in] ã‚¢ã‚¯ã‚»ã‚¹ãƒ‘ã‚¹
  *
- * @retval			true	ƒAƒNƒZƒXƒpƒX‚ª‘¶İ‚·‚é
- * @retval			false	ƒAƒNƒZƒXƒpƒX‚ª‘¶İ‚µ‚È‚¢
+ * @retval			true	ã‚¢ã‚¯ã‚»ã‚¹ãƒ‘ã‚¹ãŒå­˜åœ¨ã™ã‚‹
+ * @retval			false	ã‚¢ã‚¯ã‚»ã‚¹ãƒ‘ã‚¹ãŒå­˜åœ¨ã—ãªã„
  */
 
 bool NewtHasPath(newtRefArg r, newtRefArg p)
@@ -3071,13 +3071,13 @@ bool NewtHasPath(newtRefArg r, newtRefArg p)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚ÌƒAƒNƒZƒXƒpƒX‚Ì’l‚ğæ“¾
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚¢ã‚¯ã‚»ã‚¹ãƒ‘ã‚¹ã®å€¤ã‚’å–å¾—
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
- * @param p			[in] ƒAƒNƒZƒXƒpƒX
- * @param slotP		[out]ƒXƒƒbƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param p			[in] ã‚¢ã‚¯ã‚»ã‚¹ãƒ‘ã‚¹
+ * @param slotP		[out]ã‚¹ãƒ­ãƒƒãƒˆ
  *
- * @return			’lƒIƒuƒWƒFƒNƒg
+ * @return			å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtGetPath(newtRefArg r, newtRefArg p, newtRefVar * slotP)
@@ -3123,12 +3123,12 @@ newtRef NewtGetPath(newtRefArg r, newtRefArg p, newtRefVar * slotP)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒoƒCƒiƒŠƒIƒuƒWƒFƒNƒg‚Ìw’èˆÊ’u‚©‚ç’l‚ğæ“¾‚·‚é
+/** ãƒã‚¤ãƒŠãƒªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æŒ‡å®šä½ç½®ã‹ã‚‰å€¤ã‚’å–å¾—ã™ã‚‹
  *
- * @param r			[in] ƒoƒCƒiƒŠƒIƒuƒWƒFƒNƒg
- * @param p			[in] ˆÊ’u
+ * @param r			[in] ãƒã‚¤ãƒŠãƒªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param p			[in] ä½ç½®
  *
- * @return			’lƒIƒuƒWƒFƒNƒg
+ * @return			å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtGetBinarySlot(newtRefArg r, uint32_t p)
@@ -3150,13 +3150,13 @@ newtRef NewtGetBinarySlot(newtRefArg r, uint32_t p)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒoƒCƒiƒŠƒIƒuƒWƒFƒNƒg‚Ìw’èˆÊ’u‚É’l‚ğƒZƒbƒg‚·‚é
+/** ãƒã‚¤ãƒŠãƒªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æŒ‡å®šä½ç½®ã«å€¤ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
  *
- * @param r			[in] ƒoƒCƒiƒŠƒIƒuƒWƒFƒNƒg
- * @param p			[in] ˆÊ’u
- * @param v			[in] ’lƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ãƒã‚¤ãƒŠãƒªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param p			[in] ä½ç½®
+ * @param v			[in] å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			’lƒIƒuƒWƒFƒNƒg
+ * @return			å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtSetBinarySlot(newtRefArg r, uint32_t p, newtRefArg v)
@@ -3190,12 +3190,12 @@ newtRef NewtSetBinarySlot(newtRefArg r, uint32_t p, newtRefArg v)
 
 
 /*------------------------------------------------------------------------*/
-/** •¶š—ñ‚Ìw’èˆÊ’u‚©‚ç•¶š‚ğæ“¾
+/** æ–‡å­—åˆ—ã®æŒ‡å®šä½ç½®ã‹ã‚‰æ–‡å­—ã‚’å–å¾—
  *
- * @param r			[in] •¶šƒIƒuƒWƒFƒNƒg
- * @param p			[in] ˆÊ’u
+ * @param r			[in] æ–‡å­—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param p			[in] ä½ç½®
  *
- * @return			•¶šƒIƒuƒWƒFƒNƒg
+ * @return			æ–‡å­—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtGetStringSlot(newtRefArg r, uint32_t p)
@@ -3217,13 +3217,13 @@ newtRef NewtGetStringSlot(newtRefArg r, uint32_t p)
 
 
 /*------------------------------------------------------------------------*/
-/** •¶š—ñ‚Ìw’èˆÊ’u‚É•¶š‚ğƒZƒbƒg‚·‚é
+/** æ–‡å­—åˆ—ã®æŒ‡å®šä½ç½®ã«æ–‡å­—ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
  *
- * @param r			[in] •¶šƒIƒuƒWƒFƒNƒg
- * @param p			[in] ˆÊ’u
- * @param v			[in] •¶šƒIƒuƒWƒFƒNƒg
+ * @param r			[in] æ–‡å­—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param p			[in] ä½ç½®
+ * @param v			[in] æ–‡å­—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			•¶šƒIƒuƒWƒFƒNƒg
+ * @return			æ–‡å­—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtSetStringSlot(newtRefArg r, uint32_t p, newtRefArg v)
@@ -3250,7 +3250,7 @@ newtRef NewtSetStringSlot(newtRefArg r, uint32_t p, newtRefArg v)
         str[p] = c;
 
 		if (slen <= p)
-		{	// •¶š—ñ‚ª‰„‚Ñ‚½‚Ì‚ÅI’[•¶š‚ğƒZƒbƒg
+		{	// æ–‡å­—åˆ—ãŒå»¶ã³ãŸã®ã§çµ‚ç«¯æ–‡å­—ã‚’ã‚»ãƒƒãƒˆ
 			str[p + 1] = '\0';
 		}
     }
@@ -3264,12 +3264,12 @@ newtRef NewtSetStringSlot(newtRefArg r, uint32_t p, newtRefArg v)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒXƒƒbƒgƒIƒuƒWƒFƒNƒg‚Ìw’èˆÊ’uƒg‚©‚ç’l‚ğæ“¾
+/** ã‚¹ãƒ­ãƒƒãƒˆã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æŒ‡å®šä½ç½®ãƒˆã‹ã‚‰å€¤ã‚’å–å¾—
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
- * @param p			[in] ˆÊ’u
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param p			[in] ä½ç½®
  *
- * @return			’lƒIƒuƒWƒFƒNƒg
+ * @return			å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtSlotsGetSlot(newtRefArg r, uint32_t p)
@@ -3291,13 +3291,13 @@ newtRef NewtSlotsGetSlot(newtRefArg r, uint32_t p)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒXƒƒbƒgƒIƒuƒWƒFƒNƒg‚É‚Ìw’èˆÊ’u‚É’l‚ğƒZƒbƒg‚·‚é
+/** ã‚¹ãƒ­ãƒƒãƒˆã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«ã®æŒ‡å®šä½ç½®ã«å€¤ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
- * @param p			[in] ˆÊ’u
- * @param v			[in] ’lƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param p			[in] ä½ç½®
+ * @param v			[in] å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			’lƒIƒuƒWƒFƒNƒg
+ * @return			å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtSlotsSetSlot(newtRefArg r, uint32_t p, newtRefArg v)
@@ -3324,13 +3324,13 @@ newtRef NewtSlotsSetSlot(newtRefArg r, uint32_t p, newtRefArg v)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒXƒƒbƒgƒIƒuƒWƒFƒNƒg‚É’l‚ğ‘}“ü‚·‚é
+/** ã‚¹ãƒ­ãƒƒãƒˆã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«å€¤ã‚’æŒ¿å…¥ã™ã‚‹
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
- * @param p			[in] ˆÊ’u
- * @param v			[in] ’lƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param p			[in] ä½ç½®
+ * @param v			[in] å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			’lƒIƒuƒWƒFƒNƒg
+ * @return			å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtSlotsInsertSlot(newtRefArg r, uint32_t p, newtRefArg v)
@@ -3358,12 +3358,12 @@ newtRef NewtSlotsInsertSlot(newtRefArg r, uint32_t p, newtRefArg v)
 
 
 /*------------------------------------------------------------------------*/
-/** ”z—ñ‚Ìw’èˆÊ’u‚©‚ç’l‚ğæ“¾‚·‚é
+/** é…åˆ—ã®æŒ‡å®šä½ç½®ã‹ã‚‰å€¤ã‚’å–å¾—ã™ã‚‹
  *
- * @param r			[in] ”z—ñƒIƒuƒWƒFƒNƒg
- * @param p			[in] ˆÊ’u
+ * @param r			[in] é…åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param p			[in] ä½ç½®
  *
- * @return			’lƒIƒuƒWƒFƒNƒg
+ * @return			å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtGetArraySlot(newtRefArg r, uint32_t p)
@@ -3373,13 +3373,13 @@ newtRef NewtGetArraySlot(newtRefArg r, uint32_t p)
 
 
 /*------------------------------------------------------------------------*/
-/** ”z—ñ‚Ìw’èˆÊ’u‚É’l‚ğƒZƒbƒg‚·‚é
+/** é…åˆ—ã®æŒ‡å®šä½ç½®ã«å€¤ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
  *
- * @param r			[in] ”z—ñƒIƒuƒWƒFƒNƒg
- * @param p			[in] ˆÊ’u
- * @param v			[in] ’lƒIƒuƒWƒFƒNƒg
+ * @param r			[in] é…åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param p			[in] ä½ç½®
+ * @param v			[in] å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			’lƒIƒuƒWƒFƒNƒg
+ * @return			å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtSetArraySlot(newtRefArg r, uint32_t p, newtRefArg v)
@@ -3389,13 +3389,13 @@ newtRef NewtSetArraySlot(newtRefArg r, uint32_t p, newtRefArg v)
 
 
 /*------------------------------------------------------------------------*/
-/** ”z—ñ‚Ìw’èˆÊ’u‚É’l‚ğ‘}“ü‚·‚é
+/** é…åˆ—ã®æŒ‡å®šä½ç½®ã«å€¤ã‚’æŒ¿å…¥ã™ã‚‹
  *
- * @param r			[in] ”z—ñƒIƒuƒWƒFƒNƒg
- * @param p			[in] ˆÊ’u
- * @param v			[in] ’lƒIƒuƒWƒFƒNƒg
+ * @param r			[in] é…åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param p			[in] ä½ç½®
+ * @param v			[in] å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			’lƒIƒuƒWƒFƒNƒg
+ * @return			å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtInsertArraySlot(newtRefArg r, uint32_t p, newtRefArg v)
@@ -3405,12 +3405,12 @@ newtRef NewtInsertArraySlot(newtRefArg r, uint32_t p, newtRefArg v)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒtƒŒ[ƒ€‚ÌƒXƒƒbƒg‚©‚ç’l‚ğæ“¾‚·‚é
+/** ãƒ•ãƒ¬ãƒ¼ãƒ ã®ã‚¹ãƒ­ãƒƒãƒˆã‹ã‚‰å€¤ã‚’å–å¾—ã™ã‚‹
  *
- * @param r			[in] ƒtƒŒ[ƒ€
- * @param p			[in] ƒXƒƒbƒgƒVƒ“ƒ{ƒ‹
+ * @param r			[in] ãƒ•ãƒ¬ãƒ¼ãƒ 
+ * @param p			[in] ã‚¹ãƒ­ãƒƒãƒˆã‚·ãƒ³ãƒœãƒ«
  *
- * @return			’lƒIƒuƒWƒFƒNƒg
+ * @return			å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtGetFrameSlot(newtRefArg r, uint32_t p)
@@ -3420,13 +3420,13 @@ newtRef NewtGetFrameSlot(newtRefArg r, uint32_t p)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒtƒŒ[ƒ€‚ÌƒXƒƒbƒg‚É’l‚ğƒZƒbƒg‚·‚é
+/** ãƒ•ãƒ¬ãƒ¼ãƒ ã®ã‚¹ãƒ­ãƒƒãƒˆã«å€¤ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
  *
- * @param r			[in] ƒtƒŒ[ƒ€
- * @param p			[in] ƒXƒƒbƒgƒVƒ“ƒ{ƒ‹
- * @param v			[in] ’lƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ãƒ•ãƒ¬ãƒ¼ãƒ 
+ * @param p			[in] ã‚¹ãƒ­ãƒƒãƒˆã‚·ãƒ³ãƒœãƒ«
+ * @param v			[in] å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			’lƒIƒuƒWƒFƒNƒg
+ * @return			å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtSetFrameSlot(newtRefArg r, uint32_t p, newtRefArg v)
@@ -3453,12 +3453,12 @@ newtRef NewtGetFrameKey(newtRefArg inFrame, uint32_t inIndex)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚Ìw’è‚³‚ê‚½ˆÊ’u‚©‚ç’l‚ğæ“¾
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æŒ‡å®šã•ã‚ŒãŸä½ç½®ã‹ã‚‰å€¤ã‚’å–å¾—
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
- * @param p			[in] ˆÊ’u
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param p			[in] ä½ç½®
  *
- * @return			’lƒIƒuƒWƒFƒNƒg
+ * @return			å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtARef(newtRefArg r, uint32_t p)
@@ -3485,13 +3485,13 @@ newtRef NewtARef(newtRefArg r, uint32_t p)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚Ìw’è‚³‚ê‚½ˆÊ’u‚É’l‚ğƒZƒbƒg‚·‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æŒ‡å®šã•ã‚ŒãŸä½ç½®ã«å€¤ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
- * @param p			[in] ˆÊ’u
- * @param v			[in] ’lƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param p			[in] ä½ç½®
+ * @param v			[in] å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			’lƒIƒuƒWƒFƒNƒg
+ * @return			å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtSetARef(newtRefArg r, uint32_t p, newtRefArg v)
@@ -3519,14 +3519,14 @@ newtRef NewtSetARef(newtRefArg r, uint32_t p, newtRefArg v)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ŒŸõ‚³‚ê‚½•Ï”‚Ì•Û‘¶êŠ‚É’l‚ğƒZƒbƒg‚·‚é
+/** æ¤œç´¢ã•ã‚ŒãŸå¤‰æ•°ã®ä¿å­˜å ´æ‰€ã«å€¤ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
  *
- * @param start		[in] ŠJnƒIƒuƒWƒFƒNƒg
- * @param name		[in] •Ï”–¼ƒVƒ“ƒ{ƒ‹
- * @param value		[in] ’lƒIƒuƒWƒFƒNƒg
+ * @param start		[in] é–‹å§‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param name		[in] å¤‰æ•°åã‚·ãƒ³ãƒœãƒ«
+ * @param value		[in] å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @retval			true	’l‚ªƒZƒbƒg‚Å‚«‚½
- * @retval			false	’l‚ªƒZƒbƒg‚Å‚«‚È‚©‚Á‚½
+ * @retval			true	å€¤ãŒã‚»ãƒƒãƒˆã§ããŸ
+ * @retval			false	å€¤ãŒã‚»ãƒƒãƒˆã§ããªã‹ã£ãŸ
  */
 
 bool NewtAssignment(newtRefArg start, newtRefArg name, newtRefArg value)
@@ -3562,14 +3562,14 @@ bool NewtAssignment(newtRefArg start, newtRefArg name, newtRefArg value)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒŒƒLƒVƒJƒ‹ƒXƒR[ƒv‚ÅŒŸõ‚³‚ê‚½•Ï”‚Ì•Û‘¶êŠ‚É’l‚ğƒZƒbƒg‚·‚é
+/** ãƒ¬ã‚­ã‚·ã‚«ãƒ«ã‚¹ã‚³ãƒ¼ãƒ—ã§æ¤œç´¢ã•ã‚ŒãŸå¤‰æ•°ã®ä¿å­˜å ´æ‰€ã«å€¤ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
  *
- * @param start		[in] ŠJnƒIƒuƒWƒFƒNƒg
- * @param name		[in] •Ï”–¼ƒVƒ“ƒ{ƒ‹
- * @param value		[in] ’lƒIƒuƒWƒFƒNƒg
+ * @param start		[in] é–‹å§‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param name		[in] å¤‰æ•°åã‚·ãƒ³ãƒœãƒ«
+ * @param value		[in] å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @retval			true	’l‚ªƒZƒbƒg‚Å‚«‚½
- * @retval			false	’l‚ªƒZƒbƒg‚Å‚«‚È‚©‚Á‚½
+ * @retval			true	å€¤ãŒã‚»ãƒƒãƒˆã§ããŸ
+ * @retval			false	å€¤ãŒã‚»ãƒƒãƒˆã§ããªã‹ã£ãŸ
  */
 
 bool NewtLexicalAssignment(newtRefArg start, newtRefArg name, newtRefArg value)
@@ -3597,13 +3597,13 @@ bool NewtLexicalAssignment(newtRefArg start, newtRefArg name, newtRefArg value)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒŒƒLƒVƒJƒ‹ƒXƒR[ƒv‚Å•Ï”‚Ì‘¶İ‚ğ’²‚×‚é
+/** ãƒ¬ã‚­ã‚·ã‚«ãƒ«ã‚¹ã‚³ãƒ¼ãƒ—ã§å¤‰æ•°ã®å­˜åœ¨ã‚’èª¿ã¹ã‚‹
  *
- * @param start		[in] ŠJnƒIƒuƒWƒFƒNƒg
- * @param name		[in] •Ï”–¼ƒVƒ“ƒ{ƒ‹
+ * @param start		[in] é–‹å§‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param name		[in] å¤‰æ•°åã‚·ãƒ³ãƒœãƒ«
  *
- * @retval			true	•Ï”‚ª‚ ‚é
- * @retval			false	•Ï”‚ª‚È‚¢
+ * @retval			true	å¤‰æ•°ãŒã‚ã‚‹
+ * @retval			false	å¤‰æ•°ãŒãªã„
  */
 
 bool NewtHasLexical(newtRefArg start, newtRefArg name)
@@ -3628,13 +3628,13 @@ bool NewtHasLexical(newtRefArg start, newtRefArg name)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒvƒƒgEƒyƒAƒŒƒ“ƒgŒp³‚ÅƒtƒŒ[ƒ€“à‚ÌƒXƒƒbƒg‚Ì—L–³‚ğ’²‚×‚é
+/** ãƒ—ãƒ­ãƒˆãƒ»ãƒšã‚¢ãƒ¬ãƒ³ãƒˆç¶™æ‰¿ã§ãƒ•ãƒ¬ãƒ¼ãƒ å†…ã®ã‚¹ãƒ­ãƒƒãƒˆã®æœ‰ç„¡ã‚’èª¿ã¹ã‚‹
  *
- * @param r			[in] ƒtƒŒ[ƒ€
- * @param name		[in] ƒXƒƒbƒgƒVƒ“ƒ{ƒ‹
+ * @param r			[in] ãƒ•ãƒ¬ãƒ¼ãƒ 
+ * @param name		[in] ã‚¹ãƒ­ãƒƒãƒˆã‚·ãƒ³ãƒœãƒ«
  *
- * @retval			true	ƒXƒƒbƒg‚ª‘¶İ‚·‚é
- * @retval			false	ƒXƒƒbƒg‚ª‘¶İ‚µ‚È‚¢
+ * @retval			true	ã‚¹ãƒ­ãƒƒãƒˆãŒå­˜åœ¨ã™ã‚‹
+ * @retval			false	ã‚¹ãƒ­ãƒƒãƒˆãŒå­˜åœ¨ã—ãªã„
  */
 
 bool NewtHasVariable(newtRefArg r, newtRefArg name)
@@ -3666,11 +3666,11 @@ bool NewtHasVariable(newtRefArg r, newtRefArg name)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ƒlƒCƒeƒBƒuŠÖ”‚ÌŠÖ”ƒIƒuƒWƒFƒNƒg‚©‚çŠÖ”‚Ìƒ|ƒCƒ“ƒ^‚ğæ“¾‚·‚é
+/** ãƒã‚¤ãƒ†ã‚£ãƒ–é–¢æ•°ã®é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‹ã‚‰é–¢æ•°ã®ãƒã‚¤ãƒ³ã‚¿ã‚’å–å¾—ã™ã‚‹
  *
- * @param r			[in] ŠÖ”ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			ŠÖ”‚Ìƒ|ƒCƒ“ƒ^
+ * @return			é–¢æ•°ã®ãƒã‚¤ãƒ³ã‚¿
  */
 
 void * NewtRefToNativeFn(newtRefArg r)
@@ -3687,14 +3687,14 @@ void * NewtRefToNativeFn(newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒlƒCƒeƒBƒuŠÖ”ircvr‚È‚µj‚ÌŠÖ”ƒIƒuƒWƒFƒNƒg‚ğì¬‚·‚é
+/** ãƒã‚¤ãƒ†ã‚£ãƒ–é–¢æ•°ï¼ˆrcvrãªã—ï¼‰ã®é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆã™ã‚‹
  *
- * @param funcPtr		[in] ŠÖ”‚Ìƒ|ƒCƒ“ƒ^
- * @param numArgs		[in] ˆø”‚Ì”
- * @param indefinite	[in] •s’è’·ƒtƒ‰ƒO
- * @param doc			[in] à–¾•¶
+ * @param funcPtr		[in] é–¢æ•°ã®ãƒã‚¤ãƒ³ã‚¿
+ * @param numArgs		[in] å¼•æ•°ã®æ•°
+ * @param indefinite	[in] ä¸å®šé•·ãƒ•ãƒ©ã‚°
+ * @param doc			[in] èª¬æ˜æ–‡
  *
- * @return				ŠÖ”ƒIƒuƒWƒFƒNƒg
+ * @return				é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtMakeNativeFn0(void * funcPtr, uint32_t numArgs, bool indefinite, char * doc)
@@ -3722,15 +3722,15 @@ newtRef NewtMakeNativeFn0(void * funcPtr, uint32_t numArgs, bool indefinite, cha
 
 
 /*------------------------------------------------------------------------*/
-/** ƒlƒCƒeƒBƒuŠÖ”ircvr‚È‚µj‚ÌƒOƒ[ƒoƒ‹ŠÖ”‚ğ“o˜^‚·‚é
+/** ãƒã‚¤ãƒ†ã‚£ãƒ–é–¢æ•°ï¼ˆrcvrãªã—ï¼‰ã®ã‚°ãƒ­ãƒ¼ãƒãƒ«é–¢æ•°ã‚’ç™»éŒ²ã™ã‚‹
  *
- * @param sym			[in] ƒOƒ[ƒoƒ‹ŠÖ”–¼
- * @param funcPtr		[in] ŠÖ”‚Ìƒ|ƒCƒ“ƒ^
- * @param numArgs		[in] ˆø”‚Ì”
- * @param indefinite	[in] •s’è’·ƒtƒ‰ƒO
- * @param doc			[in] à–¾•¶
+ * @param sym			[in] ã‚°ãƒ­ãƒ¼ãƒãƒ«é–¢æ•°å
+ * @param funcPtr		[in] é–¢æ•°ã®ãƒã‚¤ãƒ³ã‚¿
+ * @param numArgs		[in] å¼•æ•°ã®æ•°
+ * @param indefinite	[in] ä¸å®šé•·ãƒ•ãƒ©ã‚°
+ * @param doc			[in] èª¬æ˜æ–‡
  *
- * @return				ŠÖ”ƒIƒuƒWƒFƒNƒg
+ * @return				é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtDefGlobalFn0(newtRefArg sym, void * funcPtr, uint32_t numArgs, bool indefinite, char * doc)
@@ -3743,14 +3743,14 @@ newtRef NewtDefGlobalFn0(newtRefArg sym, void * funcPtr, uint32_t numArgs, bool 
 
 
 /*------------------------------------------------------------------------*/
-/** ƒlƒCƒeƒBƒuŠÖ”ircvr‚ ‚èj‚ÌŠÖ”ƒIƒuƒWƒFƒNƒg‚ğì¬‚·‚é
+/** ãƒã‚¤ãƒ†ã‚£ãƒ–é–¢æ•°ï¼ˆrcvrã‚ã‚Šï¼‰ã®é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆã™ã‚‹
  *
- * @param funcPtr		[in] ŠÖ”‚Ìƒ|ƒCƒ“ƒ^
- * @param numArgs		[in] ˆø”‚Ì”
- * @param indefinite	[in] •s’è’·ƒtƒ‰ƒO
- * @param doc			[in] à–¾•¶
+ * @param funcPtr		[in] é–¢æ•°ã®ãƒã‚¤ãƒ³ã‚¿
+ * @param numArgs		[in] å¼•æ•°ã®æ•°
+ * @param indefinite	[in] ä¸å®šé•·ãƒ•ãƒ©ã‚°
+ * @param doc			[in] èª¬æ˜æ–‡
  *
- * @return				ŠÖ”ƒIƒuƒWƒFƒNƒg
+ * @return				é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtMakeNativeFunc0(void * funcPtr, uint32_t numArgs, bool indefinite, char * doc)
@@ -3778,15 +3778,15 @@ newtRef NewtMakeNativeFunc0(void * funcPtr, uint32_t numArgs, bool indefinite, c
 
 
 /*------------------------------------------------------------------------*/
-/** ƒlƒCƒeƒBƒuŠÖ”ircvr‚ ‚èj‚ÌƒOƒ[ƒoƒ‹ŠÖ”‚ğ“o˜^‚·‚é
+/** ãƒã‚¤ãƒ†ã‚£ãƒ–é–¢æ•°ï¼ˆrcvrã‚ã‚Šï¼‰ã®ã‚°ãƒ­ãƒ¼ãƒãƒ«é–¢æ•°ã‚’ç™»éŒ²ã™ã‚‹
  *
- * @param sym			[in] ƒOƒ[ƒoƒ‹ŠÖ”–¼
- * @param funcPtr		[in] ŠÖ”‚Ìƒ|ƒCƒ“ƒ^
- * @param numArgs		[in] ˆø”‚Ì”
- * @param indefinite	[in] •s’è’·ƒtƒ‰ƒO
- * @param doc			[in] à–¾•¶
+ * @param sym			[in] ã‚°ãƒ­ãƒ¼ãƒãƒ«é–¢æ•°å
+ * @param funcPtr		[in] é–¢æ•°ã®ãƒã‚¤ãƒ³ã‚¿
+ * @param numArgs		[in] å¼•æ•°ã®æ•°
+ * @param indefinite	[in] ä¸å®šé•·ãƒ•ãƒ©ã‚°
+ * @param doc			[in] èª¬æ˜æ–‡
  *
- * @return				ŠÖ”ƒIƒuƒWƒFƒNƒg
+ * @return				é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtDefGlobalFunc0(newtRefArg sym, void * funcPtr, uint32_t numArgs, bool indefinite, char * doc)
@@ -3800,15 +3800,15 @@ newtRef NewtDefGlobalFunc0(newtRefArg sym, void * funcPtr, uint32_t numArgs, boo
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** •¶š—ñ‚Ì‘O”¼•”‚ª•”•ª•¶š—ñ‚Æˆê’v‚·‚é‚©ƒ`ƒFƒbƒN‚·‚é
+/** æ–‡å­—åˆ—ã®å‰åŠéƒ¨ãŒéƒ¨åˆ†æ–‡å­—åˆ—ã¨ä¸€è‡´ã™ã‚‹ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param str		[in] •¶š—ñ
- * @param len		[in] •¶š—ñ‚Ì’·‚³
- * @param sub		[in] •”•ª•¶š—ñ
- * @param sublen	[in] •”•ª•¶š—ñ‚Ì’·‚³
+ * @param str		[in] æ–‡å­—åˆ—
+ * @param len		[in] æ–‡å­—åˆ—ã®é•·ã•
+ * @param sub		[in] éƒ¨åˆ†æ–‡å­—åˆ—
+ * @param sublen	[in] éƒ¨åˆ†æ–‡å­—åˆ—ã®é•·ã•
  *
- * @retval			true	‘O”¼•”‚ª•”•ª•¶š—ñ‚Æˆê’v‚·‚é
- * @retval			false	‘O”¼•”‚ª•”•ª•¶š—ñ‚Æˆê’v‚µ‚È‚¢
+ * @retval			true	å‰åŠéƒ¨ãŒéƒ¨åˆ†æ–‡å­—åˆ—ã¨ä¸€è‡´ã™ã‚‹
+ * @retval			false	å‰åŠéƒ¨ãŒéƒ¨åˆ†æ–‡å­—åˆ—ã¨ä¸€è‡´ã—ãªã„
  */
 
 bool NewtStrNBeginsWith(char * str, uint32_t len, char * sub, uint32_t sublen)
@@ -3821,15 +3821,15 @@ bool NewtStrNBeginsWith(char * str, uint32_t len, char * sub, uint32_t sublen)
 
 
 /*------------------------------------------------------------------------*/
-/** sub ‚ª supr ‚ÌƒTƒuƒNƒ‰ƒX‚ğ‚©ƒ`ƒFƒbƒN‚·‚é
+/** sub ãŒ supr ã®ã‚µãƒ–ã‚¯ãƒ©ã‚¹ã‚’ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param sub		[in] ƒTƒuƒNƒ‰ƒX•¶š—ñ
- * @param sublen	[in] ƒTƒuƒX[ƒpƒNƒ‰ƒX•¶š—ñ‚Ì’·‚³
- * @param supr		[in] ƒX[ƒpƒNƒ‰ƒX•¶š—ñ
- * @param suprlen	[in] ƒX[ƒpƒNƒ‰ƒX•¶š—ñ‚Ì’·‚³
+ * @param sub		[in] ã‚µãƒ–ã‚¯ãƒ©ã‚¹æ–‡å­—åˆ—
+ * @param sublen	[in] ã‚µãƒ–ã‚¹ãƒ¼ãƒ‘ã‚¯ãƒ©ã‚¹æ–‡å­—åˆ—ã®é•·ã•
+ * @param supr		[in] ã‚¹ãƒ¼ãƒ‘ã‚¯ãƒ©ã‚¹æ–‡å­—åˆ—
+ * @param suprlen	[in] ã‚¹ãƒ¼ãƒ‘ã‚¯ãƒ©ã‚¹æ–‡å­—åˆ—ã®é•·ã•
  *
- * @retval			true	ƒTƒuƒNƒ‰ƒX
- * @retval			false	ƒTƒuƒNƒ‰ƒX‚Å‚È‚¢
+ * @retval			true	ã‚µãƒ–ã‚¯ãƒ©ã‚¹
+ * @retval			false	ã‚µãƒ–ã‚¯ãƒ©ã‚¹ã§ãªã„
  */
 
 bool NewtStrIsSubclass(char * sub, uint32_t sublen, char * supr, uint32_t suprlen)
@@ -3848,15 +3848,15 @@ bool NewtStrIsSubclass(char * sub, uint32_t sublen, char * supr, uint32_t suprle
 
 
 /*------------------------------------------------------------------------*/
-/** sub ‚ª supr ‚ÌƒTƒuƒNƒ‰ƒX‚ğŠÜ‚Ş‚©ƒ`ƒFƒbƒN‚·‚é
+/** sub ãŒ supr ã®ã‚µãƒ–ã‚¯ãƒ©ã‚¹ã‚’å«ã‚€ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param sub		[in] ƒTƒuƒNƒ‰ƒX•¶š—ñ
- * @param sublen	[in] ƒTƒuƒX[ƒpƒNƒ‰ƒX•¶š—ñ‚Ì’·‚³
- * @param supr		[in] ƒX[ƒpƒNƒ‰ƒX•¶š—ñ
- * @param suprlen	[in] ƒX[ƒpƒNƒ‰ƒX•¶š—ñ‚Ì’·‚³
+ * @param sub		[in] ã‚µãƒ–ã‚¯ãƒ©ã‚¹æ–‡å­—åˆ—
+ * @param sublen	[in] ã‚µãƒ–ã‚¹ãƒ¼ãƒ‘ã‚¯ãƒ©ã‚¹æ–‡å­—åˆ—ã®é•·ã•
+ * @param supr		[in] ã‚¹ãƒ¼ãƒ‘ã‚¯ãƒ©ã‚¹æ–‡å­—åˆ—
+ * @param suprlen	[in] ã‚¹ãƒ¼ãƒ‘ã‚¯ãƒ©ã‚¹æ–‡å­—åˆ—ã®é•·ã•
  *
- * @retval			true	ƒTƒuƒNƒ‰ƒX‚ğŠÜ‚Ş
- * @retval			false	ƒTƒuƒNƒ‰ƒX‚ğŠÜ‚Ü‚È‚¢
+ * @retval			true	ã‚µãƒ–ã‚¯ãƒ©ã‚¹ã‚’å«ã‚€
+ * @retval			false	ã‚µãƒ–ã‚¯ãƒ©ã‚¹ã‚’å«ã¾ãªã„
  */
 
 bool NewtStrHasSubclass(char * sub, uint32_t sublen, char * supr, uint32_t suprlen)
@@ -3882,13 +3882,13 @@ bool NewtStrHasSubclass(char * sub, uint32_t sublen, char * supr, uint32_t suprl
 
 
 /*------------------------------------------------------------------------*/
-/** sub ‚ª supr ‚ÌƒTƒuƒNƒ‰ƒX‚ğŠÜ‚Ş‚©ƒ`ƒFƒbƒN‚·‚é
+/** sub ãŒ supr ã®ã‚µãƒ–ã‚¯ãƒ©ã‚¹ã‚’å«ã‚€ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param sub		[in] ƒTƒuƒNƒ‰ƒX
- * @param supr		[in] ƒX[ƒpƒNƒ‰ƒX
+ * @param sub		[in] ã‚µãƒ–ã‚¯ãƒ©ã‚¹
+ * @param supr		[in] ã‚¹ãƒ¼ãƒ‘ã‚¯ãƒ©ã‚¹
  *
- * @retval			true	ƒTƒuƒNƒ‰ƒX‚ğŠÜ‚Ş
- * @retval			false	ƒTƒuƒNƒ‰ƒX‚ğŠÜ‚Ü‚È‚¢
+ * @retval			true	ã‚µãƒ–ã‚¯ãƒ©ã‚¹ã‚’å«ã‚€
+ * @retval			false	ã‚µãƒ–ã‚¯ãƒ©ã‚¹ã‚’å«ã¾ãªã„
  */
 
 bool NewtHasSubclass(newtRefArg sub, newtRefArg supr)
@@ -3909,13 +3909,13 @@ bool NewtHasSubclass(newtRefArg sub, newtRefArg supr)
 
 
 /*------------------------------------------------------------------------*/
-/** sub ‚ª supr ‚ÌƒTƒuƒNƒ‰ƒX‚©ƒ`ƒFƒbƒN‚·‚é
+/** sub ãŒ supr ã®ã‚µãƒ–ã‚¯ãƒ©ã‚¹ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param sub		[in] ƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg‚P
- * @param supr		[in] ƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg‚Q
+ * @param sub		[in] ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼‘
+ * @param supr		[in] ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆï¼’
  *
- * @retval			true	ƒTƒuƒNƒ‰ƒX
- * @retval			false	ƒTƒuƒNƒ‰ƒX‚Å‚È‚¢
+ * @retval			true	ã‚µãƒ–ã‚¯ãƒ©ã‚¹
+ * @retval			false	ã‚µãƒ–ã‚¯ãƒ©ã‚¹ã§ãªã„
  */
 
 bool NewtIsSubclass(newtRefArg sub, newtRefArg supr)
@@ -3936,13 +3936,13 @@ bool NewtIsSubclass(newtRefArg sub, newtRefArg supr)
 
 
 /*------------------------------------------------------------------------*/
-/** obj ‚ª r ‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚©ƒ`ƒFƒbƒN‚·‚é
+/** obj ãŒ r ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param obj		[in] ƒIƒuƒWƒFƒNƒg
- * @param r			[in] ƒNƒ‰ƒXƒVƒ“ƒ{ƒ‹
+ * @param obj		[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param r			[in] ã‚¯ãƒ©ã‚¹ã‚·ãƒ³ãƒœãƒ«
  *
- * @retval			true	ƒCƒ“ƒXƒ^ƒ“ƒX
- * @retval			false	ƒCƒ“ƒXƒ^ƒ“ƒX‚Å‚È‚¢
+ * @retval			true	ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
+ * @retval			false	ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã§ãªã„
  */
 
 bool NewtIsInstance(newtRefArg obj, newtRefArg r)
@@ -3953,12 +3953,12 @@ bool NewtIsInstance(newtRefArg obj, newtRefArg r)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** •¶š—ñƒIƒuƒWƒFƒNƒg‚ÌÅŒã‚É•¶š—ñ‚ğ’Ç‰Á‚·‚é
+/** æ–‡å­—åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æœ€å¾Œã«æ–‡å­—åˆ—ã‚’è¿½åŠ ã™ã‚‹
  *
- * @param r			[in] •¶š—ñƒIƒuƒWƒFƒNƒg
- * @param s			[in] ’Ç‰Á‚·‚é•¶š—ñ
+ * @param r			[in] æ–‡å­—åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param s			[in] è¿½åŠ ã™ã‚‹æ–‡å­—åˆ—
  *
- * @return			•¶š—ñƒIƒuƒWƒFƒNƒg
+ * @return			æ–‡å­—åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtStrCat(newtRefArg r, char * s)
@@ -3971,13 +3971,13 @@ newtRef NewtStrCat(newtRefArg r, char * s)
 
 
 /*------------------------------------------------------------------------*/
-/** •¶š—ñƒIƒuƒWƒFƒNƒg‚ÌÅŒã‚Éw’è‚³‚ê‚½’·‚³‚Ì•¶š—ñ‚ğ’Ç‰Á‚·‚é
+/** æ–‡å­—åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æœ€å¾Œã«æŒ‡å®šã•ã‚ŒãŸé•·ã•ã®æ–‡å­—åˆ—ã‚’è¿½åŠ ã™ã‚‹
  *
- * @param r			[in] •¶š—ñƒIƒuƒWƒFƒNƒg
- * @param s			[in] ’Ç‰Á‚·‚é•¶š—ñ
- * @param slen		[in] ’Ç‰Á‚·‚é•¶š—ñ‚Ì’·‚³
+ * @param r			[in] æ–‡å­—åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param s			[in] è¿½åŠ ã™ã‚‹æ–‡å­—åˆ—
+ * @param slen		[in] è¿½åŠ ã™ã‚‹æ–‡å­—åˆ—ã®é•·ã•
  *
- * @return			•¶š—ñƒIƒuƒWƒFƒNƒg
+ * @return			æ–‡å­—åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtStrCat2(newtRefArg r, char * s, uint32_t slen)
@@ -4013,11 +4013,11 @@ newtRef NewtStrCat2(newtRefArg r, char * s, uint32_t slen)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ŠÂ‹«•Ï”‚Ìæ“¾
+/** ç’°å¢ƒå¤‰æ•°ã®å–å¾—
  *
- * @param s			[in] •¶š—ñ
+ * @param s			[in] æ–‡å­—åˆ—
  *
- * @return			•¶š—ñƒIƒuƒWƒFƒNƒg
+ * @return			æ–‡å­—åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtGetEnv(const char * s)

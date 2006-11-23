@@ -1,12 +1,12 @@
 /*------------------------------------------------------------------------*/
 /**
  * @file	NewtFns.h
- * @brief   �g���݊֐�
+ * @brief   組込み関数
  *
  * @author  M.Nukui
  * @date	2003-11-07
  *
- * @note	NS...�@�Ŏn�܂�֐��̓C���^�v���^�̊֐��Ƃ��Ē�`�\
+ * @note	NS...　で始まる関数はインタプリタの関数として定義可能
  *
  * Copyright (C) 2003-2004 M.Nukui All rights reserved.
  */
@@ -17,27 +17,27 @@
 
 /*
 
-�֐��l�[�~���O���[��
+関数ネーミングルール
 
-  Ns******	NewtonScript �l�C�e�B�u�R�[�h�i�������� rcvr ����A�X�N���v�g����g�p�j
-  Nc******	NewtonScript �l�C�e�B�u�R�[�h�i�������� rcvr �Ȃ��AC���ꂩ��g�p�j
-  NVM*****	VM�֘A
-  NPS*****	�p�[�T�[�֘A
-  NSOF*****	NSOF�֘A
-  Newt*****	�I�u�W�F�N�g�֘A�A���̑�
+  Ns******	NewtonScript ネイティブコード（第一引数に rcvr あり、スクリプトから使用）
+  Nc******	NewtonScript ネイティブコード（第一引数に rcvr なし、C言語から使用）
+  NVM*****	VM関連
+  NPS*****	パーサー関連
+  NSOF*****	NSOF関連
+  Newt*****	オブジェクト関連、その他
 
-�g��Ȃ��悤�ɁF(OBSOLETE)
+使わないように：(OBSOLETE)
   NS******	Cocoa APIs
 
 */
 
 
-/* �w�b�_�t�@�C�� */
+/* ヘッダファイル */
 #include "NewtType.h"
 
 
-/* �}�N�� */
-#define NcSelf()					NVMSelf()						///< self ���擾
+/* マクロ */
+#define NcSelf()					NVMSelf()						///< self を取得
 #define NcGetVariable(frame, slot)	NcFullLookup(frame, slot)
 
 #define NcThrow(name, data)			NsThrow(kNewtRefNIL, name, data)
@@ -55,7 +55,7 @@
 #define NcPrint(r)					NsPrint(kNewtRefNIL, r)
 
 
-/* �֐��v���g�^�C�v */
+/* 関数プロトタイプ */
 
 #ifdef __cplusplus
 extern "C" {

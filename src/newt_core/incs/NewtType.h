@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------*/
 /**
  * @file	NewtType.h
- * @brief   Œ^’è‹`
+ * @brief   å‹å®šç¾©
  *
  * @author  M.Nukui
  * @date	2003-11-07
@@ -14,7 +14,7 @@
 #define	NEWTTYPE_H
 
 
-/* ƒwƒbƒ_ƒtƒ@ƒCƒ‹ */
+/* ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ« */
 #include "platform.h"
 
 #if HAVE_STDINT_H
@@ -29,121 +29,121 @@
 #include "NewtConf.h"
 
 
-/* ƒ}ƒNƒ */
+/* ãƒã‚¯ãƒ­ */
 
 // Newton Refs Constant
 #define	kNewtRefNIL			0x0002		///< NIL
 #define	kNewtRefTRUE		0x001A		///< TRUE
-#define	kNewtSymbolClass	0x55552		///< ƒVƒ“ƒ{ƒ‹ƒNƒ‰ƒX
+#define	kNewtSymbolClass	0x55552		///< ã‚·ãƒ³ãƒœãƒ«ã‚¯ãƒ©ã‚¹
 
-#define	kNewtRefUnbind		0xFFF2		///< #UNDEFi“Æ©‹@”\j
+#define	kNewtRefUnbind		0xFFF2		///< #UNDEFï¼ˆç‹¬è‡ªæ©Ÿèƒ½ï¼‰
 
 
-/* ’è” */
+/* å®šæ•° */
 
-/// ƒIƒuƒWƒFƒNƒgƒ^ƒCƒvi“à•”‚Å‚Ì‚İg—pj
+/// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¿ã‚¤ãƒ—ï¼ˆå†…éƒ¨ã§ã®ã¿ä½¿ç”¨ï¼‰
 enum {
-    kNewtUnknownType		= 0,	///< •s–¾‚Èƒ^ƒCƒv
-    kNewtInt30,						///< 30bit®”i‘¦’lj
-    kNewtPointer,					///< ƒ|ƒCƒ“ƒ^QÆ
-    kNewtCharacter,					///< •¶ši‘¦’lj
-    kNewtSpecial,					///< “ÁêQÆi‘¦’lj
-    kNewtNil,						///< NILi“ÁêQÆ^‘¦’lj
-    kNewtTrue,						///< TRUEi“ÁêQÆ^‘¦’lj
-    kNewtUnbind,					///< –¢’è‹`i“ÁêQÆ^‘¦’lj
-    kNewtMagicPointer,				///< ƒ}ƒWƒbƒNƒ|ƒCƒ“ƒ^i‘¦’lj
+    kNewtUnknownType		= 0,	///< ä¸æ˜ãªã‚¿ã‚¤ãƒ—
+    kNewtInt30,						///< 30bitæ•´æ•°ï¼ˆå³å€¤ï¼‰
+    kNewtPointer,					///< ãƒã‚¤ãƒ³ã‚¿å‚ç…§
+    kNewtCharacter,					///< æ–‡å­—ï¼ˆå³å€¤ï¼‰
+    kNewtSpecial,					///< ç‰¹æ®Šå‚ç…§ï¼ˆå³å€¤ï¼‰
+    kNewtNil,						///< NILï¼ˆç‰¹æ®Šå‚ç…§ï¼å³å€¤ï¼‰
+    kNewtTrue,						///< TRUEï¼ˆç‰¹æ®Šå‚ç…§ï¼å³å€¤ï¼‰
+    kNewtUnbind,					///< æœªå®šç¾©ï¼ˆç‰¹æ®Šå‚ç…§ï¼å³å€¤ï¼‰
+    kNewtMagicPointer,				///< ãƒã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿ï¼ˆå³å€¤ï¼‰
 
-    //@ƒ|ƒCƒ“ƒ^QÆ
-    kNewtBinary,					///< ƒoƒCƒiƒŠƒIƒuƒWƒFƒNƒg
-    kNewtArray,						///< ”z—ñ
-    kNewtFrame,						///< ƒtƒŒ[ƒ€
+    //ã€€ãƒã‚¤ãƒ³ã‚¿å‚ç…§
+    kNewtBinary,					///< ãƒã‚¤ãƒŠãƒªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+    kNewtArray,						///< é…åˆ—
+    kNewtFrame,						///< ãƒ•ãƒ¬ãƒ¼ãƒ 
 
-    //@ƒoƒCƒiƒŠƒIƒuƒWƒFƒNƒg
-    kNewtInt32,						///< 32bit®”
-    kNewtReal,						///< •‚“®¬”“_
-    kNewtSymbol,					///< ƒVƒ“ƒ{ƒ‹
-    kNewtString						///< •¶š—ñ
+    //ã€€ãƒã‚¤ãƒŠãƒªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+    kNewtInt32,						///< 32bitæ•´æ•°
+    kNewtReal,						///< æµ®å‹•å°æ•°ç‚¹
+    kNewtSymbol,					///< ã‚·ãƒ³ãƒœãƒ«
+    kNewtString						///< æ–‡å­—åˆ—
 };
 
 
 /// Newton Object Constant
 enum {
-    kNewtObjSlotted		= 0x01,		///< ƒXƒƒbƒg
-    kNewtObjFrame		= 0x02,		///< ƒtƒŒ[ƒ€
+    kNewtObjSlotted		= 0x01,		///< ã‚¹ãƒ­ãƒƒãƒˆ
+    kNewtObjFrame		= 0x02,		///< ãƒ•ãƒ¬ãƒ¼ãƒ 
 
-    kNewtObjLiteral		= 0x40,		///< ƒŠƒeƒ‰ƒ‹
-    kNewtObjSweep		= 0x80		///< ƒSƒ~‘|œiGC—pj
+    kNewtObjLiteral		= 0x40,		///< ãƒªãƒ†ãƒ©ãƒ«
+    kNewtObjSweep		= 0x80		///< ã‚´ãƒŸæƒé™¤ï¼ˆGCç”¨ï¼‰
 };
 
 
 /// Newton Map Constant
 enum {
-    kNewtMapSorted		= 0x01,		///< ƒXƒƒbƒg
-    kNewtMapProto		= 0x04		///< ƒvƒƒg
+    kNewtMapSorted		= 0x01,		///< ã‚¹ãƒ­ãƒƒãƒˆ
+    kNewtMapProto		= 0x04		///< ãƒ—ãƒ­ãƒˆ
 };
 
 
 /// Newton Streamed Object Format (NSOF)
 enum {
-    kNSOFImmediate			= 0,	///< ‘¦’l
-    kNSOFCharacter			= 1,	///< ASCII•¶š
-    kNSOFUnicodeCharacter	= 2,	///< UNICODE•¶š
-    kNSOFBinaryObject		= 3,	///< ƒoƒCƒiƒŠƒIƒuƒWƒFƒNƒg
-    kNSOFArray				= 4,	///< ”z—ñ
-    kNSOFPlainArray			= 5,	///< ƒvƒŒƒCƒ“”z—ñ
-    kNSOFFrame				= 6,	///< ƒtƒŒ[ƒ€
-    kNSOFSymbol				= 7,	///< ƒVƒ“ƒ{ƒ‹
-    kNSOFString				= 8,	///< •¶š—ñ
-    kNSOFPrecedent			= 9,	///< oŒ»Ï‚İƒf[ƒ^
+    kNSOFImmediate			= 0,	///< å³å€¤
+    kNSOFCharacter			= 1,	///< ASCIIæ–‡å­—
+    kNSOFUnicodeCharacter	= 2,	///< UNICODEæ–‡å­—
+    kNSOFBinaryObject		= 3,	///< ãƒã‚¤ãƒŠãƒªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+    kNSOFArray				= 4,	///< é…åˆ—
+    kNSOFPlainArray			= 5,	///< ãƒ—ãƒ¬ã‚¤ãƒ³é…åˆ—
+    kNSOFFrame				= 6,	///< ãƒ•ãƒ¬ãƒ¼ãƒ 
+    kNSOFSymbol				= 7,	///< ã‚·ãƒ³ãƒœãƒ«
+    kNSOFString				= 8,	///< æ–‡å­—åˆ—
+    kNSOFPrecedent			= 9,	///< å‡ºç¾æ¸ˆã¿ãƒ‡ãƒ¼ã‚¿
     kNSOFNIL				= 10,   ///< NIL
-    kNSOFSmallRect			= 11,   ///< ¬‚³‚¢‹éŒ`
-    kNSOFLargeBinary		= 12,	///< ‘å‚«‚¢ƒoƒCƒiƒŠ
+    kNSOFSmallRect			= 11,   ///< å°ã•ã„çŸ©å½¢
+    kNSOFLargeBinary		= 12,	///< å¤§ãã„ãƒã‚¤ãƒŠãƒª
 
-    kNSOFNamedMagicPointer	= 0x10,	///< –¼‘O•tƒ}ƒWƒbƒNƒ|ƒCƒ“ƒ^i“Æ©‹@”\j
+    kNSOFNamedMagicPointer	= 0x10,	///< åå‰ä»˜ãƒã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿ï¼ˆç‹¬è‡ªæ©Ÿèƒ½ï¼‰
 };
 
 
-/* Œ^éŒ¾ */
+/* å‹å®£è¨€ */
 
 // Ref(Integer, Pointer, Charcter, Spatial, Magic pointer)
-typedef uint32_t		newtRef;		///< ƒIƒuƒWƒFƒNƒgQÆ
-typedef newtRef			newtRefVar;		///< ƒIƒuƒWƒFƒNƒgQÆ•Ï”
-typedef const newtRef	newtRefArg;		///< ƒIƒuƒWƒFƒNƒgQÆˆø”
+typedef uint32_t		newtRef;		///< ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§
+typedef newtRef			newtRefVar;		///< ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§å¤‰æ•°
+typedef const newtRef	newtRefArg;		///< ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§å¼•æ•°
 
 
-/// ƒIƒuƒWƒFƒNƒgQÆ
+/// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§
 typedef struct newtObj *	newtObjRef;
 
-/// ƒIƒuƒWƒFƒNƒgƒwƒbƒ_
+/// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ˜ãƒƒãƒ€
 typedef struct {
-    uint32_t	h;		///< ŠÇ—î•ñ
-    newtObjRef	nextp;	///< Ÿ‚ÌƒIƒuƒWƒFƒNƒg‚Ö‚Ìƒ|ƒCƒ“ƒ^
+    uint32_t	h;		///< ç®¡ç†æƒ…å ±
+    newtObjRef	nextp;	///< æ¬¡ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¸ã®ãƒã‚¤ãƒ³ã‚¿
 } newtObjHeader;
 
 
-/// ƒIƒuƒWƒFƒNƒg
+/// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 typedef struct newtObj {
-    newtObjHeader	header; ///< ƒIƒuƒWƒFƒNƒgƒwƒbƒ_
+    newtObjHeader	header; ///< ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ˜ãƒƒãƒ€
 
 	/// as
     union {
-        newtRef	klass;		///< ƒNƒ‰ƒX
-        newtRef	map;		///< ƒ}ƒbƒv
+        newtRef	klass;		///< ã‚¯ãƒ©ã‚¹
+        newtRef	map;		///< ãƒãƒƒãƒ—
     } as;
 } newtObj;
 
 
-/// ƒVƒ“ƒ{ƒ‹ƒf[ƒ^
+/// ã‚·ãƒ³ãƒœãƒ«ãƒ‡ãƒ¼ã‚¿
 typedef struct {
-    uint32_t	hash;		///< ƒnƒbƒVƒ…’l
-    char		name[1];	///< ƒeƒLƒXƒg
+    uint32_t	hash;		///< ãƒãƒƒã‚·ãƒ¥å€¤
+    char		name[1];	///< ãƒ†ã‚­ã‚¹ãƒˆ
 } newtSymData;
 
-/// ƒVƒ“ƒ{ƒ‹ƒf[ƒ^‚Ö‚Ìƒ|ƒCƒ“ƒ^
+/// ã‚·ãƒ³ãƒœãƒ«ãƒ‡ãƒ¼ã‚¿ã¸ã®ãƒã‚¤ãƒ³ã‚¿
 typedef newtSymData *	newtSymDataRef;
 
 
-/// ƒGƒ‰[ƒR[ƒh
+/// ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
 typedef int32_t		newtErr;
 
 

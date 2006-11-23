@@ -1,7 +1,7 @@
 //--------------------------------------------------------------------------
 /**
  * @file	NewtParser.c
- * @brief   \•¶–Ø‚Ì¶¬
+ * @brief   æ§‹æ–‡æœ¨ã®ç”Ÿæˆ
  *
  * @author  M.Nukui
  * @date	2003-11-07
@@ -10,7 +10,7 @@
  */
 
 
-/* ƒwƒbƒ_ƒtƒ@ƒCƒ‹ */
+/* ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ« */
 #include <stdlib.h>
 #include <string.h>
 
@@ -27,31 +27,31 @@
 #include "yacc.h"
 
 
-/* Œ^éŒ¾ */
+/* å‹å®£è¨€ */
 
-/// “ü—Íƒf[ƒ^
+/// å…¥åŠ›ãƒ‡ãƒ¼ã‚¿
 typedef struct {
-	const char *	data;		///< “ü—Íƒf[ƒ^
-	const char *	currp;		///< Œ»İ‚Ì“ü—ÍˆÊ’u
-	const char *	limit;		///< “ü—Íƒf[ƒ^‚ÌÅŒã
+	const char *	data;		///< å…¥åŠ›ãƒ‡ãƒ¼ã‚¿
+	const char *	currp;		///< ç¾åœ¨ã®å…¥åŠ›ä½ç½®
+	const char *	limit;		///< å…¥åŠ›ãƒ‡ãƒ¼ã‚¿ã®æœ€å¾Œ
 } nps_inputdata_t;
 
 
-/* ƒOƒ[ƒoƒ‹•Ï” */
-nps_env_t				nps_env;		///< ƒp[ƒTŠÂ‹«
+/* ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•° */
+nps_env_t				nps_env;		///< ãƒ‘ãƒ¼ã‚µç’°å¢ƒ
 
 
-/* ƒ[ƒJƒ‹•Ï” */
-static newtStack		nps_stree;		///< \•¶–ØƒXƒ^ƒbƒNî•ñ
-static nps_inputdata_t  nps_inputdata;  ///< “ü—Íƒf[ƒ^
+/* ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•° */
+static newtStack		nps_stree;		///< æ§‹æ–‡æœ¨ã‚¹ã‚¿ãƒƒã‚¯æƒ…å ±
+static nps_inputdata_t  nps_inputdata;  ///< å…¥åŠ›ãƒ‡ãƒ¼ã‚¿
 
 
-/* ƒ}ƒNƒ */
-#define STREESTACK		((nps_syntax_node_t *)nps_stree.stackp)		///< \•¶–ØƒXƒ^ƒbƒN
-#define CX				(nps_stree.sp)								///< \•¶–ØƒXƒ^ƒbƒNƒ|ƒCƒ“ƒ^
+/* ãƒã‚¯ãƒ­ */
+#define STREESTACK		((nps_syntax_node_t *)nps_stree.stackp)		///< æ§‹æ–‡æœ¨ã‚¹ã‚¿ãƒƒã‚¯
+#define CX				(nps_stree.sp)								///< æ§‹æ–‡æœ¨ã‚¹ã‚¿ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿
 
 
-/* ŠÖ”ƒvƒƒgƒ^ƒCƒv */
+/* é–¢æ•°ãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ— */
 static void		NPSBindParserInput(const char * s);
 static int		nps_yyinput_str(char * buff, int max_size);
 
@@ -63,11 +63,11 @@ static void		NPSPrintSyntaxCode(FILE * f, uint32_t code);
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** \•¶‰ğÍ‚·‚é•¶š—ñ‚ğƒZƒbƒg‚·‚é
+/** æ§‹æ–‡è§£æã™ã‚‹æ–‡å­—åˆ—ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
  *
- * @param s			[in] •¶š—ñ
+ * @param s			[in] æ–‡å­—åˆ—
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NPSBindParserInput(const char * s)
@@ -82,12 +82,12 @@ void NPSBindParserInput(const char * s)
 
 
 /*------------------------------------------------------------------------*/
-/** \•¶‰ğÍ‚·‚éƒf[ƒ^‚ğ•¶š—ñ‚©‚çæo‚·
+/** æ§‹æ–‡è§£æã™ã‚‹ãƒ‡ãƒ¼ã‚¿ã‚’æ–‡å­—åˆ—ã‹ã‚‰å–å‡ºã™
  *
- * @param buff		[out]ƒoƒbƒtƒ@
- * @param max_size	[in] Å‘å’·
+ * @param buff		[out]ãƒãƒƒãƒ•ã‚¡
+ * @param max_size	[in] æœ€å¤§é•·
  *
- * @return			æo‚µ‚½ƒf[ƒ^ƒTƒCƒY
+ * @return			å–å‡ºã—ãŸãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º
  */
 
 int nps_yyinput_str(char * buff, int max_size)
@@ -108,13 +108,13 @@ int nps_yyinput_str(char * buff, int max_size)
 
 
 /*------------------------------------------------------------------------*/
-/** \•¶‰ğÍ‚·‚éƒf[ƒ^‚ğæo‚·
+/** æ§‹æ–‡è§£æã™ã‚‹ãƒ‡ãƒ¼ã‚¿ã‚’å–å‡ºã™
  *
- * @param yyin		[in] “ü—Íƒtƒ@ƒCƒ‹
- * @param buff		[out]ƒoƒbƒtƒ@
- * @param max_size	[in] Å‘å’·
+ * @param yyin		[in] å…¥åŠ›ãƒ•ã‚¡ã‚¤ãƒ«
+ * @param buff		[out]ãƒãƒƒãƒ•ã‚¡
+ * @param max_size	[in] æœ€å¤§é•·
  *
- * @return			æo‚µ‚½ƒf[ƒ^ƒTƒCƒY
+ * @return			å–å‡ºã—ãŸãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º
  */
 
 int nps_yyinput(FILE * yyin, char * buff, int max_size)
@@ -128,11 +128,11 @@ int nps_yyinput(FILE * yyin, char * buff, int max_size)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** \•¶‰ğÍ‚Ì‚½‚ß‚Ì‰Šú‰»
+/** æ§‹æ–‡è§£æã®ãŸã‚ã®åˆæœŸåŒ–
  *
- * @param pool		[in] ƒƒ‚ƒŠƒv[ƒ‹
+ * @param pool		[in] ãƒ¡ãƒ¢ãƒªãƒ—ãƒ¼ãƒ«
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NPSInit(newtPool pool)
@@ -152,14 +152,14 @@ void NPSInit(newtPool pool)
 
 
 /*------------------------------------------------------------------------*/
-/** \•¶‰ğÍ‚·‚é
+/** æ§‹æ–‡è§£æã™ã‚‹
  *
- * @param path		[in] “ü—Íƒtƒ@ƒCƒ‹‚ÌƒpƒX
- * @param streeP	[out]\•¶–Ø
- * @param sizeP		[out]\•¶–Ø‚ÌƒTƒCƒY
- * @param is_file	[in] ƒtƒ@ƒCƒ‹‚©‚Ç‚¤‚©i#! ˆ—‚ğ‚¨‚±‚È‚¤‚©‚Ç‚¤‚©j
+ * @param path		[in] å…¥åŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹
+ * @param streeP	[out]æ§‹æ–‡æœ¨
+ * @param sizeP		[out]æ§‹æ–‡æœ¨ã®ã‚µã‚¤ã‚º
+ * @param is_file	[in] ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã©ã†ã‹ï¼ˆ#! å‡¦ç†ã‚’ãŠã“ãªã†ã‹ã©ã†ã‹ï¼‰
  *
- * @return			ƒGƒ‰[ƒR[ƒh
+ * @return			ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  */
 
 newtErr NPSParse(const char * path, nps_syntax_node_t ** streeP, uint32_t * sizeP, bool is_file)
@@ -195,13 +195,13 @@ newtErr NPSParse(const char * path, nps_syntax_node_t ** streeP, uint32_t * size
 
 
 /*------------------------------------------------------------------------*/
-/** w’è‚³‚ê‚½ƒtƒ@ƒCƒ‹‚ğƒ\[ƒX‚É\•¶‰ğÍ‚·‚é
+/** æŒ‡å®šã•ã‚ŒãŸãƒ•ã‚¡ã‚¤ãƒ«ã‚’ã‚½ãƒ¼ã‚¹ã«æ§‹æ–‡è§£æã™ã‚‹
  *
- * @param path		[in] “ü—Íƒtƒ@ƒCƒ‹‚ÌƒpƒX
- * @param streeP	[out]\•¶–Ø
- * @param sizeP		[out]\•¶–Ø‚ÌƒTƒCƒY
+ * @param path		[in] å…¥åŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹
+ * @param streeP	[out]æ§‹æ–‡æœ¨
+ * @param sizeP		[out]æ§‹æ–‡æœ¨ã®ã‚µã‚¤ã‚º
  *
- * @return			ƒGƒ‰[ƒR[ƒh
+ * @return			ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  */
 
 newtErr NPSParseFile(const char * path,
@@ -232,13 +232,13 @@ newtErr NPSParseFile(const char * path,
 
 
 /*------------------------------------------------------------------------*/
-/** •¶š—ñ‚ğƒ\[ƒX‚É\•¶‰ğÍ‚·‚é
+/** æ–‡å­—åˆ—ã‚’ã‚½ãƒ¼ã‚¹ã«æ§‹æ–‡è§£æã™ã‚‹
  *
- * @param s			[in] “ü—Íƒf[ƒ^
- * @param streeP	[out]\•¶–Ø
- * @param sizeP		[out]\•¶–Ø‚ÌƒTƒCƒY
+ * @param s			[in] å…¥åŠ›ãƒ‡ãƒ¼ã‚¿
+ * @param streeP	[out]æ§‹æ–‡æœ¨
+ * @param sizeP		[out]æ§‹æ–‡æœ¨ã®ã‚µã‚¤ã‚º
  *
- * @return			ƒGƒ‰[ƒR[ƒh
+ * @return			ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  */
 
 newtErr NPSParseStr(const char * s,
@@ -255,9 +255,9 @@ newtErr NPSParseStr(const char * s,
 
 
 /*------------------------------------------------------------------------*/
-/** \•¶‰ğÍ‚ÌŒãn––
+/** æ§‹æ–‡è§£æã®å¾Œå§‹æœ«
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NPSCleanup(void)
@@ -268,12 +268,12 @@ void NPSCleanup(void)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** \•¶–Ø‚Ìƒm[ƒh‚ğˆóš‚·‚é
+/** æ§‹æ–‡æœ¨ã®ãƒãƒ¼ãƒ‰ã‚’å°å­—ã™ã‚‹
  *
- * @param f			[in] o—Íƒtƒ@ƒCƒ‹
- * @param r			[in] ƒm[ƒh
+ * @param f			[in] å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«
+ * @param r			[in] ãƒãƒ¼ãƒ‰
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NPSPrintNode(FILE * f, nps_node_t r)
@@ -286,12 +286,12 @@ void NPSPrintNode(FILE * f, nps_node_t r)
 
 
 /*------------------------------------------------------------------------*/
-/** \•¶ƒR[ƒh‚ğˆóš‚·‚é
+/** æ§‹æ–‡ã‚³ãƒ¼ãƒ‰ã‚’å°å­—ã™ã‚‹
  *
- * @param f			[in] o—Íƒtƒ@ƒCƒ‹
- * @param code		[in] \•¶ƒR[ƒh
+ * @param f			[in] å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«
+ * @param code		[in] æ§‹æ–‡ã‚³ãƒ¼ãƒ‰
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NPSPrintSyntaxCode(FILE * f, uint32_t code)
@@ -402,13 +402,13 @@ void NPSPrintSyntaxCode(FILE * f, uint32_t code)
 
 
 /*------------------------------------------------------------------------*/
-/** \•¶–Ø‚ğƒ_ƒ“ƒv‚·‚é
+/** æ§‹æ–‡æœ¨ã‚’ãƒ€ãƒ³ãƒ—ã™ã‚‹
  *
- * @param f			[in] o—Íƒtƒ@ƒCƒ‹
- * @param stree		[in] \•¶–Ø
- * @param size		[in] \•¶–Ø‚ÌƒTƒCƒY
+ * @param f			[in] å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«
+ * @param stree		[in] æ§‹æ–‡æœ¨
+ * @param size		[in] æ§‹æ–‡æœ¨ã®ã‚µã‚¤ã‚º
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NPSDumpSyntaxTree(FILE * f, nps_syntax_node_t * stree, uint32_t size)
@@ -445,11 +445,11 @@ void NPSDumpSyntaxTree(FILE * f, nps_syntax_node_t * stree, uint32_t size)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ˆø”‚O‚Ìƒm[ƒh‚ğì¬
+/** å¼•æ•°ï¼ã®ãƒãƒ¼ãƒ‰ã‚’ä½œæˆ
  *
- * @param code		[in] \•¶ƒR[ƒh
+ * @param code		[in] æ§‹æ–‡ã‚³ãƒ¼ãƒ‰
  *
- * @return			ƒm[ƒh
+ * @return			ãƒãƒ¼ãƒ‰
  */
 
 nps_node_t NPSGenNode0(uint32_t code)
@@ -459,12 +459,12 @@ nps_node_t NPSGenNode0(uint32_t code)
 
 
 /*------------------------------------------------------------------------*/
-/** ˆø”‚P‚Ìƒm[ƒh‚ğì¬
+/** å¼•æ•°ï¼‘ã®ãƒãƒ¼ãƒ‰ã‚’ä½œæˆ
  *
- * @param code		[in] \•¶ƒR[ƒh
- * @param op1		[in] ˆø”‚P
+ * @param code		[in] æ§‹æ–‡ã‚³ãƒ¼ãƒ‰
+ * @param op1		[in] å¼•æ•°ï¼‘
  *
- * @return			ƒm[ƒh
+ * @return			ãƒãƒ¼ãƒ‰
  */
 
 nps_node_t NPSGenNode1(uint32_t code, nps_node_t op1)
@@ -474,13 +474,13 @@ nps_node_t NPSGenNode1(uint32_t code, nps_node_t op1)
 
 
 /*------------------------------------------------------------------------*/
-/** ˆø”‚Q‚Ìƒm[ƒh‚ğì¬
+/** å¼•æ•°ï¼’ã®ãƒãƒ¼ãƒ‰ã‚’ä½œæˆ
  *
- * @param code		[in] \•¶ƒR[ƒh
- * @param op1		[in] ˆø”‚P
- * @param op2		[in] ˆø”‚Q
+ * @param code		[in] æ§‹æ–‡ã‚³ãƒ¼ãƒ‰
+ * @param op1		[in] å¼•æ•°ï¼‘
+ * @param op2		[in] å¼•æ•°ï¼’
  *
- * @return			ƒm[ƒh
+ * @return			ãƒãƒ¼ãƒ‰
  */
 
 nps_node_t NPSGenNode2(uint32_t code, nps_node_t op1, nps_node_t op2)
@@ -506,12 +506,12 @@ nps_node_t NPSGenNode2(uint32_t code, nps_node_t op1, nps_node_t op2)
 
 
 /*------------------------------------------------------------------------*/
-/** ˆø”‚P‚ÌƒIƒyƒŒ[ƒ^ƒm[ƒh‚ğì¬
+/** å¼•æ•°ï¼‘ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚¿ãƒãƒ¼ãƒ‰ã‚’ä½œæˆ
  *
- * @param op		[in] ƒIƒyƒR[ƒh
- * @param op1		[in] ˆø”‚P
+ * @param op		[in] ã‚ªãƒšã‚³ãƒ¼ãƒ‰
+ * @param op1		[in] å¼•æ•°ï¼‘
  *
- * @return			ƒm[ƒh
+ * @return			ãƒãƒ¼ãƒ‰
  */
 
 nps_node_t NPSGenOP1(uint32_t op, nps_node_t op1)
@@ -534,13 +534,13 @@ nps_node_t NPSGenOP1(uint32_t op, nps_node_t op1)
 
 
 /*------------------------------------------------------------------------*/
-/** ˆø”‚Q‚ÌƒIƒyƒŒ[ƒ^ƒm[ƒh‚ğì¬
+/** å¼•æ•°ï¼’ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚¿ãƒãƒ¼ãƒ‰ã‚’ä½œæˆ
  *
- * @param op		[in] ƒIƒyƒR[ƒh
- * @param op1		[in] ˆø”‚P
- * @param op2		[in] ˆø”‚Q
+ * @param op		[in] ã‚ªãƒšã‚³ãƒ¼ãƒ‰
+ * @param op1		[in] å¼•æ•°ï¼‘
+ * @param op2		[in] å¼•æ•°ï¼’
  *
- * @return			ƒm[ƒh
+ * @return			ãƒãƒ¼ãƒ‰
  */
 
 nps_node_t NPSGenOP2(uint32_t op, nps_node_t op1, nps_node_t op2)
@@ -627,14 +627,14 @@ nps_node_t NPSGenOP2(uint32_t op, nps_node_t op1, nps_node_t op2)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒƒbƒZ[ƒW‘—M‚ÌƒIƒyƒm[ƒh‚ğì¬
+/** ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸é€ä¿¡ã®ã‚ªãƒšãƒãƒ¼ãƒ‰ã‚’ä½œæˆ
  *
- * @param receiver	[in] ƒŒƒV[ƒo
- * @param op		[in] ƒIƒyƒR[ƒh
- * @param msg		[in] ƒƒbƒZ[ƒW
- * @param args		[in] ƒƒbƒZ[ƒW‚Ìˆø”
+ * @param receiver	[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param op		[in] ã‚ªãƒšã‚³ãƒ¼ãƒ‰
+ * @param msg		[in] ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
+ * @param args		[in] ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®å¼•æ•°
  *
- * @return			ƒm[ƒh
+ * @return			ãƒãƒ¼ãƒ‰
  */
 
 nps_node_t NPSGenSend(nps_node_t receiver,
@@ -650,13 +650,13 @@ nps_node_t NPSGenSend(nps_node_t receiver,
 
 
 /*------------------------------------------------------------------------*/
-/** ƒƒbƒZ[ƒWÄ‘—M‚ÌƒIƒyƒm[ƒh‚ğì¬
+/** ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å†é€ä¿¡ã®ã‚ªãƒšãƒãƒ¼ãƒ‰ã‚’ä½œæˆ
  *
- * @param op		[in] ƒIƒyƒR[ƒh
- * @param msg		[in] ƒƒbƒZ[ƒW
- * @param args		[in] ƒƒbƒZ[ƒW‚Ìˆø”
+ * @param op		[in] ã‚ªãƒšã‚³ãƒ¼ãƒ‰
+ * @param msg		[in] ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
+ * @param args		[in] ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®å¼•æ•°
  *
- * @return			ƒm[ƒh
+ * @return			ãƒãƒ¼ãƒ‰
  */
 
 nps_node_t NPSGenResend(uint32_t op, nps_node_t msg, nps_node_t args)
@@ -668,13 +668,13 @@ nps_node_t NPSGenResend(uint32_t op, nps_node_t msg, nps_node_t args)
 
 
 //--------------------------------------------------------------------------
-/** ğŒ•¶‚ÌƒIƒyƒm[ƒh‚ğì¬
+/** æ¡ä»¶æ–‡ã®ã‚ªãƒšãƒãƒ¼ãƒ‰ã‚’ä½œæˆ
  *
- * @param cond		[in] ğŒ®
- * @param ifthen	[in] THEN ®
- * @param ifelse	[in] ELSE ®
+ * @param cond		[in] æ¡ä»¶å¼
+ * @param ifthen	[in] THEN å¼
+ * @param ifelse	[in] ELSE å¼
  *
- * @return			ƒm[ƒh
+ * @return			ãƒãƒ¼ãƒ‰
  */
 
 nps_node_t NPSGenIfThenElse(nps_node_t cond, nps_node_t ifthen, nps_node_t ifelse)
@@ -697,15 +697,15 @@ nps_node_t NPSGenIfThenElse(nps_node_t cond, nps_node_t ifthen, nps_node_t ifels
 
 
 //--------------------------------------------------------------------------
-/** FOR •¶‚ÌƒIƒyƒm[ƒh‚ğì¬
+/** FOR æ–‡ã®ã‚ªãƒšãƒãƒ¼ãƒ‰ã‚’ä½œæˆ
  *
- * @param index		[in] ƒCƒ“ƒfƒbƒNƒX•Ï”
- * @param v			[in] ‰Šú’l
- * @param to		[in] I—¹’l
- * @param by		[in] ƒXƒeƒbƒv’l
- * @param expr		[in] ŒJ‚è•Ô‚µ®
+ * @param index		[in] ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹å¤‰æ•°
+ * @param v			[in] åˆæœŸå€¤
+ * @param to		[in] çµ‚äº†å€¤
+ * @param by		[in] ã‚¹ãƒ†ãƒƒãƒ—å€¤
+ * @param expr		[in] ç¹°ã‚Šè¿”ã—å¼
  *
- * @return			ƒm[ƒh
+ * @return			ãƒãƒ¼ãƒ‰
  */
 
 nps_node_t NPSGenForLoop(nps_node_t index, nps_node_t v,
@@ -724,16 +724,16 @@ nps_node_t NPSGenForLoop(nps_node_t index, nps_node_t v,
 
 
 //--------------------------------------------------------------------------
-/** FOREACH •¶‚ÌƒIƒyƒm[ƒh‚ğì¬
+/** FOREACH æ–‡ã®ã‚ªãƒšãƒãƒ¼ãƒ‰ã‚’ä½œæˆ
  *
- * @param index		[in] ƒCƒ“ƒfƒbƒNƒX•Ï”
- * @param val		[in] ’l‚ğŠi”[‚·‚é•Ï”
- * @param obj		[in] ƒ‹[ƒv‚Ì‘ÎÛ‚Æ‚È‚éƒIƒuƒWƒFƒNƒg
- * @param deeply	[in] deeply ƒtƒ‰ƒO
- * @param op		[in] ƒIƒyƒŒ[ƒVƒ‡ƒ“í•ÊiDO or COLLECTj
- * @param expr		[in] ŒJ‚è•Ô‚µ®
+ * @param index		[in] ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹å¤‰æ•°
+ * @param val		[in] å€¤ã‚’æ ¼ç´ã™ã‚‹å¤‰æ•°
+ * @param obj		[in] ãƒ«ãƒ¼ãƒ—ã®å¯¾è±¡ã¨ãªã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param deeply	[in] deeply ãƒ•ãƒ©ã‚°
+ * @param op		[in] ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ç¨®åˆ¥ï¼ˆDO or COLLECTï¼‰
+ * @param expr		[in] ç¹°ã‚Šè¿”ã—å¼
  *
- * @return			ƒm[ƒh
+ * @return			ãƒãƒ¼ãƒ‰
  */
 
 nps_node_t NPSGenForeach(nps_node_t index, nps_node_t val, nps_node_t obj,
@@ -753,13 +753,13 @@ nps_node_t NPSGenForeach(nps_node_t index, nps_node_t val, nps_node_t obj,
 
 
 //--------------------------------------------------------------------------
-/** ƒOƒ[ƒoƒ‹ŠÖ”‚ÌƒIƒyƒm[ƒh‚ğì¬
+/** ã‚°ãƒ­ãƒ¼ãƒãƒ«é–¢æ•°ã®ã‚ªãƒšãƒãƒ¼ãƒ‰ã‚’ä½œæˆ
  *
- * @param name		[in] ŠÖ”–¼
- * @param args		[in] ŠÖ”‚Ìˆø”
- * @param expr		[in] Às®
+ * @param name		[in] é–¢æ•°å
+ * @param args		[in] é–¢æ•°ã®å¼•æ•°
+ * @param expr		[in] å®Ÿè¡Œå¼
  *
- * @return			ƒm[ƒh
+ * @return			ãƒãƒ¼ãƒ‰
  */
 
 nps_node_t NPSGenGlobalFn(nps_node_t name, nps_node_t args, nps_node_t expr)
@@ -773,12 +773,12 @@ nps_node_t NPSGenGlobalFn(nps_node_t name, nps_node_t args, nps_node_t expr)
 
 #pragma mark -
 //--------------------------------------------------------------------------
-/** QÆƒpƒXƒIƒuƒWƒFƒNƒg‚Ìì¬
+/** å‚ç…§ãƒ‘ã‚¹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ä½œæˆ
  *
- * @param sym1		[in] ƒVƒ“ƒ{ƒ‹‚P
- * @param sym2		[in] ƒVƒ“ƒ{ƒ‹‚Q
+ * @param sym1		[in] ã‚·ãƒ³ãƒœãƒ«ï¼‘
+ * @param sym2		[in] ã‚·ãƒ³ãƒœãƒ«ï¼’
  *
- * @return			QÆƒpƒXƒIƒuƒWƒFƒNƒg
+ * @return			å‚ç…§ãƒ‘ã‚¹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NPSMakePathExpr(newtRefArg sym1, newtRefArg sym2)
@@ -794,11 +794,11 @@ newtRef NPSMakePathExpr(newtRefArg sym1, newtRefArg sym2)
 
 
 //--------------------------------------------------------------------------
-/** ”z—ñƒIƒuƒWƒFƒNƒg‚Ìì¬
+/** é…åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ä½œæˆ
  *
- * @param v			[in] ‰Šú’l
+ * @param v			[in] åˆæœŸå€¤
  *
- * @return			”z—ñƒIƒuƒWƒFƒNƒg
+ * @return			é…åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NPSMakeArray(newtRefArg v)
@@ -820,12 +820,12 @@ newtRef NPSMakeArray(newtRefArg v)
 
 
 //--------------------------------------------------------------------------
-/** ”z—ñƒIƒuƒWƒFƒNƒg‚ÌÅŒã‚ÉƒIƒuƒWƒFƒNƒg‚ğ’Ç‰Á‚·‚é
+/** é…åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æœ€å¾Œã«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’è¿½åŠ ã™ã‚‹
  *
- * @param r			[in] ”z—ñƒIƒuƒWƒFƒNƒg
- * @param v			[in] ’Ç‰Á‚·‚éƒIƒuƒWƒFƒNƒg
+ * @param r			[in] é…åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param v			[in] è¿½åŠ ã™ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			”z—ñƒIƒuƒWƒFƒNƒg
+ * @return			é…åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NPSAddArraySlot(newtRefArg r, newtRefArg v)
@@ -836,13 +836,13 @@ newtRef NPSAddArraySlot(newtRefArg r, newtRefArg v)
 
 
 //--------------------------------------------------------------------------
-/** ”z—ñƒIƒuƒWƒFƒNƒg‚ÌƒIƒuƒWƒFƒNƒg‚ğ‘}“ü‚·‚é
+/** é…åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æŒ¿å…¥ã™ã‚‹
  *
- * @param r			[in] ”z—ñƒIƒuƒWƒFƒNƒg
- * @param p			[in] ‘}“ü‚·‚éˆÊ’u
- * @param v			[in] ‘}“ü‚éƒIƒuƒWƒFƒNƒg
+ * @param r			[in] é…åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param p			[in] æŒ¿å…¥ã™ã‚‹ä½ç½®
+ * @param v			[in] æŒ¿å…¥ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			”z—ñƒIƒuƒWƒFƒNƒg
+ * @return			é…åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NPSInsertArraySlot(newtRefArg r, uint32_t p, newtRefArg v)
@@ -854,11 +854,11 @@ newtRef NPSInsertArraySlot(newtRefArg r, uint32_t p, newtRefArg v)
 
 
 //--------------------------------------------------------------------------
-/** ƒtƒŒ[ƒ€ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg‚Ìì¬
+/** ãƒ•ãƒ¬ãƒ¼ãƒ ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ä½œæˆ
  *
- * @param v			[in] ‰Šú’l
+ * @param v			[in] åˆæœŸå€¤
  *
- * @return			ƒtƒŒ[ƒ€ƒ}ƒbƒvƒIƒuƒWƒFƒNƒg
+ * @return			ãƒ•ãƒ¬ãƒ¼ãƒ ãƒãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NPSMakeMap(newtRefArg v)
@@ -880,12 +880,12 @@ newtRef NPSMakeMap(newtRefArg v)
 
 
 //--------------------------------------------------------------------------
-/** ƒtƒŒ[ƒ€ƒIƒuƒWƒFƒNƒg‚Ìì¬
+/** ãƒ•ãƒ¬ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ä½œæˆ
  *
- * @param slot		[in] ƒXƒƒbƒgƒVƒ“ƒ{ƒ‹
- * @param v			[in] ‰Šú’l
+ * @param slot		[in] ã‚¹ãƒ­ãƒƒãƒˆã‚·ãƒ³ãƒœãƒ«
+ * @param v			[in] åˆæœŸå€¤
  *
- * @return			ƒtƒŒ[ƒ€ƒIƒuƒWƒFƒNƒg
+ * @return			ãƒ•ãƒ¬ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NPSMakeFrame(newtRefArg slot, newtRefArg v)
@@ -908,13 +908,13 @@ newtRef NPSMakeFrame(newtRefArg slot, newtRefArg v)
 
 
 //--------------------------------------------------------------------------
-/** ƒtƒŒ[ƒ€‚ÌƒXƒƒbƒg‚ÉƒIƒuƒWƒFƒNƒg‚ğƒZƒbƒg‚·‚é
+/** ãƒ•ãƒ¬ãƒ¼ãƒ ã®ã‚¹ãƒ­ãƒƒãƒˆã«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ã‚»ãƒƒãƒˆã™ã‚‹
  *
- * @param r			[in] ƒtƒŒ[ƒ€ƒIƒuƒWƒFƒNƒg
- * @param slot		[in] ƒXƒƒbƒgƒVƒ“ƒ{ƒ‹
- * @param v			[in] ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ãƒ•ãƒ¬ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param slot		[in] ã‚¹ãƒ­ãƒƒãƒˆã‚·ãƒ³ãƒœãƒ«
+ * @param v			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			ƒtƒŒ[ƒ€ƒIƒuƒWƒFƒNƒg
+ * @return			ãƒ•ãƒ¬ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NPSSetSlot(newtRefArg r, newtRefArg slot, newtRefArg v)
@@ -925,11 +925,11 @@ newtRef NPSSetSlot(newtRefArg r, newtRefArg slot, newtRefArg v)
 
 
 //--------------------------------------------------------------------------
-/** ƒoƒCƒiƒŠƒIƒuƒWƒFƒNƒg‚Ìì¬
+/** ãƒã‚¤ãƒŠãƒªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ä½œæˆ
  *
- * @param v			[in] ‰Šú’l
+ * @param v			[in] åˆæœŸå€¤
  *
- * @return			ƒoƒCƒiƒŠƒIƒuƒWƒFƒNƒg
+ * @return			ãƒã‚¤ãƒŠãƒªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NPSMakeBinary(newtRefArg v)
@@ -957,12 +957,12 @@ newtRef NPSMakeBinary(newtRefArg v)
 
 
 //--------------------------------------------------------------------------
-/** ƒoƒCƒiƒŠƒIƒuƒWƒFƒNƒg‚ÌÅŒã‚Éƒf[ƒ^‚ğ’Ç‰Á
+/** ãƒã‚¤ãƒŠãƒªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æœ€å¾Œã«ãƒ‡ãƒ¼ã‚¿ã‚’è¿½åŠ 
  *
- * @param r			[in] ƒoƒCƒiƒŠƒIƒuƒWƒFƒNƒg
- * @param v			[in] ’Ç‰Á‚·‚éƒf[ƒ^
+ * @param r			[in] ãƒã‚¤ãƒŠãƒªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param v			[in] è¿½åŠ ã™ã‚‹ãƒ‡ãƒ¼ã‚¿
  *
- * @return			ƒoƒCƒiƒŠƒIƒuƒWƒFƒNƒg
+ * @return			ãƒã‚¤ãƒŠãƒªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NPSAddARef(newtRefArg r, newtRefArg v)
@@ -979,12 +979,12 @@ newtRef NPSAddARef(newtRefArg r, newtRefArg v)
 
 #pragma mark -
 //--------------------------------------------------------------------------
-/** ƒGƒ‰[ƒƒbƒZ[ƒW‚Ì•\¦
+/** ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®è¡¨ç¤º
  *
- * @param c			[in] ƒGƒ‰[í•Ê
- * @param s			[in] ƒGƒ‰[ƒƒbƒZ[ƒW
+ * @param c			[in] ã‚¨ãƒ©ãƒ¼ç¨®åˆ¥
+ * @param s			[in] ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NPSErrorStr(char c, char * s)
@@ -1012,11 +1012,11 @@ void NPSErrorStr(char c, char * s)
 
 
 //--------------------------------------------------------------------------
-/** \•¶ƒGƒ‰[
+/** æ§‹æ–‡ã‚¨ãƒ©ãƒ¼
  *
- * @param err		[in] ƒGƒ‰[ƒR[ƒh
+ * @param err		[in] ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NPSError(int32_t err)

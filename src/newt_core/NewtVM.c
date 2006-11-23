@@ -10,7 +10,7 @@
  */
 
 
-/* ƒwƒbƒ_ƒtƒ@ƒCƒ‹ */
+/* ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ« */
 #include <stdlib.h>
 
 #include "NewtErrs.h"
@@ -28,44 +28,44 @@
 #include "NewtNSOF.h"
 
 
-/* Œ^éŒ¾ */
-typedef void(*instruction_t)(int16_t b);			///< –½—ßƒZƒbƒg
-typedef void(*simple_instruction_t)(void);			///< ƒVƒ“ƒvƒ‹–½—ß
-typedef newtRef(*nvm_func_t)();						///< ƒlƒCƒeƒBƒuŠÖ”
+/* å‹å®£è¨€ */
+typedef void(*instruction_t)(int16_t b);			///< å‘½ä»¤ã‚»ãƒƒãƒˆ
+typedef void(*simple_instruction_t)(void);			///< ã‚·ãƒ³ãƒ—ãƒ«å‘½ä»¤
+typedef newtRef(*nvm_func_t)();						///< ãƒã‚¤ãƒ†ã‚£ãƒ–é–¢æ•°
 
 
-/* ƒOƒ[ƒoƒ‹•Ï” */
+/* ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•° */
 vm_env_t	vm_env;
 
 
 #pragma mark -
-/* ƒ}ƒNƒ */
+/* ãƒã‚¯ãƒ­ */
 
-#define START_LOCALARGS		3										///< ƒ[ƒJƒ‹ˆø”‚ÌŠJnˆÊ’u
+#define START_LOCALARGS		3										///< ãƒ­ãƒ¼ã‚«ãƒ«å¼•æ•°ã®é–‹å§‹ä½ç½®
 
 
-#define BC					(vm_env.bc)								///< ƒoƒCƒgƒR[ƒh
-#define BCLEN				(vm_env.bclen)							///<@ƒoƒCƒgƒR[ƒh’·
+#define BC					(vm_env.bc)								///< ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰
+#define BCLEN				(vm_env.bclen)							///<ã€€ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰é•·
 
-#define CALLSTACK			((vm_reg_t *)vm_env.callstack.stackp)   ///< ŒÄo‚µƒXƒ^ƒbƒN
-#define CALLSP				(vm_env.callstack.sp)					///< ŒÄo‚µƒXƒ^ƒbƒN‚ÌƒXƒ^ƒbƒNƒ|ƒCƒ“ƒ^
-#define EXCPSTACK			((vm_excp_t *)vm_env.excpstack.stackp)  ///< —áŠOƒXƒ^ƒbƒN
-#define EXCPSP				(vm_env.excpstack.sp)					///< —áŠOƒXƒ^ƒbƒN‚ÌƒXƒ^ƒbƒNƒ|ƒCƒ“ƒ^
-#define CURREXCP			(vm_env.currexcp)						///< Œ»İ‚Ì—áŠO
+#define CALLSTACK			((vm_reg_t *)vm_env.callstack.stackp)   ///< å‘¼å‡ºã—ã‚¹ã‚¿ãƒƒã‚¯
+#define CALLSP				(vm_env.callstack.sp)					///< å‘¼å‡ºã—ã‚¹ã‚¿ãƒƒã‚¯ã®ã‚¹ã‚¿ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿
+#define EXCPSTACK			((vm_excp_t *)vm_env.excpstack.stackp)  ///< ä¾‹å¤–ã‚¹ã‚¿ãƒƒã‚¯
+#define EXCPSP				(vm_env.excpstack.sp)					///< ä¾‹å¤–ã‚¹ã‚¿ãƒƒã‚¯ã®ã‚¹ã‚¿ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿
+#define CURREXCP			(vm_env.currexcp)						///< ç¾åœ¨ã®ä¾‹å¤–
 
-#define	REG					(vm_env.reg)							///< ƒŒƒWƒXƒ^
-#define STACK				((newtRef *)vm_env.stack.stackp)		///< ƒXƒ^ƒbƒN
+#define	REG					(vm_env.reg)							///< ãƒ¬ã‚¸ã‚¹ã‚¿
+#define STACK				((newtRef *)vm_env.stack.stackp)		///< ã‚¹ã‚¿ãƒƒã‚¯
 
-#define	FUNC				((REG).func)							///< Às’†‚ÌŠÖ”
-#define	PC					((REG).pc)								///< ƒvƒƒOƒ‰ƒ€ƒJƒEƒ“ƒ^
-#define	SP					((REG).sp)								///< ƒXƒ^ƒbƒNƒ|ƒCƒ“ƒ^
-#define	LOCALS				((REG).locals)							///< ƒ[ƒJƒ‹ƒtƒŒ[ƒ€
-#define	RCVR				((REG).rcvr)							///< ƒŒƒV[ƒo
-#define	IMPL				((REG).impl)							///< ƒCƒ“ƒvƒŠƒƒ“ƒ^
+#define	FUNC				((REG).func)							///< å®Ÿè¡Œä¸­ã®é–¢æ•°
+#define	PC					((REG).pc)								///< ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚«ã‚¦ãƒ³ã‚¿
+#define	SP					((REG).sp)								///< ã‚¹ã‚¿ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿
+#define	LOCALS				((REG).locals)							///< ãƒ­ãƒ¼ã‚«ãƒ«ãƒ•ãƒ¬ãƒ¼ãƒ 
+#define	RCVR				((REG).rcvr)							///< ãƒ¬ã‚·ãƒ¼ãƒ
+#define	IMPL				((REG).impl)							///< ã‚¤ãƒ³ãƒ—ãƒªãƒ¡ãƒ³ã‚¿
 
 
 #pragma mark -
-/* ŠÖ”ƒvƒƒgƒ^ƒCƒv */
+/* é–¢æ•°ãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ— */
 
 static newtErr		NVMGetExceptionErrCode(newtRefArg r, bool dump);
 static newtRef		NVMMakeExceptionFrame(newtRefArg name, newtRefArg data);
@@ -192,9 +192,9 @@ static void			NVMLoop(uint32_t callsp);
 static newtRef		NVMInterpret2(nps_syntax_node_t * stree, uint32_t numStree, newtErr * errP);
 
 
-/* ƒ[ƒJƒ‹•Ï” */
+/* ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•° */
 
-/// ƒVƒ“ƒvƒ‹–½—ßƒe[ƒuƒ‹
+/// ã‚·ãƒ³ãƒ—ãƒ«å‘½ä»¤ãƒ†ãƒ¼ãƒ–ãƒ«
 static simple_instruction_t	simple_instructions[] =
             {
                 si_pop,				// 000 pop
@@ -208,7 +208,7 @@ static simple_instruction_t	simple_instructions[] =
             };
 
 
-/// ŠÖ”–½—ßƒe[ƒuƒ‹
+/// é–¢æ•°å‘½ä»¤ãƒ†ãƒ¼ãƒ–ãƒ«
 static simple_instruction_t	fn_instructions[] =
             {
                 fn_add,					//  0 add				|+|
@@ -238,7 +238,7 @@ static simple_instruction_t	fn_instructions[] =
                 fn_classof				// 24 class-of			ClassOf
             };
 
-/// –½—ßƒZƒbƒgƒe[ƒuƒ‹
+/// å‘½ä»¤ã‚»ãƒƒãƒˆãƒ†ãƒ¼ãƒ–ãƒ«
 static instruction_t	is_instructions[] =
             {
                 is_simple_instructions,		// 00x simple instructions
@@ -269,7 +269,7 @@ static instruction_t	is_instructions[] =
                 is_new_handlers				// 31x new-handlers
             };
 
-/// ƒVƒ“ƒvƒ‹–½—ß–¼ƒe[ƒuƒ‹
+/// ã‚·ãƒ³ãƒ—ãƒ«å‘½ä»¤åãƒ†ãƒ¼ãƒ–ãƒ«
 static char *	simple_instruction_names[] =
             {
                 "pop",				// 000 pop
@@ -282,7 +282,7 @@ static char *	simple_instruction_names[] =
                 "pop-handlers"		// 007 000 001 pop-handlers
             };
 
-/// ŠÖ”–½—ß–¼ƒe[ƒuƒ‹
+/// é–¢æ•°å‘½ä»¤åãƒ†ãƒ¼ãƒ–ãƒ«
 static char *	fn_instruction_names[] =
             {
                 "add",				//  0 add		|+|
@@ -312,7 +312,7 @@ static char *	fn_instruction_names[] =
                 "class-of"			// 24 class-of		ClassOf
             };
 
-/// –½—ßƒZƒbƒg–¼ƒe[ƒuƒ‹
+/// å‘½ä»¤ã‚»ãƒƒãƒˆåãƒ†ãƒ¼ãƒ–ãƒ«
 static char *	vm_instruction_names[] =
             {
                 "simple-instructions",		// 00x simple instructions
@@ -346,7 +346,7 @@ static char *	vm_instruction_names[] =
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** self ‚ğæ“¾
+/** self ã‚’å–å¾—
  *
  * @return			self
  */
@@ -358,9 +358,9 @@ newtRef NVMSelf(void)
 
 
 /*------------------------------------------------------------------------*/
-/** Œ»İ‚ÌŠÖ”ƒIƒuƒWƒFƒNƒg‚ğæ“¾‚·‚é
+/** ç¾åœ¨ã®é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å–å¾—ã™ã‚‹
  *
- * @return		Œ»İ‚ÌŠÖ”ƒIƒuƒWƒFƒNƒg
+ * @return		ç¾åœ¨ã®é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 newtRef NVMCurrentFunction(void)
 {
@@ -369,9 +369,9 @@ newtRef NVMCurrentFunction(void)
 
 
 /*------------------------------------------------------------------------*/
-/** Œ»İ‚ÌƒCƒ“ƒvƒŠƒƒ“ƒ^‚ğæ“¾‚·‚é 
+/** ç¾åœ¨ã®ã‚¤ãƒ³ãƒ—ãƒªãƒ¡ãƒ³ã‚¿ã‚’å–å¾—ã™ã‚‹ 
  *
- * @return		Œ»İ‚ÌƒCƒ“ƒvƒŠƒƒ“ƒ^
+ * @return		ç¾åœ¨ã®ã‚¤ãƒ³ãƒ—ãƒªãƒ¡ãƒ³ã‚¿
  */
 newtRef NVMCurrentImplementor(void)
 {
@@ -380,12 +380,12 @@ newtRef NVMCurrentImplementor(void)
 
 
 /*------------------------------------------------------------------------*/
-/** •Ï”‚Ì‘¶İƒ`ƒFƒbƒN
+/** å¤‰æ•°ã®å­˜åœ¨ãƒã‚§ãƒƒã‚¯
  *
- * @param name		[in] •Ï”ƒVƒ“ƒ{ƒ‹
+ * @param name		[in] å¤‰æ•°ã‚·ãƒ³ãƒœãƒ«
  *
- * @retval			true		•Ï”‚ª‘¶İ‚·‚é
- * @retval			false		•Ï”‚ª‘¶İ‚µ‚È‚¢
+ * @retval			true		å¤‰æ•°ãŒå­˜åœ¨ã™ã‚‹
+ * @retval			false		å¤‰æ•°ãŒå­˜åœ¨ã—ãªã„
  */
 
 bool NVMHasVar(newtRefArg name)
@@ -404,12 +404,12 @@ bool NVMHasVar(newtRefArg name)
 
 
 /*------------------------------------------------------------------------*/
-/** —áŠOƒtƒŒ[ƒ€‚©‚çƒGƒ‰[ƒR[ƒh‚ğæ“¾‚·‚é
+/** ä¾‹å¤–ãƒ•ãƒ¬ãƒ¼ãƒ ã‹ã‚‰ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰ã‚’å–å¾—ã™ã‚‹
  *
- * @param r		[in] •Ï”ƒVƒ“ƒ{ƒ‹
- * @param dump	[in] ƒ_ƒ“ƒvƒtƒ‰ƒO
+ * @param r		[in] å¤‰æ•°ã‚·ãƒ³ãƒœãƒ«
+ * @param dump	[in] ãƒ€ãƒ³ãƒ—ãƒ•ãƒ©ã‚°
  *
- * @return		ƒGƒ‰[ƒR[ƒh
+ * @return		ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  */
 
 newtErr NVMGetExceptionErrCode(newtRefArg r, bool dump)
@@ -432,12 +432,12 @@ newtErr NVMGetExceptionErrCode(newtRefArg r, bool dump)
 
 
 /*------------------------------------------------------------------------*/
-/** —áŠOƒtƒŒ[ƒ€‚ğì¬‚·‚é
+/** ä¾‹å¤–ãƒ•ãƒ¬ãƒ¼ãƒ ã‚’ä½œæˆã™ã‚‹
  *
- * @param name	[in] ƒVƒ“ƒ{ƒ‹
- * @param data	[in] ƒf[ƒ^
+ * @param name	[in] ã‚·ãƒ³ãƒœãƒ«
+ * @param data	[in] ãƒ‡ãƒ¼ã‚¿
  *
- * @return		—áŠOƒtƒŒ[ƒ€
+ * @return		ä¾‹å¤–ãƒ•ãƒ¬ãƒ¼ãƒ 
  */
 
 newtRef NVMMakeExceptionFrame(newtRefArg name, newtRefArg data)
@@ -459,12 +459,12 @@ newtRef NVMMakeExceptionFrame(newtRefArg name, newtRefArg data)
 
 
 /*------------------------------------------------------------------------*/
-/** —áŠO‚ğ”­¶‚³‚¹‚é
+/** ä¾‹å¤–ã‚’ç™ºç”Ÿã•ã›ã‚‹
  *
- * @param name	[in] ƒVƒ“ƒ{ƒ‹
- * @param data	[in] —áŠOƒtƒŒ[ƒ€
+ * @param name	[in] ã‚·ãƒ³ãƒœãƒ«
+ * @param data	[in] ä¾‹å¤–ãƒ•ãƒ¬ãƒ¼ãƒ 
  *
- * @return		‚È‚µ
+ * @return		ãªã—
  */
 
 void NVMThrowData(newtRefArg name, newtRefArg data)
@@ -472,7 +472,7 @@ void NVMThrowData(newtRefArg name, newtRefArg data)
     vm_excp_t *	excp;
     uint32_t	i;
 
-	// —áŠOˆ—’†‚È‚çƒNƒŠƒA‚·‚é
+	// ä¾‹å¤–å‡¦ç†ä¸­ãªã‚‰ã‚¯ãƒªã‚¢ã™ã‚‹
 	NVMClearCurrException();
 
     CURREXCP = data;
@@ -494,12 +494,12 @@ void NVMThrowData(newtRefArg name, newtRefArg data)
 
 
 /*------------------------------------------------------------------------*/
-/** —áŠO‚ğ”­¶‚³‚¹‚é
+/** ä¾‹å¤–ã‚’ç™ºç”Ÿã•ã›ã‚‹
  *
- * @param name	[in] ƒVƒ“ƒ{ƒ‹
- * @param data	[in] ƒf[ƒ^
+ * @param name	[in] ã‚·ãƒ³ãƒœãƒ«
+ * @param data	[in] ãƒ‡ãƒ¼ã‚¿
  *
- * @return		‚È‚µ
+ * @return		ãªã—
  */
 
 void NVMThrow(newtRefArg name, newtRefArg data)
@@ -512,9 +512,9 @@ void NVMThrow(newtRefArg name, newtRefArg data)
 
 
 /*------------------------------------------------------------------------*/
-/** rethrow ‚·‚é
+/** rethrow ã™ã‚‹
  *
- * @return		‚È‚µ
+ * @return		ãªã—
  */
 
 void NVMRethrow(void)
@@ -534,9 +534,9 @@ void NVMRethrow(void)
 
 
 /*------------------------------------------------------------------------*/
-/** Œ»İ‚Ì—áŠO‚ğæ“¾‚·‚é
+/** ç¾åœ¨ã®ä¾‹å¤–ã‚’å–å¾—ã™ã‚‹
  *
- * @return		—áŠOƒtƒŒ[ƒ€
+ * @return		ä¾‹å¤–ãƒ•ãƒ¬ãƒ¼ãƒ 
  */
 
 newtRef NVMCurrentException(void)
@@ -546,9 +546,9 @@ newtRef NVMCurrentException(void)
 
 
 /*------------------------------------------------------------------------*/
-/** —áŠO‚ª”­¶‚µ‚Ä‚¢‚½‚ç—áŠOƒXƒ^ƒbƒN‚ğƒNƒŠƒA‚·‚é
+/** ä¾‹å¤–ãŒç™ºç”Ÿã—ã¦ã„ãŸã‚‰ä¾‹å¤–ã‚¹ã‚¿ãƒƒã‚¯ã‚’ã‚¯ãƒªã‚¢ã™ã‚‹
  *
- * @return		‚È‚µ
+ * @return		ãªã—
  */
 
 void NVMClearCurrException(void)
@@ -562,11 +562,11 @@ void NVMClearCurrException(void)
 
 
 /*------------------------------------------------------------------------*/
-/** Œ»İ‚Ì—áŠO‚ğƒNƒŠƒA‚·‚é
+/** ç¾åœ¨ã®ä¾‹å¤–ã‚’ã‚¯ãƒªã‚¢ã™ã‚‹
  *
- * @return		‚È‚µ
+ * @return		ãªã—
  *
- * @note		ƒlƒCƒeƒBƒuŠÖ”‚Å—áŠOˆ—‚ğs‚¤‚½‚ß‚Ég—p
+ * @note		ãƒã‚¤ãƒ†ã‚£ãƒ–é–¢æ•°ã§ä¾‹å¤–å‡¦ç†ã‚’è¡Œã†ãŸã‚ã«ä½¿ç”¨
  */
 
 void NVMClearException(void)
@@ -577,11 +577,11 @@ void NVMClearException(void)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ŠÖ”ƒIƒuƒWƒFƒNƒg‚ğŒ»İ‚ÌÀsŠÖ”‚É‚·‚é
+/** é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç¾åœ¨ã®å®Ÿè¡Œé–¢æ•°ã«ã™ã‚‹
  *
- * @param fn	[in] ŠÖ”ƒIƒuƒWƒFƒNƒg
+ * @param fn	[in] é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return		‚È‚µ
+ * @return		ãªã—
  */
 
 void NVMSetFn(newtRefArg fn)
@@ -605,9 +605,9 @@ void NVMSetFn(newtRefArg fn)
 
 
 /*------------------------------------------------------------------------*/
-/** –ß‚éŠÖ”ƒXƒ^ƒbƒN‚ª‚È‚¢ê‡‚Ìˆ—
+/** æˆ»ã‚‹é–¢æ•°ã‚¹ã‚¿ãƒƒã‚¯ãŒãªã„å ´åˆã®å‡¦ç†
  *
- * @return		‚È‚µ
+ * @return		ãªã—
  */
 
 void NVMNoStackFrameForReturn(void)
@@ -618,13 +618,13 @@ void NVMNoStackFrameForReturn(void)
 }
 
 
-#pragma mark *** ŒÄo‚µƒXƒ^ƒbƒN
+#pragma mark *** å‘¼å‡ºã—ã‚¹ã‚¿ãƒƒã‚¯
 /*------------------------------------------------------------------------*/
-/** ƒŒƒWƒXƒ^‚ÌŠª‚«–ß‚µ
+/** ãƒ¬ã‚¸ã‚¹ã‚¿ã®å·»ãæˆ»ã—
  *
- * @param sp	[in] ŒÄo‚µƒXƒ^ƒbƒN‚ÌƒXƒ^ƒbƒNƒ|ƒCƒ“ƒ^
+ * @param sp	[in] å‘¼å‡ºã—ã‚¹ã‚¿ãƒƒã‚¯ã®ã‚¹ã‚¿ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿
  *
- * @return		‚È‚µ
+ * @return		ãªã—
  */
 
 void reg_rewind(int32_t sp)
@@ -646,9 +646,9 @@ void reg_rewind(int32_t sp)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒŒƒWƒXƒ^‚Ìƒ|ƒbƒv
+/** ãƒ¬ã‚¸ã‚¹ã‚¿ã®ãƒãƒƒãƒ—
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void reg_pop(void)
@@ -658,11 +658,11 @@ void reg_pop(void)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒŒƒWƒXƒ^‚ÌƒvƒbƒVƒ…
+/** ãƒ¬ã‚¸ã‚¹ã‚¿ã®ãƒ—ãƒƒã‚·ãƒ¥
  *
- * @param sp		[in] ƒXƒ^ƒbƒNƒ|ƒCƒ“ƒ^
+ * @param sp		[in] ã‚¹ã‚¿ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void reg_push(int32_t sp)
@@ -677,11 +677,11 @@ void reg_push(int32_t sp)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒŒƒWƒXƒ^‚Ì•Û‘¶
+/** ãƒ¬ã‚¸ã‚¹ã‚¿ã®ä¿å­˜
  *
- * @param sp		[in] ƒXƒ^ƒbƒNƒ|ƒCƒ“ƒ^
+ * @param sp		[in] ã‚¹ã‚¿ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void reg_save(int32_t sp)
@@ -691,11 +691,11 @@ void reg_save(int32_t sp)
 }
 
 
-#pragma mark *** ƒXƒ^ƒbƒN
+#pragma mark *** ã‚¹ã‚¿ãƒƒã‚¯
 /*------------------------------------------------------------------------*/
-/** ƒXƒ^ƒbƒN‚Ìƒ|ƒbƒv
+/** ã‚¹ã‚¿ãƒƒã‚¯ã®ãƒãƒƒãƒ—
  *
- * @return			ƒIƒuƒWƒFƒNƒg
+ * @return			ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef stk_pop0(void)
@@ -713,9 +713,9 @@ newtRef stk_pop0(void)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒXƒ^ƒbƒN‚Ìƒ|ƒbƒviƒ}ƒWƒbƒNƒ|ƒCƒ“ƒ^QÆ‚ğ‰ğŒˆj
+/** ã‚¹ã‚¿ãƒƒã‚¯ã®ãƒãƒƒãƒ—ï¼ˆãƒã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿å‚ç…§ã‚’è§£æ±ºï¼‰
  *
- * @return			ƒIƒuƒWƒFƒNƒg
+ * @return			ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef stk_pop(void)
@@ -725,12 +725,12 @@ newtRef stk_pop(void)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒXƒ^ƒbƒN‚ğ nŒÂƒ|ƒbƒv
+/** ã‚¹ã‚¿ãƒƒã‚¯ã‚’ nå€‹ãƒãƒƒãƒ—
  *
- * @param n			[in] ƒ|ƒbƒv‚·‚é”
- * @param a			[out]ƒ|ƒbƒv‚µ‚½ƒIƒuƒWƒFƒNƒg‚ğŠi”[‚·‚é”z—ñ
+ * @param n			[in] ãƒãƒƒãƒ—ã™ã‚‹æ•°
+ * @param a			[out]ãƒãƒƒãƒ—ã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æ ¼ç´ã™ã‚‹é…åˆ—
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void stk_pop_n(int32_t n, newtRef a[])
@@ -743,9 +743,9 @@ void stk_pop_n(int32_t n, newtRef a[])
 
 
 /*------------------------------------------------------------------------*/
-/** ƒXƒ^ƒbƒN‚ğ nŒÂíœ
+/** ã‚¹ã‚¿ãƒƒã‚¯ã‚’ nå€‹å‰Šé™¤
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void stk_remove(uint16_t n)
@@ -758,9 +758,9 @@ void stk_remove(uint16_t n)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒXƒ^ƒbƒN‚Ìæ“ªƒf[ƒ^‚ğæo‚·
+/** ã‚¹ã‚¿ãƒƒã‚¯ã®å…ˆé ­ãƒ‡ãƒ¼ã‚¿ã‚’å–å‡ºã™
  *
- * @return			ƒIƒuƒWƒFƒNƒg
+ * @return			ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef stk_top(void)
@@ -773,11 +773,11 @@ newtRef stk_top(void)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒXƒ^ƒbƒN‚ÉƒIƒuƒWƒFƒNƒg‚ğƒvƒbƒVƒ…
+/** ã‚¹ã‚¿ãƒƒã‚¯ã«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒ—ãƒƒã‚·ãƒ¥
  *
- * @param value		[in] ƒIƒuƒWƒFƒNƒg
+ * @param value		[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void stk_push(newtRefArg value)
@@ -790,15 +790,15 @@ void stk_push(newtRefArg value)
 }
 
 
-#pragma mark *** —áŠOƒnƒ“ƒhƒ‰ƒXƒ^ƒbƒN
+#pragma mark *** ä¾‹å¤–ãƒãƒ³ãƒ‰ãƒ©ã‚¹ã‚¿ãƒƒã‚¯
 /*------------------------------------------------------------------------*/
-/** —áŠOƒXƒ^ƒbƒN‚ÉƒvƒbƒVƒ…
+/** ä¾‹å¤–ã‚¹ã‚¿ãƒƒã‚¯ã«ãƒ—ãƒƒã‚·ãƒ¥
  *
- * @param sym		[in] —áŠOƒVƒ“ƒ{ƒ‹
- * @param pc		[in] ƒvƒƒOƒ‰ƒ€ƒJƒEƒ“ƒ^
+ * @param sym		[in] ä¾‹å¤–ã‚·ãƒ³ãƒœãƒ«
+ * @param pc		[in] ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚«ã‚¦ãƒ³ã‚¿
  *
- * @retval			true	ƒXƒ^ƒbƒN‚³‚ê‚½
- * @retval			false	ƒXƒ^ƒbƒN‚³‚ê‚È‚©‚Á‚½
+ * @retval			true	ã‚¹ã‚¿ãƒƒã‚¯ã•ã‚ŒãŸ
+ * @retval			false	ã‚¹ã‚¿ãƒƒã‚¯ã•ã‚Œãªã‹ã£ãŸ
  */
 
 bool excp_push(newtRefArg sym, newtRefArg pc)
@@ -827,9 +827,9 @@ bool excp_push(newtRefArg sym, newtRefArg pc)
 }
 
 /*------------------------------------------------------------------------*/
-/** —áŠOƒXƒ^ƒbƒN‚ğƒ|ƒbƒv
+/** ä¾‹å¤–ã‚¹ã‚¿ãƒƒã‚¯ã‚’ãƒãƒƒãƒ—
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void excp_pop(void)
@@ -839,9 +839,9 @@ void excp_pop(void)
 }
 
 /*------------------------------------------------------------------------*/
-/** —áŠOƒXƒ^ƒbƒN‚Ìæ“ª‚ğæ“¾
+/** ä¾‹å¤–ã‚¹ã‚¿ãƒƒã‚¯ã®å…ˆé ­ã‚’å–å¾—
  *
- * @return			—áŠO\‘¢‘Ì‚Ö‚Ìƒ|ƒCƒ“ƒ^
+ * @return			ä¾‹å¤–æ§‹é€ ä½“ã¸ã®ãƒã‚¤ãƒ³ã‚¿
  */
 
 vm_excp_t * excp_top(void)
@@ -854,9 +854,9 @@ vm_excp_t * excp_top(void)
 
 
 /*------------------------------------------------------------------------*/
-/** —áŠOƒnƒ“ƒhƒ‰‚ğƒ|ƒbƒv‚·‚é
+/** ä¾‹å¤–ãƒãƒ³ãƒ‰ãƒ©ã‚’ãƒãƒƒãƒ—ã™ã‚‹
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void excp_pop_handlers(void)
@@ -885,11 +885,11 @@ void excp_pop_handlers(void)
 
 #pragma mark *** Literals
 /*------------------------------------------------------------------------*/
-/** ƒŠƒeƒ‰ƒ‹‚ğæo‚·
+/** ãƒªãƒ†ãƒ©ãƒ«ã‚’å–å‡ºã™
  *
- * @param n			[in] ƒŠƒeƒ‰ƒ‹ƒŠƒXƒg‚ÌˆÊ’u
+ * @param n			[in] ãƒªãƒ†ãƒ©ãƒ«ãƒªã‚¹ãƒˆã®ä½ç½®
  *
- * @return			ƒŠƒeƒ‰ƒ‹ƒIƒuƒWƒFƒNƒg
+ * @return			ãƒªãƒ†ãƒ©ãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef liter_get(int16_t n)
@@ -907,12 +907,12 @@ newtRef liter_get(int16_t n)
 
 #pragma mark *** Iterator
 /*------------------------------------------------------------------------*/
-/** ƒCƒeƒŒ[ƒ^ƒIƒuƒWƒFƒNƒg‚ğì¬‚·‚é
+/** ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆã™ã‚‹
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
- * @param deeply	[in] deeply ƒtƒ‰ƒO
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param deeply	[in] deeply ãƒ•ãƒ©ã‚°
  *
- * @return			ƒCƒeƒŒ[ƒ^ƒIƒuƒWƒFƒNƒg
+ * @return			ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef iter_new(newtRefArg r, newtRefArg deeply)
@@ -943,11 +943,11 @@ newtRef iter_new(newtRefArg r, newtRefArg deeply)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒCƒeƒŒ[ƒ^‚ğŸ‚Éi‚ß‚é
+/** ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿ã‚’æ¬¡ã«é€²ã‚ã‚‹
  *
- * @param iter		[in] ƒCƒeƒŒ[ƒ^ƒIƒuƒWƒFƒNƒg
+ * @param iter		[in] ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void iter_next(newtRefArg iter)
@@ -1028,12 +1028,12 @@ void iter_next(newtRefArg iter)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒCƒeƒŒ[ƒ^‚ÌI—¹‚ğƒ`ƒFƒbƒN‚·‚é
+/** ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿ã®çµ‚äº†ã‚’ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param iter		[in] ƒCƒeƒŒ[ƒ^ƒIƒuƒWƒFƒNƒg
+ * @param iter		[in] ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @retval			true	I—¹
- * @retval			false	I—¹‚µ‚Ä‚¢‚È‚¢
+ * @retval			true	çµ‚äº†
+ * @retval			false	çµ‚äº†ã—ã¦ã„ãªã„
  */
 
 bool iter_done(newtRefArg iter)
@@ -1050,11 +1050,11 @@ bool iter_done(newtRefArg iter)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ˆø”‚ğƒXƒ^ƒbƒN‚©‚çæo‚µ‚Ä”z—ñ‚É‚·‚é
+/** å¼•æ•°ã‚’ã‚¹ã‚¿ãƒƒã‚¯ã‹ã‚‰å–å‡ºã—ã¦é…åˆ—ã«ã™ã‚‹
  *
- * @param numArgs	[in] ˆø”‚Ì”
+ * @param numArgs	[in] å¼•æ•°ã®æ•°
  *
- * @return			”z—ñ
+ * @return			é…åˆ—
  */
 
 newtRef NVMMakeArgsArray(uint16_t numArgs)
@@ -1074,11 +1074,11 @@ newtRef NVMMakeArgsArray(uint16_t numArgs)
 
 
 /*------------------------------------------------------------------------*/
-/** ˆø”‚ğƒXƒ^ƒbƒN‚©‚çæo‚µ‚Äƒ[ƒJƒ‹ƒtƒŒ[ƒ€‚É‘©”›‚·‚é
+/** å¼•æ•°ã‚’ã‚¹ã‚¿ãƒƒã‚¯ã‹ã‚‰å–å‡ºã—ã¦ãƒ­ãƒ¼ã‚«ãƒ«ãƒ•ãƒ¬ãƒ¼ãƒ ã«æŸç¸›ã™ã‚‹
  *
- * @param numArgs	[in] ˆø”‚Ì”
+ * @param numArgs	[in] å¼•æ•°ã®æ•°
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NVMBindArgs(uint16_t numArgs)
@@ -1108,14 +1108,14 @@ void NVMBindArgs(uint16_t numArgs)
 
 
 /*------------------------------------------------------------------------*/
-/** —áŠO‚ğ”­¶‚·‚é
+/** ä¾‹å¤–ã‚’ç™ºç”Ÿã™ã‚‹
  *
- * @param err		[in] ƒGƒ‰[”Ô†
- * @param value		[in] ’lƒIƒuƒWƒFƒNƒg
- * @param pop		[in] ƒ|ƒbƒv‚·‚é”
- * @param push		[in] ƒvƒbƒVƒ…‚Ì—L–³
+ * @param err		[in] ã‚¨ãƒ©ãƒ¼ç•ªå·
+ * @param value		[in] å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param pop		[in] ãƒãƒƒãƒ—ã™ã‚‹æ•°
+ * @param push		[in] ãƒ—ãƒƒã‚·ãƒ¥ã®æœ‰ç„¡
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NVMThrowBC(newtErr err, newtRefArg value, int16_t pop, bool push)
@@ -1133,13 +1133,13 @@ void NVMThrowBC(newtErr err, newtRefArg value, int16_t pop, bool push)
 
 
 /*------------------------------------------------------------------------*/
-/** ŠÖ”‚Ìˆø”‚Ì”‚ğƒ`ƒFƒbƒN‚·‚é
+/** é–¢æ•°ã®å¼•æ•°ã®æ•°ã‚’ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param fn		[in] ŠÖ”ƒIƒuƒWƒFƒNƒg
- * @param numArgs	[in] ˆø”‚Ì”
+ * @param fn		[in] é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param numArgs	[in] å¼•æ•°ã®æ•°
  *
- * @retval			true	³í
- * @retval			false	•s³
+ * @retval			true	æ­£å¸¸
+ * @retval			false	ä¸æ­£
  */
 
 bool NVMFuncCheckNumArgs(newtRefArg fn, int16_t numArgs)
@@ -1158,22 +1158,22 @@ bool NVMFuncCheckNumArgs(newtRefArg fn, int16_t numArgs)
 
 
 /*------------------------------------------------------------------------*/
-/** ŠÖ”ƒIƒuƒWƒFƒNƒg‚ğƒ`ƒFƒbƒN‚·‚é
+/** é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param fn		[in] ŠÖ”ƒIƒuƒWƒFƒNƒg
- * @param numArgs	[in] ˆø”‚Ì”
+ * @param fn		[in] é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param numArgs	[in] å¼•æ•°ã®æ•°
  *
- * @return			ƒGƒ‰[ƒR[ƒh
+ * @return			ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  */
 
 newtErr NVMFuncCheck(newtRefArg fn, int16_t numArgs)
 {
-    // 1. ŠÖ”ƒIƒuƒWƒFƒNƒg‚Å‚È‚¯‚ê‚Î—áŠO‚ğ”­¶
+    // 1. é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã§ãªã‘ã‚Œã°ä¾‹å¤–ã‚’ç™ºç”Ÿ
 
     if (! NewtRefIsFunction(fn))
         return kNErrInvalidFunc;
 
-    // 2. ˆø”‚Ì”‚ªˆê’v‚³‚È‚¯‚ê‚Î WrongNumberOfArgs —áŠO‚ğ”­¶
+    // 2. å¼•æ•°ã®æ•°ãŒä¸€è‡´ã•ãªã‘ã‚Œã° WrongNumberOfArgs ä¾‹å¤–ã‚’ç™ºç”Ÿ
 
     if (! NVMFuncCheckNumArgs(fn, numArgs))
         return kNErrWrongNumberOfArgs;
@@ -1183,12 +1183,12 @@ newtErr NVMFuncCheck(newtRefArg fn, int16_t numArgs)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒlƒCƒeƒBƒuŠÖ”ircvr‚È‚µj‚ÌŒÄo‚µ
+/** ãƒã‚¤ãƒ†ã‚£ãƒ–é–¢æ•°ï¼ˆrcvrãªã—ï¼‰ã®å‘¼å‡ºã—
  *
- * @param fn		[in] ŠÖ”ƒIƒuƒWƒFƒNƒg
- * @param numArgs	[in] ˆø”‚Ì”
+ * @param fn		[in] é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param numArgs	[in] å¼•æ•°ã®æ•°
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NVMCallNativeFn(newtRefArg fn, int16_t numArgs)
@@ -1406,13 +1406,13 @@ void NVMCallNativeFn(newtRefArg fn, int16_t numArgs)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒlƒCƒeƒBƒuŠÖ”ircvr‚ ‚èj‚ÌŒÄo‚µ
+/** ãƒã‚¤ãƒ†ã‚£ãƒ–é–¢æ•°ï¼ˆrcvrã‚ã‚Šï¼‰ã®å‘¼å‡ºã—
  *
- * @param fn		[in] ŠÖ”ƒIƒuƒWƒFƒNƒg
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param numArgs	[in] ˆø”‚Ì”
+ * @param fn		[in] é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param numArgs	[in] å¼•æ•°ã®æ•°
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NVMCallNativeFunc(newtRefArg fn, newtRefArg rcvr, int16_t numArgs)
@@ -1630,12 +1630,12 @@ void NVMCallNativeFunc(newtRefArg fn, newtRefArg rcvr, int16_t numArgs)
 
 
 /*------------------------------------------------------------------------*/
-/** ŠÖ”ƒIƒuƒWƒFƒNƒg‚ÌŒÄo‚µ
+/** é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å‘¼å‡ºã—
  *
- * @param fn		[in] ŠÖ”ƒIƒuƒWƒFƒNƒg
- * @param numArgs	[in] ˆø”‚Ì”
+ * @param fn		[in] é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param numArgs	[in] å¼•æ•°ã®æ•°
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NVMFuncCall(newtRefArg fn, int16_t numArgs)
@@ -1643,8 +1643,8 @@ void NVMFuncCall(newtRefArg fn, int16_t numArgs)
     newtErr	err;
 	int		type;
 
-    // 1. ŠÖ”ƒIƒuƒWƒFƒNƒg‚Å‚È‚¯‚ê‚Î—áŠO‚ğ”­¶
-    // 2. ˆø”‚Ì”‚ªˆê’v‚³‚È‚¯‚ê‚Î WrongNumberOfArgs —áŠO‚ğ”­¶
+    // 1. é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã§ãªã‘ã‚Œã°ä¾‹å¤–ã‚’ç™ºç”Ÿ
+    // 2. å¼•æ•°ã®æ•°ãŒä¸€è‡´ã•ãªã‘ã‚Œã° WrongNumberOfArgs ä¾‹å¤–ã‚’ç™ºç”Ÿ
 
     err = NVMFuncCheck(fn, numArgs);
 
@@ -1657,7 +1657,7 @@ void NVMFuncCall(newtRefArg fn, int16_t numArgs)
 	type = NewtRefFunctionType(fn);
 
     if (type == kNewtNativeFn || type == kNewtNativeFunc)
-    {	// ƒlƒCƒeƒBƒuŠÖ”‚ÌŒÄo‚µ
+    {	// ãƒã‚¤ãƒ†ã‚£ãƒ–é–¢æ•°ã®å‘¼å‡ºã—
     	// Save CALLSP to know if an exception occurred.
     	uint32_t saveCALLSP;
 		reg_save(SP - numArgs + 1);
@@ -1667,12 +1667,12 @@ void NVMFuncCall(newtRefArg fn, int16_t numArgs)
 		switch (type)
 		{
 			case kNewtNativeFn:
-				// rcvr‚È‚µ(old style)
+				// rcvrãªã—(old style)
 				NVMCallNativeFn(fn, numArgs);
 				break;
 
 			case kNewtNativeFunc:
-				// rcvr‚ ‚è(new style)
+				// rcvrã‚ã‚Š(new style)
 				NVMCallNativeFunc(fn, kNewtRefUnbind, numArgs);
 				break;
 		}
@@ -1684,36 +1684,36 @@ void NVMFuncCall(newtRefArg fn, int16_t numArgs)
         return;
     }
 
-    reg_save(SP - numArgs); // 3. VM ƒŒƒWƒXƒ^‚ğ•Û‘¶iPC ‚ÌXV‚Í...j
-    NVMSetFn(fn);			// 4. FUNC ‚ÉV‚µ‚¢ŠÖ”ƒIƒuƒWƒFƒNƒg‚ğƒZƒbƒg
-    PC = 0;					// 5. PC ‚É 0 ‚ğƒZƒbƒg
+    reg_save(SP - numArgs); // 3. VM ãƒ¬ã‚¸ã‚¹ã‚¿ã‚’ä¿å­˜ï¼ˆPC ã®æ›´æ–°ã¯...ï¼‰
+    NVMSetFn(fn);			// 4. FUNC ã«æ–°ã—ã„é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ã‚»ãƒƒãƒˆ
+    PC = 0;					// 5. PC ã« 0 ã‚’ã‚»ãƒƒãƒˆ
 
-    // 6. ƒ[ƒJƒ‹ƒtƒŒ[ƒ€iFUNC.argFramej‚ğƒNƒ[ƒ“‚µ‚Ä LOCALS ‚ÉƒZƒbƒg
+    // 6. ãƒ­ãƒ¼ã‚«ãƒ«ãƒ•ãƒ¬ãƒ¼ãƒ ï¼ˆFUNC.argFrameï¼‰ã‚’ã‚¯ãƒ­ãƒ¼ãƒ³ã—ã¦ LOCALS ã«ã‚»ãƒƒãƒˆ
     LOCALS = NcClone(NcGetSlot(FUNC, NSSYM0(argFrame)));
 
-    // 7. LOCALS ‚Ìˆø”ƒXƒƒbƒg‚ÉƒXƒ^ƒbƒN‚É‚ ‚éˆø”‚ğƒZƒbƒg‚·‚é
-    //    ˆø”‚Í LOCALS ‚Ì‚S”ÔƒXƒƒbƒg‚©‚çŠJn‚µ¶‚©‚ç‰E‚Ö‘}“ü‚³‚ê‚é
+    // 7. LOCALS ã®å¼•æ•°ã‚¹ãƒ­ãƒƒãƒˆã«ã‚¹ã‚¿ãƒƒã‚¯ã«ã‚ã‚‹å¼•æ•°ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
+    //    å¼•æ•°ã¯ LOCALS ã®ï¼”ç•ªã‚¹ãƒ­ãƒƒãƒˆã‹ã‚‰é–‹å§‹ã—å·¦ã‹ã‚‰å³ã¸æŒ¿å…¥ã•ã‚Œã‚‹
     NVMBindArgs(numArgs);
 
-    // 8. LOCALS ‚Ì _parent ƒXƒƒbƒg‚ğ RCVR ‚ÉƒZƒbƒg
+    // 8. LOCALS ã® _parent ã‚¹ãƒ­ãƒƒãƒˆã‚’ RCVR ã«ã‚»ãƒƒãƒˆ
     RCVR = NcGetSlot(LOCALS, NSSYM0(_parent));
 
-    // 9. LOCALS ‚Ì _implementor ƒXƒƒbƒg‚ğ IMPL ‚ÉƒZƒbƒg
+    // 9. LOCALS ã® _implementor ã‚¹ãƒ­ãƒƒãƒˆã‚’ IMPL ã«ã‚»ãƒƒãƒˆ
     IMPL = NcGetSlot(LOCALS, NSSYM0(_implementor));
 
-    // 10. Às‚ğƒŠƒWƒ…[ƒ€‚·‚é
+    // 10. å®Ÿè¡Œã‚’ãƒªã‚¸ãƒ¥ãƒ¼ãƒ ã™ã‚‹
 }
 
 
 /*------------------------------------------------------------------------*/
-/** ƒƒ\ƒbƒh‚Ì‘—M
+/** ãƒ¡ã‚½ãƒƒãƒ‰ã®é€ä¿¡
  *
- * @param impl		[in] ƒCƒ“ƒvƒŠƒƒ“ƒ^
- * @param receiver	[in] ƒŒƒV[ƒo
- * @param fn		[in] ŠÖ”ƒIƒuƒWƒFƒNƒg
- * @param numArgs	[in] ˆø”‚Ì”
+ * @param impl		[in] ã‚¤ãƒ³ãƒ—ãƒªãƒ¡ãƒ³ã‚¿
+ * @param receiver	[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param fn		[in] é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param numArgs	[in] å¼•æ•°ã®æ•°
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NVMMessageSend(newtRefArg impl, newtRefArg receiver, newtRefArg fn, int16_t numArgs)
@@ -1721,8 +1721,8 @@ void NVMMessageSend(newtRefArg impl, newtRefArg receiver, newtRefArg fn, int16_t
     newtErr	err;
 	int		type;
 
-    // 1. ƒƒ\ƒbƒh‚ªŠÖ”ƒIƒuƒWƒFƒNƒg‚Å‚È‚¯‚ê‚Î—áŠO‚ğ”­¶
-    // 2. ˆø”‚Ì”‚ªˆê’v‚³‚È‚¯‚ê‚Î WrongNumberOfArgs —áŠO‚ğ”­¶
+    // 1. ãƒ¡ã‚½ãƒƒãƒ‰ãŒé–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã§ãªã‘ã‚Œã°ä¾‹å¤–ã‚’ç™ºç”Ÿ
+    // 2. å¼•æ•°ã®æ•°ãŒä¸€è‡´ã•ãªã‘ã‚Œã° WrongNumberOfArgs ä¾‹å¤–ã‚’ç™ºç”Ÿ
 
     err = NVMFuncCheck(fn, numArgs);
 
@@ -1735,7 +1735,7 @@ void NVMMessageSend(newtRefArg impl, newtRefArg receiver, newtRefArg fn, int16_t
 	type = NewtRefFunctionType(fn);
 
     if (type == kNewtNativeFn || type == kNewtNativeFunc)
-    {	// ƒlƒCƒeƒBƒuŠÖ”‚ÌŒÄo‚µ
+    {	// ãƒã‚¤ãƒ†ã‚£ãƒ–é–¢æ•°ã®å‘¼å‡ºã—
     	// Save CALLSP to know if an exception occurred.
     	uint32_t saveCALLSP;
 		reg_save(SP - numArgs + 1);
@@ -1747,12 +1747,12 @@ void NVMMessageSend(newtRefArg impl, newtRefArg receiver, newtRefArg fn, int16_t
 		switch (type)
 		{
 			case kNewtNativeFn:
-				// rcvr‚È‚µ(old style)
+				// rcvrãªã—(old style)
 				NVMCallNativeFn(fn, numArgs);
 				break;
 
 			case kNewtNativeFunc:
-				// rcvr‚ ‚è(new style)
+				// rcvrã‚ã‚Š(new style)
 				NVMCallNativeFunc(fn, receiver, numArgs);
 				break;
 		}
@@ -1764,36 +1764,36 @@ void NVMMessageSend(newtRefArg impl, newtRefArg receiver, newtRefArg fn, int16_t
         return;
     }
 
-    reg_save(SP - numArgs); // 3. VM ƒŒƒWƒXƒ^‚ğ•Û‘¶iPC ‚ÌXV‚Í...j
-    NVMSetFn(fn);			// 4. FUNC ‚Éƒƒ\ƒbƒh‚ğƒZƒbƒg
-    PC = 0;					// 5. PC ‚É 0 ‚ğƒZƒbƒg
-    RCVR = receiver;		// 6. RCVR ‚É receiver ‚ğƒZƒbƒg
-    IMPL = impl;			// 7. IMPL IMPL implementor ‚ğƒZƒbƒg
+    reg_save(SP - numArgs); // 3. VM ãƒ¬ã‚¸ã‚¹ã‚¿ã‚’ä¿å­˜ï¼ˆPC ã®æ›´æ–°ã¯...ï¼‰
+    NVMSetFn(fn);			// 4. FUNC ã«ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ã‚»ãƒƒãƒˆ
+    PC = 0;					// 5. PC ã« 0 ã‚’ã‚»ãƒƒãƒˆ
+    RCVR = receiver;		// 6. RCVR ã« receiver ã‚’ã‚»ãƒƒãƒˆ
+    IMPL = impl;			// 7. IMPL IMPL implementor ã‚’ã‚»ãƒƒãƒˆ
 
-    // 8. ƒ[ƒJƒ‹ƒtƒŒ[ƒ€iFUNC.argFramej‚ğƒNƒ[ƒ“‚µ‚Ä LOCALS ‚ÉƒZƒbƒg
+    // 8. ãƒ­ãƒ¼ã‚«ãƒ«ãƒ•ãƒ¬ãƒ¼ãƒ ï¼ˆFUNC.argFrameï¼‰ã‚’ã‚¯ãƒ­ãƒ¼ãƒ³ã—ã¦ LOCALS ã«ã‚»ãƒƒãƒˆ
     LOCALS = NcClone(NcGetSlot(FUNC, NSSYM0(argFrame)));
 
-    // 9. RCVR ‚ğ LOCALS._parent ‚ÉƒZƒbƒg
+    // 9. RCVR ã‚’ LOCALS._parent ã«ã‚»ãƒƒãƒˆ
     NcSetSlot(LOCALS, NSSYM0(_parent), RCVR);
 
-    // 10. IMPL ‚ğ LOCALS._implementor ‚ÉƒZƒbƒg
+    // 10. IMPL ã‚’ LOCALS._implementor ã«ã‚»ãƒƒãƒˆ
     NcSetSlot(LOCALS, NSSYM0(_implementor), IMPL);
 
-    // 11. LOCALS ‚Ìˆø”ƒXƒƒbƒg‚ÉƒXƒ^ƒbƒN‚É‚ ‚éˆø”‚ğƒZƒbƒg‚·‚é
-    //     ˆø”‚Í LOCALS ‚Ì‚S”ÔƒXƒƒbƒg‚©‚çŠJn‚µ¶‚©‚ç‰E‚Ö‘}“ü‚³‚ê‚é
+    // 11. LOCALS ã®å¼•æ•°ã‚¹ãƒ­ãƒƒãƒˆã«ã‚¹ã‚¿ãƒƒã‚¯ã«ã‚ã‚‹å¼•æ•°ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
+    //     å¼•æ•°ã¯ LOCALS ã®ï¼”ç•ªã‚¹ãƒ­ãƒƒãƒˆã‹ã‚‰é–‹å§‹ã—å·¦ã‹ã‚‰å³ã¸æŒ¿å…¥ã•ã‚Œã‚‹
     NVMBindArgs(numArgs);
 
-    // 12. Às‚ğƒŠƒWƒ…[ƒ€‚·‚é
+    // 12. å®Ÿè¡Œã‚’ãƒªã‚¸ãƒ¥ãƒ¼ãƒ ã™ã‚‹
 }
 
 
 /*------------------------------------------------------------------------*/
-/** ƒƒ\ƒbƒh‚Ì‘—M
+/** ãƒ¡ã‚½ãƒƒãƒ‰ã®é€ä¿¡
  *
- * @param b			[in] ƒIƒyƒR[ƒh
- * @param errP		[out]ƒGƒ‰[”Ô†
+ * @param b			[in] ã‚ªãƒšã‚³ãƒ¼ãƒ‰
+ * @param errP		[out]ã‚¨ãƒ©ãƒ¼ç•ªå·
  *
- * @return			ƒƒ\ƒbƒh–¼
+ * @return			ãƒ¡ã‚½ãƒƒãƒ‰å
  */
 
 newtRef	vm_send(int16_t b, newtErr * errP)
@@ -1844,12 +1844,12 @@ newtRef	vm_send(int16_t b, newtErr * errP)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒƒ\ƒbƒh‚ÌÄ‘—M
+/** ãƒ¡ã‚½ãƒƒãƒ‰ã®å†é€ä¿¡
  *
- * @param b			[in] ƒIƒyƒR[ƒh
- * @param errP		[out]ƒGƒ‰[”Ô†
+ * @param b			[in] ã‚ªãƒšã‚³ãƒ¼ãƒ‰
+ * @param errP		[out]ã‚¨ãƒ©ãƒ¼ç•ªå·
  *
- * @return			ƒƒ\ƒbƒh–¼
+ * @return			ãƒ¡ã‚½ãƒƒãƒ‰å
  */
 
 newtRef vm_resend(int16_t b, newtErr * errP)
@@ -1903,9 +1903,9 @@ newtRef vm_resend(int16_t b, newtErr * errP)
 #pragma mark -
 #pragma mark *** Simple instructions
 /*------------------------------------------------------------------------*/
-/** ƒXƒ^ƒbƒN‚Ìƒ|ƒbƒv
+/** ã‚¹ã‚¿ãƒƒã‚¯ã®ãƒãƒƒãƒ—
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void si_pop(void)
@@ -1915,9 +1915,9 @@ void si_pop(void)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒXƒ^ƒbƒN‚Ìæ“ª‚ğ•¡»‚µ‚ÄƒvƒbƒVƒ…‚·‚é
+/** ã‚¹ã‚¿ãƒƒã‚¯ã®å…ˆé ­ã‚’è¤‡è£½ã—ã¦ãƒ—ãƒƒã‚·ãƒ¥ã™ã‚‹
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void si_dup(void)
@@ -1927,9 +1927,9 @@ void si_dup(void)
 
 
 /*------------------------------------------------------------------------*/
-/** ŠÖ”‚ÌƒŠƒ^[ƒ“
+/** é–¢æ•°ã®ãƒªã‚¿ãƒ¼ãƒ³
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void si_return(void)
@@ -1943,9 +1943,9 @@ void si_return(void)
 
 
 /*------------------------------------------------------------------------*/
-/** self ‚ğƒXƒ^ƒbƒN‚ÉƒvƒbƒVƒ…‚·‚é
+/** self ã‚’ã‚¹ã‚¿ãƒƒã‚¯ã«ãƒ—ãƒƒã‚·ãƒ¥ã™ã‚‹
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void si_pushself(void)
@@ -1955,9 +1955,9 @@ void si_pushself(void)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒŒƒLƒVƒJƒ‹ƒXƒR[ƒv‚ğƒZƒbƒg‚·‚é
+/** ãƒ¬ã‚­ã‚·ã‚«ãƒ«ã‚¹ã‚³ãƒ¼ãƒ—ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void si_set_lex_scope(void)
@@ -1976,9 +1976,9 @@ void si_set_lex_scope(void)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒCƒeƒŒ[ƒ^‚ğŸ‚Éi‚ß‚é
+/** ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿ã‚’æ¬¡ã«é€²ã‚ã‚‹
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void si_iternext(void)
@@ -1988,9 +1988,9 @@ void si_iternext(void)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒCƒeƒŒ[ƒ^‚ªI—¹‚ğƒ`ƒFƒbƒN
+/** ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿ãŒçµ‚äº†ã‚’ãƒã‚§ãƒƒã‚¯
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void si_iterdone(void)
@@ -2003,9 +2003,9 @@ void si_iterdone(void)
 
 
 /*------------------------------------------------------------------------*/
-/** —áŠOƒnƒ“ƒhƒ‰‚ğƒ|ƒbƒv‚·‚é
+/** ä¾‹å¤–ãƒãƒ³ãƒ‰ãƒ©ã‚’ãƒãƒƒãƒ—ã™ã‚‹
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void si_pop_handlers(void)
@@ -2018,9 +2018,9 @@ void si_pop_handlers(void)
 #pragma mark -
 #pragma mark *** Primitive functions
 /*------------------------------------------------------------------------*/
-/** ‰ÁZ
+/** åŠ ç®—
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void fn_add(void)
@@ -2036,9 +2036,9 @@ void fn_add(void)
 
 
 /*------------------------------------------------------------------------*/
-/** Œ¸Z
+/** æ¸›ç®—
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void fn_subtract(void)
@@ -2054,9 +2054,9 @@ void fn_subtract(void)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚Ìw’è‚³‚ê‚½ˆÊ’u‚©‚ç’l‚ğæ“¾
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æŒ‡å®šã•ã‚ŒãŸä½ç½®ã‹ã‚‰å€¤ã‚’å–å¾—
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void fn_aref(void)
@@ -2072,9 +2072,9 @@ void fn_aref(void)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚Ìw’è‚³‚ê‚½ˆÊ’u‚É’l‚ğƒZƒbƒg‚·‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æŒ‡å®šã•ã‚ŒãŸä½ç½®ã«å€¤ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void fn_set_aref(void)
@@ -2092,9 +2092,9 @@ void fn_set_aref(void)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚Ì“¯’l‚ğƒ`ƒFƒbƒN
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®åŒå€¤ã‚’ãƒã‚§ãƒƒã‚¯
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void fn_equals(void)
@@ -2110,9 +2110,9 @@ void fn_equals(void)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒu[ƒ‹’l‚Ì”Û’è
+/** ãƒ–ãƒ¼ãƒ«å€¤ã®å¦å®š
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void fn_not(void)
@@ -2128,9 +2128,9 @@ void fn_not(void)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚Ìˆá‚¢‚ğƒ`ƒFƒbƒN
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®é•ã„ã‚’ãƒã‚§ãƒƒã‚¯
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void fn_not_equals(void)
@@ -2149,9 +2149,9 @@ void fn_not_equals(void)
 
 
 /*------------------------------------------------------------------------*/
-/** æZ
+/** ä¹—ç®—
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void fn_multiply(void)
@@ -2167,9 +2167,9 @@ void fn_multiply(void)
 
 
 /*------------------------------------------------------------------------*/
-/** Š„Z
+/** å‰²ç®—
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void fn_divide(void)
@@ -2185,9 +2185,9 @@ void fn_divide(void)
 
 
 /*------------------------------------------------------------------------*/
-/** ®”‚ÌŠ„Z
+/** æ•´æ•°ã®å‰²ç®—
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void fn_div(void)
@@ -2203,9 +2203,9 @@ void fn_div(void)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚Ì”äŠr(<)
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ¯”è¼ƒ(<)
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void fn_less_than(void)
@@ -2221,9 +2221,9 @@ void fn_less_than(void)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚Ì”äŠr(>)
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ¯”è¼ƒ(>)
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void fn_greater_than(void)
@@ -2239,9 +2239,9 @@ void fn_greater_than(void)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚Ì”äŠr(>=)
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ¯”è¼ƒ(>=)
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void fn_greater_or_equal(void)
@@ -2257,9 +2257,9 @@ void fn_greater_or_equal(void)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚Ì”äŠr(<=)
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ¯”è¼ƒ(<=)
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void fn_less_or_equal(void)
@@ -2275,9 +2275,9 @@ void fn_less_or_equal(void)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒrƒbƒg‰‰Z AND
+/** ãƒ“ãƒƒãƒˆæ¼”ç®— AND
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void fn_bit_and(void)
@@ -2293,9 +2293,9 @@ void fn_bit_and(void)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒrƒbƒg‰‰Z OR
+/** ãƒ“ãƒƒãƒˆæ¼”ç®— OR
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void fn_bit_or(void)
@@ -2311,9 +2311,9 @@ void fn_bit_or(void)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒrƒbƒg‰‰Z NOT
+/** ãƒ“ãƒƒãƒˆæ¼”ç®— NOT
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void fn_bit_not(void)
@@ -2326,9 +2326,9 @@ void fn_bit_not(void)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒCƒeƒŒ[ƒ^‚Ìì¬
+/** ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿ã®ä½œæˆ
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void fn_new_iterator(void)
@@ -2350,9 +2350,9 @@ void fn_new_iterator(void)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚Ì’·‚³‚ğæ“¾
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®é•·ã•ã‚’å–å¾—
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void fn_length(void)
@@ -2365,9 +2365,9 @@ void fn_length(void)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚ğƒNƒ[ƒ“•¡»‚·‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ã‚¯ãƒ­ãƒ¼ãƒ³è¤‡è£½ã™ã‚‹
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void fn_clone(void)
@@ -2380,9 +2380,9 @@ void fn_clone(void)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚ÉƒNƒ‰ƒX‚ğƒZƒbƒg‚·‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«ã‚¯ãƒ©ã‚¹ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void fn_set_class(void)
@@ -2398,9 +2398,9 @@ void fn_set_class(void)
 
 
 /*------------------------------------------------------------------------*/
-/** ”z—ñƒIƒuƒWƒFƒNƒg‚ÉƒIƒuƒWƒFƒNƒg‚ğ’Ç‰Á‚·‚é
+/** é…åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’è¿½åŠ ã™ã‚‹
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void fn_add_array_slot(void)
@@ -2416,9 +2416,9 @@ void fn_add_array_slot(void)
 
 
 /*------------------------------------------------------------------------*/
-/** ”z—ñƒIƒuƒWƒFƒNƒg‚Ì—v‘f‚ğ•¶š—ñ‚É‡¬‚·‚é
+/** é…åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®è¦ç´ ã‚’æ–‡å­—åˆ—ã«åˆæˆã™ã‚‹
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void fn_stringer(void)
@@ -2431,9 +2431,9 @@ void fn_stringer(void)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg“à‚ÌƒAƒNƒZƒXƒpƒX‚Ì—L–³‚ğ’²‚×‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå†…ã®ã‚¢ã‚¯ã‚»ã‚¹ãƒ‘ã‚¹ã®æœ‰ç„¡ã‚’èª¿ã¹ã‚‹
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void fn_has_path(void)
@@ -2449,9 +2449,9 @@ void fn_has_path(void)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚ÌƒNƒ‰ƒXƒVƒ“ƒ{ƒ‹‚ğæ“¾
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚¯ãƒ©ã‚¹ã‚·ãƒ³ãƒœãƒ«ã‚’å–å¾—
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void fn_classof(void)
@@ -2466,11 +2466,11 @@ void fn_classof(void)
 #pragma mark -
 #pragma mark *** Instructions
 /*------------------------------------------------------------------------*/
-/** –½—ßƒZƒbƒgƒe[ƒuƒ‹“o˜^—p‚Ìƒ_ƒ~[
+/** å‘½ä»¤ã‚»ãƒƒãƒˆãƒ†ãƒ¼ãƒ–ãƒ«ç™»éŒ²ç”¨ã®ãƒ€ãƒŸãƒ¼
  *
- * @param b		[in] ƒIƒyƒf[ƒ^
+ * @param b		[in] ã‚ªãƒšãƒ‡ãƒ¼ã‚¿
  *
- * @return		‚È‚µ
+ * @return		ãªã—
  */
 
 void is_dummy(int16_t b)
@@ -2480,11 +2480,11 @@ void is_dummy(int16_t b)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒVƒ“ƒvƒ‹–½—ß‚ÌÀs
+/** ã‚·ãƒ³ãƒ—ãƒ«å‘½ä»¤ã®å®Ÿè¡Œ
  *
- * @param b		[in] ƒIƒyƒf[ƒ^
+ * @param b		[in] ã‚ªãƒšãƒ‡ãƒ¼ã‚¿
  *
- * @return		‚È‚µ
+ * @return		ãªã—
  */
 
 void is_simple_instructions(int16_t b)
@@ -2497,11 +2497,11 @@ void is_simple_instructions(int16_t b)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒXƒ^ƒbƒN‚ÉƒvƒbƒVƒ…
+/** ã‚¹ã‚¿ãƒƒã‚¯ã«ãƒ—ãƒƒã‚·ãƒ¥
  *
- * @param b		[in] ƒIƒyƒf[ƒ^
+ * @param b		[in] ã‚ªãƒšãƒ‡ãƒ¼ã‚¿
  *
- * @return		‚È‚µ
+ * @return		ãªã—
  */
 
 void is_push(int16_t b)
@@ -2511,11 +2511,11 @@ void is_push(int16_t b)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒXƒ^ƒbƒN‚É’è”‚ğƒvƒbƒVƒ…
+/** ã‚¹ã‚¿ãƒƒã‚¯ã«å®šæ•°ã‚’ãƒ—ãƒƒã‚·ãƒ¥
  *
- * @param b		[in] ƒIƒyƒf[ƒ^
+ * @param b		[in] ã‚ªãƒšãƒ‡ãƒ¼ã‚¿
  *
- * @return		‚È‚µ
+ * @return		ãªã—
  */
 
 void is_push_constant(int16_t b)
@@ -2531,7 +2531,7 @@ void is_push_constant(int16_t b)
 		n = NewtRefToInteger(r);
 
 		if (8191 < n)
-		{	// •‰‚Ì”
+		{	// è² ã®æ•°
 			n |= 0xFFFFC000;
 			r = NewtMakeInt30(r);
 		}
@@ -2546,11 +2546,11 @@ void is_push_constant(int16_t b)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒOƒ[ƒoƒ‹ŠÖ”‚ÌŒÄo‚µ
+/** ã‚°ãƒ­ãƒ¼ãƒãƒ«é–¢æ•°ã®å‘¼å‡ºã—
  *
- * @param b		[in] ƒIƒyƒf[ƒ^
+ * @param b		[in] ã‚ªãƒšãƒ‡ãƒ¼ã‚¿
  *
- * @return		‚È‚µ
+ * @return		ãªã—
  */
 
 void is_call(int16_t b)
@@ -2572,11 +2572,11 @@ void is_call(int16_t b)
 
 
 /*------------------------------------------------------------------------*/
-/** ŠÖ”ƒIƒuƒWƒFƒNƒg‚ÌÀs
+/** é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å®Ÿè¡Œ
  *
- * @param b		[in] ƒIƒyƒf[ƒ^
+ * @param b		[in] ã‚ªãƒšãƒ‡ãƒ¼ã‚¿
  *
- * @return		‚È‚µ
+ * @return		ãªã—
  */
 
 void is_invoke(int16_t b)
@@ -2586,11 +2586,11 @@ void is_invoke(int16_t b)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒƒ\ƒbƒh‚Ì‘—M
+/** ãƒ¡ã‚½ãƒƒãƒ‰ã®é€ä¿¡
  *
- * @param b		[in] ƒIƒyƒf[ƒ^
+ * @param b		[in] ã‚ªãƒšãƒ‡ãƒ¼ã‚¿
  *
- * @return		‚È‚µ
+ * @return		ãªã—
  */
 
 void is_send(int16_t b)
@@ -2606,13 +2606,13 @@ void is_send(int16_t b)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒƒ\ƒbƒh‚Ì‘—M
+/** ãƒ¡ã‚½ãƒƒãƒ‰ã®é€ä¿¡
  *
- * @param b		[in] ƒIƒyƒf[ƒ^
+ * @param b		[in] ã‚ªãƒšãƒ‡ãƒ¼ã‚¿
  *
- * @return		‚È‚µ
+ * @return		ãªã—
  *
- * @note		ƒƒ\ƒbƒh‚ª’è‹`‚³‚ê‚Ä‚¢‚È‚­‚Ä‚à—áŠO‚Í”­¶‚µ‚È‚¢
+ * @note		ãƒ¡ã‚½ãƒƒãƒ‰ãŒå®šç¾©ã•ã‚Œã¦ã„ãªãã¦ã‚‚ä¾‹å¤–ã¯ç™ºç”Ÿã—ãªã„
  */
 
 void is_send_if_defined(int16_t b)
@@ -2627,11 +2627,11 @@ void is_send_if_defined(int16_t b)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒƒ\ƒbƒh‚ÌÄ‘—M
+/** ãƒ¡ã‚½ãƒƒãƒ‰ã®å†é€ä¿¡
  *
- * @param b		[in] ƒIƒyƒf[ƒ^
+ * @param b		[in] ã‚ªãƒšãƒ‡ãƒ¼ã‚¿
  *
- * @return		‚È‚µ
+ * @return		ãªã—
  */
 
 void is_resend(int16_t b)
@@ -2647,13 +2647,13 @@ void is_resend(int16_t b)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒƒ\ƒbƒh‚ÌÄ‘—M
+/** ãƒ¡ã‚½ãƒƒãƒ‰ã®å†é€ä¿¡
  *
- * @param b		[in] ƒIƒyƒf[ƒ^
+ * @param b		[in] ã‚ªãƒšãƒ‡ãƒ¼ã‚¿
  *
- * @return		‚È‚µ
+ * @return		ãªã—
  *
- * @note		ƒƒ\ƒbƒh‚ª’è‹`‚³‚ê‚Ä‚¢‚È‚­‚Ä‚à—áŠO‚Í”­¶‚µ‚È‚¢
+ * @note		ãƒ¡ã‚½ãƒƒãƒ‰ãŒå®šç¾©ã•ã‚Œã¦ã„ãªãã¦ã‚‚ä¾‹å¤–ã¯ç™ºç”Ÿã—ãªã„
  */
 
 void is_resend_if_defined(int16_t b)
@@ -2668,11 +2668,11 @@ void is_resend_if_defined(int16_t b)
 
 
 /*------------------------------------------------------------------------*/
-/** •ªŠò
+/** åˆ†å²
  *
- * @param b		[in] ƒIƒyƒf[ƒ^
+ * @param b		[in] ã‚ªãƒšãƒ‡ãƒ¼ã‚¿
  *
- * @return		‚È‚µ
+ * @return		ãªã—
  */
 
 void is_branch(int16_t b)
@@ -2682,11 +2682,11 @@ void is_branch(int16_t b)
 
 
 /*------------------------------------------------------------------------*/
-/** ğŒ•t‚«•ªŠòiƒXƒ^ƒbƒN‚Ìæ“ª‚ª^‚Ìê‡j
+/** æ¡ä»¶ä»˜ãåˆ†å²ï¼ˆã‚¹ã‚¿ãƒƒã‚¯ã®å…ˆé ­ãŒçœŸã®å ´åˆï¼‰
  *
- * @param b		[in] ƒIƒyƒf[ƒ^
+ * @param b		[in] ã‚ªãƒšãƒ‡ãƒ¼ã‚¿
  *
- * @return		‚È‚µ
+ * @return		ãªã—
  */
 
 void is_branch_if_true(int16_t b)
@@ -2701,11 +2701,11 @@ void is_branch_if_true(int16_t b)
 
 
 /*------------------------------------------------------------------------*/
-/** ğŒ•t‚«•ªŠòiƒXƒ^ƒbƒN‚Ìæ“ª‚ª‹U‚Ìê‡j
+/** æ¡ä»¶ä»˜ãåˆ†å²ï¼ˆã‚¹ã‚¿ãƒƒã‚¯ã®å…ˆé ­ãŒå½ã®å ´åˆï¼‰
  *
- * @param b		[in] ƒIƒyƒf[ƒ^
+ * @param b		[in] ã‚ªãƒšãƒ‡ãƒ¼ã‚¿
  *
- * @return		‚È‚µ
+ * @return		ãªã—
  */
 
 void is_branch_if_false(int16_t b)
@@ -2720,11 +2720,11 @@ void is_branch_if_false(int16_t b)
 
 
 /*------------------------------------------------------------------------*/
-/** •Ï”‚ÌŒŸõ
+/** å¤‰æ•°ã®æ¤œç´¢
  *
- * @param b		[in] ƒIƒyƒf[ƒ^
+ * @param b		[in] ã‚ªãƒšãƒ‡ãƒ¼ã‚¿
  *
- * @return		‚È‚µ
+ * @return		ãªã—
  */
 
 void is_find_var(int16_t b)
@@ -2762,11 +2762,11 @@ void is_find_var(int16_t b)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒ[ƒJƒ‹•Ï”‚Ìæo‚µ
+/** ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°ã®å–å‡ºã—
  *
- * @param b		[in] ƒIƒyƒf[ƒ^
+ * @param b		[in] ã‚ªãƒšãƒ‡ãƒ¼ã‚¿
  *
- * @return		‚È‚µ
+ * @return		ãªã—
  */
 
 void is_get_var(int16_t b)
@@ -2776,11 +2776,11 @@ void is_get_var(int16_t b)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒtƒŒ[ƒ€‚Ìì¬
+/** ãƒ•ãƒ¬ãƒ¼ãƒ ã®ä½œæˆ
  *
- * @param b		[in] ƒIƒyƒf[ƒ^
+ * @param b		[in] ã‚ªãƒšãƒ‡ãƒ¼ã‚¿
  *
- * @return		‚È‚µ
+ * @return		ãªã—
  */
 
 void is_make_frame(int16_t b)
@@ -2804,11 +2804,11 @@ void is_make_frame(int16_t b)
 
 
 /*------------------------------------------------------------------------*/
-/** ”z—ñ‚Ìì¬
+/** é…åˆ—ã®ä½œæˆ
  *
- * @param b		[in] ƒIƒyƒf[ƒ^
+ * @param b		[in] ã‚ªãƒšãƒ‡ãƒ¼ã‚¿
  *
- * @return		‚È‚µ
+ * @return		ãªã—
  */
 
 void is_make_array(int16_t b)
@@ -2850,11 +2850,11 @@ void is_make_array(int16_t b)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚ÌƒAƒNƒZƒXƒpƒX‚Ì’l‚ğæo‚·
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚¢ã‚¯ã‚»ã‚¹ãƒ‘ã‚¹ã®å€¤ã‚’å–å‡ºã™
  *
- * @param b		[in] ƒIƒyƒf[ƒ^
+ * @param b		[in] ã‚ªãƒšãƒ‡ãƒ¼ã‚¿
  *
- * @return		‚È‚µ
+ * @return		ãªã—
  */
 
 void is_get_path(int16_t b)
@@ -2881,11 +2881,11 @@ void is_get_path(int16_t b)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚ÌƒAƒNƒZƒXƒpƒX‚É’l‚ğƒZƒbƒg‚·‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚¢ã‚¯ã‚»ã‚¹ãƒ‘ã‚¹ã«å€¤ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
  *
- * @param b		[in] ƒIƒyƒf[ƒ^
+ * @param b		[in] ã‚ªãƒšãƒ‡ãƒ¼ã‚¿
  *
- * @return		‚È‚µ
+ * @return		ãªã—
  */
 
 void is_set_path(int16_t b)
@@ -2908,11 +2908,11 @@ void is_set_path(int16_t b)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒ[ƒJƒ‹•Ï”‚É’l‚ğƒZƒbƒg‚·‚é
+/** ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°ã«å€¤ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
  *
- * @param b		[in] ƒIƒyƒf[ƒ^
+ * @param b		[in] ã‚ªãƒšãƒ‡ãƒ¼ã‚¿
  *
- * @return		‚È‚µ
+ * @return		ãªã—
  */
 
 void is_set_var(int16_t b)
@@ -2925,11 +2925,11 @@ void is_set_var(int16_t b)
 
 
 /*------------------------------------------------------------------------*/
-/** •Ï”‚É’l‚ğƒZƒbƒg‚·‚é
+/** å¤‰æ•°ã«å€¤ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
  *
- * @param b		[in] ƒIƒyƒf[ƒ^
+ * @param b		[in] ã‚ªãƒšãƒ‡ãƒ¼ã‚¿
  *
- * @return		‚È‚µ
+ * @return		ãªã—
  */
 
 void is_find_and_set_var(int16_t b)
@@ -2957,11 +2957,11 @@ void is_find_and_set_var(int16_t b)
 
 
 /*------------------------------------------------------------------------*/
-/** ‘‰Á
+/** å¢—åŠ 
  *
- * @param b		[in] ƒIƒyƒf[ƒ^
+ * @param b		[in] ã‚ªãƒšãƒ‡ãƒ¼ã‚¿
  *
- * @return		‚È‚µ
+ * @return		ãªã—
  */
 
 void is_incr_var(int16_t b)
@@ -2981,11 +2981,11 @@ void is_incr_var(int16_t b)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒ‹[ƒvI—¹ğŒ‚Åƒuƒ‰ƒ“ƒ`
+/** ãƒ«ãƒ¼ãƒ—çµ‚äº†æ¡ä»¶ã§ãƒ–ãƒ©ãƒ³ãƒ
  *
- * @param b		[in] ƒIƒyƒf[ƒ^
+ * @param b		[in] ã‚ªãƒšãƒ‡ãƒ¼ã‚¿
  *
- * @return		‚È‚µ
+ * @return		ãªã—
  */
 
 void is_branch_if_loop_not_done(int16_t b)
@@ -3037,11 +3037,11 @@ void is_branch_if_loop_not_done(int16_t b)
 
 
 /*------------------------------------------------------------------------*/
-/** ŠÖ”–½—ß‚ÌÀs
+/** é–¢æ•°å‘½ä»¤ã®å®Ÿè¡Œ
  *
- * @param b		[in] ƒIƒyƒf[ƒ^
+ * @param b		[in] ã‚ªãƒšãƒ‡ãƒ¼ã‚¿
  *
- * @return		‚È‚µ
+ * @return		ãªã—
  */
 
 void is_freq_func(int16_t b)
@@ -3054,11 +3054,11 @@ void is_freq_func(int16_t b)
 
 
 /*------------------------------------------------------------------------*/
-/** —áŠOƒnƒ“ƒhƒ‰‚Ìì¬
+/** ä¾‹å¤–ãƒãƒ³ãƒ‰ãƒ©ã®ä½œæˆ
  *
- * @param b		[in] ƒIƒyƒf[ƒ^
+ * @param b		[in] ã‚ªãƒšãƒ‡ãƒ¼ã‚¿
  *
- * @return		‚È‚µ
+ * @return		ãªã—
  */
 
 void is_new_handlers(int16_t b)
@@ -3081,15 +3081,15 @@ void is_new_handlers(int16_t b)
 }
 
 
-#pragma mark *** ƒ_ƒ“ƒv
+#pragma mark *** ãƒ€ãƒ³ãƒ—
 /*------------------------------------------------------------------------*/
-/** o—Íƒtƒ@ƒCƒ‹‚É–½—ßƒR[ƒh‚Ì–¼‘O‚ğƒ_ƒ“ƒvo—Í
+/** å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã«å‘½ä»¤ã‚³ãƒ¼ãƒ‰ã®åå‰ã‚’ãƒ€ãƒ³ãƒ—å‡ºåŠ›
  *
- * @param f			[in] o—Íƒtƒ@ƒCƒ‹
- * @param a			[in] ƒIƒyƒR[ƒh
- * @param b			[in] ƒIƒyƒf[ƒ^
+ * @param f			[in] å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«
+ * @param a			[in] ã‚ªãƒšã‚³ãƒ¼ãƒ‰
+ * @param b			[in] ã‚ªãƒšãƒ‡ãƒ¼ã‚¿
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NVMDumpInstName(FILE * f, uint8_t a, int16_t b)
@@ -3134,11 +3134,11 @@ void NVMDumpInstName(FILE * f, uint8_t a, int16_t b)
 
 
 /*------------------------------------------------------------------------*/
-/** o—Íƒtƒ@ƒCƒ‹‚ÉƒXƒ^ƒbƒN‚Ìæ“ª‚Æƒ[ƒJƒ‹ƒtƒŒ[ƒ€‚ğƒ_ƒ“ƒvo—Í
+/** å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã«ã‚¹ã‚¿ãƒƒã‚¯ã®å…ˆé ­ã¨ãƒ­ãƒ¼ã‚«ãƒ«ãƒ•ãƒ¬ãƒ¼ãƒ ã‚’ãƒ€ãƒ³ãƒ—å‡ºåŠ›
  *
- * @param f			[in] o—Íƒtƒ@ƒCƒ‹
+ * @param f			[in] å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NVMDumpInstResult(FILE * f)
@@ -3151,14 +3151,14 @@ void NVMDumpInstResult(FILE * f)
 
 
 /*------------------------------------------------------------------------*/
-/** o—Íƒtƒ@ƒCƒ‹‚É–½—ßƒR[ƒh‚ğƒ_ƒ“ƒvo—Í
+/** å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã«å‘½ä»¤ã‚³ãƒ¼ãƒ‰ã‚’ãƒ€ãƒ³ãƒ—å‡ºåŠ›
  *
- * @param f			[in] o—Íƒtƒ@ƒCƒ‹
- * @param bc		[in] ƒoƒCƒgƒR[ƒh
- * @param pc		[in] ƒvƒƒOƒ‰ƒ€ƒJƒEƒ“ƒ^
- * @param len		[in] –½—ßƒR[ƒh‚ÌƒoƒCƒg”
+ * @param f			[in] å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«
+ * @param bc		[in] ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰
+ * @param pc		[in] ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚«ã‚¦ãƒ³ã‚¿
+ * @param len		[in] å‘½ä»¤ã‚³ãƒ¼ãƒ‰ã®ãƒã‚¤ãƒˆæ•°
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NVMDumpInstCode(FILE * f, uint8_t * bc, uint32_t pc, uint16_t len)
@@ -3178,12 +3178,12 @@ void NVMDumpInstCode(FILE * f, uint8_t * bc, uint32_t pc, uint16_t len)
 
 
 /*------------------------------------------------------------------------*/
-/** o—Íƒtƒ@ƒCƒ‹‚ÉƒXƒ^ƒbƒN‚Ìæ“ª‚ğƒ_ƒ“ƒvo—Í
+/** å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã«ã‚¹ã‚¿ãƒƒã‚¯ã®å…ˆé ­ã‚’ãƒ€ãƒ³ãƒ—å‡ºåŠ›
  *
- * @param f			[in] o—Íƒtƒ@ƒCƒ‹
- * @param s			[in] ‹æØ‚è•¶š—ñ
+ * @param f			[in] å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«
+ * @param s			[in] åŒºåˆ‡ã‚Šæ–‡å­—åˆ—
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NVMDumpStackTop(FILE * f, char * s)
@@ -3196,13 +3196,13 @@ void NVMDumpStackTop(FILE * f, char * s)
 
 
 /*------------------------------------------------------------------------*/
-/** o—Íƒtƒ@ƒCƒ‹‚ÉƒoƒCƒgƒR[ƒh‚ğƒ_ƒ“ƒvo—Í
+/** å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã«ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ãƒ€ãƒ³ãƒ—å‡ºåŠ›
  *
- * @param f			[in] o—Íƒtƒ@ƒCƒ‹
- * @param bc		[in] ƒoƒCƒgƒR[ƒh
- * @param len		[in] ƒoƒCƒgƒR[ƒh‚Ì’·‚³
+ * @param f			[in] å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«
+ * @param bc		[in] ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰
+ * @param len		[in] ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã®é•·ã•
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NVMDumpCode(FILE * f, uint8_t * bc, uint32_t len)
@@ -3247,12 +3247,12 @@ void NVMDumpCode(FILE * f, uint8_t * bc, uint32_t len)
 
 
 /*------------------------------------------------------------------------*/
-/** o—Íƒtƒ@ƒCƒ‹‚ÉƒoƒCƒgƒR[ƒh‚ğƒ_ƒ“ƒvo—Í
+/** å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã«ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ãƒ€ãƒ³ãƒ—å‡ºåŠ›
  *
- * @param f				[in] o—Íƒtƒ@ƒCƒ‹
- * @param instructions	[in] ƒoƒCƒgƒR[ƒh
+ * @param f				[in] å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«
+ * @param instructions	[in] ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NVMDumpBC(FILE * f, newtRefArg instructions)
@@ -3271,12 +3271,12 @@ void NVMDumpBC(FILE * f, newtRefArg instructions)
 
 
 /*------------------------------------------------------------------------*/
-/** o—Íƒtƒ@ƒCƒ‹‚ÉŠÖ”ƒIƒuƒWƒFƒNƒg‚ğƒ_ƒ“ƒvo—Í
+/** å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã«é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒ€ãƒ³ãƒ—å‡ºåŠ›
  *
- * @param f			[in] o—Íƒtƒ@ƒCƒ‹
- * @param func		[in] ŠÖ”ƒIƒuƒWƒFƒNƒg
+ * @param f			[in] å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«
+ * @param func		[in] é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NVMDumpFn(FILE * f, newtRefArg func)
@@ -3304,11 +3304,11 @@ void NVMDumpFn(FILE * f, newtRefArg func)
 
 
 /*------------------------------------------------------------------------*/
-/** o—Íƒtƒ@ƒCƒ‹‚ÉƒXƒ^ƒbƒN‚ğƒ_ƒ“ƒvo—Í
+/** å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã«ã‚¹ã‚¿ãƒƒã‚¯ã‚’ãƒ€ãƒ³ãƒ—å‡ºåŠ›
  *
- * @param f			[in] o—Íƒtƒ@ƒCƒ‹
+ * @param f			[in] å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NVMDumpStacks(FILE * f)
@@ -3323,11 +3323,11 @@ void NVMDumpStacks(FILE * f)
 
 
 #pragma mark -
-#pragma mark *** ƒCƒ“ƒ^ƒvƒŠƒ^
+#pragma mark *** ã‚¤ãƒ³ã‚¿ãƒ—ãƒªã‚¿
 /*------------------------------------------------------------------------*/
-/** ƒŒƒWƒXƒ^‚Ì‰Šú‰» 
+/** ãƒ¬ã‚¸ã‚¹ã‚¿ã®åˆæœŸåŒ– 
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NVMInitREG(void)
@@ -3345,9 +3345,9 @@ void NVMInitREG(void)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒXƒ^ƒbƒN‚Ì‰Šú‰» 
+/** ã‚¹ã‚¿ãƒƒã‚¯ã®åˆæœŸåŒ– 
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NVMInitSTACK(void)
@@ -3361,9 +3361,9 @@ void NVMInitSTACK(void)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒXƒ^ƒbƒN‚ÌŒãn–– 
+/** ã‚¹ã‚¿ãƒƒã‚¯ã®å¾Œå§‹æœ« 
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NVMCleanSTACK(void)
@@ -3375,9 +3375,9 @@ void NVMCleanSTACK(void)
 
 
 /*------------------------------------------------------------------------*/
-/** •K{ƒOƒ[ƒoƒ‹ŠÖ”‚Ì‰Šú‰» 
+/** å¿…é ˆã‚°ãƒ­ãƒ¼ãƒãƒ«é–¢æ•°ã®åˆæœŸåŒ– 
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NVMInitGlobalFns0(void)
@@ -3391,11 +3391,11 @@ void NVMInitGlobalFns0(void)
     NewtDefGlobalFunc(NSSYM0(mod),			NsMod,				2, "Mod(n1, n2)");
     NewtDefGlobalFunc(NSSYM0(shiftLeft),	NsShiftLeft,		2, "ShiftLeft(n1, n2)");
     NewtDefGlobalFunc(NSSYM0(shiftRight),	NsShiftRight,		2, "ShiftRight(n1, n2)");
-    NewtDefGlobalFunc(NSSYM0(objectEqual),	NsObjectEqual,		2, "ObjectEqual(obj1, obj2)");		// “Æ©Šg’£
-    NewtDefGlobalFunc(NSSYM0(defMagicPointer),NsDefMagicPointer,2, "DefMagicPointer(mp, value)");	// “Æ©Šg’£
+    NewtDefGlobalFunc(NSSYM0(objectEqual),	NsObjectEqual,		2, "ObjectEqual(obj1, obj2)");		// ç‹¬è‡ªæ‹¡å¼µ
+    NewtDefGlobalFunc(NSSYM0(defMagicPointer),NsDefMagicPointer,2, "DefMagicPointer(mp, value)");	// ç‹¬è‡ªæ‹¡å¼µ
 
 #ifdef __NAMED_MAGIC_POINTER__
-    NewtDefGlobalFunc(NSSYM0(makeRegex),	NsMakeRegex,		2, "MakeRegex(pattern, opt)");		// “Æ©Šg’£
+    NewtDefGlobalFunc(NSSYM0(makeRegex),	NsMakeRegex,		2, "MakeRegex(pattern, opt)");		// ç‹¬è‡ªæ‹¡å¼µ
 #endif /* __NAMED_MAGIC_POINTER__ */
 
 	NewtDefGlobalFunc(NSSYM(RemoveSlot),	NsRemoveSlot,		2, "RemoveSlot(obj, slot)");
@@ -3407,9 +3407,9 @@ void NVMInitGlobalFns0(void)
 
 
 /*------------------------------------------------------------------------*/
-/** ‘g‚İƒOƒ[ƒoƒ‹ŠÖ”‚Ì‰Šú‰»
+/** çµ„è¾¼ã¿ã‚°ãƒ­ãƒ¼ãƒãƒ«é–¢æ•°ã®åˆæœŸåŒ–
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NVMInitGlobalFns1(void)
@@ -3468,9 +3468,9 @@ void NVMInitGlobalFns1(void)
 
 
 /*------------------------------------------------------------------------*/
-/** ’Ç‰ÁƒOƒ[ƒoƒ‹ŠÖ”‚Ì‰Šú‰»
+/** è¿½åŠ ã‚°ãƒ­ãƒ¼ãƒãƒ«é–¢æ•°ã®åˆæœŸåŒ–
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NVMInitExGlobalFns(void)
@@ -3512,9 +3512,9 @@ void NVMInitExGlobalFns(void)
 
 
 /*------------------------------------------------------------------------*/
-/**@ƒfƒoƒbƒO—pƒOƒ[ƒoƒ‹ŠÖ”‚Ì‰Šú‰»
+/**ã€€ãƒ‡ãƒãƒƒã‚°ç”¨ã‚°ãƒ­ãƒ¼ãƒãƒ«é–¢æ•°ã®åˆæœŸåŒ–
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NVMInitDebugGlobalFns(void)
@@ -3526,24 +3526,24 @@ void NVMInitDebugGlobalFns(void)
 
 
 /*------------------------------------------------------------------------*/
-/**@ƒOƒ[ƒoƒ‹ŠÖ”‚Ì‰Šú‰»
+/**ã€€ã‚°ãƒ­ãƒ¼ãƒãƒ«é–¢æ•°ã®åˆæœŸåŒ–
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NVMInitGlobalFns(void)
 {
-    NVMInitGlobalFns0();		// •K{
-    NVMInitGlobalFns1();		// ‘g‚İŠÖ”
-    NVMInitExGlobalFns();		// ’Ç‰Á
-    NVMInitDebugGlobalFns();	// ƒfƒoƒbƒO—p
+    NVMInitGlobalFns0();		// å¿…é ˆ
+    NVMInitGlobalFns1();		// çµ„è¾¼ã¿é–¢æ•°
+    NVMInitExGlobalFns();		// è¿½åŠ 
+    NVMInitDebugGlobalFns();	// ãƒ‡ãƒãƒƒã‚°ç”¨
 }
 
 
 /*------------------------------------------------------------------------*/
-/**@ƒOƒ[ƒoƒ‹•Ï”‚Ì‰Šú‰»
+/**ã€€ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•°ã®åˆæœŸåŒ–
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NVMInitGlobalVars(void)
@@ -3557,9 +3557,9 @@ void NVMInitGlobalVars(void)
 
 
 /*------------------------------------------------------------------------*/
-/**@VM ‚Ì‰Šú‰»
+/**ã€€VM ã®åˆæœŸåŒ–
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NVMInit(void)
@@ -3573,7 +3573,7 @@ void NVMInit(void)
     NVMInitGlobalFns();
     NVMInitGlobalVars();
 
-	// •W€ƒ‰ƒCƒuƒ‰ƒŠ‚Ìƒ[ƒh
+	// æ¨™æº–ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®ãƒ­ãƒ¼ãƒ‰
 	result = NcRequire0(NSSTR("egg"));
 	NVMClearCurrException();
 
@@ -3585,9 +3585,9 @@ void NVMInit(void)
 
 
 /*------------------------------------------------------------------------*/
-/**@VM ‚ÌŒãn––
+/**ã€€VM ã®å¾Œå§‹æœ«
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NVMClean(void)
@@ -3597,11 +3597,11 @@ void NVMClean(void)
 
 
 /*------------------------------------------------------------------------*/
-/**@VMƒ‹[ƒv
+/**ã€€VMãƒ«ãƒ¼ãƒ—
  *
- * @param callsp	[in] ŒÄo‚µƒXƒ^ƒbƒN‚ÌƒXƒ^ƒbƒNƒ|ƒCƒ“ƒ^
+ * @param callsp	[in] å‘¼å‡ºã—ã‚¹ã‚¿ãƒƒã‚¯ã®ã‚¹ã‚¿ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NVMLoop(uint32_t callsp)
@@ -3664,12 +3664,12 @@ void NVMLoop(uint32_t callsp)
 
 
 /*------------------------------------------------------------------------*/
-/** ŒÄo‚·ŠÖ”ƒIƒuƒWƒFƒNƒg‚ğƒZƒbƒg
+/** å‘¼å‡ºã™é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ã‚»ãƒƒãƒˆ
  *
- * @param fn		[in] ŠÖ”ƒIƒuƒWƒFƒNƒg
- * @param numArgs	[in] ˆø”‚Ì”
+ * @param fn		[in] é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param numArgs	[in] å¼•æ•°ã®æ•°
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NVMFnCall(newtRefArg fn, int16_t numArgs)
@@ -3681,13 +3681,13 @@ void NVMFnCall(newtRefArg fn, int16_t numArgs)
 
 
 /*------------------------------------------------------------------------*/
-/** ŠÖ”ƒIƒuƒWƒFƒNƒg‚ğÀs
+/** é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å®Ÿè¡Œ
  *
- * @param fn		[in] ŠÖ”ƒIƒuƒWƒFƒNƒg
- * @param numArgs	[in] ˆø”‚Ì”
- * @param errP		[out]ƒGƒ‰[ƒR[ƒh
+ * @param fn		[in] é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param numArgs	[in] å¼•æ•°ã®æ•°
+ * @param errP		[out]ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  *
- * @return			ƒXƒ^ƒbƒN‚ÌƒgƒbƒvƒIƒuƒWƒFƒNƒg
+ * @return			ã‚¹ã‚¿ãƒƒã‚¯ã®ãƒˆãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NVMCall(newtRefArg fn, int16_t numArgs, newtErr * errP)
@@ -3716,12 +3716,12 @@ newtRef NVMCall(newtRefArg fn, int16_t numArgs, newtErr * errP)
 
 
 /*------------------------------------------------------------------------*/
-/** ŠÖ”ƒIƒuƒWƒFƒNƒg‚ğÀs
+/** é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å®Ÿè¡Œ
  *
- * @param fn		[in] ŠÖ”ƒIƒuƒWƒFƒNƒg
- * @param errP		[out]ƒGƒ‰[ƒR[ƒh
+ * @param fn		[in] é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param errP		[out]ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  *
- * @return			ƒXƒ^ƒbƒN‚ÌƒgƒbƒvƒIƒuƒWƒFƒNƒg
+ * @return			ã‚¹ã‚¿ãƒƒã‚¯ã®ãƒˆãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NVMInterpret(newtRefArg fn, newtErr * errP)
@@ -3750,13 +3750,13 @@ newtRef NVMInterpret(newtRefArg fn, newtErr * errP)
 
 
 /*------------------------------------------------------------------------*/
-/** \•¶–Ø‚ğƒoƒCƒgƒR[ƒh‚É•ÏŠ·‚µ‚ÄÀs
+/** æ§‹æ–‡æœ¨ã‚’ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã«å¤‰æ›ã—ã¦å®Ÿè¡Œ
  *
- * @param stree		[in] \•¶–Ø
- * @param numStree  [in] \•¶–Ø‚Ì’·‚³
- * @param errP		[out]ƒGƒ‰[ƒR[ƒh
+ * @param stree		[in] æ§‹æ–‡æœ¨
+ * @param numStree  [in] æ§‹æ–‡æœ¨ã®é•·ã•
+ * @param errP		[out]ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  *
- * @return			ƒXƒ^ƒbƒN‚ÌƒgƒbƒvƒIƒuƒWƒFƒNƒg
+ * @return			ã‚¹ã‚¿ãƒƒã‚¯ã®ãƒˆãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NVMInterpret2(nps_syntax_node_t * stree, uint32_t numStree, newtErr * errP)
@@ -3781,11 +3781,11 @@ newtRef NVMInterpret2(nps_syntax_node_t * stree, uint32_t numStree, newtErr * er
 
 
 /*------------------------------------------------------------------------*/
-/** w’è‚³‚ê‚½ŠÖ”‚Ìî•ñ‚ğ•\¦
+/** æŒ‡å®šã•ã‚ŒãŸé–¢æ•°ã®æƒ…å ±ã‚’è¡¨ç¤º
  *
- * @param name		[in] ŠÖ”–¼
+ * @param name		[in] é–¢æ•°å
  *
- * @return			ƒGƒ‰[ƒR[ƒh
+ * @return			ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  */
 
 newtErr NVMInfo(const char * name)
@@ -3807,12 +3807,12 @@ newtErr NVMInfo(const char * name)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ƒtƒ@ƒCƒ‹‚ğ“Ç‚ñ‚ÅƒXƒNƒŠƒvƒg‚ğÀs
+/** ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­è¾¼ã‚“ã§ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‚’å®Ÿè¡Œ
  *
- * @param path		[in] ƒtƒ@ƒCƒ‹‚ÌƒpƒX
- * @param errP		[out]ƒGƒ‰[ƒR[ƒh
+ * @param path		[in] ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹
+ * @param errP		[out]ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  *
- * @return			ƒXƒ^ƒbƒN‚ÌƒgƒbƒvƒIƒuƒWƒFƒNƒg
+ * @return			ã‚¹ã‚¿ãƒƒã‚¯ã®ãƒˆãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NVMInterpretFile(const char * path, newtErr * errP)
@@ -3835,12 +3835,12 @@ newtRef NVMInterpretFile(const char * path, newtErr * errP)
 
 
 /*------------------------------------------------------------------------*/
-/** •¶š—ñ‚ğƒRƒ“ƒpƒCƒ‹‚µ‚ÄƒXƒNƒŠƒvƒg‚ğÀs
+/** æ–‡å­—åˆ—ã‚’ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã—ã¦ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‚’å®Ÿè¡Œ
  *
- * @param s			[in] •¶š—ñ
- * @param errP		[out]ƒGƒ‰[ƒR[ƒh
+ * @param s			[in] æ–‡å­—åˆ—
+ * @param errP		[out]ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  *
- * @return			ƒXƒ^ƒbƒN‚ÌƒgƒbƒvƒIƒuƒWƒFƒNƒg
+ * @return			ã‚¹ã‚¿ãƒƒã‚¯ã®ãƒˆãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NVMInterpretStr(const char * s, newtErr * errP)

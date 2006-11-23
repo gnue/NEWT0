@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------*/
 /**
  * @file	NewtEnv.c
- * @brief   ÀsŠÂ‹«
+ * @brief   å®Ÿè¡Œç’°å¢ƒ
  *
  * @author  M.Nukui
  * @date	2003-11-07
@@ -10,7 +10,7 @@
  */
 
 
-/* ƒwƒbƒ_ƒtƒ@ƒCƒ‹ */
+/* ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ« */
 #include <string.h>
 #include <errno.h>
 
@@ -23,23 +23,23 @@
 #include "NewtFile.h"
 
 
-/* ƒ}ƒNƒ */
-#define SYM_TABLE			(newt_env.sym_table)				///< ƒVƒ“ƒ{ƒ‹ƒe[ƒuƒ‹
-#define ROOT				(newt_env.root)						///< ƒ‹[ƒgƒIƒuƒWƒFƒNƒg
-#define GLOBALS				(newt_env.globals)					///< ƒOƒ[ƒoƒ‹•Ï”ƒe[ƒuƒ‹
-#define GLOBAL_FNS			(newt_env.global_fns)				///< ƒOƒ[ƒoƒ‹ŠÖ”ƒe[ƒuƒ‹
-#define MAGIC_POINTERS		(newt_env.magic_pointers)			///< ƒ}ƒWƒbƒNƒ|ƒCƒ“ƒ^ƒe[ƒuƒ‹
+/* ãƒã‚¯ãƒ­ */
+#define SYM_TABLE			(newt_env.sym_table)				///< ã‚·ãƒ³ãƒœãƒ«ãƒ†ãƒ¼ãƒ–ãƒ«
+#define ROOT				(newt_env.root)						///< ãƒ«ãƒ¼ãƒˆã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+#define GLOBALS				(newt_env.globals)					///< ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•°ãƒ†ãƒ¼ãƒ–ãƒ«
+#define GLOBAL_FNS			(newt_env.global_fns)				///< ã‚°ãƒ­ãƒ¼ãƒãƒ«é–¢æ•°ãƒ†ãƒ¼ãƒ–ãƒ«
+#define MAGIC_POINTERS		(newt_env.magic_pointers)			///< ãƒã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿ãƒ†ãƒ¼ãƒ–ãƒ«
 
-#define INITSYM2(sym, str)	sym = NewtMakeSymbol(str)			///< ‚æ‚­g‚¤ƒVƒ“ƒ{ƒ‹‚Ì‰Šú‰»
-#define INITSYM(name)		INITSYM2(newt_sym.name, #name)		///< ‚æ‚­g‚¤ƒVƒ“ƒ{ƒ‹‚Ì‰Šú‰»i“Áê•¶š‚È‚µj
-
-
-/* ƒOƒ[ƒoƒ‹•Ï” */
-newt_env_t	newt_env;		///< ÀsŠÂ‹«
-newt_sym_t	newt_sym;		///< ‚æ‚­g‚¤ƒVƒ“ƒ{ƒ‹‚Ì•ÛŠÇêŠ
+#define INITSYM2(sym, str)	sym = NewtMakeSymbol(str)			///< ã‚ˆãä½¿ã†ã‚·ãƒ³ãƒœãƒ«ã®åˆæœŸåŒ–
+#define INITSYM(name)		INITSYM2(newt_sym.name, #name)		///< ã‚ˆãä½¿ã†ã‚·ãƒ³ãƒœãƒ«ã®åˆæœŸåŒ–ï¼ˆç‰¹æ®Šæ–‡å­—ãªã—ï¼‰
 
 
-/* ŠÖ”ƒvƒƒgƒ^ƒCƒv */
+/* ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•° */
+newt_env_t	newt_env;		///< å®Ÿè¡Œç’°å¢ƒ
+newt_sym_t	newt_sym;		///< ã‚ˆãä½¿ã†ã‚·ãƒ³ãƒœãƒ«ã®ä¿ç®¡å ´æ‰€
+
+
+/* é–¢æ•°ãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ— */
 char *	replacechr(char * str, char srch, char repl);
 
 static void		NewtInitSYM(void);
@@ -51,13 +51,13 @@ static void		NewtInitEnv(int argc, const char * argv[], int n);
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** •¶š—ñ‚Ì•¶š‚ğw’è‚³‚ê‚½•¶š‚Å’u‚«Š·‚¦‚é
+/** æ–‡å­—åˆ—ã®æ–‡å­—ã‚’æŒ‡å®šã•ã‚ŒãŸæ–‡å­—ã§ç½®ãæ›ãˆã‚‹
  *
- * @param str		[i/o]•¶š—ñ
- * @param src		[in] ’uŠ·‚¦‚ç‚ê‚é•¶š
- * @param dest		[in] ’uŠ·‚¦‚é•¶š
+ * @param str		[i/o]æ–‡å­—åˆ—
+ * @param src		[in] ç½®æ›ãˆã‚‰ã‚Œã‚‹æ–‡å­—
+ * @param dest		[in] ç½®æ›ãˆã‚‹æ–‡å­—
  *
- * @return			’u‚«Š·‚¦‚ç‚ê‚½•¶š—ñ
+ * @return			ç½®ãæ›ãˆã‚‰ã‚ŒãŸæ–‡å­—åˆ—
  */
 
 char * replacechr(char * str, char src, char dest)
@@ -75,9 +75,9 @@ char * replacechr(char * str, char src, char dest)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ŠÂ‹«•Ï”‚©‚çƒfƒtƒHƒ‹ƒgƒGƒ“ƒR[ƒfƒBƒ“ƒO‚ğæ“¾
+/** ç’°å¢ƒå¤‰æ•°ã‹ã‚‰ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°ã‚’å–å¾—
  *
- * @return			ƒfƒtƒHƒ‹ƒgƒGƒ“ƒR[ƒfƒBƒ“ƒOi•¶š—ñj
+ * @return			ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°ï¼ˆæ–‡å­—åˆ—ï¼‰
  */
 
 char * NewtDefaultEncoding(void)
@@ -100,9 +100,9 @@ char * NewtDefaultEncoding(void)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ‚æ‚­g‚¤ƒVƒ“ƒ{ƒ‹‚Ì‰Šú‰»
+/** ã‚ˆãä½¿ã†ã‚·ãƒ³ãƒœãƒ«ã®åˆæœŸåŒ–
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NewtInitSYM(void)
@@ -148,7 +148,7 @@ void NewtInitSYM(void)
     INITSYM(weird_immediate);
     INITSYM(forEachState);
 
-    // functionsi•K{j
+    // functionsï¼ˆå¿…é ˆï¼‰
     INITSYM(hasVariable);
     INITSYM(hasVar);
     INITSYM(defGlobalFn);
@@ -211,9 +211,9 @@ void NewtInitSYM(void)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒVƒXƒeƒ€ŠÂ‹«•Ï”‚Ì‰Šú‰»
+/** ã‚·ã‚¹ãƒ†ãƒ ç’°å¢ƒå¤‰æ•°ã®åˆæœŸåŒ–
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NewtInitSysEnv(void)
@@ -261,13 +261,13 @@ void NewtInitSysEnv(void)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“ˆø”‚Ì‰Šú‰»
+/** ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å¼•æ•°ã®åˆæœŸåŒ–
  *
- * @param argc		[in] ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“ˆø”‚Ì”
- * @param argv		[in] ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“ˆø”‚Ì”z—ñ
- * @param n			[in] ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“ˆø”‚ÌˆÊ’u
+ * @param argc		[in] ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å¼•æ•°ã®æ•°
+ * @param argv		[in] ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å¼•æ•°ã®é…åˆ—
+ * @param n			[in] ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å¼•æ•°ã®ä½ç½®
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
  
 void NewtInitARGV(int argc, const char * argv[], int n)
@@ -319,9 +319,9 @@ void NewtInitARGV(int argc, const char * argv[], int n)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒo[ƒWƒ‡ƒ“î•ñ‚Ì‰Šú‰»
+/** ãƒãƒ¼ã‚¸ãƒ§ãƒ³æƒ…å ±ã®åˆæœŸåŒ–
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NewtInitVersInfo(void)
@@ -330,98 +330,98 @@ void NewtInitVersInfo(void)
 
 	versInfo = NcMakeFrame();
 
-	// ƒvƒƒ_ƒNƒg–¼
+	// ãƒ—ãƒ­ãƒ€ã‚¯ãƒˆå
     NcSetSlot(versInfo, NSSYM(name), NewtMakeString(NEWT_NAME, true));
-	// ƒvƒƒg”Ô†
+	// ãƒ—ãƒ­ãƒˆç•ªå·
     NcSetSlot(versInfo, NSSYM(proto), NewtMakeString(NEWT_PROTO, true));
-	// ƒo[ƒWƒ‡ƒ“”Ô†
+	// ãƒãƒ¼ã‚¸ãƒ§ãƒ³ç•ªå·
     NcSetSlot(versInfo, NSSYM(version), NewtMakeString(NEWT_VERSION, true));
-	// ƒrƒ‹ƒh”Ô†
+	// ãƒ“ãƒ«ãƒ‰ç•ªå·
     NcSetSlot(versInfo, NSSYM(build), NewtMakeString(NEWT_BUILD, true));
-	// ƒRƒs[ƒ‰ƒCƒg
+	// ã‚³ãƒ”ãƒ¼ãƒ©ã‚¤ãƒˆ
     NcSetSlot(versInfo, NSSYM(copyright), NewtMakeString(NEWT_COPYRIGHT, true));
-	// ƒXƒ^ƒbƒtƒ[ƒ‹
+	// ã‚¹ã‚¿ãƒƒãƒ•ãƒ­ãƒ¼ãƒ«
     NcSetSlot(versInfo, NSSYM(staff), NewtMakeString(NEWT_STAFF, true));
 
-	// ƒŠ[ƒhƒIƒ“ƒŠ[‚É‚µ‚ÄƒOƒ[ƒoƒ‹•Ï”‚É“ü‚ê‚é
+	// ãƒªãƒ¼ãƒ‰ã‚ªãƒ³ãƒªãƒ¼ã«ã—ã¦ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•°ã«å…¥ã‚Œã‚‹
     NcSetSlot(GLOBALS, NSSYM(_VERSION_), NewtPackLiteral(versInfo));
 }
 
 
 /*------------------------------------------------------------------------*/
-/** ÀsŠÂ‹«‚Ì‰Šú‰»
+/** å®Ÿè¡Œç’°å¢ƒã®åˆæœŸåŒ–
  *
- * @param argc		[in] ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“ˆø”‚Ì”
- * @param argv		[in] ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“ˆø”‚Ì”z—ñ
- * @param n			[in] ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“ˆø”‚ÌˆÊ’u
+ * @param argc		[in] ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å¼•æ•°ã®æ•°
+ * @param argv		[in] ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å¼•æ•°ã®é…åˆ—
+ * @param n			[in] ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å¼•æ•°ã®ä½ç½®
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NewtInitEnv(int argc, const char * argv[], int n)
 {
-	// ƒVƒ“ƒ{ƒ‹ƒe[ƒuƒ‹‚Ìì¬
+	// ã‚·ãƒ³ãƒœãƒ«ãƒ†ãƒ¼ãƒ–ãƒ«ã®ä½œæˆ
     SYM_TABLE = NewtMakeArray(kNewtRefUnbind, 0);
     NewtInitSYM();
 
-	// ƒ‹[ƒgƒtƒŒ[ƒ€‚Ìì¬
+	// ãƒ«ãƒ¼ãƒˆãƒ•ãƒ¬ãƒ¼ãƒ ã®ä½œæˆ
     ROOT = NcMakeFrame();
-	// ƒOƒ[ƒoƒ‹•Ï”ƒe[ƒuƒ‹‚Ìì¬
+	// ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•°ãƒ†ãƒ¼ãƒ–ãƒ«ã®ä½œæˆ
     GLOBALS = NcMakeFrame();
-	// ƒOƒ[ƒoƒ‹ŠÖ”ƒe[ƒuƒ‹‚Ìì¬
+	// ã‚°ãƒ­ãƒ¼ãƒãƒ«é–¢æ•°ãƒ†ãƒ¼ãƒ–ãƒ«ã®ä½œæˆ
     GLOBAL_FNS = NcMakeFrame();
-	// ƒ}ƒWƒbƒNƒ|ƒCƒ“ƒ^ƒe[ƒuƒ‹‚Ìì¬
+	// ãƒã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿ãƒ†ãƒ¼ãƒ–ãƒ«ã®ä½œæˆ
 #ifdef __NAMED_MAGIC_POINTER__
     MAGIC_POINTERS = NcMakeFrame();
 #else
     MAGIC_POINTERS = NewtMakeArray(kNewtRefUnbind, 0);
 #endif
 
-	// ƒ‹[ƒgƒtƒŒ[ƒ€‚ÉŠeƒe[ƒuƒ‹‚ğŠi”[
+	// ãƒ«ãƒ¼ãƒˆãƒ•ãƒ¬ãƒ¼ãƒ ã«å„ãƒ†ãƒ¼ãƒ–ãƒ«ã‚’æ ¼ç´
     NcSetSlot(ROOT, NSSYM0(globals), GLOBALS);
     NcSetSlot(ROOT, NSSYM0(global_fns), GLOBAL_FNS);
     NcSetSlot(ROOT, NSSYM0(magic_pointers), MAGIC_POINTERS);
     NcSetSlot(ROOT, NSSYM0(sym_table), SYM_TABLE);
 
-	// ŠÂ‹«•Ï”‚Ì‰Šú‰»
+	// ç’°å¢ƒå¤‰æ•°ã®åˆæœŸåŒ–
 	NewtInitSysEnv();
-	// ARGV ‚Ì‰Šú‰»
+	// ARGV ã®åˆæœŸåŒ–
 	NewtInitARGV(argc, argv, n);
-	// ƒo[ƒWƒ‡ƒ“î•ñ‚Ì‰Šú‰»
+	// ãƒãƒ¼ã‚¸ãƒ§ãƒ³æƒ…å ±ã®åˆæœŸåŒ–
 	NewtInitVersInfo();
 }
 
 
 /*------------------------------------------------------------------------*/
-/** ƒCƒ“ƒ^ƒvƒŠƒ^‚Ì‰Šú‰»
+/** ã‚¤ãƒ³ã‚¿ãƒ—ãƒªã‚¿ã®åˆæœŸåŒ–
  *
- * @param argc		[in] ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“ˆø”‚Ì”
- * @param argv		[in] ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“ˆø”‚Ì”z—ñ
- * @param n			[in] ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“ˆø”‚ÌˆÊ’u
+ * @param argc		[in] ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å¼•æ•°ã®æ•°
+ * @param argv		[in] ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å¼•æ•°ã®é…åˆ—
+ * @param n			[in] ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å¼•æ•°ã®ä½ç½®
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NewtInit(int argc, const char * argv[], int n)
 {
-	// ƒƒ‚ƒŠƒv[ƒ‹‚ÌŠm•Û
+	// ãƒ¡ãƒ¢ãƒªãƒ—ãƒ¼ãƒ«ã®ç¢ºä¿
     NEWT_POOL = NewtPoolAlloc(NEWT_POOL_EXPANDSPACE);
-	// ÀsŠÂ‹«‚Ì‰Šú‰»
+	// å®Ÿè¡Œç’°å¢ƒã®åˆæœŸåŒ–
     NewtInitEnv(argc, argv, n);
 }
 
 
 /*------------------------------------------------------------------------*/
-/** ƒCƒ“ƒ^ƒvƒŠƒ^‚ÌŒãn––
+/** ã‚¤ãƒ³ã‚¿ãƒ—ãƒªã‚¿ã®å¾Œå§‹æœ«
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NewtCleanup(void)
 {
-    // Œãn––‚ğ‚·‚é‚±‚Æ
+    // å¾Œå§‹æœ«ã‚’ã™ã‚‹ã“ã¨
 
-	// ƒƒ‚ƒŠƒv[ƒ‹‚Ì‰ğ•ú
+	// ãƒ¡ãƒ¢ãƒªãƒ—ãƒ¼ãƒ«ã®è§£æ”¾
     if (NEWT_POOL != NULL)
     {
         NewtPoolRelease(NEWT_POOL);
@@ -433,11 +433,11 @@ void NewtCleanup(void)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ƒVƒ“ƒ{ƒ‹ƒe[ƒuƒ‹‚©‚çƒVƒ“ƒ{ƒ‹‚ğŒŸõ‚·‚é
+/** ã‚·ãƒ³ãƒœãƒ«ãƒ†ãƒ¼ãƒ–ãƒ«ã‹ã‚‰ã‚·ãƒ³ãƒœãƒ«ã‚’æ¤œç´¢ã™ã‚‹
  *
- * @param name		[in] ƒVƒ“ƒ{ƒ‹‚Ì–¼‘O
+ * @param name		[in] ã‚·ãƒ³ãƒœãƒ«ã®åå‰
  *
- * @return			ƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg
+ * @return			ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtLookupSymbolTable(const char * name)
@@ -448,12 +448,12 @@ newtRef NewtLookupSymbolTable(const char * name)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ƒOƒ[ƒoƒ‹ŠÖ”‚Ì—L–³‚ğ’²‚×‚é
+/** ã‚°ãƒ­ãƒ¼ãƒãƒ«é–¢æ•°ã®æœ‰ç„¡ã‚’èª¿ã¹ã‚‹
  *
- * @param r			[in] ƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @retval			true	ƒOƒ[ƒoƒ‹ŠÖ”‚ª‘¶İ‚·‚é
- * @retval			false   ƒOƒ[ƒoƒ‹ŠÖ”‚ª‘¶İ‚µ‚È‚¢
+ * @retval			true	ã‚°ãƒ­ãƒ¼ãƒãƒ«é–¢æ•°ãŒå­˜åœ¨ã™ã‚‹
+ * @retval			false   ã‚°ãƒ­ãƒ¼ãƒãƒ«é–¢æ•°ãŒå­˜åœ¨ã—ãªã„
  */
 
 bool NewtHasGlobalFn(newtRefArg r)
@@ -463,12 +463,12 @@ bool NewtHasGlobalFn(newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒOƒ[ƒoƒ‹•Ï”‚Ì—L–³‚ğ’²‚×‚é
+/** ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•°ã®æœ‰ç„¡ã‚’èª¿ã¹ã‚‹
  *
- * @param r			[in] ƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @retval			true	ƒOƒ[ƒoƒ‹•Ï”‚ª‘¶İ‚·‚é
- * @retval			false   ƒOƒ[ƒoƒ‹•Ï”‚ª‘¶İ‚µ‚È‚¢
+ * @retval			true	ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•°ãŒå­˜åœ¨ã™ã‚‹
+ * @retval			false   ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•°ãŒå­˜åœ¨ã—ãªã„
  */
 
 bool NewtHasGlobalVar(newtRefArg r)
@@ -479,15 +479,15 @@ bool NewtHasGlobalVar(newtRefArg r)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ƒOƒ[ƒoƒ‹ŠÖ”‚Ì—L–³‚ğ’²‚×‚é
+/** ã‚°ãƒ­ãƒ¼ãƒãƒ«é–¢æ•°ã®æœ‰ç„¡ã‚’èª¿ã¹ã‚‹
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] ƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @retval			TRUE	ƒOƒ[ƒoƒ‹ŠÖ”‚ª‘¶İ‚·‚é
- * @retval			NIL		ƒOƒ[ƒoƒ‹ŠÖ”‚ª‘¶İ‚µ‚È‚¢
+ * @retval			TRUE	ã‚°ãƒ­ãƒ¼ãƒãƒ«é–¢æ•°ãŒå­˜åœ¨ã™ã‚‹
+ * @retval			NIL		ã‚°ãƒ­ãƒ¼ãƒãƒ«é–¢æ•°ãŒå­˜åœ¨ã—ãªã„
  *
- * @note			ƒXƒNƒŠƒvƒg‚©‚ç‚ÌŒÄo‚µ—p
+ * @note			ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‹ã‚‰ã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NsGlobalFnExists(newtRefArg rcvr, newtRefArg r)
@@ -498,15 +498,15 @@ newtRef NsGlobalFnExists(newtRefArg rcvr, newtRefArg r)
 
 #ifdef __USE_OBSOLETE_STYLE__
 /*------------------------------------------------------------------------*/
-/** ƒOƒ[ƒoƒ‹ŠÖ”‚Ì—L–³‚ğ’²‚×‚é (OBSOLETE)
+/** ã‚°ãƒ­ãƒ¼ãƒãƒ«é–¢æ•°ã®æœ‰ç„¡ã‚’èª¿ã¹ã‚‹ (OBSOLETE)
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] ƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @retval			TRUE	ƒOƒ[ƒoƒ‹ŠÖ”‚ª‘¶İ‚·‚é
- * @retval			NIL		ƒOƒ[ƒoƒ‹ŠÖ”‚ª‘¶İ‚µ‚È‚¢
+ * @retval			TRUE	ã‚°ãƒ­ãƒ¼ãƒãƒ«é–¢æ•°ãŒå­˜åœ¨ã™ã‚‹
+ * @retval			NIL		ã‚°ãƒ­ãƒ¼ãƒãƒ«é–¢æ•°ãŒå­˜åœ¨ã—ãªã„
  *
- * @note			ƒXƒNƒŠƒvƒg‚©‚ç‚ÌŒÄo‚µ—p
+ * @note			ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‹ã‚‰ã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NsHasGlobalFn(newtRefArg rcvr, newtRefArg r)
@@ -517,12 +517,12 @@ newtRef NsHasGlobalFn(newtRefArg rcvr, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒOƒ[ƒoƒ‹ŠÖ”‚Ìæ“¾
+/** ã‚°ãƒ­ãƒ¼ãƒãƒ«é–¢æ•°ã®å–å¾—
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] ƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			ŠÖ”ƒIƒuƒWƒFƒNƒg
+ * @return			é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NsGetGlobalFn(newtRefArg rcvr, newtRefArg r)
@@ -532,13 +532,13 @@ newtRef NsGetGlobalFn(newtRefArg rcvr, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒOƒ[ƒoƒ‹ŠÖ”‚Ì’è‹`
+/** ã‚°ãƒ­ãƒ¼ãƒãƒ«é–¢æ•°ã®å®šç¾©
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] ƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg
- * @param fn		[in] ŠÖ”ƒIƒuƒWƒFƒNƒg
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param fn		[in] é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			ŠÖ”ƒIƒuƒWƒFƒNƒg
+ * @return			é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NsDefGlobalFn(newtRefArg rcvr, newtRefArg r, newtRefArg fn)
@@ -550,8 +550,8 @@ newtRef NsDefGlobalFn(newtRefArg rcvr, newtRefArg r, newtRefArg fn)
 /*------------------------------------------------------------------------*/
 /** Undefine a global function.
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] ƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
  * @return			NIL
  */
@@ -564,15 +564,15 @@ newtRef NsUndefGlobalFn(newtRefArg rcvr, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒOƒ[ƒoƒ‹•Ï”‚Ì—L–³‚ğ’²‚×‚é
+/** ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•°ã®æœ‰ç„¡ã‚’èª¿ã¹ã‚‹
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] ƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @retval			TRUE	ƒOƒ[ƒoƒ‹•Ï”‚ª‘¶İ‚·‚é
- * @retval			NIL		ƒOƒ[ƒoƒ‹•Ï”‚ª‘¶İ‚µ‚È‚¢
+ * @retval			TRUE	ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•°ãŒå­˜åœ¨ã™ã‚‹
+ * @retval			NIL		ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•°ãŒå­˜åœ¨ã—ãªã„
  *
- * @note			ƒXƒNƒŠƒvƒg‚©‚ç‚ÌŒÄo‚µ—p
+ * @note			ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‹ã‚‰ã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NsGlobalVarExists(newtRefArg rcvr, newtRefArg r)
@@ -583,15 +583,15 @@ newtRef NsGlobalVarExists(newtRefArg rcvr, newtRefArg r)
 
 #ifdef __USE_OBSOLETE_STYLE__
 /*------------------------------------------------------------------------*/
-/** ƒOƒ[ƒoƒ‹•Ï”‚Ì—L–³‚ğ’²‚×‚é (OBSOLETE)
+/** ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•°ã®æœ‰ç„¡ã‚’èª¿ã¹ã‚‹ (OBSOLETE)
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] ƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @retval			TRUE	ƒOƒ[ƒoƒ‹•Ï”‚ª‘¶İ‚·‚é
- * @retval			NIL		ƒOƒ[ƒoƒ‹•Ï”‚ª‘¶İ‚µ‚È‚¢
+ * @retval			TRUE	ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•°ãŒå­˜åœ¨ã™ã‚‹
+ * @retval			NIL		ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•°ãŒå­˜åœ¨ã—ãªã„
  *
- * @note			ƒXƒNƒŠƒvƒg‚©‚ç‚ÌŒÄo‚µ—p
+ * @note			ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‹ã‚‰ã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef NsHasGlobalVar(newtRefArg rcvr, newtRefArg r)
@@ -602,12 +602,12 @@ newtRef NsHasGlobalVar(newtRefArg rcvr, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒOƒ[ƒoƒ‹•Ï”‚Ìæ“¾
+/** ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•°ã®å–å¾—
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] ƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			ƒIƒuƒWƒFƒNƒg
+ * @return			ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NsGetGlobalVar(newtRefArg rcvr, newtRefArg r)
@@ -617,13 +617,13 @@ newtRef NsGetGlobalVar(newtRefArg rcvr, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒOƒ[ƒoƒ‹•Ï”‚É’l‚ğƒZƒbƒg‚·‚é
+/** ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•°ã«å€¤ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] ƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg
- * @param v			[in] ’lƒIƒuƒWƒFƒNƒg
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param v			[in] å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			ƒIƒuƒWƒFƒNƒg
+ * @return			ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NsDefGlobalVar(newtRefArg rcvr, newtRefArg r, newtRefArg v)
@@ -634,13 +634,13 @@ newtRef NsDefGlobalVar(newtRefArg rcvr, newtRefArg r, newtRefArg v)
 
 #ifdef __USE_OBSOLETE_STYLE__
 /*------------------------------------------------------------------------*/
-/** ƒOƒ[ƒoƒ‹•Ï”‚É’l‚ğƒZƒbƒg‚·‚é (OBSOLETE)
+/** ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•°ã«å€¤ã‚’ã‚»ãƒƒãƒˆã™ã‚‹ (OBSOLETE)
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] ƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg
- * @param v			[in] ’lƒIƒuƒWƒFƒNƒg
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param v			[in] å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			ƒIƒuƒWƒFƒNƒg
+ * @return			ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NsSetGlobalVar(newtRefArg rcvr, newtRefArg r, newtRefArg v)
@@ -653,8 +653,8 @@ newtRef NsSetGlobalVar(newtRefArg rcvr, newtRefArg r, newtRefArg v)
 /*------------------------------------------------------------------------*/
 /** Undefine a global variable.
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] ƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
  * @return			NIL
  */
@@ -669,11 +669,11 @@ newtRef NsUndefGlobalVar(newtRefArg rcvr, newtRefArg r)
 #ifdef __NAMED_MAGIC_POINTER__
 
 /*------------------------------------------------------------------------*/
-/** ƒ}ƒWƒbƒNƒ|ƒCƒ“ƒ^‚ÌQÆ‚ğ‰ğŒˆ‚·‚é
+/** ãƒã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿ã®å‚ç…§ã‚’è§£æ±ºã™ã‚‹
  *
- * @param r			[in] ƒ}ƒWƒbƒNƒ|ƒCƒ“ƒ^
+ * @param r			[in] ãƒã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿
  *
- * @return			ƒIƒuƒWƒFƒNƒg
+ * @return			ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NcResolveMagicPointer(newtRefArg r)
@@ -693,13 +693,13 @@ newtRef NcResolveMagicPointer(newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒ}ƒWƒbƒNƒ|ƒCƒ“ƒ^‚Ì’è‹`
+/** ãƒã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿ã®å®šç¾©
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] ƒ}ƒWƒbƒNƒ|ƒCƒ“ƒ^
- * @param v			[in] ƒIƒuƒWƒFƒNƒg
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] ãƒã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿
+ * @param v			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			ƒIƒuƒWƒFƒNƒg
+ * @return			ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NsDefMagicPointer(newtRefArg rcvr, newtRefArg r, newtRefArg v)
@@ -726,11 +726,11 @@ newtRef NsDefMagicPointer(newtRefArg rcvr, newtRefArg r, newtRefArg v)
 #else
 
 /*------------------------------------------------------------------------*/
-/** ƒ}ƒWƒbƒNƒ|ƒCƒ“ƒ^‚ÌQÆ‚ğ‰ğŒˆ‚·‚é
+/** ãƒã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿ã®å‚ç…§ã‚’è§£æ±ºã™ã‚‹
  *
- * @param r			[in] ƒ}ƒWƒbƒNƒ|ƒCƒ“ƒ^
+ * @param r			[in] ãƒã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿
  *
- * @return			ƒIƒuƒWƒFƒNƒg
+ * @return			ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NcResolveMagicPointer(newtRefArg r)
@@ -745,7 +745,7 @@ newtRef NcResolveMagicPointer(newtRefArg r)
 	index = NewtMPToIndex(r);
 
 	if (table != 0)
-	{	// ƒe[ƒuƒ‹”Ô† 0 ˆÈŠO‚Í–¢ƒTƒ|[ƒg
+	{	// ãƒ†ãƒ¼ãƒ–ãƒ«ç•ªå· 0 ä»¥å¤–ã¯æœªã‚µãƒãƒ¼ãƒˆ
 		return r;
 	}
 
@@ -764,13 +764,13 @@ newtRef NcResolveMagicPointer(newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒ}ƒWƒbƒNƒ|ƒCƒ“ƒ^‚Ì’è‹`
+/** ãƒã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿ã®å®šç¾©
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] ƒ}ƒWƒbƒNƒ|ƒCƒ“ƒ^
- * @param v			[in] ƒIƒuƒWƒFƒNƒg
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] ãƒã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿
+ * @param v			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			ƒIƒuƒWƒFƒNƒg
+ * @return			ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NsDefMagicPointer(newtRefArg rcvr, newtRefArg r, newtRefArg v)
@@ -784,7 +784,7 @@ newtRef NsDefMagicPointer(newtRefArg rcvr, newtRefArg r, newtRefArg v)
 		index = NewtMPToIndex(r);
 
 		if (table != 0)
-		{	// ƒe[ƒuƒ‹”Ô† 0 ˆÈŠO‚Í–¢ƒTƒ|[ƒg
+		{	// ãƒ†ãƒ¼ãƒ–ãƒ«ç•ªå· 0 ä»¥å¤–ã¯æœªã‚µãƒãƒ¼ãƒˆ
 			return kNewtRefUnbind;
 		}
 	}
@@ -798,7 +798,7 @@ newtRef NsDefMagicPointer(newtRefArg rcvr, newtRefArg r, newtRefArg v)
 	}
 
 	if (NewtLength(MAGIC_POINTERS) <= index)
-	{	// ƒe[ƒuƒ‹‚Ì’·‚³‚ğŠg’£
+	{	// ãƒ†ãƒ¼ãƒ–ãƒ«ã®é•·ã•ã‚’æ‹¡å¼µ
 		NewtSetLength(MAGIC_POINTERS, index + 1);
 	}
 
@@ -810,11 +810,11 @@ newtRef NsDefMagicPointer(newtRefArg rcvr, newtRefArg r, newtRefArg v)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ƒ‹[ƒgƒIƒuƒWƒFƒNƒg‚Ìæ“¾
+/** ãƒ«ãƒ¼ãƒˆã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å–å¾—
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
  *
- * @return			ƒ‹[ƒgƒIƒuƒWƒFƒNƒg
+ * @return			ãƒ«ãƒ¼ãƒˆã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NsGetRoot(newtRefArg rcvr)
@@ -824,11 +824,11 @@ newtRef NsGetRoot(newtRefArg rcvr)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒOƒ[ƒoƒ‹•Ï”ƒe[ƒuƒ‹‚Ìæ“¾
+/** ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•°ãƒ†ãƒ¼ãƒ–ãƒ«ã®å–å¾—
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
  *
- * @return			ƒOƒ[ƒoƒ‹•Ï”ƒe[ƒuƒ‹
+ * @return			ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•°ãƒ†ãƒ¼ãƒ–ãƒ«
  */
 
 newtRef NsGetGlobals(newtRefArg rcvr)
@@ -838,11 +838,11 @@ newtRef NsGetGlobals(newtRefArg rcvr)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒOƒ[ƒoƒ‹ŠÖ”ƒe[ƒuƒ‹‚Ìæ“¾
+/** ã‚°ãƒ­ãƒ¼ãƒãƒ«é–¢æ•°ãƒ†ãƒ¼ãƒ–ãƒ«ã®å–å¾—
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
  *
- * @return			ƒOƒ[ƒoƒ‹ŠÖ”ƒe[ƒuƒ‹
+ * @return			ã‚°ãƒ­ãƒ¼ãƒãƒ«é–¢æ•°ãƒ†ãƒ¼ãƒ–ãƒ«
  */
 
 newtRef NsGetGlobalFns(newtRefArg rcvr)
@@ -852,11 +852,11 @@ newtRef NsGetGlobalFns(newtRefArg rcvr)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒ}ƒWƒbƒNƒ|ƒCƒ“ƒ^ŠÖ”ƒe[ƒuƒ‹‚Ìæ“¾
+/** ãƒã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿é–¢æ•°ãƒ†ãƒ¼ãƒ–ãƒ«ã®å–å¾—
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
  *
- * @return			ƒ}ƒWƒbƒNƒ|ƒCƒ“ƒ^ŠÖ”ƒe[ƒuƒ‹
+ * @return			ãƒã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿é–¢æ•°ãƒ†ãƒ¼ãƒ–ãƒ«
  */
 
 newtRef NsGetMagicPointers(newtRefArg rcvr)
@@ -866,11 +866,11 @@ newtRef NsGetMagicPointers(newtRefArg rcvr)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒVƒ“ƒ{ƒ‹ƒe[ƒuƒ‹‚Ìæ“¾
+/** ã‚·ãƒ³ãƒœãƒ«ãƒ†ãƒ¼ãƒ–ãƒ«ã®å–å¾—
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
  *
- * @return			ƒVƒ“ƒ{ƒ‹ƒe[ƒuƒ‹
+ * @return			ã‚·ãƒ³ãƒœãƒ«ãƒ†ãƒ¼ãƒ–ãƒ«
  */
 
 newtRef NsGetSymTable(newtRefArg rcvr)

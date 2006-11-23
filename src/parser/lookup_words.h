@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------*/
 /**
  * @file	lookup_words.h
- * @brief   ’PŒê‚ÌŒŸõ
+ * @brief   å˜èªã®æ¤œç´¢
  *
  * @author  M.Nukui
  * @date	2003-11-07
@@ -14,16 +14,16 @@
 #define	LOOKUP_WORDS_H
 
 
-/* Œ^éŒ¾ */
+/* å‹å®£è¨€ */
 
-/// ’PŒêƒe[ƒuƒ‹‚Ì—v‘f\‘¢‘Ì
+/// å˜èªãƒ†ãƒ¼ãƒ–ãƒ«ã®è¦ç´ æ§‹é€ ä½“
 typedef struct {
-    char *	name;   ///< ’PŒê
-    int		tokn;   ///< ƒg[ƒNƒ“ID
+    char *	name;   ///< å˜èª
+    int		tokn;   ///< ãƒˆãƒ¼ã‚¯ãƒ³ID
 } keyword_t;
 
 
-/* ŠÖ”ƒvƒƒgƒ^ƒCƒv */
+/* é–¢æ•°ãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ— */
 
 #ifdef __cplusplus
 extern "C" {

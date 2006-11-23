@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------*/
 /**
  * @file	NewtParser.h
- * @brief   \•¶–Ø‚Ì¶¬
+ * @brief   æ§‹æ–‡æœ¨ã®ç”Ÿæˆ
  *
  * @author  M.Nukui
  * @date	2003-11-07
@@ -13,33 +13,33 @@
 #ifndef	NEWTPARSE_H
 #define	NEWTPARSE_H
 
-/* ƒwƒbƒ_ƒtƒ@ƒCƒ‹ */
+/* ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ« */
 #include <stdio.h>
 
 #include "NewtType.h"
 #include "NewtConf.h"
 
 
-/* ƒ}ƒNƒ */
+/* ãƒã‚¯ãƒ­ */
 
 /*
-#define kNPSSyntaxNodeMask			0x80000003											///< ƒIƒuƒWƒFƒNƒgQÆ‚Ìƒ}ƒXƒNi\•¶–Øƒm[ƒh—pj
+#define kNPSSyntaxNodeMask			0x80000003											///< ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§ã®ãƒã‚¹ã‚¯ï¼ˆæ§‹æ–‡æœ¨ãƒãƒ¼ãƒ‰ç”¨ï¼‰
 
-#define NPSRefIsSyntaxNode(r)		((r & kNPSSyntaxNodeMask) == kNPSSyntaxNodeMask)	///< ƒIƒuƒWƒFƒNƒgQÆ‚ª\•¶–Øƒm[ƒh‚©H
-#define NPSRefToSyntaxNode(r)		(((uint32_t)r & 0x7fffffff) >> 2)					///< ƒIƒuƒWƒFƒNƒgQÆ‚ğ\•¶–Øƒm[ƒh‚É•ÏŠ·
-#define NPSMakeSyntaxNode(v)		((v << 2) | kNPSSyntaxNodeMask)						///< \•¶–Øƒm[ƒh‚ÌƒIƒuƒWƒFƒNƒgQÆ‚ğì¬
+#define NPSRefIsSyntaxNode(r)		((r & kNPSSyntaxNodeMask) == kNPSSyntaxNodeMask)	///< ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§ãŒæ§‹æ–‡æœ¨ãƒãƒ¼ãƒ‰ã‹ï¼Ÿ
+#define NPSRefToSyntaxNode(r)		(((uint32_t)r & 0x7fffffff) >> 2)					///< ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§ã‚’æ§‹æ–‡æœ¨ãƒãƒ¼ãƒ‰ã«å¤‰æ›
+#define NPSMakeSyntaxNode(v)		((v << 2) | kNPSSyntaxNodeMask)						///< æ§‹æ–‡æœ¨ãƒãƒ¼ãƒ‰ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§ã‚’ä½œæˆ
 */
 
-#define kNPSSyntaxNodeMask			0x0000000e									///< ƒIƒuƒWƒFƒNƒgQÆ‚Ìƒ}ƒXƒNi\•¶–Øƒm[ƒh—pj
+#define kNPSSyntaxNodeMask			0x0000000e									///< ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§ã®ãƒã‚¹ã‚¯ï¼ˆæ§‹æ–‡æœ¨ãƒãƒ¼ãƒ‰ç”¨ï¼‰
 
-#define NPSRefIsSyntaxNode(r)		((r & 0x0000000f) == kNPSSyntaxNodeMask)	///< ƒIƒuƒWƒFƒNƒgQÆ‚ª\•¶–Øƒm[ƒh‚©H
-#define NPSRefToSyntaxNode(r)		((uint32_t)r >> 4)							///< ƒIƒuƒWƒFƒNƒgQÆ‚ğ\•¶–Øƒm[ƒh‚É•ÏŠ·
-#define NPSMakeSyntaxNode(v)		((v << 4) | kNPSSyntaxNodeMask)				///< \•¶–Øƒm[ƒh‚ÌƒIƒuƒWƒFƒNƒgQÆ‚ğì¬
+#define NPSRefIsSyntaxNode(r)		((r & 0x0000000f) == kNPSSyntaxNodeMask)	///< ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§ãŒæ§‹æ–‡æœ¨ãƒãƒ¼ãƒ‰ã‹ï¼Ÿ
+#define NPSRefToSyntaxNode(r)		((uint32_t)r >> 4)							///< ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§ã‚’æ§‹æ–‡æœ¨ãƒãƒ¼ãƒ‰ã«å¤‰æ›
+#define NPSMakeSyntaxNode(v)		((v << 4) | kNPSSyntaxNodeMask)				///< æ§‹æ–‡æœ¨ãƒãƒ¼ãƒ‰ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§ã‚’ä½œæˆ
 
 
-/* ’è” */
+/* å®šæ•° */
 
-/// ƒIƒyƒŒ[ƒ^ƒR[ƒh
+/// ã‚ªãƒšãƒ¬ãƒ¼ã‚¿ã‚³ãƒ¼ãƒ‰
 enum {
 	kNPS_NOT				= 256,  ///< not
 	kNPS_DIV,						///< div
@@ -53,7 +53,7 @@ enum {
 	kNPS_CONCAT2,					///< &&
 };
 
-/// ƒp[ƒT—p‹^—–½—ß
+/// ãƒ‘ãƒ¼ã‚µç”¨ç–‘ä¼¼å‘½ä»¤
 enum {
     kNPSPop					= 000,	///< 000 pop
     kNPSDup					= 001,	///< 001 dup
@@ -151,57 +151,57 @@ enum {
 	kNPSShiftLeft,							///< <<
 	kNPSShiftRight,							///< >>
 
-	// “Æ©Šg’£
+	// ç‹¬è‡ªæ‹¡å¼µ
 	kNPSObjectEqual,						///< ==
-	kNPSMakeRegex,							///< ³‹K•\Œ»ƒIƒuƒWƒFƒNƒg‚Ì¶¬
+	kNPSMakeRegex,							///< æ­£è¦è¡¨ç¾ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç”Ÿæˆ
 
     // Unknown
-    KNPSUnknownCode		= 0xffffffff		///< •s–¾‚È–½—ß
+    KNPSUnknownCode		= 0xffffffff		///< ä¸æ˜ãªå‘½ä»¤
 };
 
 
-/// \•¶–Øƒf[ƒ^‚Ìí—Ş
+/// æ§‹æ–‡æœ¨ãƒ‡ãƒ¼ã‚¿ã®ç¨®é¡
 enum {
-    kNPSKindNone,		///< ƒf[ƒ^‚È‚µ
-    kNPSKindLink,		///< ƒŠƒ“ƒN
-    kNPSKindObject		///< ƒIƒuƒWƒFƒNƒg
+    kNPSKindNone,		///< ãƒ‡ãƒ¼ã‚¿ãªã—
+    kNPSKindLink,		///< ãƒªãƒ³ã‚¯
+    kNPSKindObject		///< ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 };
 
 
-/* Œ^éŒ¾ */
+/* å‹å®£è¨€ */
 
-/// \•¶–Øƒm[ƒh‚Ö‚Ìƒ|ƒCƒ“ƒ^
+/// æ§‹æ–‡æœ¨ãƒãƒ¼ãƒ‰ã¸ã®ãƒã‚¤ãƒ³ã‚¿
 typedef newtRef		nps_node_t;
 
 
-/// \•¶–Øƒm[ƒh
+/// æ§‹æ–‡æœ¨ãƒãƒ¼ãƒ‰
 typedef struct {
-    uint32_t	code;   ///< –½—ßƒR[ƒh
-    nps_node_t	op1;	///< ƒIƒyƒR[ƒh1
-    nps_node_t	op2;	///< ƒIƒyƒR[ƒh2
+    uint32_t	code;   ///< å‘½ä»¤ã‚³ãƒ¼ãƒ‰
+    nps_node_t	op1;	///< ã‚ªãƒšã‚³ãƒ¼ãƒ‰1
+    nps_node_t	op2;	///< ã‚ªãƒšã‚³ãƒ¼ãƒ‰2
 } nps_syntax_node_t;
 
 
-/// ƒp[ƒTŠÂ‹«
+/// ãƒ‘ãƒ¼ã‚µç’°å¢ƒ
 typedef struct {
-	bool			first_time;			///< š‹å‰ğÍ‚Ì‰‰ñ”»•Ê—pƒtƒ‰ƒO
+	bool			first_time;			///< å­—å¥è§£æã®åˆå›åˆ¤åˆ¥ç”¨ãƒ•ãƒ©ã‚°
 
-	uint16_t		numwarns;			///< ”­¶‚µ‚½ƒ[ƒjƒ“ƒO”
-	uint16_t		numerrs;			///< ”­¶‚µ‚½ƒGƒ‰[”
+	uint16_t		numwarns;			///< ç™ºç”Ÿã—ãŸãƒ¯ãƒ¼ãƒ‹ãƒ³ã‚°æ•°
+	uint16_t		numerrs;			///< ç™ºç”Ÿã—ãŸã‚¨ãƒ©ãƒ¼æ•°
 
-	const char *	fname;				///< “ü—Í’†‚Ìƒtƒ@ƒCƒ‹–¼
-	uint32_t		lineno;				///< š‹å‰ğÍ‚Ìs”Ô†
-	uint32_t		tokenpos;			///< ƒg[ƒNƒ“‚ÌˆÊ’u
-	uint16_t		yyleng;				///< ƒg[ƒNƒ“‚Ì’·‚³
-	char			linebuf[NEWT_LEX_LINEBUFFSIZE];  ///< sƒoƒbƒtƒ@
+	const char *	fname;				///< å…¥åŠ›ä¸­ã®ãƒ•ã‚¡ã‚¤ãƒ«å
+	uint32_t		lineno;				///< å­—å¥è§£æã®è¡Œç•ªå·
+	uint32_t		tokenpos;			///< ãƒˆãƒ¼ã‚¯ãƒ³ã®ä½ç½®
+	uint16_t		yyleng;				///< ãƒˆãƒ¼ã‚¯ãƒ³ã®é•·ã•
+	char			linebuf[NEWT_LEX_LINEBUFFSIZE];  ///< è¡Œãƒãƒƒãƒ•ã‚¡
 } nps_env_t;
 
 
-/* ƒOƒ[ƒoƒ‹•Ï” */
-extern nps_env_t	nps_env;		///< ƒp[ƒTŠÂ‹«
+/* ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•° */
+extern nps_env_t	nps_env;		///< ãƒ‘ãƒ¼ã‚µç’°å¢ƒ
 
 
-/* ŠÖ”ƒvƒƒgƒ^ƒCƒv */
+/* é–¢æ•°ãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ— */
 
 #ifdef __cplusplus
 extern "C" {

@@ -1,6 +1,6 @@
 /**
  * @file	NewtIconv.c
- * @brief   •¶šƒR[ƒhˆ—ilibiconvg—pj
+ * @brief   æ–‡å­—ã‚³ãƒ¼ãƒ‰å‡¦ç†ï¼ˆlibiconvä½¿ç”¨ï¼‰
  *
  * @author  M.Nukui
  * @date	2005-07-17
@@ -9,22 +9,22 @@
  */
 
 
-/* ƒwƒbƒ_ƒtƒ@ƒCƒ‹ */
+/* ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ« */
 #include "NewtIconv.h"
 
 
 #ifdef HAVE_LIBICONV
 /*------------------------------------------------------------------------*/
-/** NSOFƒoƒbƒtƒ@‚ğ“Ç‚ñ‚Å”z—ñƒIƒuƒWƒFƒNƒg‚É•ÏŠ·‚·‚é
+/** NSOFãƒãƒƒãƒ•ã‚¡ã‚’èª­è¾¼ã‚“ã§é…åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«å¤‰æ›ã™ã‚‹
  *
- * @param cd		[in] iconv•ÏŠ·ƒfƒBƒXƒNƒŠƒvƒ^[
- * @param src		[in] •ÏŠ·‚·‚é•¶š—ñ
- * @param srclen	[in] •ÏŠ·‚·‚é•¶š—ñ‚Ì’·‚³
- * @param dstlenp	[out]•ÏŠ·‚³‚ê‚½•¶š—ñ‚Ì’·‚³
+ * @param cd		[in] iconvå¤‰æ›ãƒ‡ã‚£ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ¼
+ * @param src		[in] å¤‰æ›ã™ã‚‹æ–‡å­—åˆ—
+ * @param srclen	[in] å¤‰æ›ã™ã‚‹æ–‡å­—åˆ—ã®é•·ã•
+ * @param dstlenp	[out]å¤‰æ›ã•ã‚ŒãŸæ–‡å­—åˆ—ã®é•·ã•
  *
- * @return			•ÏŠ·‚³‚ê‚½•¶š—ñ
+ * @return			å¤‰æ›ã•ã‚ŒãŸæ–‡å­—åˆ—
  *
- * @note			•ÏŠ·‚³‚ê‚½•¶š—ñ‚ÍŒÄo‚µŒ³‚Å free ‚·‚é•K—v‚ ‚è
+ * @note			å¤‰æ›ã•ã‚ŒãŸæ–‡å­—åˆ—ã¯å‘¼å‡ºã—å…ƒã§ free ã™ã‚‹å¿…è¦ã‚ã‚Š
  */
 
 char * NewtIconv(iconv_t cd, char * src, size_t srclen, size_t* dstlenp)
@@ -51,12 +51,12 @@ char * NewtIconv(iconv_t cd, char * src, size_t srclen, size_t* dstlenp)
 			status = iconv(cd, &inbuf_p, &inbytesleft, &outbuf_p, &outbytesleft);
 
 			if (status == (size_t)-1)
-			{	// •ÏŠ·‚É¸”s‚µ‚½‚Ì‚Åƒoƒbƒtƒ@‚ğ‰ğ•ú‚·‚é
+			{	// å¤‰æ›ã«å¤±æ•—ã—ãŸã®ã§ãƒãƒƒãƒ•ã‚¡ã‚’è§£æ”¾ã™ã‚‹
 				free(dst);
 				dst = NULL;
 			}
 			else
-			{	// ‚¢‚ç‚È‚¢•”•ª‚Ìƒoƒbƒtƒ@‚ğØ‚è‹l‚ß‚é
+			{	// ã„ã‚‰ãªã„éƒ¨åˆ†ã®ãƒãƒƒãƒ•ã‚¡ã‚’åˆ‡ã‚Šè©°ã‚ã‚‹
 				dstlen = bufflen - outbytesleft;
 				dst = realloc(dst, dstlen);
 			}

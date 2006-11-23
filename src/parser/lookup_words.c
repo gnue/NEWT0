@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------*/
 /**
  * @file	lookup_words.c
- * @brief   ’PŒê‚ÌŒŸõ
+ * @brief   å˜èªã®æ¤œç´¢
  *
  * @author  M.Nukui
  * @date	2003-11-07
@@ -10,21 +10,21 @@
  */
 
 
-/* ƒwƒbƒ_ƒtƒ@ƒCƒ‹ */
+/* ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ« */
 #include <string.h>
 #include <stdlib.h>
 #include "lookup_words.h"
 
 
 /*------------------------------------------------------------------------*/
-/** ’PŒê‚ÌŒŸõ
+/** å˜èªã®æ¤œç´¢
  *
- * @param words		[in] ’PŒêƒe[ƒuƒ‹
- * @param len		[in] ’PŒêƒe[ƒuƒ‹‚Ì’·‚³
- * @param s			[in] ŒŸõ‚·‚é•¶š—ñ
+ * @param words		[in] å˜èªãƒ†ãƒ¼ãƒ–ãƒ«
+ * @param len		[in] å˜èªãƒ†ãƒ¼ãƒ–ãƒ«ã®é•·ã•
+ * @param s			[in] æ¤œç´¢ã™ã‚‹æ–‡å­—åˆ—
  *
- * @retval			-1ˆÈŠO	ƒg[ƒNƒ“ID
- * @retval			-1		’PŒê‚ª‚İ‚Â‚©‚ç‚È‚©‚Á‚½
+ * @retval			-1ä»¥å¤–	ãƒˆãƒ¼ã‚¯ãƒ³ID
+ * @retval			-1		å˜èªãŒã¿ã¤ã‹ã‚‰ãªã‹ã£ãŸ
  */
 
 int lookup_words(keyword_t words[], int len, const char * s)
@@ -53,7 +53,7 @@ int lookup_words(keyword_t words[], int len, const char * s)
 
 
 /*------------------------------------------------------------------------*/
-/** ’PŒêƒe[ƒuƒ‹‚Ìƒ\[ƒg—p”äŠrŠÖ”
+/** å˜èªãƒ†ãƒ¼ãƒ–ãƒ«ã®ã‚½ãƒ¼ãƒˆç”¨æ¯”è¼ƒé–¢æ•°
  */
 
 int lookup_membcompare(const void * a1, const void * a2)
@@ -63,12 +63,12 @@ int lookup_membcompare(const void * a1, const void * a2)
 
 
 /*------------------------------------------------------------------------*/
-/** ’PŒêƒe[ƒuƒ‹‚Ìƒ\[ƒg
+/** å˜èªãƒ†ãƒ¼ãƒ–ãƒ«ã®ã‚½ãƒ¼ãƒˆ
  *
- * @param words		[in] ’PŒêƒe[ƒuƒ‹
- * @param len		[in] ’PŒêƒe[ƒuƒ‹‚Ì’·‚³
+ * @param words		[in] å˜èªãƒ†ãƒ¼ãƒ–ãƒ«
+ * @param len		[in] å˜èªãƒ†ãƒ¼ãƒ–ãƒ«ã®é•·ã•
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void lookup_sorttable(keyword_t words[], int len)

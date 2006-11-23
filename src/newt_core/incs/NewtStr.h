@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------*/
 /**
  * @file	NewtStr.h
- * @brief   •¶š—ñˆ—
+ * @brief   æ–‡å­—åˆ—å‡¦ç†
  *
  * @author  M.Nukui
  * @date	2004-01-25
@@ -14,11 +14,11 @@
 #define	NEWTSTR_H
 
 
-/* ƒwƒbƒ_ƒtƒ@ƒCƒ‹ */
+/* ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ« */
 #include "NewtType.h"
 
 
-/* ƒ}ƒNƒ */
+/* ãƒã‚¯ãƒ­ */
 #define	NcChr(r)				NsChr(kNewtRefNIL, r)
 #define	NcOrd(r)				NsOrd(kNewtRefNIL, r)
 #define	NcStrLen(r)				NsStrLen(kNewtRefNIL, r)
@@ -28,7 +28,7 @@
 #define	NcParamStr(base, array)	NsParamStr(kNewtRefNIL, base, array)
 
 
-/* ŠÖ”ƒvƒƒgƒ^ƒCƒv */
+/* é–¢æ•°ãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ— */
 
 #ifdef __cplusplus
 extern "C" {

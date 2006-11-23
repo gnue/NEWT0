@@ -44,34 +44,34 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		DAE3D27C0A429BA300FE1B1F /* protoFILE.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = protoFILE.c; sourceTree = "<group>"; };
-		DAE3D27E0A429BA300FE1B1F /* protoREGEX.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = protoREGEX.c; sourceTree = "<group>"; };
-		F53BCC700670CDF00013103E /* NewtIO.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = NewtIO.h; sourceTree = "<group>"; };
-		F541CF5107D8582D0071DCE6 /* Newton.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = Newton.h; sourceTree = "<group>"; };
-		F5547416088A7486001E9DDF /* NewtIconv.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = NewtIconv.h; sourceTree = "<group>"; };
-		F55860F907E09F800080D223 /* NewtPrint.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = NewtPrint.h; sourceTree = "<group>"; };
-		F55A5AF70726499E002A520F /* NewtLib.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = NewtLib.h; sourceTree = "<group>"; };
-		F5622ED907E0273B009AAF9A /* Objects.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = Objects.h; sourceTree = "<group>"; };
-		F5622F2307E029FC009AAF9A /* NewtonMemory.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = NewtonMemory.h; sourceTree = "<group>"; };
-		F5622F2407E029FC009AAF9A /* NewtonExceptions.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = NewtonExceptions.h; sourceTree = "<group>"; };
-		F57E7A0C07FD362400256511 /* NewtNSOF.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = NewtNSOF.h; sourceTree = "<group>"; };
-		F5ACB05306412D4900DB6CF9 /* NewtBC.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = NewtBC.h; sourceTree = "<group>"; };
-		F5ACB05406412D4900DB6CF9 /* NewtConf.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = NewtConf.h; sourceTree = "<group>"; };
-		F5ACB05506412D4900DB6CF9 /* NewtCore.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = NewtCore.h; sourceTree = "<group>"; };
-		F5ACB05606412D4900DB6CF9 /* NewtEnv.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = NewtEnv.h; sourceTree = "<group>"; };
-		F5ACB05706412D4900DB6CF9 /* NewtErrs.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = NewtErrs.h; sourceTree = "<group>"; };
-		F5ACB05806412D4900DB6CF9 /* NewtFile.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = NewtFile.h; sourceTree = "<group>"; };
-		F5ACB05906412D4900DB6CF9 /* NewtFns.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = NewtFns.h; sourceTree = "<group>"; };
-		F5ACB05A06412D4900DB6CF9 /* NewtGC.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = NewtGC.h; sourceTree = "<group>"; };
-		F5ACB05B06412D4900DB6CF9 /* NewtMem.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = NewtMem.h; sourceTree = "<group>"; };
-		F5ACB05C06412D4900DB6CF9 /* NewtObj.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = NewtObj.h; sourceTree = "<group>"; };
-		F5ACB05D06412D4900DB6CF9 /* NewtParser.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = NewtParser.h; sourceTree = "<group>"; };
-		F5ACB05E06412D4900DB6CF9 /* NewtStr.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = NewtStr.h; sourceTree = "<group>"; };
-		F5ACB05F06412D4900DB6CF9 /* NewtType.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = NewtType.h; sourceTree = "<group>"; };
-		F5ACB06006412D4900DB6CF9 /* NewtVM.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = NewtVM.h; sourceTree = "<group>"; };
+		DAE3D27C0A429BA300FE1B1F /* protoFILE.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = protoFILE.c; sourceTree = "<group>"; };
+		DAE3D27E0A429BA300FE1B1F /* protoREGEX.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = protoREGEX.c; sourceTree = "<group>"; };
+		F53BCC700670CDF00013103E /* NewtIO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewtIO.h; sourceTree = "<group>"; };
+		F541CF5107D8582D0071DCE6 /* Newton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Newton.h; sourceTree = "<group>"; };
+		F5547416088A7486001E9DDF /* NewtIconv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewtIconv.h; sourceTree = "<group>"; };
+		F55860F907E09F800080D223 /* NewtPrint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewtPrint.h; sourceTree = "<group>"; };
+		F55A5AF70726499E002A520F /* NewtLib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewtLib.h; sourceTree = "<group>"; };
+		F5622ED907E0273B009AAF9A /* Objects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Objects.h; sourceTree = "<group>"; };
+		F5622F2307E029FC009AAF9A /* NewtonMemory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewtonMemory.h; sourceTree = "<group>"; };
+		F5622F2407E029FC009AAF9A /* NewtonExceptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewtonExceptions.h; sourceTree = "<group>"; };
+		F57E7A0C07FD362400256511 /* NewtNSOF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewtNSOF.h; sourceTree = "<group>"; };
+		F5ACB05306412D4900DB6CF9 /* NewtBC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewtBC.h; sourceTree = "<group>"; };
+		F5ACB05406412D4900DB6CF9 /* NewtConf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewtConf.h; sourceTree = "<group>"; };
+		F5ACB05506412D4900DB6CF9 /* NewtCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewtCore.h; sourceTree = "<group>"; };
+		F5ACB05606412D4900DB6CF9 /* NewtEnv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewtEnv.h; sourceTree = "<group>"; };
+		F5ACB05706412D4900DB6CF9 /* NewtErrs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewtErrs.h; sourceTree = "<group>"; };
+		F5ACB05806412D4900DB6CF9 /* NewtFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewtFile.h; sourceTree = "<group>"; };
+		F5ACB05906412D4900DB6CF9 /* NewtFns.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewtFns.h; sourceTree = "<group>"; };
+		F5ACB05A06412D4900DB6CF9 /* NewtGC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewtGC.h; sourceTree = "<group>"; };
+		F5ACB05B06412D4900DB6CF9 /* NewtMem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewtMem.h; sourceTree = "<group>"; };
+		F5ACB05C06412D4900DB6CF9 /* NewtObj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewtObj.h; sourceTree = "<group>"; };
+		F5ACB05D06412D4900DB6CF9 /* NewtParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewtParser.h; sourceTree = "<group>"; };
+		F5ACB05E06412D4900DB6CF9 /* NewtStr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewtStr.h; sourceTree = "<group>"; };
+		F5ACB05F06412D4900DB6CF9 /* NewtType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewtType.h; sourceTree = "<group>"; };
+		F5ACB06006412D4900DB6CF9 /* NewtVM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewtVM.h; sourceTree = "<group>"; };
 		F5D8909F0A454544004C7582 /* protoREGEX.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = protoREGEX.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5D890A90A454575004C7582 /* protoFILE.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = protoFILE.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
-		F5DE1345082AD4A500BB42A5 /* config.h */ = {isa = PBXFileReference; fileEncoding = "-2147483647"; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
+		F5DE1345082AD4A500BB42A5 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
 		F5F69C0107E8F36E0086BCEA /* platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = platform.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 

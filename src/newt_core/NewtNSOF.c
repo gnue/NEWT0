@@ -10,7 +10,7 @@
  */
 
 
-/* ƒwƒbƒ_ƒtƒ@ƒCƒ‹ */
+/* ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ« */
 #include <string.h>
 
 #include "NewtNSOF.h"
@@ -23,40 +23,40 @@
 
 #include "utils/endian_utils.h"
 
-/* ƒ}ƒNƒ */
-#define NSOFIsNOS(verno)	((verno == 1) || (verno == 2))	///< Newton OS@ŒİŠ·‚Ì NSOF
+/* ãƒã‚¯ãƒ­ */
+#define NSOFIsNOS(verno)	((verno == 1) || (verno == 2))	///< Newton OSã€€äº’æ›ã® NSOF
 
 
 
-/* Œ^éŒ¾ */
+/* å‹å®£è¨€ */
 
-/// NSOF•ÏŠ·‚Ég—p‚·‚é iconv•ÏŠ·ƒfƒBƒXƒNƒŠƒvƒ^[
+/// NSOFå¤‰æ›ã«ä½¿ç”¨ã™ã‚‹ iconvå¤‰æ›ãƒ‡ã‚£ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ¼
 #ifdef HAVE_LIBICONV
 typedef struct {
-	iconv_t		utf16be;	///< iconv•ÏŠ·ƒfƒBƒXƒNƒŠƒvƒ^[iUTF16-BEj
-	iconv_t		macroman;	///< iconv•ÏŠ·ƒfƒBƒXƒNƒŠƒvƒ^[iMACROMANj
+	iconv_t		utf16be;	///< iconvå¤‰æ›ãƒ‡ã‚£ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ¼ï¼ˆUTF16-BEï¼‰
+	iconv_t		macroman;	///< iconvå¤‰æ›ãƒ‡ã‚£ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ¼ï¼ˆMACROMANï¼‰
 } nsof_iconv_t;
 #endif /* HAVE_LIBICONV */
 
-/// NSOFƒXƒgƒŠ[ƒ€\‘¢‘Ì
+/// NSOFã‚¹ãƒˆãƒªãƒ¼ãƒ æ§‹é€ ä½“
 typedef struct {
-	int32_t		verno;			///< NSOFƒo[ƒWƒ‡ƒ“”Ô†
-	uint8_t *	data;			///< ƒf[ƒ^
-	uint32_t	len;			///< ƒf[ƒ^‚Ì’·‚³
-	uint32_t	offset;			///< ì‹Æ’†‚ÌˆÊ’u
-	newtRefVar	precedents;		///< oŒ»Ï‚İƒIƒuƒWƒFƒNƒg‚ÌƒŠƒXƒg
-	newtErr		lastErr;		///< ÅŒã‚ÌƒGƒ‰[ƒR[ƒh
+	int32_t		verno;			///< NSOFãƒãƒ¼ã‚¸ãƒ§ãƒ³ç•ªå·
+	uint8_t *	data;			///< ãƒ‡ãƒ¼ã‚¿
+	uint32_t	len;			///< ãƒ‡ãƒ¼ã‚¿ã®é•·ã•
+	uint32_t	offset;			///< ä½œæ¥­ä¸­ã®ä½ç½®
+	newtRefVar	precedents;		///< å‡ºç¾æ¸ˆã¿ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ãƒªã‚¹ãƒˆ
+	newtErr		lastErr;		///< æœ€å¾Œã®ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
 
 #ifdef HAVE_LIBICONV
 	struct {
-		nsof_iconv_t	to;		///< NSOFƒGƒ“ƒR[ƒfƒBƒ“ƒO‚Ö‚Ì•ÏŠ·—p
-		nsof_iconv_t	from;	///< NSOFƒGƒ“ƒR[ƒfƒBƒ“ƒO‚©‚ç‚Ì•ÏŠ·—p
-	} cd; ///< iconv•ÏŠ·ƒfƒBƒXƒNƒŠƒvƒ^[
+		nsof_iconv_t	to;		///< NSOFã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°ã¸ã®å¤‰æ›ç”¨
+		nsof_iconv_t	from;	///< NSOFã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°ã‹ã‚‰ã®å¤‰æ›ç”¨
+	} cd; ///< iconvå¤‰æ›ãƒ‡ã‚£ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ¼
 #endif /* HAVE_LIBICONV */
 } nsof_stream_t;
 
 
-/* ŠÖ”ƒvƒƒgƒ^ƒCƒv */
+/* é–¢æ•°ãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ— */
 static bool			NewtRefIsByte(newtRefArg r);
 static bool			NewtRefIsSmallRect(newtRefArg r);
 static int32_t		NewtArraySearch(newtRefArg array, newtRefArg r);
@@ -88,12 +88,12 @@ static newtRef		NSOFReadNSOF(nsof_stream_t * nsof);
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚ª 0`255 ‚Ì®”‚©ƒ`ƒFƒbƒN‚·‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒ 0ã€œ255 ã®æ•´æ•°ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @retval			true	0`255 ‚Ì®”
- * @retval			false   0`255 ‚Ì®”‚Å‚È‚¢
+ * @retval			true	0ã€œ255 ã®æ•´æ•°
+ * @retval			false   0ã€œ255 ã®æ•´æ•°ã§ãªã„
  */
 
 bool NewtRefIsByte(newtRefArg r)
@@ -113,12 +113,12 @@ bool NewtRefIsByte(newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒtƒŒ[ƒ€‚ª NSOF(smallRect) ‚ÌğŒ‚ğ–‚½‚·‚©ƒ`ƒFƒbƒN‚·‚é
+/** ãƒ•ãƒ¬ãƒ¼ãƒ ãŒ NSOF(smallRect) ã®æ¡ä»¶ã‚’æº€ãŸã™ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param r			[in] ƒtƒŒ[ƒ€ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ãƒ•ãƒ¬ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @retval			true	ğŒ‚ğ–‚½‚·
- * @retval			false	ğŒ‚ğ–‚½‚³‚È‚¢
+ * @retval			true	æ¡ä»¶ã‚’æº€ãŸã™
+ * @retval			false	æ¡ä»¶ã‚’æº€ãŸã•ãªã„
  */
 
 bool NewtRefIsSmallRect(newtRefArg r)
@@ -139,13 +139,13 @@ bool NewtRefIsSmallRect(newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ”z—ñ‚©‚çƒIƒuƒWƒFƒNƒg‚ğ’T‚·
+/** é…åˆ—ã‹ã‚‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æ¢ã™
  *
- * @param array		[in] ”z—ñ
- * @param r			[in] ƒtƒŒ[ƒ€ƒIƒuƒWƒFƒNƒg
+ * @param array		[in] é…åˆ—
+ * @param r			[in] ãƒ•ãƒ¬ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @retval			0ˆÈã	Œ©‚Â‚©‚Á‚½ˆÊ’u
- * @retval			-1		Œ©‚Â‚©‚ç‚È‚©‚Á‚½
+ * @retval			0ä»¥ä¸Š	è¦‹ã¤ã‹ã£ãŸä½ç½®
+ * @retval			-1		è¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸ
  */
 
 int32_t NewtArraySearch(newtRefArg array, newtRefArg r)
@@ -169,14 +169,14 @@ int32_t NewtArraySearch(newtRefArg array, newtRefArg r)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** 1byte ‚ğ NSOF ‚Åƒoƒbƒtƒ@‚É‘‚Ş
+/** 1byte ã‚’ NSOF ã§ãƒãƒƒãƒ•ã‚¡ã«æ›¸è¾¼ã‚€
  *
- * @param nsof		[i/o]NSOFƒoƒbƒtƒ@
- * @param value		[in] 1byte@ƒf[ƒ^
+ * @param nsof		[i/o]NSOFãƒãƒƒãƒ•ã‚¡
+ * @param value		[in] 1byteã€€ãƒ‡ãƒ¼ã‚¿
  *
- * @return			ƒGƒ‰[ƒR[ƒh
+ * @return			ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  *
- * @note			nsof->data ‚ª NULL ‚Ìê‡‚Í nsof->offset ‚Ì‚İXV‚³‚ê‚é
+ * @note			nsof->data ãŒ NULL ã®å ´åˆã¯ nsof->offset ã®ã¿æ›´æ–°ã•ã‚Œã‚‹
  */
  
 newtErr NSOFWriteByte(nsof_stream_t * nsof, uint8_t value)
@@ -184,7 +184,7 @@ newtErr NSOFWriteByte(nsof_stream_t * nsof, uint8_t value)
 	if (nsof->data)
 	{
 		if (nsof->len <= nsof->offset)
-		{	// ƒoƒbƒtƒ@‚ğ‰z‚¦‚½
+		{	// ãƒãƒƒãƒ•ã‚¡ã‚’è¶ŠãˆãŸ
 			nsof->lastErr = kNErrOutOfRange;
 			return nsof->lastErr;
 		}
@@ -199,14 +199,14 @@ newtErr NSOFWriteByte(nsof_stream_t * nsof, uint8_t value)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒf[ƒ^‚ğ xlong Œ`®‚Åƒoƒbƒtƒ@‚É‘‚Ş
+/** ãƒ‡ãƒ¼ã‚¿ã‚’ xlong å½¢å¼ã§ãƒãƒƒãƒ•ã‚¡ã«æ›¸è¾¼ã‚€
  *
- * @param nsof		[i/o]NSOFƒoƒbƒtƒ@
- * @param value		[in] ƒf[ƒ^
+ * @param nsof		[i/o]NSOFãƒãƒƒãƒ•ã‚¡
+ * @param value		[in] ãƒ‡ãƒ¼ã‚¿
  *
- * @return			ƒGƒ‰[ƒR[ƒh
+ * @return			ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  *
- * @note			nsof->data ‚ª NULL ‚Ìê‡‚Í nsof->offset ‚Ì‚İXV‚³‚ê‚é
+ * @note			nsof->data ãŒ NULL ã®å ´åˆã¯ nsof->offset ã®ã¿æ›´æ–°ã•ã‚Œã‚‹
  */
 
 newtErr NSOFWriteXlong(nsof_stream_t * nsof, int32_t value)
@@ -229,11 +229,11 @@ newtErr NSOFWriteXlong(nsof_stream_t * nsof, int32_t value)
 
 
 /*------------------------------------------------------------------------*/
-/** NSOFƒoƒbƒtƒ@ ‚©‚çƒf[ƒ^‚ğ 1byte “Ç‚Ş
+/** NSOFãƒãƒƒãƒ•ã‚¡ ã‹ã‚‰ãƒ‡ãƒ¼ã‚¿ã‚’ 1byte èª­è¾¼ã‚€
  *
- * @param nsof		[i/o]NSOFƒoƒbƒtƒ@
+ * @param nsof		[i/o]NSOFãƒãƒƒãƒ•ã‚¡
  *
- * @return			1byte ƒf[ƒ^
+ * @return			1byte ãƒ‡ãƒ¼ã‚¿
  */
  
 uint8_t NSOFReadByte(nsof_stream_t * nsof)
@@ -241,7 +241,7 @@ uint8_t NSOFReadByte(nsof_stream_t * nsof)
 	uint8_t		result;
 
 	if (nsof->len <= nsof->offset)
-	{	// ƒoƒbƒtƒ@‚ğ‰z‚¦‚½
+	{	// ãƒãƒƒãƒ•ã‚¡ã‚’è¶ŠãˆãŸ
 		nsof->lastErr = kNErrNotABinaryObject;
 		return 0;
 	}
@@ -254,11 +254,11 @@ uint8_t NSOFReadByte(nsof_stream_t * nsof)
 
 
 /*------------------------------------------------------------------------*/
-/** NSOFƒoƒbƒtƒ@ ‚©‚çƒf[ƒ^‚ğ xlong Œ`®‚Å“Ç‚Ş
+/** NSOFãƒãƒƒãƒ•ã‚¡ ã‹ã‚‰ãƒ‡ãƒ¼ã‚¿ã‚’ xlong å½¢å¼ã§èª­è¾¼ã‚€
  *
- * @param nsof		[i/o]NSOFƒoƒbƒtƒ@
+ * @param nsof		[i/o]NSOFãƒãƒƒãƒ•ã‚¡
  *
- * @return			ƒf[ƒ^
+ * @return			ãƒ‡ãƒ¼ã‚¿
  */
 
 int32_t NSOFReadXlong(nsof_stream_t * nsof)
@@ -281,14 +281,14 @@ int32_t NSOFReadXlong(nsof_stream_t * nsof)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** oŒ»Ï‚İƒf[ƒ^‚ğ NSOF ‚Åƒoƒbƒtƒ@‚É‘‚Ş
+/** å‡ºç¾æ¸ˆã¿ãƒ‡ãƒ¼ã‚¿ã‚’ NSOF ã§ãƒãƒƒãƒ•ã‚¡ã«æ›¸è¾¼ã‚€
  *
- * @param nsof		[i/o]NSOFƒoƒbƒtƒ@
- * @param pos		[in] oŒ»ˆÊ’u
+ * @param nsof		[i/o]NSOFãƒãƒƒãƒ•ã‚¡
+ * @param pos		[in] å‡ºç¾ä½ç½®
  *
- * @return			ƒGƒ‰[ƒR[ƒh
+ * @return			ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  *
- * @note			nsof->data ‚ª NULL ‚Ìê‡‚Í nsof->offset ‚Ì‚İXV‚³‚ê‚é
+ * @note			nsof->data ãŒ NULL ã®å ´åˆã¯ nsof->offset ã®ã¿æ›´æ–°ã•ã‚Œã‚‹
  */
  
 newtErr NSOFWritePrecedent(nsof_stream_t * nsof, int32_t pos)
@@ -301,14 +301,14 @@ newtErr NSOFWritePrecedent(nsof_stream_t * nsof, int32_t pos)
 
 
 /*------------------------------------------------------------------------*/
-/** ‘¦’lƒf[ƒ^‚ğ NSOF ‚Åƒoƒbƒtƒ@‚É‘‚Ş
+/** å³å€¤ãƒ‡ãƒ¼ã‚¿ã‚’ NSOF ã§ãƒãƒƒãƒ•ã‚¡ã«æ›¸è¾¼ã‚€
  *
- * @param nsof		[i/o]NSOFƒoƒbƒtƒ@
- * @param r			[in] ‘¦’lƒf[ƒ^
+ * @param nsof		[i/o]NSOFãƒãƒƒãƒ•ã‚¡
+ * @param r			[in] å³å€¤ãƒ‡ãƒ¼ã‚¿
  *
- * @return			ƒGƒ‰[ƒR[ƒh
+ * @return			ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  *
- * @note			nsof->data ‚ª NULL ‚Ìê‡‚Í nsof->offset ‚Ì‚İXV‚³‚ê‚é
+ * @note			nsof->data ãŒ NULL ã®å ´åˆã¯ nsof->offset ã®ã¿æ›´æ–°ã•ã‚Œã‚‹
  */
  
 newtErr NSOFWriteImmediate(nsof_stream_t * nsof, newtRefArg r)
@@ -321,14 +321,14 @@ newtErr NSOFWriteImmediate(nsof_stream_t * nsof, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** •¶šƒf[ƒ^‚ğ NSOF ‚Åƒoƒbƒtƒ@‚É‘‚Ş
+/** æ–‡å­—ãƒ‡ãƒ¼ã‚¿ã‚’ NSOF ã§ãƒãƒƒãƒ•ã‚¡ã«æ›¸è¾¼ã‚€
  *
- * @param nsof		[i/o]NSOFƒoƒbƒtƒ@
- * @param r			[in] •¶šƒf[ƒ^
+ * @param nsof		[i/o]NSOFãƒãƒƒãƒ•ã‚¡
+ * @param r			[in] æ–‡å­—ãƒ‡ãƒ¼ã‚¿
  *
- * @return			ƒGƒ‰[ƒR[ƒh
+ * @return			ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  *
- * @note			nsof->data ‚ª NULL ‚Ìê‡‚Í nsof->offset ‚Ì‚İXV‚³‚ê‚é
+ * @note			nsof->data ãŒ NULL ã®å ´åˆã¯ nsof->offset ã®ã¿æ›´æ–°ã•ã‚Œã‚‹
  */
 
 newtErr NSOFWriteCharacter(nsof_stream_t * nsof, newtRefArg r)
@@ -354,15 +354,15 @@ newtErr NSOFWriteCharacter(nsof_stream_t * nsof, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒoƒCƒiƒŠƒf[ƒ^‚ğ NSOF ‚Åƒoƒbƒtƒ@‚É‘‚Ş
+/** ãƒã‚¤ãƒŠãƒªãƒ‡ãƒ¼ã‚¿ã‚’ NSOF ã§ãƒãƒƒãƒ•ã‚¡ã«æ›¸è¾¼ã‚€
  *
- * @param nsof		[i/o]NSOFƒoƒbƒtƒ@
- * @param r			[in] ƒoƒCƒiƒŠƒIƒuƒWƒFƒNƒg
- * @param objtype	[in] ƒIƒuƒWƒFƒNƒgƒ^ƒCƒv
+ * @param nsof		[i/o]NSOFãƒãƒƒãƒ•ã‚¡
+ * @param r			[in] ãƒã‚¤ãƒŠãƒªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param objtype	[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¿ã‚¤ãƒ—
  *
- * @return			ƒGƒ‰[ƒR[ƒh
+ * @return			ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  *
- * @note			nsof->data ‚ª NULL ‚Ìê‡‚Í nsof->offset ‚Ì‚İXV‚³‚ê‚é
+ * @note			nsof->data ãŒ NULL ã®å ´åˆã¯ nsof->offset ã®ã¿æ›´æ–°ã•ã‚Œã‚‹
  */
 
 newtErr NSOFWriteBinary(nsof_stream_t * nsof, newtRefArg r, uint16_t objtype)
@@ -451,14 +451,14 @@ newtErr NSOFWriteBinary(nsof_stream_t * nsof, newtRefArg r, uint16_t objtype)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒVƒ“ƒ{ƒ‹ƒf[ƒ^‚ğ NSOF ‚Åƒoƒbƒtƒ@‚É‘‚Ş
+/** ã‚·ãƒ³ãƒœãƒ«ãƒ‡ãƒ¼ã‚¿ã‚’ NSOF ã§ãƒãƒƒãƒ•ã‚¡ã«æ›¸è¾¼ã‚€
  *
- * @param nsof		[i/o]NSOFƒoƒbƒtƒ@
- * @param r			[in] ƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg
+ * @param nsof		[i/o]NSOFãƒãƒƒãƒ•ã‚¡
+ * @param r			[in] ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			ƒGƒ‰[ƒR[ƒh
+ * @return			ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  *
- * @note			nsof->data ‚ª NULL ‚Ìê‡‚Í nsof->offset ‚Ì‚İXV‚³‚ê‚é
+ * @note			nsof->data ãŒ NULL ã®å ´åˆã¯ nsof->offset ã®ã¿æ›´æ–°ã•ã‚Œã‚‹
  */
 
 newtErr NSOFWriteSymbol(nsof_stream_t * nsof, newtRefArg r)
@@ -498,14 +498,14 @@ newtErr NSOFWriteSymbol(nsof_stream_t * nsof, newtRefArg r)
 
 #ifdef __NAMED_MAGIC_POINTER__
 /*------------------------------------------------------------------------*/
-/** –¼‘O•tƒ}ƒWƒbƒNƒ|ƒCƒ“ƒ^‚ğ NSOF ‚Åƒoƒbƒtƒ@‚É‘‚Ş
+/** åå‰ä»˜ãƒã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿ã‚’ NSOF ã§ãƒãƒƒãƒ•ã‚¡ã«æ›¸è¾¼ã‚€
  *
- * @param nsof		[i/o]NSOFƒoƒbƒtƒ@
- * @param r			[in] –¼‘O•tƒ}ƒWƒbƒNƒ|ƒCƒ“ƒ^
+ * @param nsof		[i/o]NSOFãƒãƒƒãƒ•ã‚¡
+ * @param r			[in] åå‰ä»˜ãƒã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿
  *
- * @return			ƒGƒ‰[ƒR[ƒh
+ * @return			ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  *
- * @note			nsof->data ‚ª NULL ‚Ìê‡‚Í nsof->offset ‚Ì‚İXV‚³‚ê‚é
+ * @note			nsof->data ãŒ NULL ã®å ´åˆã¯ nsof->offset ã®ã¿æ›´æ–°ã•ã‚Œã‚‹
  */
 
 newtErr NSOFWriteNamedMP(nsof_stream_t * nsof, newtRefArg r)
@@ -516,7 +516,7 @@ newtErr NSOFWriteNamedMP(nsof_stream_t * nsof, newtRefArg r)
 
 	if (NSOFIsNOS(nsof->verno))
 	{
-		// ‚Æ‚è‚ ‚¦‚¸ƒVƒ“ƒ{ƒ‹‚ğ‘‚Ş
+		// ã¨ã‚Šã‚ãˆãšã‚·ãƒ³ãƒœãƒ«ã‚’æ›¸è¾¼ã‚€
 		NSOFWriteSymbol(nsof, sym);
 		nsof->lastErr = kNErrNSOFWrite;
 	}
@@ -539,14 +539,14 @@ newtErr NSOFWriteNamedMP(nsof_stream_t * nsof, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ”z—ñƒf[ƒ^‚ğ NSOF ‚Åƒoƒbƒtƒ@‚É‘‚Ş
+/** é…åˆ—ãƒ‡ãƒ¼ã‚¿ã‚’ NSOF ã§ãƒãƒƒãƒ•ã‚¡ã«æ›¸è¾¼ã‚€
  *
- * @param nsof		[i/o]NSOFƒoƒbƒtƒ@
- * @param r			[in] ”z—ñƒIƒuƒWƒFƒNƒg
+ * @param nsof		[i/o]NSOFãƒãƒƒãƒ•ã‚¡
+ * @param r			[in] é…åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			ƒGƒ‰[ƒR[ƒh
+ * @return			ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  *
- * @note			nsof->data ‚ª NULL ‚Ìê‡‚Í nsof->offset ‚Ì‚İXV‚³‚ê‚é
+ * @note			nsof->data ãŒ NULL ã®å ´åˆã¯ nsof->offset ã®ã¿æ›´æ–°ã•ã‚Œã‚‹
  */
 
 newtErr NSOFWriteArray(nsof_stream_t * nsof, newtRefArg r)
@@ -588,14 +588,14 @@ newtErr NSOFWriteArray(nsof_stream_t * nsof, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒtƒŒ[ƒ€ƒf[ƒ^‚ğ NSOF ‚Åƒoƒbƒtƒ@‚É‘‚Ş
+/** ãƒ•ãƒ¬ãƒ¼ãƒ ãƒ‡ãƒ¼ã‚¿ã‚’ NSOF ã§ãƒãƒƒãƒ•ã‚¡ã«æ›¸è¾¼ã‚€
  *
- * @param nsof		[i/o]NSOFƒoƒbƒtƒ@
- * @param r			[in] ƒtƒŒ[ƒ€ƒIƒuƒWƒFƒNƒg
+ * @param nsof		[i/o]NSOFãƒãƒƒãƒ•ã‚¡
+ * @param r			[in] ãƒ•ãƒ¬ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			ƒGƒ‰[ƒR[ƒh
+ * @return			ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  *
- * @note			nsof->data ‚ª NULL ‚Ìê‡‚Í nsof->offset ‚Ì‚İXV‚³‚ê‚é
+ * @note			nsof->data ãŒ NULL ã®å ´åˆã¯ nsof->offset ã®ã¿æ›´æ–°ã•ã‚Œã‚‹
  */
 
 newtErr NSOFWriteFrame(nsof_stream_t * nsof, newtRefArg r)
@@ -632,14 +632,14 @@ newtErr NSOFWriteFrame(nsof_stream_t * nsof, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒtƒŒ[ƒ€ƒf[ƒ^‚ğ NSOF(smallRect) ‚Åƒoƒbƒtƒ@‚É‘‚Ş
+/** ãƒ•ãƒ¬ãƒ¼ãƒ ãƒ‡ãƒ¼ã‚¿ã‚’ NSOF(smallRect) ã§ãƒãƒƒãƒ•ã‚¡ã«æ›¸è¾¼ã‚€
  *
- * @param nsof		[i/o]NSOFƒoƒbƒtƒ@
- * @param r			[in] ƒtƒŒ[ƒ€ƒIƒuƒWƒFƒNƒg
+ * @param nsof		[i/o]NSOFãƒãƒƒãƒ•ã‚¡
+ * @param r			[in] ãƒ•ãƒ¬ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			ƒGƒ‰[ƒR[ƒh
+ * @return			ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  *
- * @note			nsof->data ‚ª NULL ‚Ìê‡‚Í nsof->offset ‚Ì‚İXV‚³‚ê‚é
+ * @note			nsof->data ãŒ NULL ã®å ´åˆã¯ nsof->offset ã®ã¿æ›´æ–°ã•ã‚Œã‚‹
  */
 
 newtErr NSOFWriteSmallRect(nsof_stream_t * nsof, newtRefArg r)
@@ -655,14 +655,14 @@ newtErr NSOFWriteSmallRect(nsof_stream_t * nsof, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚ğ NSOFƒoƒCƒiƒŠƒIƒuƒWƒFƒNƒg‚É•ÏŠ·‚µ‚Ä‘‚Ş
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ NSOFãƒã‚¤ãƒŠãƒªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«å¤‰æ›ã—ã¦æ›¸è¾¼ã‚€
  *
- * @param nsof		[i/o]NSOFƒoƒbƒtƒ@
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param nsof		[i/o]NSOFãƒãƒƒãƒ•ã‚¡
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			ƒGƒ‰[ƒR[ƒh
+ * @return			ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  *
- * @note			nsof->data ‚ª NULL ‚Ìê‡‚Í nsof->offset ‚Ì‚İXV‚³‚ê‚é
+ * @note			nsof->data ãŒ NULL ã®å ´åˆã¯ nsof->offset ã®ã¿æ›´æ–°ã•ã‚Œã‚‹
  */
 
 newtErr NewtWriteNSOF(nsof_stream_t * nsof, newtRefArg r)
@@ -728,13 +728,13 @@ newtErr NewtWriteNSOF(nsof_stream_t * nsof, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚ğ NSOFƒoƒCƒiƒŠƒIƒuƒWƒFƒNƒg‚É•ÏŠ·‚·‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ NSOFãƒã‚¤ãƒŠãƒªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«å¤‰æ›ã™ã‚‹
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
- * @param ver		[in] ƒo[ƒWƒ‡ƒ“
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param ver		[in] ãƒãƒ¼ã‚¸ãƒ§ãƒ³
  *
- * @return			NSOFƒoƒCƒiƒŠƒIƒuƒWƒFƒNƒg
+ * @return			NSOFãƒã‚¤ãƒŠãƒªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NsMakeNSOF(newtRefArg rcvr, newtRefArg r, newtRefArg ver)
@@ -767,16 +767,16 @@ newtRef NsMakeNSOF(newtRefArg rcvr, newtRefArg r, newtRefArg ver)
 	}
 #endif /* HAVE_LIBICONV */
 
-	// •K—v‚ÈƒTƒCƒY‚ÌŒvZ
+	// å¿…è¦ãªã‚µã‚¤ã‚ºã®è¨ˆç®—
 	NewtWriteNSOF(&nsof, r);
 
 	if (nsof.lastErr == kNErrNone)
 	{
-		// ƒoƒCƒiƒŠƒIƒuƒWƒFƒNƒg‚Ìì¬
+		// ãƒã‚¤ãƒŠãƒªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ä½œæˆ
 		result = NewtMakeBinary(NSSYM(NSOF), NULL, nsof.offset, false);
 
 		if (NewtRefIsNotNIL(result))
-		{	// ÀÛ‚Ì‘‚İ
+		{	// å®Ÿéš›ã®æ›¸è¾¼ã¿
 			NewtSetLength(nsof.precedents, 0);
 			nsof.data = NewtRefToBinary(result);
 			nsof.len = nsof.offset;
@@ -802,12 +802,12 @@ newtRef NsMakeNSOF(newtRefArg rcvr, newtRefArg r, newtRefArg ver)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** NSOFƒoƒbƒtƒ@‚ğ“Ç‚ñ‚ÅƒoƒCƒiƒŠƒIƒuƒWƒFƒNƒg‚É•ÏŠ·‚·‚é
+/** NSOFãƒãƒƒãƒ•ã‚¡ã‚’èª­è¾¼ã‚“ã§ãƒã‚¤ãƒŠãƒªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«å¤‰æ›ã™ã‚‹
  *
- * @param nsof		[i/o]NSOFƒoƒbƒtƒ@
- * @param type		[in] NSOF‚Ìƒ^ƒCƒv
+ * @param nsof		[i/o]NSOFãƒãƒƒãƒ•ã‚¡
+ * @param type		[in] NSOFã®ã‚¿ã‚¤ãƒ—
  *
- * @return			ƒoƒCƒiƒŠƒIƒuƒWƒFƒNƒg
+ * @return			ãƒã‚¤ãƒŠãƒªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NSOFReadBinary(nsof_stream_t * nsof, int type)
@@ -884,12 +884,12 @@ newtRef NSOFReadBinary(nsof_stream_t * nsof, int type)
 
 
 /*------------------------------------------------------------------------*/
-/** NSOFƒoƒbƒtƒ@‚ğ“Ç‚ñ‚Å”z—ñƒIƒuƒWƒFƒNƒg‚É•ÏŠ·‚·‚é
+/** NSOFãƒãƒƒãƒ•ã‚¡ã‚’èª­è¾¼ã‚“ã§é…åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«å¤‰æ›ã™ã‚‹
  *
- * @param nsof		[i/o]NSOFƒoƒbƒtƒ@
- * @param type		[in] NSOF‚Ìƒ^ƒCƒv
+ * @param nsof		[i/o]NSOFãƒãƒƒãƒ•ã‚¡
+ * @param type		[in] NSOFã®ã‚¿ã‚¤ãƒ—
  *
- * @return			”z—ñƒIƒuƒWƒFƒNƒg
+ * @return			é…åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NSOFReadArray(nsof_stream_t * nsof, int type)
@@ -928,11 +928,11 @@ newtRef NSOFReadArray(nsof_stream_t * nsof, int type)
 
 
 /*------------------------------------------------------------------------*/
-/** NSOFƒoƒbƒtƒ@‚ğ“Ç‚ñ‚ÅƒtƒŒ[ƒ€ƒIƒuƒWƒFƒNƒg‚É•ÏŠ·‚·‚é
+/** NSOFãƒãƒƒãƒ•ã‚¡ã‚’èª­è¾¼ã‚“ã§ãƒ•ãƒ¬ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«å¤‰æ›ã™ã‚‹
  *
- * @param nsof		[i/o]NSOFƒoƒbƒtƒ@
+ * @param nsof		[i/o]NSOFãƒãƒƒãƒ•ã‚¡
  *
- * @return			ƒtƒŒ[ƒ€ƒIƒuƒWƒFƒNƒg
+ * @return			ãƒ•ãƒ¬ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NSOFReadFrame(nsof_stream_t * nsof)
@@ -973,11 +973,11 @@ newtRef NSOFReadFrame(nsof_stream_t * nsof)
 
 
 /*------------------------------------------------------------------------*/
-/** NSOFƒoƒbƒtƒ@‚ğ“Ç‚ñ‚ÅƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg‚É•ÏŠ·‚·‚é
+/** NSOFãƒãƒƒãƒ•ã‚¡ã‚’èª­è¾¼ã‚“ã§ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«å¤‰æ›ã™ã‚‹
  *
- * @param nsof		[i/o]NSOFƒoƒbƒtƒ@
+ * @param nsof		[i/o]NSOFãƒãƒƒãƒ•ã‚¡
  *
- * @return			ƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg
+ * @return			ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NSOFReadSymbol(nsof_stream_t * nsof)
@@ -1001,7 +1001,7 @@ newtRef NSOFReadSymbol(nsof_stream_t * nsof)
 			buff = NewtIconv(nsof->cd.from.macroman, name, xlen + 1, NULL);
 
 			if (buff)
-			{	// •ÏŠ·‚³‚ê‚½
+			{	// å¤‰æ›ã•ã‚ŒãŸ
 				r = NewtMakeSymbol(buff);
 				free(buff);
 			}
@@ -1022,11 +1022,11 @@ newtRef NSOFReadSymbol(nsof_stream_t * nsof)
 
 #ifdef __NAMED_MAGIC_POINTER__
 /*------------------------------------------------------------------------*/
-/** NSOFƒoƒbƒtƒ@‚ğ“Ç‚ñ‚Å–¼‘O•tƒ}ƒWƒbƒNƒ|ƒCƒ“ƒ^‚É•ÏŠ·‚·‚é
+/** NSOFãƒãƒƒãƒ•ã‚¡ã‚’èª­è¾¼ã‚“ã§åå‰ä»˜ãƒã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿ã«å¤‰æ›ã™ã‚‹
  *
- * @param nsof		[i/o]NSOFƒoƒbƒtƒ@
+ * @param nsof		[i/o]NSOFãƒãƒƒãƒ•ã‚¡
  *
- * @return			–¼‘O•tƒ}ƒWƒbƒNƒ|ƒCƒ“ƒ^
+ * @return			åå‰ä»˜ãƒã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿
  */
 
 newtRef NSOFReadNamedMP(nsof_stream_t * nsof)
@@ -1040,7 +1040,7 @@ newtRef NSOFReadNamedMP(nsof_stream_t * nsof)
 		if (NSOFIsNOS(nsof->verno))
 		{
 			nsof->lastErr = kNErrNSOFRead;
-			// ‚Æ‚è‚ ‚¦‚¸ƒVƒ“ƒ{ƒ‹‚Ì‚Ü‚Ü
+			// ã¨ã‚Šã‚ãˆãšã‚·ãƒ³ãƒœãƒ«ã®ã¾ã¾
 		}
 		else
 		{
@@ -1054,11 +1054,11 @@ newtRef NSOFReadNamedMP(nsof_stream_t * nsof)
 
 
 /*------------------------------------------------------------------------*/
-/** NSOFƒoƒbƒtƒ@‚ğ“Ç‚ñ‚ÅƒtƒŒ[ƒ€ƒIƒuƒWƒFƒNƒg(smallRect)‚É•ÏŠ·‚·‚é
+/** NSOFãƒãƒƒãƒ•ã‚¡ã‚’èª­è¾¼ã‚“ã§ãƒ•ãƒ¬ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ(smallRect)ã«å¤‰æ›ã™ã‚‹
  *
- * @param nsof		[i/o]NSOFƒoƒbƒtƒ@
+ * @param nsof		[i/o]NSOFãƒãƒƒãƒ•ã‚¡
  *
- * @return			ƒtƒŒ[ƒ€ƒIƒuƒWƒFƒNƒg(smallRect)
+ * @return			ãƒ•ãƒ¬ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ(smallRect)
  */
 
 newtRef NSOFReadSmallRect(nsof_stream_t * nsof)
@@ -1066,7 +1066,7 @@ newtRef NSOFReadSmallRect(nsof_stream_t * nsof)
 	newtRefVar	r;
 
 	r = NcMakeFrame();
-	// «—ˆ‚Í map ‚ğ‹¤—L‚·‚é‚±‚Æ
+	// å°†æ¥ã¯ map ã‚’å…±æœ‰ã™ã‚‹ã“ã¨
 
 	NcSetSlot(r, NSSYM(top), NewtMakeInteger(NSOFReadByte(nsof)));
 	NcSetSlot(r, NSSYM(left), NewtMakeInteger(NSOFReadByte(nsof)));
@@ -1078,11 +1078,11 @@ newtRef NSOFReadSmallRect(nsof_stream_t * nsof)
 
 
 /*------------------------------------------------------------------------*/
-/** NSOFƒoƒCƒiƒŠƒIƒuƒWƒFƒNƒg‚ğ“Ç‚ñ‚ÅƒIƒuƒWƒFƒNƒg‚É•ÏŠ·‚·‚é
+/** NSOFãƒã‚¤ãƒŠãƒªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’èª­è¾¼ã‚“ã§ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«å¤‰æ›ã™ã‚‹
  *
- * @param nsof		[i/o]NSOFƒoƒbƒtƒ@
+ * @param nsof		[i/o]NSOFãƒãƒƒãƒ•ã‚¡
  *
- * @return			ƒIƒuƒWƒFƒNƒg
+ * @return			ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NSOFReadNSOF(nsof_stream_t * nsof)
@@ -1150,7 +1150,7 @@ newtRef NSOFReadNSOF(nsof_stream_t * nsof)
 
 		case kNSOFLargeBinary:
 		default:
-			// ƒTƒ|[ƒg‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ
+			// ã‚µãƒãƒ¼ãƒˆã•ã‚Œã¦ã„ã¾ã›ã‚“
 			nsof->lastErr = kNErrNSOFRead;
 			break;
 	}
@@ -1160,12 +1160,12 @@ newtRef NSOFReadNSOF(nsof_stream_t * nsof)
 
 
 /*------------------------------------------------------------------------*/
-/** NSOFƒoƒCƒiƒŠƒIƒuƒWƒFƒNƒg‚ğ“Ç‚Ş
+/** NSOFãƒã‚¤ãƒŠãƒªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’èª­è¾¼ã‚€
  *
- * @param data		[in] NSOFƒf[ƒ^
- * @param size		[in] NSOFƒf[ƒ^ƒTƒCƒY
+ * @param data		[in] NSOFãƒ‡ãƒ¼ã‚¿
+ * @param size		[in] NSOFãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º
  *
- * @return			ƒIƒuƒWƒFƒNƒg
+ * @return			ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtReadNSOF(uint8_t * data, size_t size)
@@ -1208,12 +1208,12 @@ newtRef NewtReadNSOF(uint8_t * data, size_t size)
 
 
 /*------------------------------------------------------------------------*/
-/** NSOFƒoƒCƒiƒŠƒIƒuƒWƒFƒNƒg‚ğ“Ç‚Ş
+/** NSOFãƒã‚¤ãƒŠãƒªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’èª­è¾¼ã‚€
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] NSOFƒoƒCƒiƒŠƒIƒuƒWƒFƒNƒg
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] NSOFãƒã‚¤ãƒŠãƒªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			ƒIƒuƒWƒFƒNƒg
+ * @return			ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NsReadNSOF(newtRefArg rcvr, newtRefArg r)

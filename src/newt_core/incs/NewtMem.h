@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------*/
 /**
  * @file	NewtMem.h
- * @brief   ƒƒ‚ƒŠŠÇ—
+ * @brief   ãƒ¡ãƒ¢ãƒªç®¡ç†
  *
  * @author  M.Nukui
  * @date	2003-11-07
@@ -14,41 +14,41 @@
 #define	NEWTMEM_H
 
 
-/* ƒwƒbƒ_ƒtƒ@ƒCƒ‹ */
+/* ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ« */
 #include "NewtType.h"
 
 
-/* Œ^éŒ¾ */
+/* å‹å®£è¨€ */
 
-/// ƒƒ‚ƒŠƒv[ƒ‹
+/// ãƒ¡ãƒ¢ãƒªãƒ—ãƒ¼ãƒ«
 typedef struct {
-    void *		pool;			///< Àƒƒ‚ƒŠƒv[ƒ‹‚Ö‚Ìƒ|ƒCƒ“ƒ^
+    void *		pool;			///< å®Ÿãƒ¡ãƒ¢ãƒªãƒ—ãƒ¼ãƒ«ã¸ã®ãƒã‚¤ãƒ³ã‚¿
 
-    int32_t		usesize;		///< g—pƒTƒCƒY
-    int32_t		maxspace;		///< Œ»İ‚ÌÅ‘åƒTƒCƒY
-    int32_t		expandspace;	///< ˆê“x‚ÉŠg’£‚Å‚«‚éƒƒ‚ƒŠƒTƒCƒY
+    int32_t		usesize;		///< ä½¿ç”¨ã‚µã‚¤ã‚º
+    int32_t		maxspace;		///< ç¾åœ¨ã®æœ€å¤§ã‚µã‚¤ã‚º
+    int32_t		expandspace;	///< ä¸€åº¦ã«æ‹¡å¼µã§ãã‚‹ãƒ¡ãƒ¢ãƒªã‚µã‚¤ã‚º
 
-    newtObjRef	obj;			///< Šm•Û‚µ‚½ƒIƒuƒWƒFƒNƒg‚Ö‚Ìƒ`ƒFƒCƒ“iGC ‚Ì‘ÎÛj
-    newtObjRef	literal;		///< Šm•Û‚µ‚½ƒŠƒeƒ‰ƒ‹‚Ö‚Ìƒ`ƒFƒCƒ“
+    newtObjRef	obj;			///< ç¢ºä¿ã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¸ã®ãƒã‚§ã‚¤ãƒ³ï¼ˆGC ã®å¯¾è±¡ï¼‰
+    newtObjRef	literal;		///< ç¢ºä¿ã—ãŸãƒªãƒ†ãƒ©ãƒ«ã¸ã®ãƒã‚§ã‚¤ãƒ³
 } newtpool_t;
 
-typedef newtpool_t *	newtPool;   ///< ƒƒ‚ƒŠƒv[ƒ‹‚Ö‚Ìƒ|ƒCƒ“ƒ^
+typedef newtpool_t *	newtPool;   ///< ãƒ¡ãƒ¢ãƒªãƒ—ãƒ¼ãƒ«ã¸ã®ãƒã‚¤ãƒ³ã‚¿
 
 
-/// ƒXƒ^ƒbƒN
+/// ã‚¹ã‚¿ãƒƒã‚¯
 typedef struct {
-    newtPool	pool;		///< ƒƒ‚ƒŠƒv[ƒ‹
+    newtPool	pool;		///< ãƒ¡ãƒ¢ãƒªãƒ—ãƒ¼ãƒ«
 
-    void *		stackp;		///< ƒXƒ^ƒbƒNi”z—ñƒƒ‚ƒŠj‚Ö‚Ìƒ|ƒCƒ“ƒ^
-    uint32_t	sp;			///< ƒXƒ^ƒbƒNƒ|ƒCƒ“ƒ^
+    void *		stackp;		///< ã‚¹ã‚¿ãƒƒã‚¯ï¼ˆé…åˆ—ãƒ¡ãƒ¢ãƒªï¼‰ã¸ã®ãƒã‚¤ãƒ³ã‚¿
+    uint32_t	sp;			///< ã‚¹ã‚¿ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿
 
-    uint32_t	datasize;	///< ƒf[ƒ^ƒTƒCƒY
-    uint32_t	nums;		///< ƒƒ‚ƒŠŠm•Û‚³‚ê‚Ä‚¢‚éƒf[ƒ^”
-    uint32_t	blocksize;	///< ƒƒ‚ƒŠ‚ğˆêŠ‡Šm•Û‚·‚éƒf[ƒ^”
+    uint32_t	datasize;	///< ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º
+    uint32_t	nums;		///< ãƒ¡ãƒ¢ãƒªç¢ºä¿ã•ã‚Œã¦ã„ã‚‹ãƒ‡ãƒ¼ã‚¿æ•°
+    uint32_t	blocksize;	///< ãƒ¡ãƒ¢ãƒªã‚’ä¸€æ‹¬ç¢ºä¿ã™ã‚‹ãƒ‡ãƒ¼ã‚¿æ•°
 } newtStack;
 
 
-/* ŠÖ”ƒvƒƒgƒ^ƒCƒv */
+/* é–¢æ•°ãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ— */
 
 #ifdef __cplusplus
 extern "C" {

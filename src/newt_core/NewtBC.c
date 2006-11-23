@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------*/
 /**
  * @file	NewtBC.c
- * @brief   ƒoƒCƒgƒR[ƒh‚Ì¶¬
+ * @brief   ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã®ç”Ÿæˆ
  *
  * @author  M.Nukui
  * @date	2003-11-07
@@ -10,7 +10,7 @@
  */
 
 
-/* ƒwƒbƒ_ƒtƒ@ƒCƒ‹ */
+/* ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ« */
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -21,65 +21,65 @@
 #include "NewtMem.h"
 
 
-/* Œ^éŒ¾ */
+/* å‹å®£è¨€ */
 
-/// ƒoƒCƒgƒR[ƒhŠÂ‹«
+/// ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ç’°å¢ƒ
 typedef struct nbc_env_t	nbc_env_t;
 
-/// ƒoƒCƒgƒR[ƒhŠÂ‹«i\‘¢‘Ì’è‹`j
+/// ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ç’°å¢ƒï¼ˆæ§‹é€ ä½“å®šç¾©ï¼‰
 struct nbc_env_t {
-    nbc_env_t *	parent;			///< ŒÄo‚µŒ³ŠÂ‹«
+    nbc_env_t *	parent;			///< å‘¼å‡ºã—å…ƒç’°å¢ƒ
 
-	newtStack   bytecode;		///< ƒoƒCƒgƒR[ƒhƒoƒbƒtƒ@
-	newtStack   breakstack;		///< ƒuƒŒ[ƒNƒXƒ^ƒbƒN
-	newtStack   onexcpstack;	///< —áŠOƒXƒ^ƒbƒN
+	newtStack   bytecode;		///< ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ãƒãƒƒãƒ•ã‚¡
+	newtStack   breakstack;		///< ãƒ–ãƒ¬ãƒ¼ã‚¯ã‚¹ã‚¿ãƒƒã‚¯
+	newtStack   onexcpstack;	///< ä¾‹å¤–ã‚¹ã‚¿ãƒƒã‚¯
 
-    newtRefVar	func;			///< ŠÖ”ƒIƒuƒWƒFƒNƒg
-    newtRefVar	literals;		///< ŠÖ”ƒIƒuƒWƒFƒNƒg‚ÌƒŠƒeƒ‰ƒ‹ƒtƒŒ[ƒ€
-    newtRefVar	argFrame;		///< ŠÖ”ƒIƒuƒWƒFƒNƒg‚ÌƒtƒŒ[ƒ€
-    newtRefVar	constant;		///< ’è”ƒtƒŒ[ƒ€
+    newtRefVar	func;			///< é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+    newtRefVar	literals;		///< é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ãƒªãƒ†ãƒ©ãƒ«ãƒ•ãƒ¬ãƒ¼ãƒ 
+    newtRefVar	argFrame;		///< é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ãƒ•ãƒ¬ãƒ¼ãƒ 
+    newtRefVar	constant;		///< å®šæ•°ãƒ•ãƒ¬ãƒ¼ãƒ 
 };
 
 
-/// ŠÖ”–½—ßƒe[ƒuƒ‹\‘¢‘Ì
+/// é–¢æ•°å‘½ä»¤ãƒ†ãƒ¼ãƒ–ãƒ«æ§‹é€ ä½“
 typedef struct {
-    char *		name;		///< ŠÖ”–¼
-    int32_t		numArgs;	///< ˆø”‚Ì”
-    int16_t		b;			///< ƒoƒCƒgƒR[ƒh
-    newtRefVar	sym;		///< ƒVƒ“ƒ{ƒ‹
+    char *		name;		///< é–¢æ•°å
+    int32_t		numArgs;	///< å¼•æ•°ã®æ•°
+    int16_t		b;			///< ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰
+    newtRefVar	sym;		///< ã‚·ãƒ³ãƒœãƒ«
 } freq_func_t;
 
 
-/* ŠÖ”ƒvƒƒgƒ^ƒCƒv */
-#define	ENV_BC(env)				((uint8_t*)env->bytecode.stackp)				///< ƒoƒCƒgƒR[ƒh
-#define	ENV_CX(env)				(env->bytecode.sp)								///< ƒR[ƒhƒCƒ“ƒfƒbƒNƒXiƒvƒƒOƒ‰ƒ€ƒJƒEƒ“ƒ^j
-#define	BC						ENV_BC(newt_bc_env)								///< ì¬’†‚ÌƒoƒCƒgƒR[ƒh
-#define	CX						ENV_CX(newt_bc_env)								///< ì¬’†‚ÌƒR[ƒhƒCƒ“ƒfƒbƒNƒXiƒvƒƒOƒ‰ƒ€ƒJƒEƒ“ƒ^j
-#define	BREAKSTACK				((uint32_t*)newt_bc_env->breakstack.stackp)		///< ƒuƒŒ[ƒNƒXƒ^ƒbƒN
-#define BREAKSP					(newt_bc_env->breakstack.sp)					///< ƒuƒŒ[ƒNƒXƒ^ƒbƒN‚ÌƒXƒ^ƒbƒNƒ|ƒCƒ“ƒ^
-#define	ONEXCPSTACK				((uint32_t*)newt_bc_env->onexcpstack.stackp)	///< —áŠOƒXƒ^ƒbƒN
-#define ONEXCPSP				(newt_bc_env->onexcpstack.sp)					///< —áŠOƒXƒ^ƒbƒN‚ÌƒXƒ^ƒbƒNƒ|ƒCƒ“ƒ^
-#define	LITERALS				(newt_bc_env->literals)							///< ì¬’†ŠÖ”ƒIƒuƒWƒFƒNƒg‚ÌƒŠƒeƒ‰ƒ‹
-#define	ARGFRAME				(newt_bc_env->argFrame)							///< ì¬’†ŠÖ”ƒIƒuƒWƒFƒNƒg‚Ìˆø”ƒtƒŒ[ƒ€
-#define	CONSTANT				(newt_bc_env->constant)							///< ’è”ƒtƒŒ[ƒ€
+/* é–¢æ•°ãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ— */
+#define	ENV_BC(env)				((uint8_t*)env->bytecode.stackp)				///< ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰
+#define	ENV_CX(env)				(env->bytecode.sp)								///< ã‚³ãƒ¼ãƒ‰ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ï¼ˆãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚«ã‚¦ãƒ³ã‚¿ï¼‰
+#define	BC						ENV_BC(newt_bc_env)								///< ä½œæˆä¸­ã®ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰
+#define	CX						ENV_CX(newt_bc_env)								///< ä½œæˆä¸­ã®ã‚³ãƒ¼ãƒ‰ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ï¼ˆãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚«ã‚¦ãƒ³ã‚¿ï¼‰
+#define	BREAKSTACK				((uint32_t*)newt_bc_env->breakstack.stackp)		///< ãƒ–ãƒ¬ãƒ¼ã‚¯ã‚¹ã‚¿ãƒƒã‚¯
+#define BREAKSP					(newt_bc_env->breakstack.sp)					///< ãƒ–ãƒ¬ãƒ¼ã‚¯ã‚¹ã‚¿ãƒƒã‚¯ã®ã‚¹ã‚¿ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿
+#define	ONEXCPSTACK				((uint32_t*)newt_bc_env->onexcpstack.stackp)	///< ä¾‹å¤–ã‚¹ã‚¿ãƒƒã‚¯
+#define ONEXCPSP				(newt_bc_env->onexcpstack.sp)					///< ä¾‹å¤–ã‚¹ã‚¿ãƒƒã‚¯ã®ã‚¹ã‚¿ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿
+#define	LITERALS				(newt_bc_env->literals)							///< ä½œæˆä¸­é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ãƒªãƒ†ãƒ©ãƒ«
+#define	ARGFRAME				(newt_bc_env->argFrame)							///< ä½œæˆä¸­é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å¼•æ•°ãƒ•ãƒ¬ãƒ¼ãƒ 
+#define	CONSTANT				(newt_bc_env->constant)							///< å®šæ•°ãƒ•ãƒ¬ãƒ¼ãƒ 
 
-#define NBCAddLiteral(r)		NBCAddLiteralEnv(newt_bc_env, r)				///< ƒŠƒeƒ‰ƒ‹ƒŠƒXƒg‚ÉƒIƒuƒWƒFƒNƒg‚ğ’Ç‰Á
-#define NBCGenCode(a, b)		NBCGenCodeEnv(newt_bc_env, a, b)				///< ƒoƒCƒgƒR[ƒh‚ğ¶¬
-#define NBCGenCodeL(a, r)		NBCGenCodeEnvL(newt_bc_env, a, r)				///< ƒŠƒeƒ‰ƒ‹‚ÈƒIƒyƒf[ƒ^‚ÌƒoƒCƒgƒR[ƒh‚ğ¶¬
-#define NBCGenPushLiteral(r)	NBCGenPushLiteralEnv(newt_bc_env, r)			///< ƒŠƒeƒ‰ƒ‹‚ğƒvƒbƒVƒ…‚·‚éƒoƒCƒgƒR[ƒh‚ğ¶¬
+#define NBCAddLiteral(r)		NBCAddLiteralEnv(newt_bc_env, r)				///< ãƒªãƒ†ãƒ©ãƒ«ãƒªã‚¹ãƒˆã«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’è¿½åŠ 
+#define NBCGenCode(a, b)		NBCGenCodeEnv(newt_bc_env, a, b)				///< ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆ
+#define NBCGenCodeL(a, r)		NBCGenCodeEnvL(newt_bc_env, a, r)				///< ãƒªãƒ†ãƒ©ãƒ«ãªã‚ªãƒšãƒ‡ãƒ¼ã‚¿ã®ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆ
+#define NBCGenPushLiteral(r)	NBCGenPushLiteralEnv(newt_bc_env, r)			///< ãƒªãƒ†ãƒ©ãƒ«ã‚’ãƒ—ãƒƒã‚·ãƒ¥ã™ã‚‹ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆ
 
-#define NBCGenBC_op(stree, r)   NBCGenBC_stmt(stree, r, true)					///< ˆø”‚ÌƒoƒCƒgƒR[ƒh‚ğ¶¬‚·‚é
-#define NBCGenFreq(b)			NBCGenCode(kNBCFreqFunc, b)						///< ŠÖ”–½—ß‚ÌƒoƒCƒgƒR[ƒh‚ğ¶¬‚·‚é
+#define NBCGenBC_op(stree, r)   NBCGenBC_stmt(stree, r, true)					///< å¼•æ•°ã®ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã™ã‚‹
+#define NBCGenFreq(b)			NBCGenCode(kNBCFreqFunc, b)						///< é–¢æ•°å‘½ä»¤ã®ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã™ã‚‹
 
 
 #pragma mark -
-#pragma mark ƒ[ƒJƒ‹•Ï”
-/* ƒ[ƒJƒ‹•Ï” */
+#pragma mark ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°
+/* ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•° */
 
-/// ƒoƒCƒhƒR[ƒhŠÂ‹«
+/// ãƒã‚¤ãƒ‰ã‚³ãƒ¼ãƒ‰ç’°å¢ƒ
 static nbc_env_t *	newt_bc_env;
 
-/// ŠÖ”–½—ßƒe[ƒuƒ‹
+/// é–¢æ•°å‘½ä»¤ãƒ†ãƒ¼ãƒ–ãƒ«
 static freq_func_t freq_func_tb[] =
     {
 //		{"aref",			2,	kNBCAref,			0},
@@ -100,7 +100,7 @@ static freq_func_t freq_func_tb[] =
 
 
 #pragma mark -
-/* ŠÖ”ƒvƒƒgƒ^ƒCƒv */
+/* é–¢æ•°ãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ— */
 static int16_t			NBCAddLiteralEnv(nbc_env_t * env, newtRefArg r);
 static void				NBCGenCodeEnv(nbc_env_t * env, uint8_t a, int16_t b);
 static void				NBCGenCodeEnvL(nbc_env_t * env, uint8_t a, newtRefArg r);
@@ -174,12 +174,12 @@ static void				NBCGenBC_sub(nps_syntax_node_t * stree, uint32_t n, bool ret);
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ƒŠƒeƒ‰ƒ‹ƒŠƒXƒg‚ÉƒIƒuƒWƒFƒNƒg‚ğ’Ç‰Á‚·‚é
+/** ãƒªãƒ†ãƒ©ãƒ«ãƒªã‚¹ãƒˆã«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’è¿½åŠ ã™ã‚‹
  *
- * @param env		[in] ƒoƒCƒgƒR[ƒhŠÂ‹«
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param env		[in] ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ç’°å¢ƒ
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			’Ç‰Á‚³‚ê‚½ˆÊ’u
+ * @return			è¿½åŠ ã•ã‚ŒãŸä½ç½®
  */
 
 int16_t NBCAddLiteralEnv(nbc_env_t * env, newtRefArg r)
@@ -194,13 +194,13 @@ int16_t NBCAddLiteralEnv(nbc_env_t * env, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒoƒCƒgƒR[ƒh‚ğ¶¬
+/** ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆ
  *
- * @param env		[in] ƒoƒCƒgƒR[ƒhŠÂ‹«
- * @param a			[in] –½—ß
- * @param b			[in] ƒIƒyƒf[ƒ^
+ * @param env		[in] ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ç’°å¢ƒ
+ * @param a			[in] å‘½ä»¤
+ * @param b			[in] ã‚ªãƒšãƒ‡ãƒ¼ã‚¿
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBCGenCodeEnv(nbc_env_t * env, uint8_t a, int16_t b)
@@ -236,13 +236,13 @@ void NBCGenCodeEnv(nbc_env_t * env, uint8_t a, int16_t b)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒŠƒeƒ‰ƒ‹‚ÈƒIƒyƒf[ƒ^‚ÌƒoƒCƒgƒR[ƒh‚ğ¶¬
+/** ãƒªãƒ†ãƒ©ãƒ«ãªã‚ªãƒšãƒ‡ãƒ¼ã‚¿ã®ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆ
  *
- * @param env		[in] ƒoƒCƒgƒR[ƒhŠÂ‹«
- * @param a			[in] –½—ß
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param env		[in] ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ç’°å¢ƒ
+ * @param a			[in] å‘½ä»¤
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBCGenCodeEnvL(nbc_env_t * env, uint8_t a, newtRefArg r)
@@ -252,10 +252,10 @@ void NBCGenCodeEnvL(nbc_env_t * env, uint8_t a, newtRefArg r)
 
     obj = NewtPackLiteral(r);
 
-    // ƒŠƒeƒ‰ƒ‹‚ğŒŸõ
+    // ãƒªãƒ†ãƒ©ãƒ«ã‚’æ¤œç´¢
     b = NewtFindArrayIndex(env->literals, obj, 0);
 
-    if (b == -1) // ƒŠƒeƒ‰ƒ‹‚É’Ç‰Á
+    if (b == -1) // ãƒªãƒ†ãƒ©ãƒ«ã«è¿½åŠ 
         b = NBCAddLiteralEnv(env, obj);
 
     NBCGenCodeEnv(env, a, b);
@@ -263,12 +263,12 @@ void NBCGenCodeEnvL(nbc_env_t * env, uint8_t a, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒŠƒeƒ‰ƒ‹‚ğƒvƒbƒVƒ…‚·‚éƒoƒCƒgƒR[ƒh‚ğ¶¬
+/** ãƒªãƒ†ãƒ©ãƒ«ã‚’ãƒ—ãƒƒã‚·ãƒ¥ã™ã‚‹ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆ
  *
- * @param env		[in] ƒoƒCƒgƒR[ƒhŠÂ‹«
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param env		[in] ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ç’°å¢ƒ
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			ƒŠƒeƒ‰ƒ‹ƒŠƒXƒg‚ÌˆÊ’u
+ * @return			ãƒªãƒ†ãƒ©ãƒ«ãƒªã‚¹ãƒˆã®ä½ç½®
  */
 
 int16_t NBCGenPushLiteralEnv(nbc_env_t * env, newtRefArg r)
@@ -287,11 +287,11 @@ int16_t NBCGenPushLiteralEnv(nbc_env_t * env, newtRefArg r)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚ğƒvƒbƒVƒ…‚·‚éƒoƒCƒgƒR[ƒh‚ğ¶¬
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒ—ãƒƒã‚·ãƒ¥ã™ã‚‹ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆ
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBCGenPUSH(newtRefArg r)
@@ -335,19 +335,19 @@ void NBCGenPUSH(newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** •Ï”‚ğæ“¾‚·‚éƒoƒCƒgƒR[ƒh‚ğ¶¬
+/** å¤‰æ•°ã‚’å–å¾—ã™ã‚‹ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆ
  *
- * @param stree		[in] \•¶–Ø
- * @param r			[in] •Ï”–¼ƒIƒuƒWƒFƒNƒg
+ * @param stree		[in] æ§‹æ–‡æœ¨
+ * @param r			[in] å¤‰æ•°åã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBCGenGetVar(nps_syntax_node_t * stree, newtRefArg r)
 {
     if (NewtHasSlot(CONSTANT, r))
     {
-        // ’è”‚Ìê‡
+        // å®šæ•°ã®å ´åˆ
         newtRefVar	c;
 
         c = NcGetSlot(CONSTANT, r);
@@ -361,7 +361,7 @@ void NBCGenGetVar(nps_syntax_node_t * stree, newtRefArg r)
     {
         int16_t	b;
 
-        // ƒ[ƒJƒ‹•Ï”‚ğŒŸõ
+        // ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°ã‚’æ¤œç´¢
         b = NewtFindSlotIndex(ARGFRAME, r);
     
         if (b != -1)
@@ -373,19 +373,19 @@ void NBCGenGetVar(nps_syntax_node_t * stree, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ŠÖ”ŒÄo‚µ‚ÌƒoƒCƒgƒR[ƒh‚ğ¶¬
+/** é–¢æ•°å‘¼å‡ºã—ã®ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆ
  *
- * @param fn		[in] ŠÖ”ƒIƒuƒWƒFƒNƒg
- * @param numArgs	[in] ˆø”‚Ì”
+ * @param fn		[in] é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param numArgs	[in] å¼•æ•°ã®æ•°
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBCGenCallFn(newtRefArg fn, int16_t numArgs)
 {
     int	i;
 
-    // freq-func ‚Ìê‡
+    // freq-func ã®å ´åˆ
     for (i = 0; freq_func_tb[i].name != NULL; i++)
     {
         if (NewtRefEqual(fn, freq_func_tb[i].sym))
@@ -408,14 +408,14 @@ void NBCGenCallFn(newtRefArg fn, int16_t numArgs)
 
 
 /*------------------------------------------------------------------------*/
-/** ŠÖ”‚Ìˆø”ƒtƒŒ[ƒ€‚ğì¬‚·‚é
+/** é–¢æ•°ã®å¼•æ•°ãƒ•ãƒ¬ãƒ¼ãƒ ã‚’ä½œæˆã™ã‚‹
  *
- * @param argFrame		[in] ˆø”ƒtƒŒ[ƒ€
- * @param stree			[in] \•¶–Ø
- * @param r				[in] \•¶–Øƒm[ƒh
- * @param indefiniteP	[out]•s’è’·ƒtƒ‰ƒO
+ * @param argFrame		[in] å¼•æ•°ãƒ•ãƒ¬ãƒ¼ãƒ 
+ * @param stree			[in] æ§‹æ–‡æœ¨
+ * @param r				[in] æ§‹æ–‡æœ¨ãƒãƒ¼ãƒ‰
+ * @param indefiniteP	[out]ä¸å®šé•·ãƒ•ãƒ©ã‚°
  *
- * @return			ˆø”‚Ì”
+ * @return			å¼•æ•°ã®æ•°
  */
 
 int16_t NBCMakeFnArgFrame(newtRefArg argFrame, nps_syntax_node_t * stree, nps_node_t r, bool * indefiniteP)
@@ -445,12 +445,12 @@ int16_t NBCMakeFnArgFrame(newtRefArg argFrame, nps_syntax_node_t * stree, nps_no
                 break;
 
             case kNPSArg:
-                // type (node->op1) ‚Í‚Æ‚è‚ ‚¦‚¸–³‹
+                // type (node->op1) ã¯ã¨ã‚Šã‚ãˆãšç„¡è¦–
                 NcSetSlot(argFrame, node->op2, kNewtRefUnbind);
                 break;
 
 			case kNPSIndefinite:
-                // •s’è’·
+                // ä¸å®šé•·
 				NcSetSlot(argFrame, node->op1, kNewtRefUnbind);
 				*indefiniteP = true;
                 numArgs = 0;
@@ -471,13 +471,13 @@ int16_t NBCMakeFnArgFrame(newtRefArg argFrame, nps_syntax_node_t * stree, nps_no
 
 
 /*------------------------------------------------------------------------*/
-/** ŠÖ”ƒIƒuƒWƒFƒNƒg‚Ìˆø”‚ğì¬‚·‚é
+/** é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å¼•æ•°ã‚’ä½œæˆã™ã‚‹
  *
- * @param fn		[in] ŠÖ”ƒIƒuƒWƒFƒNƒg
- * @param stree		[in] \•¶–Ø
- * @param r			[in] \•¶–Øƒm[ƒh
+ * @param fn		[in] é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param stree		[in] æ§‹æ–‡æœ¨
+ * @param r			[in] æ§‹æ–‡æœ¨ãƒãƒ¼ãƒ‰
  *
- * @return			ˆø”‚Ì”
+ * @return			å¼•æ•°ã®æ•°
  */
 
 int16_t NBCMakeFnArgs(newtRefArg fn, nps_syntax_node_t * stree, nps_node_t r)
@@ -504,12 +504,12 @@ int16_t NBCMakeFnArgs(newtRefArg fn, nps_syntax_node_t * stree, nps_node_t r)
 
 
 /*------------------------------------------------------------------------*/
-/** ŠÖ”‚ÌƒoƒCƒgƒR[ƒhŠÂ‹«‚ğì¬‚·‚é
+/** é–¢æ•°ã®ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ç’°å¢ƒã‚’ä½œæˆã™ã‚‹
  *
- * @param stree		[in] \•¶–Ø
- * @param args		[in] ˆø”
+ * @param stree		[in] æ§‹æ–‡æœ¨
+ * @param args		[in] å¼•æ•°
  *
- * @return			ƒoƒCƒgƒR[ƒhŠÂ‹«
+ * @return			ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ç’°å¢ƒ
  */
 
 nbc_env_t * NBCMakeFnEnv(nps_syntax_node_t * stree, nps_node_t args)
@@ -524,11 +524,11 @@ nbc_env_t * NBCMakeFnEnv(nps_syntax_node_t * stree, nps_node_t args)
 
 
 /*------------------------------------------------------------------------*/
-/** •ªŠò–½—ß‚ÌƒoƒCƒgƒR[ƒh‚ğ¶¬
+/** åˆ†å²å‘½ä»¤ã®ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆ
  *
- * @param a			[in] –½—ß
+ * @param a			[in] å‘½ä»¤
  *
- * @return			ƒoƒCƒgƒR[ƒh‚ÌˆÊ’u
+ * @return			ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã®ä½ç½®
  */
 
 uint32_t NBCGenBranch(uint8_t a)
@@ -544,16 +544,16 @@ uint32_t NBCGenBranch(uint8_t a)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ƒ[ƒJƒ‹•Ï”‚ğ’è‹`‚·‚éƒoƒCƒgƒR[ƒh‚ğ¶¬
+/** ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°ã‚’å®šç¾©ã™ã‚‹ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆ
  *
- * @param type		[in] •Ï”‚ÌŒ^
- * @param r			[in] •Ï”–¼ƒVƒ“ƒ{ƒ‹
- * @param init		[in] ‰Šú‰»
+ * @param type		[in] å¤‰æ•°ã®å‹
+ * @param r			[in] å¤‰æ•°åã‚·ãƒ³ãƒœãƒ«
+ * @param init		[in] åˆæœŸåŒ–
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  *
- * @note			‚à‚µ init ‚ª true ‚È‚ç‚Î‰Šú‰»‚·‚éƒoƒCƒgƒR[ƒh‚ğ¶¬‚·‚é
- *					Œ»İ‚Ìƒo[ƒWƒ‡ƒ“‚Å‚Í type ‚ÍŠ®‘S‚É–³‹‚³‚ê‚é
+ * @note			ã‚‚ã— init ãŒ true ãªã‚‰ã°åˆæœŸåŒ–ã™ã‚‹ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã™ã‚‹
+ *					ç¾åœ¨ã®ãƒãƒ¼ã‚¸ãƒ§ãƒ³ã§ã¯ type ã¯å®Œå…¨ã«ç„¡è¦–ã•ã‚Œã‚‹
  */
 
 void NBCDefLocal(newtRefArg type, newtRefArg r, bool init)
@@ -564,7 +564,7 @@ void NBCDefLocal(newtRefArg type, newtRefArg r, bool init)
     {
         int16_t	b;
     
-        // ƒ[ƒJƒ‹•Ï”‚ğŒŸõ
+        // ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°ã‚’æ¤œç´¢
         b = NewtFindSlotIndex(ARGFRAME, r);
 
         if (b != -1)
@@ -577,14 +577,14 @@ void NBCDefLocal(newtRefArg type, newtRefArg r, bool init)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ƒoƒCƒgƒR[ƒh‚ğƒoƒbƒNƒpƒbƒ`‚·‚é
+/** ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ãƒãƒƒã‚¯ãƒ‘ãƒƒãƒã™ã‚‹
  *
- * @param cx		[in] ƒoƒbƒNƒpƒbƒ`‚·‚éˆÊ’u
- * @param b			[in] ƒoƒbƒNƒpƒbƒ`‚·‚éƒIƒyƒf[ƒ^
+ * @param cx		[in] ãƒãƒƒã‚¯ãƒ‘ãƒƒãƒã™ã‚‹ä½ç½®
+ * @param b			[in] ãƒãƒƒã‚¯ãƒ‘ãƒƒãƒã™ã‚‹ã‚ªãƒšãƒ‡ãƒ¼ã‚¿
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  *
- *@@note				•ªŠò–½—ß‚âƒ‹[ƒv–½—ß‚È‚Ç‚·‚®‚ÉƒIƒyƒf[ƒ^‚ªŒˆ’è‚µ‚È‚¢ê‡‚Ég‚¤
+ *ã€€@note				åˆ†å²å‘½ä»¤ã‚„ãƒ«ãƒ¼ãƒ—å‘½ä»¤ãªã©ã™ãã«ã‚ªãƒšãƒ‡ãƒ¼ã‚¿ãŒæ±ºå®šã—ãªã„å ´åˆã«ä½¿ã†
  */
 
 void NBCBackPatch(uint32_t cx, int16_t b)
@@ -595,13 +595,13 @@ void NBCBackPatch(uint32_t cx, int16_t b)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒuƒŒ[ƒN–½—ß‚ÌˆÊ’u‚ğƒXƒ^ƒbƒN‚·‚é
+/** ãƒ–ãƒ¬ãƒ¼ã‚¯å‘½ä»¤ã®ä½ç½®ã‚’ã‚¹ã‚¿ãƒƒã‚¯ã™ã‚‹
  *
- * @param cx		[in] ƒuƒŒ[ƒN–½—ß‚ÌˆÊ’u
+ * @param cx		[in] ãƒ–ãƒ¬ãƒ¼ã‚¯å‘½ä»¤ã®ä½ç½®
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  *
- *@@note				ƒoƒbƒNƒpƒbƒ`‚Ì‚½‚ß‚ÉŠo‚¦‚Ä‚¨‚­
+ *ã€€@note				ãƒãƒƒã‚¯ãƒ‘ãƒƒãƒã®ãŸã‚ã«è¦šãˆã¦ãŠã
  */
 
 void NBCPushBreakStack(uint32_t cx)
@@ -618,12 +618,12 @@ void NBCPushBreakStack(uint32_t cx)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒ‹[ƒv“à‚ÌƒuƒŒ[ƒN–½—ß‚ğƒoƒbƒNƒpƒbƒ`‚·‚é
+/** ãƒ«ãƒ¼ãƒ—å†…ã®ãƒ–ãƒ¬ãƒ¼ã‚¯å‘½ä»¤ã‚’ãƒãƒƒã‚¯ãƒ‘ãƒƒãƒã™ã‚‹
  *
- * @param loop_head	[in] ƒ‹[ƒv‚ÌŠJnˆÊ’u
- * @param cx		[in] ƒ‹[ƒv‚ÌI‚í‚èˆÊ’u
+ * @param loop_head	[in] ãƒ«ãƒ¼ãƒ—ã®é–‹å§‹ä½ç½®
+ * @param cx		[in] ãƒ«ãƒ¼ãƒ—ã®çµ‚ã‚ã‚Šä½ç½®
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBCBreakBackPatchs(uint32_t loop_head, uint32_t cx)
@@ -637,20 +637,20 @@ void NBCBreakBackPatchs(uint32_t loop_head, uint32_t cx)
         if (branch < loop_head)
             break;
 
-        NBCBackPatch(branch, cx);	// ƒuƒ‰ƒ“ƒ`‚ğƒoƒbƒNƒpƒbƒ`
+        NBCBackPatch(branch, cx);	// ãƒ–ãƒ©ãƒ³ãƒã‚’ãƒãƒƒã‚¯ãƒ‘ãƒƒãƒ
     }
 }
 
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** —áŠOˆ—–½—ß‚ÌˆÊ’u‚ğƒXƒ^ƒbƒN‚·‚é
+/** ä¾‹å¤–å‡¦ç†å‘½ä»¤ã®ä½ç½®ã‚’ã‚¹ã‚¿ãƒƒã‚¯ã™ã‚‹
  *
- * @param cx		[in] —áŠOˆ—–½—ß‚ÌˆÊ’u
+ * @param cx		[in] ä¾‹å¤–å‡¦ç†å‘½ä»¤ã®ä½ç½®
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  *
- *@@note				ƒoƒbƒNƒpƒbƒ`‚Ì‚½‚ß‚ÉŠo‚¦‚Ä‚¨‚­
+ *ã€€@note				ãƒãƒƒã‚¯ãƒ‘ãƒƒãƒã®ãŸã‚ã«è¦šãˆã¦ãŠã
  */
 
 void NBCPushOnexcpStack(uint32_t cx)
@@ -667,12 +667,12 @@ void NBCPushOnexcpStack(uint32_t cx)
 
 
 /*------------------------------------------------------------------------*/
-/** TRY•¶“à‚ÌƒuƒŒ[ƒN–½—ß‚ğƒoƒbƒNƒpƒbƒ`‚·‚é
+/** TRYæ–‡å†…ã®ãƒ–ãƒ¬ãƒ¼ã‚¯å‘½ä»¤ã‚’ãƒãƒƒã‚¯ãƒ‘ãƒƒãƒã™ã‚‹
  *
- * @param try_head	[in] TRY•¶‚ÌŠJnˆÊ’u
- * @param cx		[in] TRY•¶‚ÌI‚í‚èˆÊ’u
+ * @param try_head	[in] TRYæ–‡ã®é–‹å§‹ä½ç½®
+ * @param cx		[in] TRYæ–‡ã®çµ‚ã‚ã‚Šä½ç½®
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBCOnexcpBackPatchs(uint32_t try_head, uint32_t cx)
@@ -686,17 +686,17 @@ void NBCOnexcpBackPatchs(uint32_t try_head, uint32_t cx)
         if (branch < try_head)
             break;
 
-        NBCBackPatch(branch, cx);	// ƒuƒ‰ƒ“ƒ`‚ğƒoƒbƒNƒpƒbƒ`
+        NBCBackPatch(branch, cx);	// ãƒ–ãƒ©ãƒ³ãƒã‚’ãƒãƒƒã‚¯ãƒ‘ãƒƒãƒ
     }
 }
 
 
 /*------------------------------------------------------------------------*/
-/** —áŠOˆ—–½—ß‚ÌƒoƒCƒgƒR[ƒh‚ğ¶¬‚·‚é
+/** ä¾‹å¤–å‡¦ç†å‘½ä»¤ã®ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã™ã‚‹
  *
- * @param pc		[in] —áŠOˆ—–½—ß‚ÌƒvƒƒOƒ‰ƒ€ƒJƒEƒ“ƒ^
+ * @param pc		[in] ä¾‹å¤–å‡¦ç†å‘½ä»¤ã®ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚«ã‚¦ãƒ³ã‚¿
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBCGenOnexcpPC(int32_t pc)
@@ -707,32 +707,32 @@ void NBCGenOnexcpPC(int32_t pc)
     r = NewtMakeInteger(pc);
     b = NBCGenPushLiteral(r);
 
-    NBCPushOnexcpStack(b);	// ƒoƒbƒNƒpƒbƒ`‚Ì‚½‚ß‚ÉƒXƒ^ƒbƒN‚ÉƒvƒbƒVƒ…‚·‚é
+    NBCPushOnexcpStack(b);	// ãƒãƒƒã‚¯ãƒ‘ãƒƒãƒã®ãŸã‚ã«ã‚¹ã‚¿ãƒƒã‚¯ã«ãƒ—ãƒƒã‚·ãƒ¥ã™ã‚‹
 }
 
 
 /*------------------------------------------------------------------------*/
-/** —áŠOˆ—“à‚ÌƒuƒŒ[ƒN–½—ß‚ÌƒoƒCƒgƒR[ƒh‚ğ¶¬‚·‚é
+/** ä¾‹å¤–å‡¦ç†å†…ã®ãƒ–ãƒ¬ãƒ¼ã‚¯å‘½ä»¤ã®ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã™ã‚‹
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBCGenOnexcpBranch(void)
 {
     uint32_t	cx;
     
-    cx = NBCGenBranch(kNBCBranch);	// ƒuƒ‰ƒ“ƒ`
-    NBCPushOnexcpStack(cx);			// ƒoƒbƒNƒpƒbƒ`‚Ì‚½‚ß‚ÉƒXƒ^ƒbƒN‚ÉƒvƒbƒVƒ…‚·‚é
+    cx = NBCGenBranch(kNBCBranch);	// ãƒ–ãƒ©ãƒ³ãƒ
+    NBCPushOnexcpStack(cx);			// ãƒãƒƒã‚¯ãƒ‘ãƒƒãƒã®ãŸã‚ã«ã‚¹ã‚¿ãƒƒã‚¯ã«ãƒ—ãƒƒã‚·ãƒ¥ã™ã‚‹
 }
 
 
 /*------------------------------------------------------------------------*/
-/** ƒoƒbƒNƒpƒbƒ`‚É—áŠOˆ—ƒVƒ“ƒ{ƒ‹‚ğƒŠƒeƒ‰ƒ‹ƒŠƒXƒg‚É“o˜^‚·‚é
+/** ãƒãƒƒã‚¯ãƒ‘ãƒƒãƒæ™‚ã«ä¾‹å¤–å‡¦ç†ã‚·ãƒ³ãƒœãƒ«ã‚’ãƒªãƒ†ãƒ©ãƒ«ãƒªã‚¹ãƒˆã«ç™»éŒ²ã™ã‚‹
  *
- * @param sp		[in] —áŠOˆ—–½—ßƒXƒ^ƒbƒN‚ÌƒXƒ^ƒbƒNƒ|ƒCƒ“ƒ^
- * @param pc		[in] —áŠOˆ—–½—ß‚ÌƒvƒƒOƒ‰ƒ€ƒJƒEƒ“ƒ^
+ * @param sp		[in] ä¾‹å¤–å‡¦ç†å‘½ä»¤ã‚¹ã‚¿ãƒƒã‚¯ã®ã‚¹ã‚¿ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿
+ * @param pc		[in] ä¾‹å¤–å‡¦ç†å‘½ä»¤ã®ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚«ã‚¦ãƒ³ã‚¿
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBCOnexcpBackPatchL(uint32_t sp, int32_t pc)
@@ -749,11 +749,11 @@ void NBCOnexcpBackPatchL(uint32_t sp, int32_t pc)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ŠÖ”ƒIƒuƒWƒFƒNƒg‚ğì¬‚·‚é
+/** é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆã™ã‚‹
  *
- * @param env		[in] ƒoƒCƒgƒR[ƒhŠÂ‹«
+ * @param env		[in] ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ç’°å¢ƒ
  *
- * @return			ŠÖ”ƒIƒuƒWƒFƒNƒg
+ * @return			é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NBCMakeFn(nbc_env_t * env)
@@ -794,11 +794,11 @@ newtRef NBCMakeFn(nbc_env_t * env)
 
     // constant
 	if (env->parent)
-	{	// e‚ª‚ ‚ê‚Î’è”ƒtƒŒ[ƒ€‚ğ‹¤—L‚·‚é
+	{	// è¦ªãŒã‚ã‚Œã°å®šæ•°ãƒ•ãƒ¬ãƒ¼ãƒ ã‚’å…±æœ‰ã™ã‚‹
 		env->constant = env->parent->constant;
 	}
 	else
-	{	// e‚ª‚È‚¯‚ê‚ÎV‹K‚É’è”ƒtƒŒ[ƒ€‚ğì¬
+	{	// è¦ªãŒãªã‘ã‚Œã°æ–°è¦ã«å®šæ•°ãƒ•ãƒ¬ãƒ¼ãƒ ã‚’ä½œæˆ
 		env->constant = NcMakeFrame();
 	}
 
@@ -807,9 +807,9 @@ newtRef NBCMakeFn(nbc_env_t * env)
 
 
 /*------------------------------------------------------------------------*/
-/** ŠÖ”–½—ßƒe[ƒuƒ‹‚ğ‰Šú‰»‚·‚é
+/** é–¢æ•°å‘½ä»¤ãƒ†ãƒ¼ãƒ–ãƒ«ã‚’åˆæœŸåŒ–ã™ã‚‹
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBCInitFreqFuncTable(void)
@@ -824,11 +824,11 @@ void NBCInitFreqFuncTable(void)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒoƒCƒgƒR[ƒhŠÂ‹«‚ğì¬‚·‚é
+/** ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ç’°å¢ƒã‚’ä½œæˆã™ã‚‹
  *
- * @param parent	[in] ŒÄo‚µŒ³‚ÌƒoƒCƒgƒR[ƒhŠÂ‹«
+ * @param parent	[in] å‘¼å‡ºã—å…ƒã®ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ç’°å¢ƒ
  *
- * @return			ƒoƒCƒgƒR[ƒhŠÂ‹«
+ * @return			ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ç’°å¢ƒ
  */
 
 nbc_env_t * NBCEnvNew(nbc_env_t * parent)
@@ -850,11 +850,11 @@ nbc_env_t * NBCEnvNew(nbc_env_t * parent)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒoƒCƒgƒR[ƒhŠÂ‹«‚ğ‰ğ•ú‚·‚é
+/** ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ç’°å¢ƒã‚’è§£æ”¾ã™ã‚‹
  *
- * @param env		[in] ƒoƒCƒgƒR[ƒhŠÂ‹«
+ * @param env		[in] ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ç’°å¢ƒ
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBCEnvFree(nbc_env_t * env)
@@ -871,11 +871,11 @@ void NBCEnvFree(nbc_env_t * env)
 
 
 /*------------------------------------------------------------------------*/
-/** ŠÖ”ƒIƒuƒWƒFƒNƒg‚Ì¶¬‚ğI—¹‚·‚é
+/** é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç”Ÿæˆã‚’çµ‚äº†ã™ã‚‹
  *
- * @param envP		[in] ƒoƒCƒgƒR[ƒhŠÂ‹«‚Ö‚Ìƒ|ƒCƒ“ƒ^
+ * @param envP		[in] ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ç’°å¢ƒã¸ã®ãƒã‚¤ãƒ³ã‚¿
  *
- * @return			ŠÖ”ƒIƒuƒWƒFƒNƒg
+ * @return			é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NBCFnDone(nbc_env_t ** envP)
@@ -908,9 +908,9 @@ newtRef NBCFnDone(nbc_env_t ** envP)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒoƒCƒgƒR[ƒh¶¬‚Ì‚½‚ß‚Ì‰Šú‰»
+/** ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ç”Ÿæˆã®ãŸã‚ã®åˆæœŸåŒ–
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBCInit(void)
@@ -920,9 +920,9 @@ void NBCInit(void)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒoƒCƒgƒR[ƒh¶¬‚ÌŒãn––
+/** ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ç”Ÿæˆã®å¾Œå§‹æœ«
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBCCleanup(void)
@@ -940,13 +940,13 @@ void NBCCleanup(void)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** •¶‚ÌƒoƒCƒgƒR[ƒh‚ğ¶¬‚·‚é
+/** æ–‡ã®ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã™ã‚‹
  *
- * @param stree		[in] \•¶–Ø
- * @param r			[in] \•¶–Øƒm[ƒh
- * @param ret		[in] –ß‚è’l‚Ì—L–³
+ * @param stree		[in] æ§‹æ–‡æœ¨
+ * @param r			[in] æ§‹æ–‡æœ¨ãƒãƒ¼ãƒ‰
+ * @param ret		[in] æˆ»ã‚Šå€¤ã®æœ‰ç„¡
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBCGenBC_stmt(nps_syntax_node_t * stree, nps_node_t r, bool ret)
@@ -963,12 +963,12 @@ void NBCGenBC_stmt(nps_syntax_node_t * stree, nps_node_t r, bool ret)
 
 
 /*------------------------------------------------------------------------*/
-/** ’è”‚ÌƒoƒCƒgƒR[ƒh‚ğ¶¬‚·‚é
+/** å®šæ•°ã®ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã™ã‚‹
  *
- * @param stree		[in] \•¶–Ø
- * @param r			[in] \•¶–Øƒm[ƒh
+ * @param stree		[in] æ§‹æ–‡æœ¨
+ * @param r			[in] æ§‹æ–‡æœ¨ãƒãƒ¼ãƒ‰
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBCGenConstant(nps_syntax_node_t * stree, nps_node_t r)
@@ -987,7 +987,7 @@ void NBCGenConstant(nps_syntax_node_t * stree, nps_node_t r)
                 break;
 
             case kNPSAsign:
-                // node->op2 ‚ªƒIƒuƒWƒFƒNƒg‚Å‚È‚¢ê‡‚Ìˆ—‚ğs‚¤‚±‚Æ
+                // node->op2 ãŒã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã§ãªã„å ´åˆã®å‡¦ç†ã‚’è¡Œã†ã“ã¨
                 NcSetSlot(CONSTANT, node->op1, node->op2);
                 break;
         }
@@ -1000,12 +1000,12 @@ void NBCGenConstant(nps_syntax_node_t * stree, nps_node_t r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒOƒ[ƒoƒ‹•Ï”‚ÌƒoƒCƒgƒR[ƒh‚ğ¶¬‚·‚é
+/** ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•°ã®ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã™ã‚‹
  *
- * @param stree		[in] \•¶–Ø
- * @param r			[in] \•¶–Øƒm[ƒh
+ * @param stree		[in] æ§‹æ–‡æœ¨
+ * @param r			[in] æ§‹æ–‡æœ¨ãƒãƒ¼ãƒ‰
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBCGenGlobalVar(nps_syntax_node_t * stree, nps_node_t r)
@@ -1027,7 +1027,7 @@ void NBCGenGlobalVar(nps_syntax_node_t * stree, nps_node_t r)
                 NBCGenPUSH(node->op1);
                 NBCGenBC_op(stree, node->op2);
 
-                // defGlobalVar ‚ğŒÄo‚·
+                // defGlobalVar ã‚’å‘¼å‡ºã™
                 NBCGenCallFn(NSSYM0(defGlobalVar), 2);
                 break;
         }
@@ -1037,7 +1037,7 @@ void NBCGenGlobalVar(nps_syntax_node_t * stree, nps_node_t r)
         NBCGenPUSH(r);
         NBCGenPUSH(kNewtRefUnbind);
 
-        // defGlobalVar ‚ğŒÄo‚·
+        // defGlobalVar ã‚’å‘¼å‡ºã™
         NBCGenCallFn(NSSYM0(defGlobalVar), 2);
     }
     else
@@ -1048,15 +1048,15 @@ void NBCGenGlobalVar(nps_syntax_node_t * stree, nps_node_t r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒ[ƒJƒ‹•Ï”‚ÌƒoƒCƒgƒR[ƒh‚ğ¶¬‚·‚é
+/** ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°ã®ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã™ã‚‹
  *
- * @param stree		[in] \•¶–Ø
- * @param type		[in] Œ^
- * @param r			[in] \•¶–Øƒm[ƒh
+ * @param stree		[in] æ§‹æ–‡æœ¨
+ * @param type		[in] å‹
+ * @param r			[in] æ§‹æ–‡æœ¨ãƒãƒ¼ãƒ‰
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  *
- * @note			Œ»İ‚Ìƒo[ƒWƒ‡ƒ“‚Å‚Í type ‚ÍŠ®‘S‚É–³‹‚³‚ê‚é
+ * @note			ç¾åœ¨ã®ãƒãƒ¼ã‚¸ãƒ§ãƒ³ã§ã¯ type ã¯å®Œå…¨ã«ç„¡è¦–ã•ã‚Œã‚‹
  */
 
 void NBCGenLocalVar(nps_syntax_node_t * stree, nps_node_t type, nps_node_t r)
@@ -1092,12 +1092,12 @@ void NBCGenLocalVar(nps_syntax_node_t * stree, nps_node_t type, nps_node_t r)
 
 
 /*------------------------------------------------------------------------*/
-/** Œ^‚ª³‚µ‚¢‚©ƒ`ƒFƒbƒN‚·‚é
+/** å‹ãŒæ­£ã—ã„ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param type		[in] Œ^
+ * @param type		[in] å‹
  *
- * @retval			true	³‚µ‚¢Œ^
- * @retval			false	³‚µ‚­‚È‚¢Œ^
+ * @retval			true	æ­£ã—ã„å‹
+ * @retval			false	æ­£ã—ããªã„å‹
  */
 
 bool NBCTypeValid(nps_node_t type)
@@ -1118,12 +1118,12 @@ bool NBCTypeValid(nps_node_t type)
 
 
 /*------------------------------------------------------------------------*/
-/** TRY•¶‚Ìæ“ª‚ÌƒoƒCƒgƒR[ƒh‚ğ¶¬‚·‚é
+/** TRYæ–‡ã®å…ˆé ­ã®ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã™ã‚‹
  *
- * @param stree		[in] \•¶–Ø
- * @param r			[in] \•¶–Øƒm[ƒh
+ * @param stree		[in] æ§‹æ–‡æœ¨
+ * @param r			[in] æ§‹æ–‡æœ¨ãƒãƒ¼ãƒ‰
  *
- * @return			—áŠOˆ—‚Ì”
+ * @return			ä¾‹å¤–å‡¦ç†ã®æ•°
  */
 
 int16_t NBCGenTryPre(nps_syntax_node_t * stree, nps_node_t r)
@@ -1139,8 +1139,8 @@ int16_t NBCGenTryPre(nps_syntax_node_t * stree, nps_node_t r)
         switch (node->code)
         {
             case kNPSOnexception:
-                NBCGenPUSH(node->op1);	// ƒVƒ“ƒ{ƒ‹
-                NBCGenOnexcpPC(-1);	// PCiƒ_ƒ~[j
+                NBCGenPUSH(node->op1);	// ã‚·ãƒ³ãƒœãƒ«
+                NBCGenOnexcpPC(-1);	// PCï¼ˆãƒ€ãƒŸãƒ¼ï¼‰
 
                 numExcps = 1;
                 break;
@@ -1157,13 +1157,13 @@ int16_t NBCGenTryPre(nps_syntax_node_t * stree, nps_node_t r)
 
 
 /*------------------------------------------------------------------------*/
-/** TRY•¶‚ÌI‚í‚è‚ÌƒoƒCƒgƒR[ƒh‚ğ¶¬‚·‚é
+/** TRYæ–‡ã®çµ‚ã‚ã‚Šã®ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã™ã‚‹
  *
- * @param stree		[in] \•¶–Ø
- * @param r			[in] \•¶–Øƒm[ƒh
- * @param onexcpspP	[in] —áŠOˆ—–½—ß‚Ì‡”Ô‚Ö‚Ìƒ|ƒCƒ“ƒ^
+ * @param stree		[in] æ§‹æ–‡æœ¨
+ * @param r			[in] æ§‹æ–‡æœ¨ãƒãƒ¼ãƒ‰
+ * @param onexcpspP	[in] ä¾‹å¤–å‡¦ç†å‘½ä»¤ã®é †ç•ªã¸ã®ãƒã‚¤ãƒ³ã‚¿
  *
- * @return			—áŠOˆ—‚Ì”
+ * @return			ä¾‹å¤–å‡¦ç†ã®æ•°
  */
 
 int16_t NBCGenTryPost(nps_syntax_node_t * stree, nps_node_t r,
@@ -1180,11 +1180,11 @@ int16_t NBCGenTryPost(nps_syntax_node_t * stree, nps_node_t r,
         switch (node->code)
         {
             case kNPSOnexception:
-                // new-handler ‚Ìˆø”‚ğƒoƒbƒNƒpƒbƒ`
+                // new-handler ã®å¼•æ•°ã‚’ãƒãƒƒã‚¯ãƒ‘ãƒƒãƒ
                 NBCOnexcpBackPatchL(*onexcpspP, CX);
                 (*onexcpspP)++;
 
-                // onexception ‚ÌƒR[ƒh¶¬
+                // onexception ã®ã‚³ãƒ¼ãƒ‰ç”Ÿæˆ
                 NBCGenBC_stmt(stree, node->op2, true);
                 NBCGenOnexcpBranch();
 
@@ -1203,13 +1203,13 @@ int16_t NBCGenTryPost(nps_syntax_node_t * stree, nps_node_t r,
 
 
 /*------------------------------------------------------------------------*/
-/** TRY•¶‚ÌƒoƒCƒgƒR[ƒh‚ğ¶¬‚·‚é
+/** TRYæ–‡ã®ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã™ã‚‹
  *
- * @param stree		[in] \•¶–Ø
- * @param expr		[in] ®‚Ì\•¶–Øƒm[ƒh
- * @param onexception_list	[in] —áŠOˆ—‚Ì\•¶–Øƒm[ƒh
+ * @param stree		[in] æ§‹æ–‡æœ¨
+ * @param expr		[in] å¼ã®æ§‹æ–‡æœ¨ãƒãƒ¼ãƒ‰
+ * @param onexception_list	[in] ä¾‹å¤–å‡¦ç†ã®æ§‹æ–‡æœ¨ãƒãƒ¼ãƒ‰
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBCGenTry(nps_syntax_node_t * stree, nps_node_t expr,
@@ -1224,7 +1224,7 @@ void NBCGenTry(nps_syntax_node_t * stree, nps_node_t expr,
     numExcps = NBCGenTryPre(stree, onexception_list);
     NBCGenCode(kNBCNewHandlers, numExcps);
 
-    // Às•¶
+    // å®Ÿè¡Œæ–‡
     NBCGenBC_op(stree, expr);
     NBCGenCode(kNBCPopHandlers, 0);
 
@@ -1235,27 +1235,27 @@ void NBCGenTry(nps_syntax_node_t * stree, nps_node_t expr,
     onexcp_cx = CX;
     NBCGenTryPost(stree, onexception_list, &onexcpsp);
 
-    // onexception ‚ÌI—¹
-    NBCOnexcpBackPatchs(onexcp_cx, CX);	// onexception ‚ÌI—¹‚ğƒoƒbƒNƒpƒbƒ`
+    // onexception ã®çµ‚äº†
+    NBCOnexcpBackPatchs(onexcp_cx, CX);	// onexception ã®çµ‚äº†ã‚’ãƒãƒƒã‚¯ãƒ‘ãƒƒãƒ
     NBCGenCode(kNBCPopHandlers, 0);
 
-    // ONEXCPSP ‚ğ–ß‚·
+    // ONEXCPSP ã‚’æˆ»ã™
     ONEXCPSP = onexcpsp;
 
-    // ƒoƒbƒNƒpƒbƒ`
-    NBCBackPatch(branch_cx, CX);	// branch ‚ğƒoƒbƒNƒpƒbƒ`
+    // ãƒãƒƒã‚¯ãƒ‘ãƒƒãƒ
+    NBCBackPatch(branch_cx, CX);	// branch ã‚’ãƒãƒƒã‚¯ãƒ‘ãƒƒãƒ
 }
 
 
 /*------------------------------------------------------------------------*/
-/** IF•¶‚ÌƒoƒCƒgƒR[ƒh‚ğ¶¬‚·‚é
+/** IFæ–‡ã®ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã™ã‚‹
  *
- * @param stree		[in] \•¶–Ø
- * @param cond		[in] ğŒ®‚Ì\•¶–Øƒm[ƒh
- * @param thenelse	[in] THEN, ELSE ‚Ì\•¶–Øƒm[ƒh
- * @param ret		[in] –ß‚è’l‚Ì—L–³
+ * @param stree		[in] æ§‹æ–‡æœ¨
+ * @param cond		[in] æ¡ä»¶å¼ã®æ§‹æ–‡æœ¨ãƒãƒ¼ãƒ‰
+ * @param thenelse	[in] THEN, ELSE ã®æ§‹æ–‡æœ¨ãƒãƒ¼ãƒ‰
+ * @param ret		[in] æˆ»ã‚Šå€¤ã®æœ‰ç„¡
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBCGenIfThenElse(nps_syntax_node_t * stree, nps_node_t cond,
@@ -1278,36 +1278,36 @@ void NBCGenIfThenElse(nps_syntax_node_t * stree, nps_node_t cond,
         ifthen = thenelse;
     }
 
-    // THEN •¶
+    // THEN æ–‡
     NBCGenBC_stmt(stree, ifthen, ret);
 
     if (ifelse == kNewtRefUnbind)
     {
-        NBCBackPatch(cond_cx, CX);				// ğŒ•¶‚ğƒoƒbƒNƒpƒbƒ`
+        NBCBackPatch(cond_cx, CX);				// æ¡ä»¶æ–‡ã‚’ãƒãƒƒã‚¯ãƒ‘ãƒƒãƒ
     }
     else
     {
         uint32_t	then_done;
 
-        then_done = NBCGenBranch(kNBCBranch);	// THEN •¶‚ÌI—¹
-        NBCBackPatch(cond_cx, CX);				// ğŒ•¶‚ğƒoƒbƒNƒpƒbƒ`
+        then_done = NBCGenBranch(kNBCBranch);	// THEN æ–‡ã®çµ‚äº†
+        NBCBackPatch(cond_cx, CX);				// æ¡ä»¶æ–‡ã‚’ãƒãƒƒã‚¯ãƒ‘ãƒƒãƒ
 
-        // ELSE •¶
+        // ELSE æ–‡
         NBCGenBC_stmt(stree, ifelse, ret);
 
-        NBCBackPatch(then_done, CX);			// THEN •¶I—¹‚Ìƒuƒ‰ƒ“ƒ`‚ğƒoƒbƒNƒpƒbƒ`
+        NBCBackPatch(then_done, CX);			// THEN æ–‡çµ‚äº†ã®ãƒ–ãƒ©ãƒ³ãƒã‚’ãƒãƒƒã‚¯ãƒ‘ãƒƒãƒ
     }
 }
 
 
 /*------------------------------------------------------------------------*/
-/** ˜_—AND ‚ÌƒoƒCƒgƒR[ƒh‚ğ¶¬‚·‚é
+/** è«–ç†AND ã®ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã™ã‚‹
  *
- * @param stree		[in] \•¶–Ø
- * @param op1		[in] ƒIƒyƒ‰ƒ“ƒh‚P‚Ì\•¶–Øƒm[ƒh
- * @param op2		[in] ƒIƒyƒ‰ƒ“ƒh‚Q‚Ì\•¶–Øƒm[ƒh
+ * @param stree		[in] æ§‹æ–‡æœ¨
+ * @param op1		[in] ã‚ªãƒšãƒ©ãƒ³ãƒ‰ï¼‘ã®æ§‹æ–‡æœ¨ãƒãƒ¼ãƒ‰
+ * @param op2		[in] ã‚ªãƒšãƒ©ãƒ³ãƒ‰ï¼’ã®æ§‹æ–‡æœ¨ãƒãƒ¼ãƒ‰
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBCGenAnd(nps_syntax_node_t * stree, nps_node_t op1, nps_node_t op2)
@@ -1315,34 +1315,34 @@ void NBCGenAnd(nps_syntax_node_t * stree, nps_node_t op1, nps_node_t op2)
     uint32_t	cx1;
     uint32_t	cx2;
 
-	// ƒIƒyƒ‰ƒ“ƒh‚P
+	// ã‚ªãƒšãƒ©ãƒ³ãƒ‰ï¼‘
     NBCGenBC_op(stree, op1);
 
-	// NIL ‚È‚ç•ªŠò
+	// NIL ãªã‚‰åˆ†å²
     cx1 = NBCGenBranch(kNBCBranchIfFalse);
 
-    // ƒIƒyƒ‰ƒ“ƒh‚Q
+    // ã‚ªãƒšãƒ©ãƒ³ãƒ‰ï¼’
     NBCGenBC_op(stree, op2);
-	// ®‚ÌÅŒã‚Ö•ªŠò
+	// å¼ã®æœ€å¾Œã¸åˆ†å²
     cx2 = NBCGenBranch(kNBCBranch);
 
-	// –ß‚è’l‚ğƒvƒbƒVƒ…
-	NBCBackPatch(cx1, CX);		// •ªŠò‚ğƒoƒbƒNƒpƒbƒ`
-    NBCGenPUSH(kNewtRefNIL);	// –ß‚è’l‚Í NIL
+	// æˆ»ã‚Šå€¤ã‚’ãƒ—ãƒƒã‚·ãƒ¥
+	NBCBackPatch(cx1, CX);		// åˆ†å²ã‚’ãƒãƒƒã‚¯ãƒ‘ãƒƒãƒ
+    NBCGenPUSH(kNewtRefNIL);	// æˆ»ã‚Šå€¤ã¯ NIL
 
-	// ®‚ÌÅŒã
-	NBCBackPatch(cx2, CX);		// •ªŠò‚ğƒoƒbƒNƒpƒbƒ`
+	// å¼ã®æœ€å¾Œ
+	NBCBackPatch(cx2, CX);		// åˆ†å²ã‚’ãƒãƒƒã‚¯ãƒ‘ãƒƒãƒ
 }
 
 
 /*------------------------------------------------------------------------*/
-/** ˜_—OR ‚ÌƒoƒCƒgƒR[ƒh‚ğ¶¬‚·‚é
+/** è«–ç†OR ã®ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã™ã‚‹
  *
- * @param stree		[in] \•¶–Ø
- * @param op1		[in] ƒIƒyƒ‰ƒ“ƒh‚P‚Ì\•¶–Øƒm[ƒh
- * @param op2		[in] ƒIƒyƒ‰ƒ“ƒh‚Q‚Ì\•¶–Øƒm[ƒh
+ * @param stree		[in] æ§‹æ–‡æœ¨
+ * @param op1		[in] ã‚ªãƒšãƒ©ãƒ³ãƒ‰ï¼‘ã®æ§‹æ–‡æœ¨ãƒãƒ¼ãƒ‰
+ * @param op2		[in] ã‚ªãƒšãƒ©ãƒ³ãƒ‰ï¼’ã®æ§‹æ–‡æœ¨ãƒãƒ¼ãƒ‰
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBCGenOr(nps_syntax_node_t * stree, nps_node_t op1, nps_node_t op2)
@@ -1350,64 +1350,64 @@ void NBCGenOr(nps_syntax_node_t * stree, nps_node_t op1, nps_node_t op2)
     uint32_t	cx1;
     uint32_t	cx2;
 
-	// ƒIƒyƒ‰ƒ“ƒh‚P
+	// ã‚ªãƒšãƒ©ãƒ³ãƒ‰ï¼‘
     NBCGenBC_op(stree, op1);
 
-	// TRUE ‚È‚ç•ªŠò
+	// TRUE ãªã‚‰åˆ†å²
     cx1 = NBCGenBranch(kNBCBranchIfTrue);
 
-    // ƒIƒyƒ‰ƒ“ƒh‚Q
+    // ã‚ªãƒšãƒ©ãƒ³ãƒ‰ï¼’
     NBCGenBC_op(stree, op2);
-	// ®‚ÌÅŒã‚Ö•ªŠò
+	// å¼ã®æœ€å¾Œã¸åˆ†å²
     cx2 = NBCGenBranch(kNBCBranch);
 
-	// –ß‚è’l‚ğƒvƒbƒVƒ…
-	NBCBackPatch(cx1, CX);		// •ªŠò‚ğƒoƒbƒNƒpƒbƒ`
+	// æˆ»ã‚Šå€¤ã‚’ãƒ—ãƒƒã‚·ãƒ¥
+	NBCBackPatch(cx1, CX);		// åˆ†å²ã‚’ãƒãƒƒã‚¯ãƒ‘ãƒƒãƒ
 
 	if (NPSRefIsSyntaxNode(op1))
 		NBCGenPUSH(kNewtRefTRUE);
 	else
 		NBCGenPUSH(op1);
 
-	// ®‚ÌÅŒã
-	NBCBackPatch(cx2, CX);		// •ªŠò‚ğƒoƒbƒNƒpƒbƒ`
+	// å¼ã®æœ€å¾Œ
+	NBCBackPatch(cx2, CX);		// åˆ†å²ã‚’ãƒãƒƒã‚¯ãƒ‘ãƒƒãƒ
 }
 
 
 /*------------------------------------------------------------------------*/
-/** LOOP•¶‚ÌƒoƒCƒgƒR[ƒh‚ğ¶¬‚·‚é
+/** LOOPæ–‡ã®ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã™ã‚‹
  *
- * @param stree		[in] \•¶–Ø
- * @param expr		[in] Às•¶‚Ì\•¶–Øƒm[ƒh
+ * @param stree		[in] æ§‹æ–‡æœ¨
+ * @param expr		[in] å®Ÿè¡Œæ–‡ã®æ§‹æ–‡æœ¨ãƒãƒ¼ãƒ‰
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBCGenLoop(nps_syntax_node_t * stree, nps_node_t expr)
 {
     uint32_t	loop_head;
 
-    // loop ‚Ìæ“ª
+    // loop ã®å…ˆé ­
     loop_head = CX;
 
-    // Às•¶
+    // å®Ÿè¡Œæ–‡
     NBCGenBC_stmt(stree, expr, false);
 
-    NBCGenCode(kNBCBranch, loop_head);	// loop ‚Ìæ“ª‚Ö
+    NBCGenCode(kNBCBranch, loop_head);	// loop ã®å…ˆé ­ã¸
 
-    // ƒoƒbƒNƒpƒbƒ`
-    NBCBreakBackPatchs(loop_head, CX);	// break ‚ğƒoƒbƒNƒpƒbƒ`
+    // ãƒãƒƒã‚¯ãƒ‘ãƒƒãƒ
+    NBCBreakBackPatchs(loop_head, CX);	// break ã‚’ãƒãƒƒã‚¯ãƒ‘ãƒƒãƒ
 }
 
 
 /*------------------------------------------------------------------------*/
-/** ƒCƒeƒŒ[ƒ^‚Åg—p‚·‚éˆê“I‚ÈƒVƒ“ƒ{ƒ‹‚ğì¬‚·‚é
+/** ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿ã§ä½¿ç”¨ã™ã‚‹ä¸€æ™‚çš„ãªã‚·ãƒ³ãƒœãƒ«ã‚’ä½œæˆã™ã‚‹
  *
- * @param index		[in] ƒCƒ“ƒfƒbƒNƒX•Ï”ƒVƒ“ƒ{ƒ‹
- * @param val		[in] ƒoƒŠƒ…[•Ï”ƒVƒ“ƒ{ƒ‹
- * @param s			[in] •¶š—ñ
+ * @param index		[in] ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹å¤‰æ•°ã‚·ãƒ³ãƒœãƒ«
+ * @param val		[in] ãƒãƒªãƒ¥ãƒ¼å¤‰æ•°ã‚·ãƒ³ãƒœãƒ«
+ * @param s			[in] æ–‡å­—åˆ—
  *
- * @return			ƒVƒ“ƒ{ƒ‹
+ * @return			ã‚·ãƒ³ãƒœãƒ«
  */
 
 newtRef NBCMakeTempSymbol(newtRefArg index, newtRefArg val, char * s)
@@ -1426,13 +1426,13 @@ newtRef NBCMakeTempSymbol(newtRefArg index, newtRefArg val, char * s)
 
 
 /*------------------------------------------------------------------------*/
-/** FOR•¶‚ÌƒoƒCƒgƒR[ƒh‚ğ¶¬‚·‚é
+/** FORæ–‡ã®ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã™ã‚‹
  *
- * @param stree		[in] \•¶–Ø
- * @param r			[in] \•¶–Øƒm[ƒh
- * @param expr		[in] Às•¶‚Ì\•¶–Øƒm[ƒh
+ * @param stree		[in] æ§‹æ–‡æœ¨
+ * @param r			[in] æ§‹æ–‡æœ¨ãƒãƒ¼ãƒ‰
+ * @param expr		[in] å®Ÿè¡Œæ–‡ã®æ§‹æ–‡æœ¨ãƒãƒ¼ãƒ‰
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBCGenFor(nps_syntax_node_t * stree, nps_node_t r, nps_node_t expr)
@@ -1454,33 +1454,33 @@ void NBCGenFor(nps_syntax_node_t * stree, nps_node_t r, nps_node_t expr)
     if (by == kNewtRefUnbind)
         by = NSINT(1);
 
-    // index ‚ğ‰Šú‰»
+    // index ã‚’åˆæœŸåŒ–
     NBCGenBC_op(stree, v);
     NBCDefLocal(NS_INT, index, true);
 
-    // index|limit ‚ğ‰Šú‰»
+    // index|limit ã‚’åˆæœŸåŒ–
     _limit = NBCMakeTempSymbol(index, kNewtRefUnbind, "limit");
     NBCGenBC_op(stree, to);
     NBCDefLocal(NS_INT, _limit, true);
 
-    // index|limit ‚ğ‰Šú‰»
+    // index|limit ã‚’åˆæœŸåŒ–
     _incr = NBCMakeTempSymbol(index, kNewtRefUnbind, "incr");
     NBCGenBC_op(stree, by);
     NBCDefLocal(NS_INT, _incr, true);
 
-    // ğŒ•¶‚Öƒuƒ‰ƒ“ƒ`
+    // æ¡ä»¶æ–‡ã¸ãƒ–ãƒ©ãƒ³ãƒ
     NBCGenGetVar(stree, _incr);
     NBCGenGetVar(stree, index);
 
     branch_cx = NBCGenBranch(kNBCBranch);
 
-    // loop ‚Ìæ“ª
+    // loop ã®å…ˆé ­
     loop_head = CX;
 
-    // Às•¶
+    // å®Ÿè¡Œæ–‡
     NBCGenBC_stmt(stree, expr, false);
 
-    // •Ï”‚É by ‚ğ‘•ª
+    // å¤‰æ•°ã« by ã‚’å¢—åˆ†
     {
         int16_t	b;
 
@@ -1490,27 +1490,27 @@ void NBCGenFor(nps_syntax_node_t * stree, nps_node_t r, nps_node_t expr)
         NBCGenCode(kNBCIncrVar, b);
     }
 
-    // ğŒ•¶
-    NBCBackPatch(branch_cx, CX);			// branch ‚ğƒoƒbƒNƒpƒbƒ`
+    // æ¡ä»¶æ–‡
+    NBCBackPatch(branch_cx, CX);			// branch ã‚’ãƒãƒƒã‚¯ãƒ‘ãƒƒãƒ
     NBCGenGetVar(stree, _limit);
-    NBCGenCode(kNBCBranchIfLoopNotDone, loop_head);	// loop ‚Ìæ“ª‚Ö
+    NBCGenCode(kNBCBranchIfLoopNotDone, loop_head);	// loop ã®å…ˆé ­ã¸
 
-    // –ß‚è’l
+    // æˆ»ã‚Šå€¤
     NBCGenPUSH(kNewtRefNIL);
 
-    // ƒoƒbƒNƒpƒbƒ`
-    NBCBreakBackPatchs(loop_head, CX);	// break ‚ğƒoƒbƒNƒpƒbƒ`
+    // ãƒãƒƒã‚¯ãƒ‘ãƒƒãƒ
+    NBCBreakBackPatchs(loop_head, CX);	// break ã‚’ãƒãƒƒã‚¯ãƒ‘ãƒƒãƒ
 }
 
 
 /*------------------------------------------------------------------------*/
-/** FOREACH•¶‚ÌƒoƒCƒgƒR[ƒh‚ğ¶¬‚·‚é
+/** FOREACHæ–‡ã®ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã™ã‚‹
  *
- * @param stree		[in] \•¶–Ø
- * @param r			[in] \•¶–Øƒm[ƒh
- * @param expr		[in] Às•¶‚Ì\•¶–Øƒm[ƒh
+ * @param stree		[in] æ§‹æ–‡æœ¨
+ * @param r			[in] æ§‹æ–‡æœ¨ãƒãƒ¼ãƒ‰
+ * @param expr		[in] å®Ÿè¡Œæ–‡ã®æ§‹æ–‡æœ¨ãƒãƒ¼ãƒ‰
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBCGenForeach(nps_syntax_node_t * stree, nps_node_t r, nps_node_t expr)
@@ -1556,7 +1556,7 @@ void NBCGenForeach(nps_syntax_node_t * stree, nps_node_t r, nps_node_t expr)
         NBCDefLocal(NSSYM0(array), _index, false);
         NBCDefLocal(NSSYM0(array), _result, false);
 
-        // –ß‚è’l‚Ì array ‚ğì¬
+        // æˆ»ã‚Šå€¤ã® array ã‚’ä½œæˆ
         if (NewtRefIsNIL(deeply))
             lenIndex = kIterMax;
         else
@@ -1571,24 +1571,24 @@ void NBCGenForeach(nps_syntax_node_t * stree, nps_node_t r, nps_node_t expr)
         NBCGenCode(kNBCMakeArray, -1);
         NBCDefLocal(NSSYM0(array), _result, true);
 
-        // index ‚Ì‰Šú‰»
+        // index ã®åˆæœŸåŒ–
         NBCGenPUSH(NSINT(0));
         NBCDefLocal(NS_INT, _index, true);
     }
 
-    // ğŒ•¶‚Öƒuƒ‰ƒ“ƒ`
+    // æ¡ä»¶æ–‡ã¸ãƒ–ãƒ©ãƒ³ãƒ
     branch_cx = NBCGenBranch(kNBCBranch);
 
-    // loop ‚Ìæ“ª
+    // loop ã®å…ˆé ­
     loop_head = CX;
 
-    // val ‚ÌƒZƒbƒg
+    // val ã®ã‚»ãƒƒãƒˆ
     NBCGenGetVar(stree, _iter);
     NBCGenPUSH(NewtMakeInteger(kIterValue));
     NBCGenFreq(kNBCAref);
     NBCDefLocal(kNewtRefUnbind, val, true);
 
-    // index ‚ÌƒZƒbƒg
+    // index ã®ã‚»ãƒƒãƒˆ
     if (index != kNewtRefUnbind)
     {
         NBCGenGetVar(stree, _iter);
@@ -1597,7 +1597,7 @@ void NBCGenForeach(nps_syntax_node_t * stree, nps_node_t r, nps_node_t expr)
         NBCDefLocal(kNewtRefUnbind, index, true);
     }
 
-    // Às•¶
+    // å®Ÿè¡Œæ–‡
     if (collect)
     {
         int16_t	b;
@@ -1626,22 +1626,22 @@ void NBCGenForeach(nps_syntax_node_t * stree, nps_node_t r, nps_node_t expr)
     NBCGenGetVar(stree, _iter);
     NBCGenCode(kNBCIterNext, 0);
 
-    // ğŒ•¶
-    NBCBackPatch(branch_cx, CX);		// branch ‚ğƒoƒbƒNƒpƒbƒ`
+    // æ¡ä»¶æ–‡
+    NBCBackPatch(branch_cx, CX);		// branch ã‚’ãƒãƒƒã‚¯ãƒ‘ãƒƒãƒ
     NBCGenGetVar(stree, _iter);
     NBCGenCode(kNBCIterDone, 0);		// iter-done
-    NBCGenCode(kNBCBranchIfFalse, loop_head);	// loop ‚Ìæ“ª‚Ö
+    NBCGenCode(kNBCBranchIfFalse, loop_head);	// loop ã®å…ˆé ­ã¸
 
-    // –ß‚è’l
+    // æˆ»ã‚Šå€¤
     if (collect)
         NBCGenGetVar(stree, _result);
     else
         NBCGenPUSH(kNewtRefNIL);
 
-    // ƒoƒbƒNƒpƒbƒ`
-    NBCBreakBackPatchs(loop_head, CX);	// break ‚ğƒoƒbƒNƒpƒbƒ`
+    // ãƒãƒƒã‚¯ãƒ‘ãƒƒãƒ
+    NBCBreakBackPatchs(loop_head, CX);	// break ã‚’ãƒãƒƒã‚¯ãƒ‘ãƒƒãƒ
 
-    // iterator ‚ÌŒãn––
+    // iterator ã®å¾Œå§‹æœ«
     if (collect)
     {
         NBCGenPUSH(kNewtRefNIL);
@@ -1654,13 +1654,13 @@ void NBCGenForeach(nps_syntax_node_t * stree, nps_node_t r, nps_node_t expr)
 
 
 /*------------------------------------------------------------------------*/
-/** WHILE•¶‚ÌƒoƒCƒgƒR[ƒh‚ğ¶¬‚·‚é
+/** WHILEæ–‡ã®ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã™ã‚‹
  *
- * @param stree		[in] \•¶–Ø
- * @param cond		[in] ğŒ®‚Ì\•¶–Øƒm[ƒh
- * @param expr		[in] Às•¶‚Ì\•¶–Øƒm[ƒh
+ * @param stree		[in] æ§‹æ–‡æœ¨
+ * @param cond		[in] æ¡ä»¶å¼ã®æ§‹æ–‡æœ¨ãƒãƒ¼ãƒ‰
+ * @param expr		[in] å®Ÿè¡Œæ–‡ã®æ§‹æ–‡æœ¨ãƒãƒ¼ãƒ‰
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBCGenWhile(nps_syntax_node_t * stree, nps_node_t cond, nps_node_t expr)
@@ -1668,94 +1668,94 @@ void NBCGenWhile(nps_syntax_node_t * stree, nps_node_t cond, nps_node_t expr)
     uint32_t	loop_head;
     uint32_t	cond_cx;
 
-    // loop ‚Ìæ“ª
+    // loop ã®å…ˆé ­
     loop_head = CX;
 
-    // ğŒ•¶
+    // æ¡ä»¶æ–‡
     NBCGenBC_op(stree, cond);
     cond_cx = NBCGenBranch(kNBCBranchIfFalse);
 
-    // Às•¶
+    // å®Ÿè¡Œæ–‡
     NBCGenBC_stmt(stree, expr, false);
 
-    NBCGenCode(kNBCBranch, loop_head);	// loop ‚Ìæ“ª‚Ö
+    NBCGenCode(kNBCBranch, loop_head);	// loop ã®å…ˆé ­ã¸
 
-    // ƒoƒbƒNƒpƒbƒ`
-    NBCBackPatch(cond_cx, CX);		// ğŒ•¶‚ğƒoƒbƒNƒpƒbƒ`
+    // ãƒãƒƒã‚¯ãƒ‘ãƒƒãƒ
+    NBCBackPatch(cond_cx, CX);		// æ¡ä»¶æ–‡ã‚’ãƒãƒƒã‚¯ãƒ‘ãƒƒãƒ
 
-    // –ß‚è’l
+    // æˆ»ã‚Šå€¤
     NBCGenPUSH(kNewtRefNIL);
 
-    NBCBreakBackPatchs(loop_head, CX);	// break ‚ğƒoƒbƒNƒpƒbƒ`
+    NBCBreakBackPatchs(loop_head, CX);	// break ã‚’ãƒãƒƒã‚¯ãƒ‘ãƒƒãƒ
 }
 
 
 /*------------------------------------------------------------------------*/
-/** REPEAT•¶‚ÌƒoƒCƒgƒR[ƒh‚ğ¶¬‚·‚é
+/** REPEATæ–‡ã®ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã™ã‚‹
  *
- * @param stree		[in] \•¶–Ø
- * @param expr		[in] Às•¶‚Ì\•¶–Øƒm[ƒh
- * @param cond		[in] ğŒ®‚Ì\•¶–Øƒm[ƒh
+ * @param stree		[in] æ§‹æ–‡æœ¨
+ * @param expr		[in] å®Ÿè¡Œæ–‡ã®æ§‹æ–‡æœ¨ãƒãƒ¼ãƒ‰
+ * @param cond		[in] æ¡ä»¶å¼ã®æ§‹æ–‡æœ¨ãƒãƒ¼ãƒ‰
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBCGenRepeat(nps_syntax_node_t * stree, nps_node_t expr, nps_node_t cond)
 {
     uint32_t	loop_head;
 
-    // loop ‚Ìæ“ª
+    // loop ã®å…ˆé ­
     loop_head = CX;
 
-    // Às•¶
+    // å®Ÿè¡Œæ–‡
     NBCGenBC_stmt(stree, expr, false);
 
-    // ğŒ•¶
+    // æ¡ä»¶æ–‡
     NBCGenBC_op(stree, cond);
-    NBCGenCode(kNBCBranchIfFalse, loop_head);	// loop ‚Ìæ“ª‚Ö
+    NBCGenCode(kNBCBranchIfFalse, loop_head);	// loop ã®å…ˆé ­ã¸
 
-    // –ß‚è’l
+    // æˆ»ã‚Šå€¤
     NBCGenPUSH(kNewtRefNIL);
 
-    // ƒoƒbƒNƒpƒbƒ`
-    NBCBreakBackPatchs(loop_head, CX);		// break ‚ğƒoƒbƒNƒpƒbƒ`
+    // ãƒãƒƒã‚¯ãƒ‘ãƒƒãƒ
+    NBCBreakBackPatchs(loop_head, CX);		// break ã‚’ãƒãƒƒã‚¯ãƒ‘ãƒƒãƒ
 }
 
 
 /*------------------------------------------------------------------------*/
-/** BREAK•¶‚ÌƒoƒCƒgƒR[ƒh‚ğ¶¬‚·‚é
+/** BREAKæ–‡ã®ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã™ã‚‹
  *
- * @param stree		[in] \•¶–Ø
- * @param expr		[in] Às•¶‚Ì\•¶–Øƒm[ƒh
+ * @param stree		[in] æ§‹æ–‡æœ¨
+ * @param expr		[in] å®Ÿè¡Œæ–‡ã®æ§‹æ–‡æœ¨ãƒãƒ¼ãƒ‰
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBCGenBreak(nps_syntax_node_t * stree, nps_node_t expr)
 {
     uint32_t	cx;
 
-    // –ß‚è’l
+    // æˆ»ã‚Šå€¤
     if (expr == kNewtRefUnbind)
         NBCGenPUSH(kNewtRefNIL);
     else
         NBCGenBC_op(stree, expr);
 
-    // ƒuƒ‰ƒ“ƒ`
-    cx = NBCGenBranch(kNBCBranch);	// loop ‚ÌI‚í‚è‚Ö
-    NBCPushBreakStack(cx);		// ƒoƒbƒNƒpƒbƒ`‚Ì‚½‚ß‚ÉƒXƒ^ƒbƒN‚ÉƒvƒbƒVƒ…‚·‚é
+    // ãƒ–ãƒ©ãƒ³ãƒ
+    cx = NBCGenBranch(kNBCBranch);	// loop ã®çµ‚ã‚ã‚Šã¸
+    NBCPushBreakStack(cx);		// ãƒãƒƒã‚¯ãƒ‘ãƒƒãƒã®ãŸã‚ã«ã‚¹ã‚¿ãƒƒã‚¯ã«ãƒ—ãƒƒã‚·ãƒ¥ã™ã‚‹
 }
 
 
 /*------------------------------------------------------------------------*/
-/** •¶š—ñ‚ÌŒ‹‡–½—ß‚ÌƒoƒCƒgƒR[ƒh‚ğ¶¬‚·‚é
+/** æ–‡å­—åˆ—ã®çµåˆå‘½ä»¤ã®ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã™ã‚‹
  *
- * @param stree		[in] \•¶–Ø
- * @param op1		[in] ˆø”‚P
- * @param op2		[in] ˆø”‚Q
- * @param dlmt		[in] ‹æØ‚è•¶š—ñ
+ * @param stree		[in] æ§‹æ–‡æœ¨
+ * @param op1		[in] å¼•æ•°ï¼‘
+ * @param op2		[in] å¼•æ•°ï¼’
+ * @param dlmt		[in] åŒºåˆ‡ã‚Šæ–‡å­—åˆ—
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBCGenStringer(nps_syntax_node_t * stree, nps_node_t op1, nps_node_t op2,
@@ -1780,14 +1780,14 @@ void NBCGenStringer(nps_syntax_node_t * stree, nps_node_t op1, nps_node_t op2,
 
 
 /*------------------------------------------------------------------------*/
-/** ‘ã“ü®‚ÌƒoƒCƒgƒR[ƒh‚ğ¶¬‚·‚é
+/** ä»£å…¥å¼ã®ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã™ã‚‹
  *
- * @param stree		[in] \•¶–Ø
- * @param lvalue	[in] ¶•Ó
- * @param expr		[in] ®
- * @param ret		[in] –ß‚è’l‚Ì—L–³
+ * @param stree		[in] æ§‹æ–‡æœ¨
+ * @param lvalue	[in] å·¦è¾º
+ * @param expr		[in] å¼
+ * @param ret		[in] æˆ»ã‚Šå€¤ã®æœ‰ç„¡
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBCGenAsign(nps_syntax_node_t * stree,
@@ -1797,7 +1797,7 @@ void NBCGenAsign(nps_syntax_node_t * stree,
     {
         if (NewtHasSlot(CONSTANT, lvalue))
         {
-            // ’è”‚Ìê‡
+            // å®šæ•°ã®å ´åˆ
             NBError(kNErrAssignToConstant);
             return;
         }
@@ -1859,12 +1859,12 @@ void NBCGenAsign(nps_syntax_node_t * stree,
 
 
 /*------------------------------------------------------------------------*/
-/** EXISTS®‚ÌƒoƒCƒgƒR[ƒh‚ğ¶¬‚·‚é
+/** EXISTSå¼ã®ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã™ã‚‹
  *
- * @param stree		[in] \•¶–Ø
- * @param r			[in] \•¶–Øƒm[ƒh
+ * @param stree		[in] æ§‹æ–‡æœ¨
+ * @param r			[in] æ§‹æ–‡æœ¨ãƒãƒ¼ãƒ‰
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBCGenExists(nps_syntax_node_t * stree, nps_node_t r)
@@ -1873,7 +1873,7 @@ void NBCGenExists(nps_syntax_node_t * stree, nps_node_t r)
     {
         if (NewtFindArrayIndex(LITERALS, r, 0) != -1)
         {
-            // ƒ[ƒJƒ‹•Ï”‚ªéŒ¾‚³‚ê‚Ä‚¢‚éê‡
+            // ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•°ãŒå®£è¨€ã•ã‚Œã¦ã„ã‚‹å ´åˆ
             NBCGenPUSH(kNewtRefTRUE);
         }
         else
@@ -1909,12 +1909,12 @@ void NBCGenExists(nps_syntax_node_t * stree, nps_node_t r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒŒƒV[ƒo‚ÌƒoƒCƒgƒR[ƒh‚ğ¶¬‚·‚é
+/** ãƒ¬ã‚·ãƒ¼ãƒã®ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã™ã‚‹
  *
- * @param stree		[in] \•¶–Ø
- * @param r			[in] \•¶–Øƒm[ƒh
+ * @param stree		[in] æ§‹æ–‡æœ¨
+ * @param r			[in] æ§‹æ–‡æœ¨ãƒãƒ¼ãƒ‰
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBCGenReceiver(nps_syntax_node_t * stree, nps_node_t r)
@@ -1927,37 +1927,37 @@ void NBCGenReceiver(nps_syntax_node_t * stree, nps_node_t r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒƒ\ƒbƒhEXISTS®‚ÌƒoƒCƒgƒR[ƒh‚ğ¶¬‚·‚é
+/** ãƒ¡ã‚½ãƒƒãƒ‰EXISTSå¼ã®ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã™ã‚‹
  *
- * @param stree		[in] \•¶–Ø
- * @param receiver  [in] ƒŒƒV[ƒo
- * @param name		[in] ƒƒ\ƒbƒh–¼
+ * @param stree		[in] æ§‹æ–‡æœ¨
+ * @param receiver  [in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param name		[in] ãƒ¡ã‚½ãƒƒãƒ‰å
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBCGenMethodExists(nps_syntax_node_t * stree,
         nps_node_t receiver, nps_node_t name)
 {
-    // receiver ‚Ì¶¬
+    // receiver ã®ç”Ÿæˆ
     NBCGenReceiver(stree, receiver);
 
     // name
     NBCGenBC_op(stree, name);
 
-    // hasVariable ‚ğŒÄo‚·
+    // hasVariable ã‚’å‘¼å‡ºã™
     NBCGenCallFn(NSSYM0(hasVariable), 2);
 }
 
 
 /*------------------------------------------------------------------------*/
-/** ŠÖ”’è‹`‚ÌƒoƒCƒgƒR[ƒh‚ğ¶¬‚·‚é
+/** é–¢æ•°å®šç¾©ã®ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã™ã‚‹
  *
- * @param stree		[in] \•¶–Ø
- * @param args		[in] ˆø”
- * @param expr		[in] ®
+ * @param stree		[in] æ§‹æ–‡æœ¨
+ * @param args		[in] å¼•æ•°
+ * @param expr		[in] å¼
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBCGenFn(nps_syntax_node_t * stree, nps_node_t args, nps_node_t expr)
@@ -1974,13 +1974,13 @@ void NBCGenFn(nps_syntax_node_t * stree, nps_node_t args, nps_node_t expr)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒOƒ[ƒoƒ‹ŠÖ”’è‹`‚ÌƒoƒCƒgƒR[ƒh‚ğ¶¬‚·‚é
+/** ã‚°ãƒ­ãƒ¼ãƒãƒ«é–¢æ•°å®šç¾©ã®ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã™ã‚‹
  *
- * @param stree		[in] \•¶–Ø
- * @param name		[in] ƒOƒ[ƒoƒ‹ŠÖ”–¼
- * @param fn		[in] ŠÖ”
+ * @param stree		[in] æ§‹æ–‡æœ¨
+ * @param name		[in] ã‚°ãƒ­ãƒ¼ãƒãƒ«é–¢æ•°å
+ * @param fn		[in] é–¢æ•°
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBCGenGlobalFn(nps_syntax_node_t * stree, nps_node_t name, nps_node_t fn)
@@ -1993,13 +1993,13 @@ void NBCGenGlobalFn(nps_syntax_node_t * stree, nps_node_t name, nps_node_t fn)
 
 
 /*------------------------------------------------------------------------*/
-/** ŠÖ”ŒÄo‚µ‚ÌƒoƒCƒgƒR[ƒh‚ğ¶¬‚·‚é
+/** é–¢æ•°å‘¼å‡ºã—ã®ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã™ã‚‹
  *
- * @param stree		[in] \•¶–Ø
- * @param name		[in] ƒOƒ[ƒoƒ‹ŠÖ”–¼
- * @param args		[in] ˆø”
+ * @param stree		[in] æ§‹æ–‡æœ¨
+ * @param name		[in] ã‚°ãƒ­ãƒ¼ãƒãƒ«é–¢æ•°å
+ * @param args		[in] å¼•æ•°
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBCGenCall(nps_syntax_node_t * stree, nps_node_t name, nps_node_t args)
@@ -2014,13 +2014,13 @@ void NBCGenCall(nps_syntax_node_t * stree, nps_node_t name, nps_node_t args)
 
 
 /*------------------------------------------------------------------------*/
-/** ŠÖ”ƒIƒuƒWƒFƒNƒgÀs‚ÌƒoƒCƒgƒR[ƒh‚ğ¶¬‚·‚é
+/** é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå®Ÿè¡Œã®ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã™ã‚‹
  *
- * @param stree		[in] \•¶–Ø
- * @param fn		[in] ŠÖ”ƒIƒuƒWƒFƒNƒg
- * @param args		[in] ˆø”
+ * @param stree		[in] æ§‹æ–‡æœ¨
+ * @param fn		[in] é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param args		[in] å¼•æ•°
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBCGenInvoke(nps_syntax_node_t * stree, nps_node_t fn, nps_node_t args)
@@ -2037,14 +2037,14 @@ void NBCGenInvoke(nps_syntax_node_t * stree, nps_node_t fn, nps_node_t args)
 
 
 /*------------------------------------------------------------------------*/
-/** ‚Q€ŠÖ”‚ÌŒÄo‚µƒoƒCƒgƒR[ƒh‚ğ¶¬‚·‚é
+/** ï¼’é …é–¢æ•°ã®å‘¼å‡ºã—ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã™ã‚‹
  *
- * @param stree		[in] \•¶–Ø
- * @param name		[in] ŠÖ”–¼
- * @param op1		[in] ˆø”‚P
- * @param op2		[in] ˆø”‚Q
+ * @param stree		[in] æ§‹æ–‡æœ¨
+ * @param name		[in] é–¢æ•°å
+ * @param op1		[in] å¼•æ•°ï¼‘
+ * @param op2		[in] å¼•æ•°ï¼’
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBCGenFunc2(nps_syntax_node_t * stree,
@@ -2058,14 +2058,14 @@ void NBCGenFunc2(nps_syntax_node_t * stree,
 
 
 /*------------------------------------------------------------------------*/
-/** ƒƒ\ƒbƒh‘—M‚ÌƒoƒCƒgƒR[ƒh‚ğ¶¬‚·‚é
+/** ãƒ¡ã‚½ãƒƒãƒ‰é€ä¿¡ã®ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã™ã‚‹
  *
- * @param stree		[in] \•¶–Ø
- * @param code		[in] ‘—Mƒ^ƒCƒv
- * @param receiver	[in] ƒŒƒV[ƒo
- * @param r			[in] ƒƒ\ƒbƒh–¼{ˆø”
+ * @param stree		[in] æ§‹æ–‡æœ¨
+ * @param code		[in] é€ä¿¡ã‚¿ã‚¤ãƒ—
+ * @param receiver	[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] ãƒ¡ã‚½ãƒƒãƒ‰åï¼‹å¼•æ•°
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBCGenSend(nps_syntax_node_t * stree, uint32_t code,
@@ -2076,30 +2076,30 @@ void NBCGenSend(nps_syntax_node_t * stree, uint32_t code,
 
     node = &stree[NPSRefToSyntaxNode(r)];
 
-    // ˆø”‚Ì¶¬
+    // å¼•æ•°ã®ç”Ÿæˆ
     NBCGenBC_op(stree, node->op2);
     numArgs = NBCCountNumArgs(stree, node->op2);
 
-    // message ‚Ì¶¬
+    // message ã®ç”Ÿæˆ
     NBCGenPUSH(node->op1);
 
-    // receiver ‚Ì¶¬
+    // receiver ã®ç”Ÿæˆ
     NBCGenReceiver(stree, receiver);
 
-    // ƒƒbƒZ[ƒWŒÄo‚µ‚Ì¶¬
+    // ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å‘¼å‡ºã—ã®ç”Ÿæˆ
     NBCGenCode(code, numArgs);
 }
 
 
 /*------------------------------------------------------------------------*/
-/** ƒƒ\ƒbƒhÄ‘—M‚ÌƒoƒCƒgƒR[ƒh‚ğ¶¬‚·‚é
+/** ãƒ¡ã‚½ãƒƒãƒ‰å†é€ä¿¡ã®ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã™ã‚‹
  *
- * @param stree		[in] \•¶–Ø
- * @param code		[in] ‘—Mƒ^ƒCƒv
- * @param name		[in] ƒƒ\ƒbƒh–¼
- * @param args		[in] ˆø”
+ * @param stree		[in] æ§‹æ–‡æœ¨
+ * @param code		[in] é€ä¿¡ã‚¿ã‚¤ãƒ—
+ * @param name		[in] ãƒ¡ã‚½ãƒƒãƒ‰å
+ * @param args		[in] å¼•æ•°
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBCGenResend(nps_syntax_node_t * stree, uint32_t code,
@@ -2116,13 +2116,13 @@ void NBCGenResend(nps_syntax_node_t * stree, uint32_t code,
 
 
 /*------------------------------------------------------------------------*/
-/** ”z—ñì¬‚ÌƒoƒCƒgƒR[ƒh‚ğ¶¬‚·‚é
+/** é…åˆ—ä½œæˆã®ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã™ã‚‹
  *
- * @param stree		[in] \•¶–Ø
- * @param klass		[in] ƒNƒ‰ƒX
- * @param r			[in] ‰Šú‰»ƒf[ƒ^
+ * @param stree		[in] æ§‹æ–‡æœ¨
+ * @param klass		[in] ã‚¯ãƒ©ã‚¹
+ * @param r			[in] åˆæœŸåŒ–ãƒ‡ãƒ¼ã‚¿
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBCGenMakeArray(nps_syntax_node_t * stree, nps_node_t klass, nps_node_t r)
@@ -2138,12 +2138,12 @@ void NBCGenMakeArray(nps_syntax_node_t * stree, nps_node_t klass, nps_node_t r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒtƒŒ[ƒ€ì¬‚ÌƒoƒCƒgƒR[ƒh‚ğ¶¬‚·‚é
+/** ãƒ•ãƒ¬ãƒ¼ãƒ ä½œæˆã®ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã™ã‚‹
  *
- * @param stree		[in] \•¶–Ø
- * @param r			[in] ‰Šú‰»ƒf[ƒ^
+ * @param stree		[in] æ§‹æ–‡æœ¨
+ * @param r			[in] åˆæœŸåŒ–ãƒ‡ãƒ¼ã‚¿
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBCGenMakeFrame(nps_syntax_node_t * stree, nps_node_t r)
@@ -2160,11 +2160,11 @@ void NBCGenMakeFrame(nps_syntax_node_t * stree, nps_node_t r)
 
 
 /*------------------------------------------------------------------------*/
-/** –ß‚è’l‚ª•s—p‚Ìê‡‚ÌƒoƒCƒgƒR[ƒh‚ğ¶¬‚·‚é
+/** æˆ»ã‚Šå€¤ãŒä¸ç”¨ã®å ´åˆã®ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã™ã‚‹
  *
- * @param ret		[in] –ß‚è’l‚Ì—L–³
+ * @param ret		[in] æˆ»ã‚Šå€¤ã®æœ‰ç„¡
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NVCGenNoResult(bool ret)
@@ -2175,13 +2175,13 @@ void NVCGenNoResult(bool ret)
 
 
 /*------------------------------------------------------------------------*/
-/** \•¶ƒR[ƒh‚ÌƒoƒCƒgƒR[ƒh‚ğ¶¬‚·‚é
+/** æ§‹æ–‡ã‚³ãƒ¼ãƒ‰ã®ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã™ã‚‹
  *
- * @param stree		[in] \•¶–Ø
- * @param node		[in] \•¶–Øƒm[ƒh
- * @param ret		[in] –ß‚è’l‚Ì—L–³
+ * @param stree		[in] æ§‹æ–‡æœ¨
+ * @param node		[in] æ§‹æ–‡æœ¨ãƒãƒ¼ãƒ‰
+ * @param ret		[in] æˆ»ã‚Šå€¤ã®æœ‰ç„¡
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBCGenSyntaxCode(nps_syntax_node_t * stree, nps_syntax_node_t * node, bool ret)
@@ -2342,12 +2342,12 @@ void NBCGenSyntaxCode(nps_syntax_node_t * stree, nps_syntax_node_t * node, bool 
 
 
 /*------------------------------------------------------------------------*/
-/** ˆø”‚Ì”‚ğƒJƒEƒ“ƒg‚·‚é
+/** å¼•æ•°ã®æ•°ã‚’ã‚«ã‚¦ãƒ³ãƒˆã™ã‚‹
  *
- * @param stree		[in] \•¶–Ø
- * @param r			[in] \•¶–Øƒm[ƒh
+ * @param stree		[in] æ§‹æ–‡æœ¨
+ * @param r			[in] æ§‹æ–‡æœ¨ãƒãƒ¼ãƒ‰
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 int16_t NBCCountNumArgs(nps_syntax_node_t * stree, nps_node_t r)
@@ -2377,12 +2377,12 @@ int16_t NBCCountNumArgs(nps_syntax_node_t * stree, nps_node_t r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒtƒŒ[ƒ€‚Ü‚½‚Í”z—ñ‚Ì‰Šú‰»ƒoƒCƒgƒR[ƒh‚ğ¶¬‚·‚éiÄ‹AŒÄo‚µ—pj
+/** ãƒ•ãƒ¬ãƒ¼ãƒ ã¾ãŸã¯é…åˆ—ã®åˆæœŸåŒ–ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã™ã‚‹ï¼ˆå†å¸°å‘¼å‡ºã—ç”¨ï¼‰
  *
- * @param stree		[in] \•¶–Ø
- * @param r			[in] \•¶–Øƒm[ƒh
+ * @param stree		[in] æ§‹æ–‡æœ¨
+ * @param r			[in] æ§‹æ–‡æœ¨ãƒãƒ¼ãƒ‰
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 newtRef NBCGenMakeFrameSlots_sub(nps_syntax_node_t * stree, nps_node_t r)
@@ -2439,12 +2439,12 @@ newtRef NBCGenMakeFrameSlots_sub(nps_syntax_node_t * stree, nps_node_t r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒtƒŒ[ƒ€‚Ü‚½‚Í”z—ñ‚Ì‰Šú‰»ƒoƒCƒgƒR[ƒh‚ğ¶¬‚·‚é
+/** ãƒ•ãƒ¬ãƒ¼ãƒ ã¾ãŸã¯é…åˆ—ã®åˆæœŸåŒ–ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’ç”Ÿæˆã™ã‚‹
  *
- * @param stree		[in] \•¶–Ø
- * @param r			[in] \•¶–Øƒm[ƒh
+ * @param stree		[in] æ§‹æ–‡æœ¨
+ * @param r			[in] æ§‹æ–‡æœ¨ãƒãƒ¼ãƒ‰
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 newtRef NBCGenMakeFrameSlots(nps_syntax_node_t * stree, nps_node_t r)
@@ -2470,13 +2470,13 @@ newtRef NBCGenMakeFrameSlots(nps_syntax_node_t * stree, nps_node_t r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒoƒCƒgƒR[ƒh‚Ì¶¬iÄ‹AŒÄo‚µ—pj
+/** ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã®ç”Ÿæˆï¼ˆå†å¸°å‘¼å‡ºã—ç”¨ï¼‰
  *
- * @param stree		[in] \•¶–Ø
- * @param n			[in] \•¶–Ø‚Ì’·‚³
- * @param ret		[in] –ß‚è’l‚Ì—L–³
+ * @param stree		[in] æ§‹æ–‡æœ¨
+ * @param n			[in] æ§‹æ–‡æœ¨ã®é•·ã•
+ * @param ret		[in] æˆ»ã‚Šå€¤ã®æœ‰ç„¡
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBCGenBC_sub(nps_syntax_node_t * stree, uint32_t n, bool ret)
@@ -2557,13 +2557,13 @@ void NBCGenBC_sub(nps_syntax_node_t * stree, uint32_t n, bool ret)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒoƒCƒgƒR[ƒh‚Ì¶¬
+/** ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã®ç”Ÿæˆ
  *
- * @param stree		[in] \•¶–Ø
- * @param size		[in] \•¶–Ø‚Ì’·‚³
- * @param ret		[in] –ß‚è’l‚Ì—L–³
+ * @param stree		[in] æ§‹æ–‡æœ¨
+ * @param size		[in] æ§‹æ–‡æœ¨ã®é•·ã•
+ * @param ret		[in] æˆ»ã‚Šå€¤ã®æœ‰ç„¡
  *
- * @return			ŠÖ”ƒIƒuƒWƒFƒNƒg
+ * @return			é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NBCGenBC(nps_syntax_node_t * stree, uint32_t size, bool ret)
@@ -2595,12 +2595,12 @@ newtRef NBCGenBC(nps_syntax_node_t * stree, uint32_t size, bool ret)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒ\[ƒXƒtƒ@ƒCƒ‹‚ğƒRƒ“ƒpƒCƒ‹
+/** ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«
  *
- * @param s			[in] ƒ\[ƒXƒtƒ@ƒCƒ‹‚ÌƒpƒX
- * @param ret		[in] –ß‚è’l‚Ì—L–³
+ * @param s			[in] ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹
+ * @param ret		[in] æˆ»ã‚Šå€¤ã®æœ‰ç„¡
  *
- * @return			ŠÖ”ƒIƒuƒWƒFƒNƒg
+ * @return			é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NBCCompileFile(char * s, bool ret)
@@ -2623,12 +2623,12 @@ newtRef NBCCompileFile(char * s, bool ret)
 
 
 /*------------------------------------------------------------------------*/
-/** •¶š—ñ‚ğƒRƒ“ƒpƒCƒ‹
+/** æ–‡å­—åˆ—ã‚’ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«
  *
- * @param s			[in] ƒXƒNƒŠƒvƒg•¶š—ñ
- * @param ret		[in] –ß‚è’l‚Ì—L–³
+ * @param s			[in] ã‚¹ã‚¯ãƒªãƒ—ãƒˆæ–‡å­—åˆ—
+ * @param ret		[in] æˆ»ã‚Šå€¤ã®æœ‰ç„¡
  *
- * @return			ŠÖ”ƒIƒuƒWƒFƒNƒg
+ * @return			é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NBCCompileStr(char * s, bool ret)
@@ -2657,11 +2657,11 @@ newtRef NBCCompileStr(char * s, bool ret)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ƒGƒ‰[ƒƒbƒZ[ƒW‚Ì•\¦
+/** ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®è¡¨ç¤º
  *
- * @param err		[in] ƒGƒ‰[ƒR[ƒh
+ * @param err		[in] ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NBError(int32_t err)

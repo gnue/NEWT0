@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------*/
 /**
  * @file	newt.y
- * @brief   \•¶‰ğÍ
+ * @brief   æ§‹æ–‡è§£æ
  *
  * @author  M.Nukui
  * @date	2003-11-07
@@ -11,7 +11,7 @@
 
 %{
 
-/* ƒwƒbƒ_ƒtƒ@ƒCƒ‹ */
+/* ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ« */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -22,7 +22,7 @@
 #include "NewtParser.h"
 
 
-/* ƒ}ƒNƒ */
+/* ãƒã‚¯ãƒ­ */
 #define SYMCHECK(v, sym)	if (v != sym) NPSError(kNErrSyntaxError);
 #define TYPECHECK(v)		if (! (v == NS_INT || v == NSSYM0(array))) NPSError(kNErrSyntaxError);
 #define ERR_NOS2C(msg)		if (NEWT_MODE_NOS2) yyerror(msg);
@@ -31,12 +31,12 @@
 %}
 
 %union {
-    newtRefVar	obj;	// ƒIƒuƒWƒFƒNƒg
-    uint32_t	op;		// ‰‰Zq
-    nps_node_t	node;	// ƒm[ƒh
+    newtRefVar	obj;	// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+    uint32_t	op;		// æ¼”ç®—å­
+    nps_node_t	node;	// ãƒãƒ¼ãƒ‰
 }
 
-   /* ƒ^ƒCƒv */
+   /* ã‚¿ã‚¤ãƒ— */
 
 %type	<node>	constituent_list	constituent
 %type	<node>	expr
@@ -72,10 +72,10 @@
 %type	<obj>	foreach_operator	deeply
 
 
-%token  <op>	kBINBG	kBINED	// ƒoƒCƒiƒŠƒf[ƒ^i“Æ©Šg’£j
+%token  <op>	kBINBG	kBINED	// ãƒã‚¤ãƒŠãƒªãƒ‡ãƒ¼ã‚¿ï¼ˆç‹¬è‡ªæ‹¡å¼µï¼‰
 
 
-   /* —\–ñŒê */
+   /* äºˆç´„èª */
 
 %token		kBEGIN	kEND
 			kFUNC	kNATIVE		kCALL	kWITH
@@ -85,22 +85,22 @@
 			kTRY	kONEXCEPTION
 			kLOOP	kWHILE	kREPEAT kUNTIL  kDO		kIN
 			kGLOBAL	kLOCAL	kCONSTANT
-			k3READER		// ‚R“_ƒŠ[ƒ_[i“Æ©Šg’£j
-			kERROR			// ƒGƒ‰[
+			k3READER		// ï¼“ç‚¹ãƒªãƒ¼ãƒ€ãƒ¼ï¼ˆç‹¬è‡ªæ‹¡å¼µï¼‰
+			kERROR			// ã‚¨ãƒ©ãƒ¼
 
-    /* ƒIƒuƒWƒFƒNƒg */
+    /* ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ */
 
 %token		<obj>	kSYMBOL		kSTRING		kREGEX
 %token		<obj>	kINTEGER	kREAL		kCHARACTER	kMAGICPOINTER
 %token		<obj>	kTRUE		kNIL		kUNBIND
 
-// —Dæ‡ˆÊ
+// å„ªå…ˆé †ä½
 
-    /* ® */
+    /* å¼ */
 
 %left		kEXPR2
 
-    /* —\–ñŒê */
+    /* äºˆç´„èª */
 
 %left		kBREAK	kRETURN
 %left		//kTRY  kONEXCEPTION
@@ -109,49 +109,49 @@
 			kSYMBOL
 %left		','		//  ';'
 
-    /* IF •¶ */
+    /* IF æ–‡ */
 
 %nonassoc	kTHEN
 %nonassoc	kELSE
 
-    /* ‰‰Zq */
+    /* æ¼”ç®—å­ */
 
 /*
-•\2-5 ‚É‚ÍANewtonScript ‚Ì‘S‰‰Zq‚Ì—Dæ‡ˆÊ‚ÆA‚‚¢‚à‚Ì‚©‚ç’á‚¢‚à‚Ì
-‚ÖAã‚©‚ç‰º‚É•À‚×‚Ä¦‚·Bˆê‚ÌƒOƒ‹[ƒv‚É“ü‚Á‚Ä‚¢‚é‰‰Zq‚ÍA“™‰¿‚È
-—Dæ‡ˆÊ‚ğ‚Â‚±‚Æ‚É’ˆÓB
+è¡¨2-5 ã«ã¯ã€NewtonScript ã®å…¨æ¼”ç®—å­ã®å„ªå…ˆé †ä½ã¨ã€é«˜ã„ã‚‚ã®ã‹ã‚‰ä½ã„ã‚‚ã®
+ã¸ã€ä¸Šã‹ã‚‰ä¸‹ã«ä¸¦ã¹ã¦ç¤ºã™ã€‚ä¸€ç·’ã®ã‚°ãƒ«ãƒ¼ãƒ—ã«å…¥ã£ã¦ã„ã‚‹æ¼”ç®—å­ã¯ã€ç­‰ä¾¡ãª
+å„ªå…ˆé †ä½ã‚’æŒã¤ã“ã¨ã«æ³¨æ„ã€‚
 
-.				ƒXƒƒbƒgƒAƒNƒZƒX					¨
-: :?			(ğŒ•t)ƒƒbƒZ[ƒW‘—M			¨
-[]				”z—ñ—v‘f						¨
--				’P€ƒ}ƒCƒiƒX					¨
-<< >>			¶ƒVƒtƒg‰EƒVƒtƒg					¨
-* / div mod		æZAœZA®”œZA—]‚è			¨
-+ -				‰ÁZAŒ¸Z						¨
-& &&			•¶š—ñ‡¬A•¶š—ñƒXƒy[ƒX“ü‚è‡¬	¨
-exists			•Ï”EƒXƒƒbƒg‚Ì‘¶İŠm”F			‚È‚µ
-< <= > >= = <>	”äŠr							¨
-not				˜_—”Û’è						¨
-and or			˜_—AND, ˜_—OR				¨
-:=				‘ã“ü							©
+.				ã‚¹ãƒ­ãƒƒãƒˆã‚¢ã‚¯ã‚»ã‚¹					â†’
+: :?			(æ¡ä»¶ä»˜)ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸é€ä¿¡			â†’
+[]				é…åˆ—è¦ç´ 						â†’
+-				å˜é …ãƒã‚¤ãƒŠã‚¹					â†’
+<< >>			å·¦ã‚·ãƒ•ãƒˆå³ã‚·ãƒ•ãƒˆ					â†’
+* / div mod		ä¹—ç®—ã€é™¤ç®—ã€æ•´æ•°é™¤ç®—ã€ä½™ã‚Š			â†’
++ -				åŠ ç®—ã€æ¸›ç®—						â†’
+& &&			æ–‡å­—åˆ—åˆæˆã€æ–‡å­—åˆ—ã‚¹ãƒšãƒ¼ã‚¹å…¥ã‚Šåˆæˆ	â†’
+exists			å¤‰æ•°ãƒ»ã‚¹ãƒ­ãƒƒãƒˆã®å­˜åœ¨ç¢ºèª			ãªã—
+< <= > >= = <>	æ¯”è¼ƒ							â†’
+not				è«–ç†å¦å®š						â†’
+and or			è«–ç†AND, è«–ç†OR				â†’
+:=				ä»£å…¥							â†
 */
 
-%right		<op>	kASNOP			// ‘ã“ü							©
-%left		<op>	kANDOP, kOROP	// ˜_—AND, ˜_—OR				¨
-%left		<op>	kNOTOP			// ˜_—”Û’è						¨
-%left		<op>	kRELOP			// ”äŠr							¨
-%left		<op>	kEXISTS			// •Ï”EƒXƒƒbƒg‚Ì‘¶İŠm”F			‚È‚µ
-%left		<op>	kSTROP			// •¶š—ñ‡¬A•¶š—ñƒXƒy[ƒX“ü‚è‡¬	¨
-%left		<op>	kADDOP			// ‰ÁZAŒ¸Z						¨
-%left		<op>	kMULOP			// æZAœZA®”œZA—]‚è			¨
-%left		<op>	kSFTOP			// ¶ƒVƒtƒg‰EƒVƒtƒg					¨
-%nonassoc			kUMINUS			// ’P€ƒ}ƒCƒiƒX					¨
-%left				'[' ']'			// ”z—ñ—v‘f						¨
-%left		<op>	kSNDOP			// (ğŒ•t)ƒƒbƒZ[ƒW‘—M			¨
+%right		<op>	kASNOP			// ä»£å…¥							â†
+%left		<op>	kANDOP, kOROP	// è«–ç†AND, è«–ç†OR				â†’
+%left		<op>	kNOTOP			// è«–ç†å¦å®š						â†’
+%left		<op>	kRELOP			// æ¯”è¼ƒ							â†’
+%left		<op>	kEXISTS			// å¤‰æ•°ãƒ»ã‚¹ãƒ­ãƒƒãƒˆã®å­˜åœ¨ç¢ºèª			ãªã—
+%left		<op>	kSTROP			// æ–‡å­—åˆ—åˆæˆã€æ–‡å­—åˆ—ã‚¹ãƒšãƒ¼ã‚¹å…¥ã‚Šåˆæˆ	â†’
+%left		<op>	kADDOP			// åŠ ç®—ã€æ¸›ç®—						â†’
+%left		<op>	kMULOP			// ä¹—ç®—ã€é™¤ç®—ã€æ•´æ•°é™¤ç®—ã€ä½™ã‚Š			â†’
+%left		<op>	kSFTOP			// å·¦ã‚·ãƒ•ãƒˆå³ã‚·ãƒ•ãƒˆ					â†’
+%nonassoc			kUMINUS			// å˜é …ãƒã‚¤ãƒŠã‚¹					â†’
+%left				'[' ']'			// é…åˆ—è¦ç´ 						â†’
+%left		<op>	kSNDOP			// (æ¡ä»¶ä»˜)ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸é€ä¿¡			â†’
 					':'
-%left				'.'				// ƒXƒƒbƒgƒAƒNƒZƒX					¨
+%left				'.'				// ã‚¹ãƒ­ãƒƒãƒˆã‚¢ã‚¯ã‚»ã‚¹					â†’
 
-    /* Š‡ŒÊ */
+    /* æ‹¬å¼§ */
 
 %left				'(' ')'
 
@@ -165,8 +165,8 @@ constituent_list
 		: /* empty */					{ $$ = kNewtRefUnbind; }
 		| constituent					{ $$ = NPSGenNode1(kNPSConstituentList, $1); }
 		| constituent_list ';'
-//		| constituent ';' constituent_list	// ‰EÄ‹A
-		| constituent_list ';' constituent	// ¶Ä‹A
+//		| constituent ';' constituent_list	// å³å†å¸°
+		| constituent_list ';' constituent	// å·¦å†å¸°
 										{ $$ = NPSGenNode2(kNPSConstituentList, $1, $3); }
 		| constituent_list error ';'	{ yyerrok; }
 		;
@@ -183,8 +183,8 @@ expr
 		| constructor
 		| lvalue						{ $$ = NPSGenNode1(kNPSLvalue, $1); }
 		| lvalue kASNOP expr			{ $$ = NPSGenNode2(kNPSAsign, $1, $3); }
-		| kMAGICPOINTER kASNOP expr		{	// ƒ}ƒWƒbƒNƒ|ƒCƒ“ƒ^‚Ì’è‹`i“Æ©Šg’£j
-											ERR_NOS2C("Assign Magic Pointer");	// NOS2 ”ñŒİŠ·
+		| kMAGICPOINTER kASNOP expr		{	// ãƒã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿ã®å®šç¾©ï¼ˆç‹¬è‡ªæ‹¡å¼µï¼‰
+											ERR_NOS2C("Assign Magic Pointer");	// NOS2 éäº’æ›
 											$$ = NPSGenNode2(kNPSAsign, $1, $3);
 										}
 		| exists_expr
@@ -255,8 +255,8 @@ expr_sequence
 		: /* empty */				{ $$ = kNewtRefUnbind; }
 		| expr
 		| expr_sequence ';'
-//		| expr ';' expr_sequence	// ‰EÄ‹A
-		| expr_sequence ';' expr	// ¶Ä‹A
+//		| expr ';' expr_sequence	// å³å†å¸°
+		| expr_sequence ';' expr	// å·¦å†å¸°
 									{ $$ = NPSGenNode2(kNPSConstituentList, $1, $3); }
 		| expr_sequence error ';'   { yyerrok; }
 		;
@@ -264,8 +264,8 @@ expr_sequence
 literal
 		: simple_literal
 		| kSTRING		{ $$ = NPSGenNode1(kNPSClone, $1); }
-		| binary		{	// ƒoƒCƒiƒŠƒf[ƒ^i“Æ©Šg’£j
-							ERR_NOS2C("Binary Syntax");	// NOS2 ”ñŒİŠ·
+		| binary		{	// ãƒã‚¤ãƒŠãƒªãƒ‡ãƒ¼ã‚¿ï¼ˆç‹¬è‡ªæ‹¡å¼µï¼‰
+							ERR_NOS2C("Binary Syntax");	// NOS2 éäº’æ›
 							$$ = NPSGenNode1(kNPSClone, $1);
 						}
 		| '\'' object   { $$ = NewtPackLiteral($2); }
@@ -279,21 +279,21 @@ simple_literal
 		| kMAGICPOINTER
 		| kTRUE			{ $$ = kNewtRefTRUE; }
 		| kNIL			{ $$ = kNewtRefNIL; }
-		| kUNBIND		{	// #UNBIND i“Æ©Šg’£j
-							ERR_NOS2C("Unbind Ref");	// NOS2 ”ñŒİŠ·
+		| kUNBIND		{	// #UNBIND ï¼ˆç‹¬è‡ªæ‹¡å¼µï¼‰
+							ERR_NOS2C("Unbind Ref");	// NOS2 éäº’æ›
 							$$ = kNewtRefUnbind;
 						}
-//		| binaryy		{ ERR_NOS2C("Binary Syntax"); }	// ƒoƒCƒiƒŠƒf[ƒ^i“Æ©Šg’£j
+//		| binaryy		{ ERR_NOS2C("Binary Syntax"); }	// ãƒã‚¤ãƒŠãƒªãƒ‡ãƒ¼ã‚¿ï¼ˆç‹¬è‡ªæ‹¡å¼µï¼‰
 		;
 
 object
 		: simple_literal
 		| kSTRING
-		| kSYMBOL				// NewtonScript ‚Ì\•¶}‚Å‚Í‚±‚ê‚ª‚È‚¢i‹Lq˜R‚êHj
+		| kSYMBOL				// NewtonScript ã®æ§‹æ–‡å›³ã§ã¯ã“ã‚ŒãŒãªã„ï¼ˆè¨˜è¿°æ¼ã‚Œï¼Ÿï¼‰
 		| path_expr
 		| array
 		| frame
-		| binary		{ ERR_NOS2C("Binary Syntax"); }	// ƒoƒCƒiƒŠƒf[ƒ^i“Æ©Šg’£j
+		| binary		{ ERR_NOS2C("Binary Syntax"); }	// ãƒã‚¤ãƒŠãƒªãƒ‡ãƒ¼ã‚¿ï¼ˆç‹¬è‡ªæ‹¡å¼µï¼‰
 		;
 
 path_expr
@@ -325,7 +325,7 @@ frame_slot_list
                                         { $$ = NPSSetSlot($1, $3, $5); }
 		;
 
-binary	// ƒoƒCƒiƒŠƒf[ƒ^i“Æ©Šg’£j
+binary	// ãƒã‚¤ãƒŠãƒªãƒ‡ãƒ¼ã‚¿ï¼ˆç‹¬è‡ªæ‹¡å¼µï¼‰
 		: kBINBG kSYMBOL ':' binary_item_list kBINED	{ $$ = NcSetClass($4, $2); } 
 		| kBINBG binary_item_list kBINED				{ $$ = $2; }
 		;
@@ -337,18 +337,18 @@ binary_item_list
 		;
 
 constructor
-		// ”z—ñ‚Ì¶¬
+		// é…åˆ—ã®ç”Ÿæˆ
 		: '[' kSYMBOL ':' expr_list ']'		{ $$ = NPSGenNode2(kNPSMakeArray, $2, $4); }
 		| '[' expr_list ']'					{ $$ = NPSGenNode2(kNPSMakeArray, kNewtRefUnbind, $2); }
 
-		// ƒtƒŒ[ƒ€‚Ì¶¬
+		// ãƒ•ãƒ¬ãƒ¼ãƒ ã®ç”Ÿæˆ
 		| '{' frame_constructor_list '}'	{ $$ = NPSGenNode1(kNPSMakeFrame, $2); }
 
-		// ŠÖ”ƒIƒuƒWƒFƒNƒg‚Ì¶¬
+		// é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç”Ÿæˆ
 		| kFUNC func_keyword '(' formal_argument_list ')' expr %prec kEXPR2
                         { $$ = NPSGenNode2(kNPSFunc, $4, $6); }
 
-		// ³‹K•\Œ»ƒIƒuƒWƒFƒNƒg‚Ì¶¬
+		// æ­£è¦è¡¨ç¾ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç”Ÿæˆ
 		| kREGEX kSTRING			{ $$ = NPSGenNode2(kNPSMakeRegex, $1, $2); }
 		| kREGEX					{ $$ = NPSGenNode2(kNPSMakeRegex, $1, kNewtRefNIL); }
 		;
@@ -373,7 +373,7 @@ frame_slot_value
 		: kSYMBOL ':' expr	{ $$ = NPSGenNode2(kNPSSlot, $1, $3); }
 		;
 
-func_keyword	// –³‹(not supported)
+func_keyword	// ç„¡è¦–(not supported)
 		: /* empty */
 		| kNATIVE
 		;
@@ -393,12 +393,12 @@ formal_argument_list2
 
 formal_argument
 		: kSYMBOL					{ $$ = $1; }
-		| type kSYMBOL				{ $$ = NPSGenNode2(kNPSArg, $1, $2); }		// type ‚Í–³‹(not supported)
+		| type kSYMBOL				{ $$ = NPSGenNode2(kNPSArg, $1, $2); }		// type ã¯ç„¡è¦–(not supported)
 		;
 
 indefinite_argument
-		: kSYMBOL k3READER			{	// •s’è’·i“Æ©Šg’£j
-										ERR_NOS2C("Indefinite Argument");	// NOS2 ”ñŒİŠ·
+		: kSYMBOL k3READER			{	// ä¸å®šé•·ï¼ˆç‹¬è‡ªæ‹¡å¼µï¼‰
+										ERR_NOS2C("Indefinite Argument");	// NOS2 éäº’æ›
 										$$ = NPSGenNode1(kNPSIndefinite, $1);
 									}
 		;
@@ -501,22 +501,22 @@ onexcp
 
 local_declaration
 		: kLOCAL l_init_clause_list  { $$ = NPSGenNode2(kNPSLocal, kNewtRefUnbind, $2); }
-		| kLOCAL kSYMBOL l_init_clause_list	// type ‚Í–³‹(not supported)
+		| kLOCAL kSYMBOL l_init_clause_list	// type ã¯ç„¡è¦–(not supported)
 			{
 				TYPECHECK($2);
 				$$ = NPSGenNode2(kNPSLocal, $2, $3);
 			}
 /*
-		// ‚±‚ê‚¾‚ÆƒRƒ“ƒtƒŠƒNƒg‚ª”­¶‚·‚é
-		| kLOCAL type l_init_clause_list	// type ‚Í–³‹(not supported)
+		// ã“ã‚Œã ã¨ã‚³ãƒ³ãƒ•ãƒªã‚¯ãƒˆãŒç™ºç”Ÿã™ã‚‹
+		| kLOCAL type l_init_clause_list	// type ã¯ç„¡è¦–(not supported)
 									{ $$ = NPSGenNode2(kNPSLocal, $2, $3); }
 */
 		;
 
 l_init_clause_list
 		: init_clause
-//		| init_clause ',' l_init_clause_list	// ‰EÄ‹A
-		| l_init_clause_list ',' init_clause	// ¶Ä‹A
+//		| init_clause ',' l_init_clause_list	// å³å†å¸°
+		| l_init_clause_list ',' init_clause	// å·¦å†å¸°
 									{ $$ = NPSGenNode2(kNPSCommaList, $1, $3); }
 		;
 
@@ -527,7 +527,7 @@ init_clause
 
 c_init_clause_list
 		: c_init_clause
-		| c_init_clause_list ',' c_init_clause	// ¶Ä‹A
+		| c_init_clause_list ',' c_init_clause	// å·¦å†å¸°
 									{ $$ = NPSGenNode2(kNPSCommaList, $1, $3); }
 		;
 

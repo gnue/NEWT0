@@ -1,8 +1,8 @@
 /*------------------------------------------------------------------------*/
 /**
  * @file	Objects.h
- * @brief   Šî–{ƒIƒuƒWƒFƒNƒgƒCƒ“ƒ^ƒtƒF[ƒX
- *			iNewton C++ Tools / Newton.framework ŒİŠ·—pj
+ * @brief   åŸºæœ¬ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹
+ *			ï¼ˆNewton C++ Tools / Newton.framework äº’æ›ç”¨ï¼‰
  *
  * @author  M.Nukui
  * @date	2005-03-10
@@ -14,17 +14,17 @@
 #define __OBJECTS_H
 
 
-/* ƒwƒbƒ_ƒtƒ@ƒCƒ‹ */
+/* ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ« */
 #include "Newton/Newton.h"
 
 
-/* Œ^’è‹` */
+/* å‹å®šç¾© */
 typedef newtRef					Ref;
 typedef newtRefVar				RefVar;
 typedef newtRefArg				RefArg;
 
 
-/* ƒ}ƒNƒ */
+/* ãƒã‚¯ãƒ­ */
 #define	MAKEINT(i)				NewtMakeInteger(i)
 #define	MAKECHAR(c)				NewtMakeCharacter(c)
 #define	MAKEBOOLEAN(b)			NewtMakeBoolean(b)
@@ -36,7 +36,7 @@ typedef newtRefArg				RefArg;
 #define	FALSEREF				NILREF
 #define	INVALIDPTRREF			NewtMakeInt30(0)
 
-// c‚è‚Í–¢À‘•A’è‹`‚·‚é‚±‚Æ
+// æ®‹ã‚Šã¯æœªå®Ÿè£…ã€å®šç¾©ã™ã‚‹ã“ã¨
 
 
 #endif	/* __OBJECTS_H */

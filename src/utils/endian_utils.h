@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------*/
 /**
  * @file	endian_utils.h
- * @brief   ƒGƒ“ƒfƒBƒAƒ“Eƒ†[ƒeƒBƒŠƒeƒB
+ * @brief   ã‚¨ãƒ³ãƒ‡ã‚£ã‚¢ãƒ³ãƒ»ãƒ¦ãƒ¼ãƒ†ã‚£ãƒªãƒ†ã‚£
  *
  * @author  M.Nukui
  * @date	2005-06-04
@@ -14,7 +14,7 @@
 #define	ENDIAN_UTILS_H
 
 
-/* ƒwƒbƒ_ƒtƒ@ƒCƒ‹ */
+/* ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ« */
 #ifdef HAVE_CONFIG_H
 	#include "config.h"
 #endif
@@ -50,7 +50,7 @@
 #endif
 
 
-/* ƒ}ƒNƒ’è‹` */
+/* ãƒã‚¯ãƒ­å®šç¾© */
 #ifdef __BIG_ENDIAN__
 	#define ntohd(d)	(d)
 	#define htond(d)	(d)
@@ -83,7 +83,7 @@
 #endif
 
 
-/* ŠÖ”ƒvƒƒgƒ^ƒCƒv */
+/* é–¢æ•°ãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ— */
 
 #ifdef __cplusplus
 extern "C" {

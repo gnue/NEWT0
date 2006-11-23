@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------*/
 /**
  * @file	NewtPrint.c
- * @brief   ƒvƒŠƒ“ƒgŠÖŒW
+ * @brief   ãƒ—ãƒªãƒ³ãƒˆé–¢ä¿‚
  *
  * @author  M.Nukui
  * @date	2005-04-11
@@ -10,7 +10,7 @@
  */
 
 
-/* ƒwƒbƒ_ƒtƒ@ƒCƒ‹ */
+/* ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ« */
 #include <ctype.h>
 
 #include "NewtPrint.h"
@@ -20,7 +20,7 @@
 #include "NewtIO.h"
 
 
-/* ŠÖ”ƒvƒƒgƒ^ƒCƒv */
+/* é–¢æ•°ãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ— */
 
 static int32_t		NewtGetPrintLength(void);
 static int32_t		NewtGetPrintDepth(void);
@@ -58,9 +58,9 @@ static void			NIOInfo(newtStream_t * f, newtRefArg r);
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ”z—ñ‚Ü‚½‚ÍƒtƒŒ[ƒ€‚ÌƒvƒŠƒ“ƒg‰Â”\‚È’·‚³‚ğ•Ô‚·
+/** é…åˆ—ã¾ãŸã¯ãƒ•ãƒ¬ãƒ¼ãƒ ã®ãƒ—ãƒªãƒ³ãƒˆå¯èƒ½ãªé•·ã•ã‚’è¿”ã™
  *
- * @return			ƒvƒŠƒ“ƒg‰Â”\‚È’·‚³
+ * @return			ãƒ—ãƒªãƒ³ãƒˆå¯èƒ½ãªé•·ã•
  */
 
 int32_t NewtGetPrintLength(void)
@@ -81,9 +81,9 @@ int32_t NewtGetPrintLength(void)
 
 
 /*------------------------------------------------------------------------*/
-/** ”z—ñ‚Ü‚½‚ÍƒtƒŒ[ƒ€‚ÌƒvƒŠƒ“ƒg‰Â”\‚È[‚³‚ğ•Ô‚·
+/** é…åˆ—ã¾ãŸã¯ãƒ•ãƒ¬ãƒ¼ãƒ ã®ãƒ—ãƒªãƒ³ãƒˆå¯èƒ½ãªæ·±ã•ã‚’è¿”ã™
  *
- * @return			ƒvƒŠƒ“ƒg‰Â”\‚È[‚³
+ * @return			ãƒ—ãƒªãƒ³ãƒˆå¯èƒ½ãªæ·±ã•
  */
 
 int32_t NewtGetPrintDepth(void)
@@ -102,13 +102,13 @@ int32_t NewtGetPrintDepth(void)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ƒVƒ“ƒ{ƒ‹•¶š—ñ‚ª•\¦‰Â”\‚©’²‚×‚é
+/** ã‚·ãƒ³ãƒœãƒ«æ–‡å­—åˆ—ãŒè¡¨ç¤ºå¯èƒ½ã‹èª¿ã¹ã‚‹
  *
- * @param str		[in] ƒVƒ“ƒ{ƒ‹•¶š—ñ
- * @param len		[in] •¶š—ñ‚Ì’·‚³
+ * @param str		[in] ã‚·ãƒ³ãƒœãƒ«æ–‡å­—åˆ—
+ * @param len		[in] æ–‡å­—åˆ—ã®é•·ã•
  *
- * @retval			true	•\¦‰Â”\
- * @retval			false	•\¦•s‰Â
+ * @retval			true	è¡¨ç¤ºå¯èƒ½
+ * @retval			false	è¡¨ç¤ºä¸å¯
  */
 
 bool NewtSymbolIsPrint(char * str, int len)
@@ -141,13 +141,13 @@ bool NewtSymbolIsPrint(char * str, int len)
 
 
 /*------------------------------------------------------------------------*/
-/** •¶š—ñ‚ª•\¦‰Â”\‚©’²‚×‚é
+/** æ–‡å­—åˆ—ãŒè¡¨ç¤ºå¯èƒ½ã‹èª¿ã¹ã‚‹
  *
- * @param str		[in] •¶š—ñ
- * @param len		[in] •¶š—ñ‚Ì’·‚³
+ * @param str		[in] æ–‡å­—åˆ—
+ * @param len		[in] æ–‡å­—åˆ—ã®é•·ã•
  *
- * @retval			true	•\¦‰Â”\
- * @retval			false	•\¦•s‰Â
+ * @retval			true	è¡¨ç¤ºå¯èƒ½
+ * @retval			false	è¡¨ç¤ºä¸å¯
  */
 
 bool NewtStrIsPrint(char * str, int len)
@@ -168,11 +168,11 @@ bool NewtStrIsPrint(char * str, int len)
 
 
 /*------------------------------------------------------------------------*/
-/** •¶š‚ğƒGƒXƒP[ƒv•¶š—ñ‚É•ÏŠ·‚·‚é
+/** æ–‡å­—ã‚’ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—æ–‡å­—åˆ—ã«å¤‰æ›ã™ã‚‹
  *
- * @param c			[in] •¶š
+ * @param c			[in] æ–‡å­—
  *
- * @return			ƒGƒXƒP[ƒv•¶š—ñ
+ * @return			ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—æ–‡å­—åˆ—
  */
 
 char * NewtCharToEscape(int c)
@@ -203,15 +203,15 @@ char * NewtCharToEscape(int c)
 
 
 /*------------------------------------------------------------------------*/
-/** •¶š—ñ‚ğƒGƒXƒP[ƒv‚ÅƒvƒŠƒ“ƒg‚·‚é
+/** æ–‡å­—åˆ—ã‚’ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ã§ãƒ—ãƒªãƒ³ãƒˆã™ã‚‹
  *
- * @param f			[in] o—Íƒtƒ@ƒCƒ‹
- * @param str		[in] •¶š—ñ
- * @param len		[in] •¶š—ñ‚Ì’·‚³
+ * @param f			[in] å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«
+ * @param str		[in] æ–‡å­—åˆ—
+ * @param len		[in] æ–‡å­—åˆ—ã®é•·ã•
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  *
- * @note			newtStream_t ‚ğg—p
+ * @note			newtStream_t ã‚’ä½¿ç”¨
  */
 
 void NIOPrintEscapeStr(newtStream_t * f, char * str, int len)
@@ -263,14 +263,14 @@ void NIOPrintEscapeStr(newtStream_t * f, char * str, int len)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** o—Íƒtƒ@ƒCƒ‹‚ÉƒIƒuƒWƒFƒNƒgQÆ‚ğ‚P‚Ui”‚ÅƒvƒŠƒ“ƒg‚·‚é
+/** å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§ã‚’ï¼‘ï¼–é€²æ•°ã§ãƒ—ãƒªãƒ³ãƒˆã™ã‚‹
  *
- * @param f			[in] o—Íƒtƒ@ƒCƒ‹
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param f			[in] å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  *
- * @note			newtStream_t ‚ğg—p
+ * @note			newtStream_t ã‚’ä½¿ç”¨
  */
 
 void NIOPrintRef(newtStream_t * f, newtRefArg r)
@@ -280,14 +280,14 @@ void NIOPrintRef(newtStream_t * f, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** o—Íƒtƒ@ƒCƒ‹‚É“ÁêƒIƒuƒWƒFƒNƒg‚ğƒvƒŠƒ“ƒg‚·‚é
+/** å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã«ç‰¹æ®Šã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒ—ãƒªãƒ³ãƒˆã™ã‚‹
  *
- * @param f			[in] o—Íƒtƒ@ƒCƒ‹
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param f			[in] å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  *
- * @note			newtStream_t ‚ğg—p
+ * @note			newtStream_t ã‚’ä½¿ç”¨
  */
 
 void NIOPrintSpecial(newtStream_t * f, newtRefArg r)
@@ -300,14 +300,14 @@ void NIOPrintSpecial(newtStream_t * f, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** o—Íƒtƒ@ƒCƒ‹‚É®”ƒIƒuƒWƒFƒNƒg‚ğƒvƒŠƒ“ƒg‚·‚é
+/** å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã«æ•´æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒ—ãƒªãƒ³ãƒˆã™ã‚‹
  *
- * @param f			[in] o—Íƒtƒ@ƒCƒ‹
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param f			[in] å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  *
- * @note			newtStream_t ‚ğg—p
+ * @note			newtStream_t ã‚’ä½¿ç”¨
  */
 
 void NIOPrintInteger(newtStream_t * f, newtRefArg r)
@@ -320,14 +320,14 @@ void NIOPrintInteger(newtStream_t * f, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** o—Íƒtƒ@ƒCƒ‹‚É•‚“®¬”“_ƒIƒuƒWƒFƒNƒg‚ğƒvƒŠƒ“ƒg‚·‚é
+/** å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã«æµ®å‹•å°æ•°ç‚¹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒ—ãƒªãƒ³ãƒˆã™ã‚‹
  *
- * @param f			[in] o—Íƒtƒ@ƒCƒ‹
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param f			[in] å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  *
- * @note			newtStream_t ‚ğg—p
+ * @note			newtStream_t ã‚’ä½¿ç”¨
  */
 
 void NIOPrintReal(newtStream_t * f, newtRefArg r)
@@ -340,14 +340,14 @@ void NIOPrintReal(newtStream_t * f, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** o—Íƒtƒ@ƒCƒ‹‚É•¶šƒIƒuƒWƒFƒNƒg‚ğƒvƒŠƒ“ƒg‚·‚é
+/** å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã«æ–‡å­—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒ—ãƒªãƒ³ãƒˆã™ã‚‹
  *
- * @param f			[in] o—Íƒtƒ@ƒCƒ‹
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param f			[in] å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  *
- * @note			newtStream_t ‚ğg—p
+ * @note			newtStream_t ã‚’ä½¿ç”¨
  */
 
 void NIOPrintObjCharacter(newtStream_t * f, newtRefArg r)
@@ -375,14 +375,14 @@ void NIOPrintObjCharacter(newtStream_t * f, newtRefArg r)
 #ifdef __NAMED_MAGIC_POINTER__
 
 /*------------------------------------------------------------------------*/
-/** o—Íƒtƒ@ƒCƒ‹‚Éƒ}ƒWƒbƒNƒ|ƒCƒ“ƒ^‚ğƒvƒŠƒ“ƒg‚·‚é
+/** å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã«ãƒã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿ã‚’ãƒ—ãƒªãƒ³ãƒˆã™ã‚‹
  *
- * @param f			[in] o—Íƒtƒ@ƒCƒ‹
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param f			[in] å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  *
- * @note			newtStream_t ‚ğg—p
+ * @note			newtStream_t ã‚’ä½¿ç”¨
  */
 
 void NIOPrintObjMagicPointer(newtStream_t * f, newtRefArg r)
@@ -398,14 +398,14 @@ void NIOPrintObjMagicPointer(newtStream_t * f, newtRefArg r)
 #else
 
 /*------------------------------------------------------------------------*/
-/** o—Íƒtƒ@ƒCƒ‹‚Éƒ}ƒWƒbƒNƒ|ƒCƒ“ƒ^‚ğƒvƒŠƒ“ƒg‚·‚é
+/** å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã«ãƒã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿ã‚’ãƒ—ãƒªãƒ³ãƒˆã™ã‚‹
  *
- * @param f			[in] o—Íƒtƒ@ƒCƒ‹
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param f			[in] å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  *
- * @note			newtStream_t ‚ğg—p
+ * @note			newtStream_t ã‚’ä½¿ç”¨
  */
 
 void NIOPrintObjMagicPointer(newtStream_t * f, newtRefArg r)
@@ -422,14 +422,14 @@ void NIOPrintObjMagicPointer(newtStream_t * f, newtRefArg r)
 #endif
 
 /*------------------------------------------------------------------------*/
-/** o—Íƒtƒ@ƒCƒ‹‚ÉƒoƒCƒiƒŠƒIƒuƒWƒFƒNƒg‚ğƒvƒŠƒ“ƒg‚·‚é
+/** å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã«ãƒã‚¤ãƒŠãƒªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒ—ãƒªãƒ³ãƒˆã™ã‚‹
  *
- * @param f			[in] o—Íƒtƒ@ƒCƒ‹
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param f			[in] å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  *
- * @note			newtStream_t ‚ğg—p
+ * @note			newtStream_t ã‚’ä½¿ç”¨
  */
 
 void NIOPrintObjBinary(newtStream_t * f, newtRefArg r)
@@ -457,14 +457,14 @@ void NIOPrintObjBinary(newtStream_t * f, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** o—Íƒtƒ@ƒCƒ‹‚ÉƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg‚ğƒvƒŠƒ“ƒg‚·‚é
+/** å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã«ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒ—ãƒªãƒ³ãƒˆã™ã‚‹
  *
- * @param f			[in] o—Íƒtƒ@ƒCƒ‹
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param f			[in] å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  *
- * @note			newtStream_t ‚ğg—p
+ * @note			newtStream_t ã‚’ä½¿ç”¨
  */
 
 void NIOPrintObjSymbol(newtStream_t * f, newtRefArg r)
@@ -489,14 +489,14 @@ void NIOPrintObjSymbol(newtStream_t * f, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** o—Íƒtƒ@ƒCƒ‹‚É•¶š—ñƒIƒuƒWƒFƒNƒg‚ğƒvƒŠƒ“ƒg‚·‚é
+/** å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã«æ–‡å­—åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒ—ãƒªãƒ³ãƒˆã™ã‚‹
  *
- * @param f			[in] o—Íƒtƒ@ƒCƒ‹
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param f			[in] å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  *
- * @note			newtStream_t ‚ğg—p
+ * @note			newtStream_t ã‚’ä½¿ç”¨
  */
 
 void NIOPrintObjString(newtStream_t * f, newtRefArg r)
@@ -524,16 +524,16 @@ void NIOPrintObjString(newtStream_t * f, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** o—Íƒtƒ@ƒCƒ‹‚É”z—ñƒIƒuƒWƒFƒNƒg‚ğƒvƒŠƒ“ƒg‚·‚é
+/** å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã«é…åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒ—ãƒªãƒ³ãƒˆã™ã‚‹
  *
- * @param f			[in] o—Íƒtƒ@ƒCƒ‹
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
- * @param depth		[in] [‚³
- * @param literal	[in] ƒŠƒeƒ‰ƒ‹ƒtƒ‰ƒO
+ * @param f			[in] å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param depth		[in] æ·±ã•
+ * @param literal	[in] ãƒªãƒ†ãƒ©ãƒ«ãƒ•ãƒ©ã‚°
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  *
- * @note			newtStream_t ‚ğg—p
+ * @note			newtStream_t ã‚’ä½¿ç”¨
  */
 
 void NIOPrintObjArray(newtStream_t * f, newtRefArg r, int32_t depth, bool literal)
@@ -602,14 +602,14 @@ void NIOPrintObjArray(newtStream_t * f, newtRefArg r, int32_t depth, bool litera
 
 
 /*------------------------------------------------------------------------*/
-/** o—Íƒtƒ@ƒCƒ‹‚ÉŠÖ”ƒIƒuƒWƒFƒNƒg‚ğƒvƒŠƒ“ƒg‚·‚é
+/** å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã«é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒ—ãƒªãƒ³ãƒˆã™ã‚‹
  *
- * @param f			[in] o—Íƒtƒ@ƒCƒ‹
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param f			[in] å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  *
- * @note			newtStream_t ‚ğg—p
+ * @note			newtStream_t ã‚’ä½¿ç”¨
  */
 
 void NIOPrintFnFrame(newtStream_t * f, newtRefArg r)
@@ -629,14 +629,14 @@ void NIOPrintFnFrame(newtStream_t * f, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** o—Íƒtƒ@ƒCƒ‹‚É³‹K•\Œ»ƒIƒuƒWƒFƒNƒg‚ğƒvƒŠƒ“ƒg‚·‚é
+/** å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã«æ­£è¦è¡¨ç¾ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒ—ãƒªãƒ³ãƒˆã™ã‚‹
  *
- * @param f			[in] o—Íƒtƒ@ƒCƒ‹
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param f			[in] å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  *
- * @note			newtStream_t ‚ğg—p
+ * @note			newtStream_t ã‚’ä½¿ç”¨
  */
 
 void NIOPrintRegexFrame(newtStream_t * f, newtRefArg r)
@@ -658,16 +658,16 @@ void NIOPrintRegexFrame(newtStream_t * f, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** o—Íƒtƒ@ƒCƒ‹‚ÉƒtƒŒ[ƒ€ƒIƒuƒWƒFƒNƒg‚ğƒvƒŠƒ“ƒg‚·‚é
+/** å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã«ãƒ•ãƒ¬ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒ—ãƒªãƒ³ãƒˆã™ã‚‹
  *
- * @param f			[in] o—Íƒtƒ@ƒCƒ‹
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
- * @param depth		[in] [‚³
- * @param literal	[in] ƒŠƒeƒ‰ƒ‹ƒtƒ‰ƒO
+ * @param f			[in] å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param depth		[in] æ·±ã•
+ * @param literal	[in] ãƒªãƒ†ãƒ©ãƒ«ãƒ•ãƒ©ã‚°
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  *
- * @note			newtStream_t ‚ğg—p
+ * @note			newtStream_t ã‚’ä½¿ç”¨
  */
 
 void NIOPrintObjFrame(newtStream_t * f, newtRefArg r, int32_t depth, bool literal)
@@ -733,15 +733,15 @@ void NIOPrintObjFrame(newtStream_t * f, newtRefArg r, int32_t depth, bool litera
 
 
 /*------------------------------------------------------------------------*/
-/** o—Íƒtƒ@ƒCƒ‹‚ÉƒŠƒeƒ‰ƒ‹‚Ìˆó‚ğƒvƒŠƒ“ƒg‚·‚é
+/** å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã«ãƒªãƒ†ãƒ©ãƒ«ã®å°ã‚’ãƒ—ãƒªãƒ³ãƒˆã™ã‚‹
  *
- * @param f			[in] o—Íƒtƒ@ƒCƒ‹
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
- * @param literalP	[i/o]ƒŠƒeƒ‰ƒ‹ƒtƒ‰ƒO
+ * @param f			[in] å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param literalP	[i/o]ãƒªãƒ†ãƒ©ãƒ«ãƒ•ãƒ©ã‚°
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  *
- * @note			newtStream_t ‚ğg—p
+ * @note			newtStream_t ã‚’ä½¿ç”¨
  */
 
 void NIOPrintLiteral(newtStream_t * f, newtRefArg r, bool * literalP)
@@ -755,16 +755,16 @@ void NIOPrintLiteral(newtStream_t * f, newtRefArg r, bool * literalP)
 
 
 /*------------------------------------------------------------------------*/
-/** o—Íƒtƒ@ƒCƒ‹‚ÉƒIƒuƒWƒFƒNƒg‚ğƒvƒŠƒ“ƒgiÄ‹AŒÄo‚µ—pj
+/** å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒ—ãƒªãƒ³ãƒˆï¼ˆå†å¸°å‘¼å‡ºã—ç”¨ï¼‰
  *
- * @param f			[in] o—Íƒtƒ@ƒCƒ‹
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
- * @param depth		[in] [‚³
- * @param literal	[in] ƒŠƒeƒ‰ƒ‹ƒtƒ‰ƒO
+ * @param f			[in] å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param depth		[in] æ·±ã•
+ * @param literal	[in] ãƒªãƒ†ãƒ©ãƒ«ãƒ•ãƒ©ã‚°
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  *
- * @note			newtStream_t ‚ğg—p
+ * @note			newtStream_t ã‚’ä½¿ç”¨
  */
 
 void NIOPrintObj2(newtStream_t * f, newtRefArg r, int32_t depth, bool literal)
@@ -848,14 +848,14 @@ void NIOPrintObj2(newtStream_t * f, newtRefArg r, int32_t depth, bool literal)
 
 
 /*------------------------------------------------------------------------*/
-/** o—Íƒtƒ@ƒCƒ‹‚ÉƒIƒuƒWƒFƒNƒg‚ğƒvƒŠƒ“ƒg
+/** å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒ—ãƒªãƒ³ãƒˆ
  *
- * @param f			[in] o—Íƒtƒ@ƒCƒ‹
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param f			[in] å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  *
- * @note			newtStream_t ‚ğg—p
+ * @note			newtStream_t ã‚’ä½¿ç”¨
  */
 
 void NIOPrintObj(newtStream_t * f, newtRefArg r)
@@ -865,12 +865,12 @@ void NIOPrintObj(newtStream_t * f, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** o—Íƒtƒ@ƒCƒ‹‚ÉƒIƒuƒWƒFƒNƒg‚ğƒvƒŠƒ“ƒg
+/** å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒ—ãƒªãƒ³ãƒˆ
  *
- * @param f			[in] o—Íƒtƒ@ƒCƒ‹
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param f			[in] å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NewtPrintObj(FILE * f, newtRefArg r)
@@ -883,12 +883,12 @@ void NewtPrintObj(FILE * f, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** o—Íƒtƒ@ƒCƒ‹‚ÉƒIƒuƒWƒFƒNƒg‚ğƒvƒŠƒ“ƒgi‰üs‚ ‚èj
+/** å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒ—ãƒªãƒ³ãƒˆï¼ˆæ”¹è¡Œã‚ã‚Šï¼‰
  *
- * @param f			[in] o—Íƒtƒ@ƒCƒ‹
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param f			[in] å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NewtPrintObject(FILE * f, newtRefArg r)
@@ -903,14 +903,14 @@ void NewtPrintObject(FILE * f, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** o—Íƒtƒ@ƒCƒ‹‚É•¶šƒIƒuƒWƒFƒNƒg‚ğƒvƒŠƒ“ƒg‚·‚é
+/** å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã«æ–‡å­—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒ—ãƒªãƒ³ãƒˆã™ã‚‹
  *
- * @param f			[in] o—Íƒtƒ@ƒCƒ‹
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param f			[in] å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  *
- * @note			newtStream_t ‚ğg—p
+ * @note			newtStream_t ã‚’ä½¿ç”¨
  */
 
 void NIOPrintCharacter(newtStream_t * f, newtRefArg r)
@@ -920,14 +920,14 @@ void NIOPrintCharacter(newtStream_t * f, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** o—Íƒtƒ@ƒCƒ‹‚ÉƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg‚ğƒvƒŠƒ“ƒg‚·‚é
+/** å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã«ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒ—ãƒªãƒ³ãƒˆã™ã‚‹
  *
- * @param f			[in] o—Íƒtƒ@ƒCƒ‹
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param f			[in] å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  *
- * @note			newtStream_t ‚ğg—p
+ * @note			newtStream_t ã‚’ä½¿ç”¨
  */
 
 void NIOPrintSymbol(newtStream_t * f, newtRefArg r)
@@ -940,14 +940,14 @@ void NIOPrintSymbol(newtStream_t * f, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** o—Íƒtƒ@ƒCƒ‹‚É•¶š—ñƒIƒuƒWƒFƒNƒg‚ğƒvƒŠƒ“ƒg‚·‚é
+/** å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã«æ–‡å­—åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒ—ãƒªãƒ³ãƒˆã™ã‚‹
  *
- * @param f			[in] o—Íƒtƒ@ƒCƒ‹
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param f			[in] å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  *
- * @note			newtStream_t ‚ğg—p
+ * @note			newtStream_t ã‚’ä½¿ç”¨
  */
 
 void NIOPrintString(newtStream_t * f, newtRefArg r)
@@ -957,14 +957,14 @@ void NIOPrintString(newtStream_t * f, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** o—Íƒtƒ@ƒCƒ‹‚É”z—ñƒIƒuƒWƒFƒNƒg‚ğƒvƒŠƒ“ƒg‚·‚é
+/** å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã«é…åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒ—ãƒªãƒ³ãƒˆã™ã‚‹
  *
- * @param f			[in] o—Íƒtƒ@ƒCƒ‹
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param f			[in] å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  *
- * @note			newtStream_t ‚ğg—p
+ * @note			newtStream_t ã‚’ä½¿ç”¨
  */
 
 void NIOPrintArray(newtStream_t * f, newtRefArg r)
@@ -984,14 +984,14 @@ void NIOPrintArray(newtStream_t * f, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** o—Íƒtƒ@ƒCƒ‹‚ÉƒIƒuƒWƒFƒNƒg‚ğƒvƒŠƒ“ƒg
+/** å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒ—ãƒªãƒ³ãƒˆ
  *
- * @param f			[in] o—Íƒtƒ@ƒCƒ‹
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param f			[in] å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  *
- * @note			newtStream_t ‚ğg—p
+ * @note			newtStream_t ã‚’ä½¿ç”¨
  */
 
 void NIOPrint(newtStream_t * f, newtRefArg r)
@@ -1056,12 +1056,12 @@ void NIOPrint(newtStream_t * f, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** o—Íƒtƒ@ƒCƒ‹‚ÉƒIƒuƒWƒFƒNƒg‚ğƒvƒŠƒ“ƒg
+/** å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒ—ãƒªãƒ³ãƒˆ
  *
- * @param f			[in] o—Íƒtƒ@ƒCƒ‹
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param f			[in] å‡ºåŠ›ãƒ•ã‚¡ã‚¤ãƒ«
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NewtPrint(FILE * f, newtRefArg r)
@@ -1074,13 +1074,13 @@ void NewtPrint(FILE * f, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** •W€o—Í‚ÉŠÖ”î•ñ‚ğ•\¦
+/** æ¨™æº–å‡ºåŠ›ã«é–¢æ•°æƒ…å ±ã‚’è¡¨ç¤º
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  *
- * @note			newtStream_t ‚ğg—p
+ * @note			newtStream_t ã‚’ä½¿ç”¨
  */
 
 void NIOInfo(newtStream_t * f, newtRefArg r)
@@ -1116,11 +1116,11 @@ void NIOInfo(newtStream_t * f, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** •W€o—Í‚ÉŠÖ”î•ñ‚ğ•\¦
+/** æ¨™æº–å‡ºåŠ›ã«é–¢æ•°æƒ…å ±ã‚’è¡¨ç¤º
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NewtInfo(newtRefArg r)
@@ -1133,9 +1133,9 @@ void NewtInfo(newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** •W€o—Í‚É‘SƒOƒ[ƒoƒ‹ŠÖ”‚ÌŠÖ”î•ñ‚ğ•\¦
+/** æ¨™æº–å‡ºåŠ›ã«å…¨ã‚°ãƒ­ãƒ¼ãƒãƒ«é–¢æ•°ã®é–¢æ•°æƒ…å ±ã‚’è¡¨ç¤º
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NewtInfoGlobalFns(void)

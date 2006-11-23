@@ -1,12 +1,12 @@
 /*------------------------------------------------------------------------*/
 /**
  * @file	NewtErrs.h
- * @brief   ƒGƒ‰[ƒR[ƒh
+ * @brief   ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  *
  * @author  M.Nukui
  * @date	2003-11-07
  *
- * @note	“Æ©’è‹`ˆÈŠO‚Í Apple Newton OS ‚É€‹’
+ * @note	ç‹¬è‡ªå®šç¾©ä»¥å¤–ã¯ Apple Newton OS ã«æº–æ‹ 
  *
  * Copyright (C) 2003-2004 M.Nukui All rights reserved.
  */
@@ -15,21 +15,21 @@
 #ifndef	NEWTERRS_H
 #define	NEWTERRS_H
 
-/* ƒ}ƒNƒ’è‹` */
+/* ãƒã‚¯ãƒ­å®šç¾© */
 
-#define kNErrNone						0						///< ƒGƒ‰[‚È‚µ
-#define kNErrBase						(-48000)				///< ƒVƒXƒeƒ€’è‹`ƒGƒ‰[
+#define kNErrNone						0						///< ã‚¨ãƒ©ãƒ¼ãªã—
+#define kNErrBase						(-48000)				///< ã‚·ã‚¹ãƒ†ãƒ å®šç¾©ã‚¨ãƒ©ãƒ¼
 
-// ƒGƒ‰[ƒx[ƒX
-#define kNErrObjectBase					(kNErrBase - 200)		///< ƒIƒuƒWƒFƒNƒgƒGƒ‰[
-#define kNErrBadTypeBase				(kNErrBase - 400)		///< •s³ƒ^ƒCƒvƒGƒ‰[
-#define kNErrCompilerBase				(kNErrBase - 600)		///< ƒRƒ“ƒpƒCƒ‰ƒGƒ‰[
-#define kNErrInterpreterBase			(kNErrBase - 800)		///< ƒCƒ“ƒ^ƒvƒŠƒ^ƒGƒ‰[
-#define kNErrFileBase					(kNErrBase - 1000)		///< ƒtƒ@ƒCƒ‹ƒGƒ‰[i“Æ©’è‹`j
-#define kNErrSystemBase					(kNErrBase - 1100)		///< ƒVƒXƒeƒ€ƒGƒ‰[i“Æ©’è‹`j
-#define kNErrMiscBase					(kNErrBase - 2000)		///< ‚»‚Ì‘¼‚ÌƒGƒ‰[i“Æ©’è‹`j
+// ã‚¨ãƒ©ãƒ¼ãƒ™ãƒ¼ã‚¹
+#define kNErrObjectBase					(kNErrBase - 200)		///< ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¨ãƒ©ãƒ¼
+#define kNErrBadTypeBase				(kNErrBase - 400)		///< ä¸æ­£ã‚¿ã‚¤ãƒ—ã‚¨ãƒ©ãƒ¼
+#define kNErrCompilerBase				(kNErrBase - 600)		///< ã‚³ãƒ³ãƒ‘ã‚¤ãƒ©ã‚¨ãƒ©ãƒ¼
+#define kNErrInterpreterBase			(kNErrBase - 800)		///< ã‚¤ãƒ³ã‚¿ãƒ—ãƒªã‚¿ã‚¨ãƒ©ãƒ¼
+#define kNErrFileBase					(kNErrBase - 1000)		///< ãƒ•ã‚¡ã‚¤ãƒ«ã‚¨ãƒ©ãƒ¼ï¼ˆç‹¬è‡ªå®šç¾©ï¼‰
+#define kNErrSystemBase					(kNErrBase - 1100)		///< ã‚·ã‚¹ãƒ†ãƒ ã‚¨ãƒ©ãƒ¼ï¼ˆç‹¬è‡ªå®šç¾©ï¼‰
+#define kNErrMiscBase					(kNErrBase - 2000)		///< ãã®ä»–ã®ã‚¨ãƒ©ãƒ¼ï¼ˆç‹¬è‡ªå®šç¾©ï¼‰
 
-// ƒIƒuƒWƒFƒNƒgƒGƒ‰[
+// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¨ãƒ©ãƒ¼
 #define kNErrObjectPointerOfNonPtr		(kNErrObjectBase - 0)
 #define kNErrBadMagicPointer			(kNErrObjectBase - 1)
 #define kNErrEmptyPath					(kNErrObjectBase - 2)
@@ -53,7 +53,7 @@
 #define kNErrBadPackageRef				(kNErrObjectBase - 21)
 #define kNErrBadExceptionName			(kNErrObjectBase - 22)
 
-// •s³ƒ^ƒCƒvƒGƒ‰[
+// ä¸æ­£ã‚¿ã‚¤ãƒ—ã‚¨ãƒ©ãƒ¼
 #define kNErrNotAFrame					(kNErrBadTypeBase - 0)
 #define kNErrNotAnArray					(kNErrBadTypeBase - 1)
 #define kNErrNotAString					(kNErrBadTypeBase - 2)
@@ -81,7 +81,7 @@
 #define kNErrNotTrueOrNil				(kNErrBadTypeBase - 24)
 #define kNErrNotAnIntegerOrArray		(kNErrBadTypeBase - 25)
 
-// ƒRƒ“ƒpƒCƒ‹ƒGƒ‰[
+// ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã‚¨ãƒ©ãƒ¼
 #define kNErrSyntaxError				(kNErrCompilerBase - 1)
 #define kNErrAssignToConstant			(kNErrCompilerBase - 3)
 #define kNErrCantTest					(kNErrCompilerBase - 4)
@@ -89,13 +89,13 @@
 #define kNErrCantHaveSameName			(kNErrCompilerBase - 6)
 #define kNErrCantRedefineConstant		(kNErrCompilerBase - 7)
 #define kNErrCantHaveSameNameInScope	(kNErrCompilerBase - 8)
-#define kNErrNonLiteralExpression		(kNErrCompilerBase - 9)		///< ’è”’è‹`
+#define kNErrNonLiteralExpression		(kNErrCompilerBase - 9)		///< å®šæ•°å®šç¾©
 #define kNErrEndOfInputString			(kNErrCompilerBase - 10)
 #define kNErrOddNumberOfDigits			(kNErrCompilerBase - 11)	///< \\u
 #define kNErrNoEscapes					(kNErrCompilerBase - 12)
-#define kNErrInvalidHexCharacter		(kNErrCompilerBase - 13)	///< \\u •¶š—ñ
-#define kNErrNotTowDigitHex				(kNErrCompilerBase - 17)	///< $\\ •¶š
-#define kNErrNotFourDigitHex			(kNErrCompilerBase - 18)	///< $\u •¶š
+#define kNErrInvalidHexCharacter		(kNErrCompilerBase - 13)	///< \\u æ–‡å­—åˆ—
+#define kNErrNotTowDigitHex				(kNErrCompilerBase - 17)	///< $\\ æ–‡å­—
+#define kNErrNotFourDigitHex			(kNErrCompilerBase - 18)	///< $\u æ–‡å­—
 #define kNErrIllegalCharacter			(kNErrCompilerBase - 19)
 #define kNErrInvalidHexadecimal			(kNErrCompilerBase - 20)
 #define kNErrInvalidReal				(kNErrCompilerBase - 21)
@@ -103,7 +103,7 @@
 #define kNErrNotConstant				(kNErrCompilerBase - 27)
 #define kNErrNotDecimalDigit			(kNErrCompilerBase - 28)	///<  @
 
-// ƒCƒ“ƒ^ƒvƒŠƒ^ƒGƒ‰[
+// ã‚¤ãƒ³ã‚¿ãƒ—ãƒªã‚¿ã‚¨ãƒ©ãƒ¼
 #define kNErrNotInBreakLoop				(kNErrInterpreterBase - 0)
 #define kNErrTooManyArgs				(kNErrInterpreterBase - 2)
 #define kNErrWrongNumberOfArgs			(kNErrInterpreterBase - 3)
@@ -116,23 +116,23 @@
 #define kNErrNilContext					(kNErrInterpreterBase - 11)
 #define kNErrBadCharForString			(kNErrInterpreterBase - 15)
 
-// ƒCƒ“ƒ^ƒvƒŠƒ^ƒGƒ‰[i“Æ©’è‹`j
-#define kNErrInvalidFunc				(kNErrInterpreterBase - 100)	///< ŠÖ”‚ª•s³
-#define kNErrInvalidInstruction			(kNErrInterpreterBase - 101)	///< ƒoƒCƒgƒR[ƒh‚ÌƒCƒ“ƒXƒgƒ‰ƒNƒVƒ‡ƒ“‚ª•s³
+// ã‚¤ãƒ³ã‚¿ãƒ—ãƒªã‚¿ã‚¨ãƒ©ãƒ¼ï¼ˆç‹¬è‡ªå®šç¾©ï¼‰
+#define kNErrInvalidFunc				(kNErrInterpreterBase - 100)	///< é–¢æ•°ãŒä¸æ­£
+#define kNErrInvalidInstruction			(kNErrInterpreterBase - 101)	///< ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã®ã‚¤ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚·ãƒ§ãƒ³ãŒä¸æ­£
 
-// ƒtƒ@ƒCƒ‹ƒGƒ‰[i“Æ©’è‹`j
-#define kNErrFileNotFound				(kNErrFileBase - 0)				///< ƒtƒ@ƒCƒ‹‚ª‘¶İ‚µ‚È‚¢
-#define kNErrFileNotOpen				(kNErrFileBase - 1)				///< ƒtƒ@ƒCƒ‹‚ªƒI[ƒvƒ“‚Å‚«‚È‚¢
-#define kNErrDylibNotOpen				(kNErrFileBase - 2)				///< “®“Iƒ‰ƒCƒuƒ‰ƒŠ‚ªƒI[ƒvƒ“‚Å‚«‚È‚¢
+// ãƒ•ã‚¡ã‚¤ãƒ«ã‚¨ãƒ©ãƒ¼ï¼ˆç‹¬è‡ªå®šç¾©ï¼‰
+#define kNErrFileNotFound				(kNErrFileBase - 0)				///< ãƒ•ã‚¡ã‚¤ãƒ«ãŒå­˜åœ¨ã—ãªã„
+#define kNErrFileNotOpen				(kNErrFileBase - 1)				///< ãƒ•ã‚¡ã‚¤ãƒ«ãŒã‚ªãƒ¼ãƒ—ãƒ³ã§ããªã„
+#define kNErrDylibNotOpen				(kNErrFileBase - 2)				///< å‹•çš„ãƒ©ã‚¤ãƒ–ãƒ©ãƒªãŒã‚ªãƒ¼ãƒ—ãƒ³ã§ããªã„
 
-// ƒVƒXƒeƒ€ƒGƒ‰[i“Æ©’è‹`j
-#define kNErrSystemError				(kNErrSystemBase - 0)			///< ƒVƒXƒeƒ€ƒGƒ‰[
+// ã‚·ã‚¹ãƒ†ãƒ ã‚¨ãƒ©ãƒ¼ï¼ˆç‹¬è‡ªå®šç¾©ï¼‰
+#define kNErrSystemError				(kNErrSystemBase - 0)			///< ã‚·ã‚¹ãƒ†ãƒ ã‚¨ãƒ©ãƒ¼
 
-// ‚»‚Ì‘¼‚ÌƒGƒ‰[i“Æ©’è‹`j
-#define kNErrDiv0						(kNErrMiscBase - 0)				///< 0‚ÅŠ„‚èZ‚µ‚½
-																		// Newton OS ‚Å‚Í—áŠO‚Í”­¶‚µ‚È‚¢H
-#define kNErrRegcomp					(kNErrMiscBase - 1)				///< ³‹K•\Œ»‚ÌƒRƒ“ƒpƒCƒ‹ƒGƒ‰[
-#define kNErrNSOFWrite					(kNErrMiscBase - 2)				///< NSOF‚Ì‘‚İƒGƒ‰[
-#define kNErrNSOFRead					(kNErrMiscBase - 3)				///< NSOF‚Ì“Ç‚İƒGƒ‰[
+// ãã®ä»–ã®ã‚¨ãƒ©ãƒ¼ï¼ˆç‹¬è‡ªå®šç¾©ï¼‰
+#define kNErrDiv0						(kNErrMiscBase - 0)				///< 0ã§å‰²ã‚Šç®—ã—ãŸ
+																		// Newton OS ã§ã¯ä¾‹å¤–ã¯ç™ºç”Ÿã—ãªã„ï¼Ÿ
+#define kNErrRegcomp					(kNErrMiscBase - 1)				///< æ­£è¦è¡¨ç¾ã®ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã‚¨ãƒ©ãƒ¼
+#define kNErrNSOFWrite					(kNErrMiscBase - 2)				///< NSOFã®æ›¸è¾¼ã¿ã‚¨ãƒ©ãƒ¼
+#define kNErrNSOFRead					(kNErrMiscBase - 3)				///< NSOFã®èª­è¾¼ã¿ã‚¨ãƒ©ãƒ¼
 
 #endif /* NEWTERRS_H */

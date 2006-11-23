@@ -1,7 +1,7 @@
 //--------------------------------------------------------------------------
 /**
  * @file  protoFILE.c
- * @brief Šg’£ƒ‰ƒCƒuƒ‰ƒŠ
+ * @brief æ‹¡å¼µãƒ©ã‚¤ãƒ–ãƒ©ãƒª
  *
  * @author M.Nukui
  * @date 2004-06-10
@@ -10,7 +10,7 @@
  */
 
 
-/* ƒwƒbƒ_ƒtƒ@ƒCƒ‹ */
+/* ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ« */
 #include <stdio.h>
 
 #include "NewtLib.h"
@@ -21,17 +21,17 @@
 #include "NewtPrint.h"
 
 
-#define NewtRefToFILE(r)		((FILE *)NewtRefToAddress(r))   ///< ƒIƒuƒWƒFƒNƒgŽQÆ‚ðƒtƒ@ƒCƒ‹ŽQÆ‚É•ÏŠ·
+#define NewtRefToFILE(r)		((FILE *)NewtRefToAddress(r))   ///< ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§ã‚’ãƒ•ã‚¡ã‚¤ãƒ«å‚ç…§ã«å¤‰æ›
 
 
 /*------------------------------------------------------------------------*/
-/** ƒtƒ@ƒCƒ‹‚ðƒI[ƒvƒ“‚·‚é
+/** ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ã‚ªãƒ¼ãƒ—ãƒ³ã™ã‚‹
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param path		[in] ƒpƒX
- * @param mode		[in] ƒI[ƒvƒ“ƒ‚[ƒh
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param path		[in] ãƒ‘ã‚¹
+ * @param mode		[in] ã‚ªãƒ¼ãƒ—ãƒ³ãƒ¢ãƒ¼ãƒ‰
  *
- * @return			ƒtƒ@ƒCƒ‹ŽQÆ
+ * @return			ãƒ•ã‚¡ã‚¤ãƒ«å‚ç…§
  */
 
 newtRef MyFopen(newtRefArg rcvr, newtRefArg path, newtRefArg mode)
@@ -54,12 +54,12 @@ newtRef MyFopen(newtRefArg rcvr, newtRefArg path, newtRefArg mode)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒtƒ@ƒCƒ‹‚ðƒNƒ[ƒY‚·‚é
+/** ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ã‚¯ãƒ­ãƒ¼ã‚ºã™ã‚‹
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param stream	[in] ƒtƒ@ƒCƒ‹ŽQÆ
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param stream	[in] ãƒ•ã‚¡ã‚¤ãƒ«å‚ç…§
  *
- * @return			ƒGƒ‰[ƒR[ƒh
+ * @return			ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  */
 
 newtRef MyFclose(newtRefArg rcvr, newtRefArg stream)
@@ -447,9 +447,9 @@ newtRef MyWrite(newtRefArg rcvr, newtRefArg binary)
 }
 
 /*------------------------------------------------------------------------*/
-/** Šg’£ƒ‰ƒCƒuƒ‰ƒŠ‚ÌƒCƒ“ƒXƒg[ƒ‹
+/** æ‹¡å¼µãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void newt_install(void)
