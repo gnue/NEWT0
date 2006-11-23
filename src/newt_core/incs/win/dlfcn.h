@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------*/
 /**
  * @file	dlfcn.h
- * @brief   ‹¤—Lƒ‰ƒCƒuƒ‰ƒŠiŒİŠ·—pj
+ * @brief   å…±æœ‰ãƒ©ã‚¤ãƒ–ãƒ©ãƒªï¼ˆäº’æ›ç”¨ï¼‰
  *
  * @author  M.Nukui
  * @date	2004-10-21
@@ -14,11 +14,11 @@
 #define	_DLFCN_H_
 
 
-/* ƒwƒbƒ_ƒtƒ@ƒCƒ‹ */
+/* ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ« */
 #include <windows.h>
 
 
-/* ƒ}ƒNƒ */
+/* ãƒã‚¯ãƒ­ */
 #define RTLD_LAZY       0x1
 #define RTLD_NOW        0x2
 #define RTLD_LOCAL      0x4
