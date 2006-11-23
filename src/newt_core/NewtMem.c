@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------*/
 /**
  * @file	NewtMem.c
- * @brief   ƒƒ‚ƒŠŠÇ—
+ * @brief   ãƒ¡ãƒ¢ãƒªç®¡ç†
  *
  * @author  M.Nukui
  * @date	2003-11-07
@@ -10,17 +10,17 @@
  */
 
 
-/* ƒwƒbƒ_ƒtƒ@ƒCƒ‹ */
+/* ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ« */
 #include <string.h>
 #include "NewtMem.h"
 
 
 /*------------------------------------------------------------------------*/
-/** ƒƒ‚ƒŠƒv[ƒ‹‚ÌŠm•Û
+/** ãƒ¡ãƒ¢ãƒªãƒ—ãƒ¼ãƒ«ã®ç¢ºä¿
  *
- * @param expandspace   [in] ƒuƒƒbƒN‚ÌŠg’£ƒTƒCƒY
+ * @param expandspace   [in] ãƒ–ãƒ­ãƒƒã‚¯ã®æ‹¡å¼µã‚µã‚¤ã‚º
  *
- * @return				ƒƒ‚ƒŠƒv[ƒ‹
+ * @return				ãƒ¡ãƒ¢ãƒªãƒ—ãƒ¼ãƒ«
  */
 
 newtPool NewtPoolAlloc(int32_t expandspace)
@@ -39,14 +39,14 @@ newtPool NewtPoolAlloc(int32_t expandspace)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒƒ‚ƒŠƒv[ƒ‹‚©‚çw’è‚³‚ê‚½ƒTƒCƒY‚Ìƒƒ‚ƒŠ‚ğŠm•Û‚·‚é
+/** ãƒ¡ãƒ¢ãƒªãƒ—ãƒ¼ãƒ«ã‹ã‚‰æŒ‡å®šã•ã‚ŒãŸã‚µã‚¤ã‚ºã®ãƒ¡ãƒ¢ãƒªã‚’ç¢ºä¿ã™ã‚‹
  *
- * @param pool		[in] ƒƒ‚ƒŠƒv[ƒ‹
- * @param size		[in] ƒf[ƒ^ƒTƒCƒY
+ * @param pool		[in] ãƒ¡ãƒ¢ãƒªãƒ—ãƒ¼ãƒ«
+ * @param size		[in] ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º
  *
- * @return			Šm•Û‚µ‚½ƒƒ‚ƒŠ‚Ö‚Ìƒ|ƒCƒ“ƒ^
+ * @return			ç¢ºä¿ã—ãŸãƒ¡ãƒ¢ãƒªã¸ã®ãƒã‚¤ãƒ³ã‚¿
  *
- * @note			Œ»İ‚Í‚Ü‚¾“Æ©ƒƒ‚ƒŠŠÇ—‚Ís‚í‚ê‚Ä‚¢‚È‚¢
+ * @note			ç¾åœ¨ã¯ã¾ã ç‹¬è‡ªãƒ¡ãƒ¢ãƒªç®¡ç†ã¯è¡Œã‚ã‚Œã¦ã„ãªã„
  */
 
 void * NewtMemAlloc(newtPool pool, size_t size)
@@ -60,15 +60,15 @@ void * NewtMemAlloc(newtPool pool, size_t size)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒƒ‚ƒŠƒv[ƒ‹‚©‚çw’è‚³‚ê‚½ƒTƒCƒY‚Ìƒƒ‚ƒŠ‚ğŠm•Û‚·‚é
+/** ãƒ¡ãƒ¢ãƒªãƒ—ãƒ¼ãƒ«ã‹ã‚‰æŒ‡å®šã•ã‚ŒãŸã‚µã‚¤ã‚ºã®ãƒ¡ãƒ¢ãƒªã‚’ç¢ºä¿ã™ã‚‹
  *
- * @param pool		[in] ƒƒ‚ƒŠƒv[ƒ‹
- * @param number	[in] ƒf[ƒ^”
- * @param size		[in] ƒf[ƒ^ƒTƒCƒY
+ * @param pool		[in] ãƒ¡ãƒ¢ãƒªãƒ—ãƒ¼ãƒ«
+ * @param number	[in] ãƒ‡ãƒ¼ã‚¿æ•°
+ * @param size		[in] ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º
  *
- * @return			Šm•Û‚µ‚½ƒƒ‚ƒŠ‚Ö‚Ìƒ|ƒCƒ“ƒ^
+ * @return			ç¢ºä¿ã—ãŸãƒ¡ãƒ¢ãƒªã¸ã®ãƒã‚¤ãƒ³ã‚¿
  *
- * @note			Œ»İ‚Í‚Ü‚¾“Æ©ƒƒ‚ƒŠŠÇ—‚Ís‚í‚ê‚Ä‚¢‚È‚¢
+ * @note			ç¾åœ¨ã¯ã¾ã ç‹¬è‡ªãƒ¡ãƒ¢ãƒªç®¡ç†ã¯è¡Œã‚ã‚Œã¦ã„ãªã„
  */
 
 void * NewtMemCalloc(newtPool pool, size_t number, size_t size)
@@ -82,15 +82,15 @@ void * NewtMemCalloc(newtPool pool, size_t number, size_t size)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒƒ‚ƒŠƒv[ƒ‹‚©‚çw’è‚³‚ê‚½ƒTƒCƒY‚Ìƒƒ‚ƒŠ‚ğÄŠm•Û‚·‚é
+/** ãƒ¡ãƒ¢ãƒªãƒ—ãƒ¼ãƒ«ã‹ã‚‰æŒ‡å®šã•ã‚ŒãŸã‚µã‚¤ã‚ºã®ãƒ¡ãƒ¢ãƒªã‚’å†ç¢ºä¿ã™ã‚‹
  *
- * @param pool		[in] ƒƒ‚ƒŠƒv[ƒ‹
- * @param ptr		[in] ƒƒ‚ƒŠ‚Ö‚Ìƒ|ƒCƒ“ƒ^
- * @param size		[in] ƒf[ƒ^ƒTƒCƒY
+ * @param pool		[in] ãƒ¡ãƒ¢ãƒªãƒ—ãƒ¼ãƒ«
+ * @param ptr		[in] ãƒ¡ãƒ¢ãƒªã¸ã®ãƒã‚¤ãƒ³ã‚¿
+ * @param size		[in] ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º
  *
- * @return			ÄŠm•Û‚µ‚½ƒƒ‚ƒŠ‚Ö‚Ìƒ|ƒCƒ“ƒ^
+ * @return			å†ç¢ºä¿ã—ãŸãƒ¡ãƒ¢ãƒªã¸ã®ãƒã‚¤ãƒ³ã‚¿
  *
- * @note			Œ»İ‚Í‚Ü‚¾“Æ©ƒƒ‚ƒŠŠÇ—‚Ís‚í‚ê‚Ä‚¢‚È‚¢
+ * @note			ç¾åœ¨ã¯ã¾ã ç‹¬è‡ªãƒ¡ãƒ¢ãƒªç®¡ç†ã¯è¡Œã‚ã‚Œã¦ã„ãªã„
  */
 
 void * NewtMemRealloc(newtPool pool, void * ptr, size_t size)
@@ -104,13 +104,13 @@ void * NewtMemRealloc(newtPool pool, void * ptr, size_t size)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒƒ‚ƒŠ‚ğ‰ğ•ú‚·‚é
+/** ãƒ¡ãƒ¢ãƒªã‚’è§£æ”¾ã™ã‚‹
  *
- * @param ptr		[in] ƒƒ‚ƒŠ‚Ö‚Ìƒ|ƒCƒ“ƒ^
+ * @param ptr		[in] ãƒ¡ãƒ¢ãƒªã¸ã®ãƒã‚¤ãƒ³ã‚¿
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  *
- * @note			Œ»İ‚Í‚Ü‚¾“Æ©ƒƒ‚ƒŠŠÇ—‚Ís‚í‚ê‚Ä‚¢‚È‚¢
+ * @note			ç¾åœ¨ã¯ã¾ã ç‹¬è‡ªãƒ¡ãƒ¢ãƒªç®¡ç†ã¯è¡Œã‚ã‚Œã¦ã„ãªã„
  */
 
 void NewtMemFree(void * ptr)
@@ -121,14 +121,14 @@ void NewtMemFree(void * ptr)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ƒXƒ^ƒbƒNî•ñ‚ğƒZƒbƒgƒAƒbƒv
+/** ã‚¹ã‚¿ãƒƒã‚¯æƒ…å ±ã‚’ã‚»ãƒƒãƒˆã‚¢ãƒƒãƒ—
  *
- * @param stackinfo	[out]ƒXƒ^ƒbƒNî•ñ
- * @param pool		[in] ƒƒ‚ƒŠƒv[ƒ‹
- * @param datasize	[in] ƒf[ƒ^ƒTƒCƒY
- * @param blocksize	[in] ƒuƒƒbƒNƒTƒCƒY
+ * @param stackinfo	[out]ã‚¹ã‚¿ãƒƒã‚¯æƒ…å ±
+ * @param pool		[in] ãƒ¡ãƒ¢ãƒªãƒ—ãƒ¼ãƒ«
+ * @param datasize	[in] ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º
+ * @param blocksize	[in] ãƒ–ãƒ­ãƒƒã‚¯ã‚µã‚¤ã‚º
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NewtStackSetup(newtStack * stackinfo,
@@ -143,11 +143,11 @@ void NewtStackSetup(newtStack * stackinfo,
 
 
 /*------------------------------------------------------------------------*/
-/** ƒXƒ^ƒbƒN‚ğ‰ğ•ú
+/** ã‚¹ã‚¿ãƒƒã‚¯ã‚’è§£æ”¾
  *
- * @param stackinfo	[in] ƒXƒ^ƒbƒNî•ñ
+ * @param stackinfo	[in] ã‚¹ã‚¿ãƒƒã‚¯æƒ…å ±
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NewtStackFree(newtStack * stackinfo)
@@ -164,13 +164,13 @@ void NewtStackFree(newtStack * stackinfo)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒXƒ^ƒbƒN‚ğŠg’£
+/** ã‚¹ã‚¿ãƒƒã‚¯ã‚’æ‹¡å¼µ
  *
- * @param stackinfo	[in] ƒXƒ^ƒbƒNî•ñ
- * @param n			[in] •K—v‚Æ‚³‚ê‚Ä‚¢‚éƒXƒ^ƒbƒN’·
+ * @param stackinfo	[in] ã‚¹ã‚¿ãƒƒã‚¯æƒ…å ±
+ * @param n			[in] å¿…è¦ã¨ã•ã‚Œã¦ã„ã‚‹ã‚¹ã‚¿ãƒƒã‚¯é•·
  *
- * @retval			true	•K—v‚È‚¾‚¯Šm•Û‚³‚ê‚Ä‚¢‚é
- * @retval			false   Šm•Û‚Å‚«‚È‚©‚Á‚½
+ * @retval			true	å¿…è¦ãªã ã‘ç¢ºä¿ã•ã‚Œã¦ã„ã‚‹
+ * @retval			false   ç¢ºä¿ã§ããªã‹ã£ãŸ
  */
 
 bool NewtStackExpand(newtStack * stackinfo, uint32_t n)
@@ -197,12 +197,12 @@ bool NewtStackExpand(newtStack * stackinfo, uint32_t n)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒXƒ^ƒbƒN‚ğƒXƒŠƒ€‰»
+/** ã‚¹ã‚¿ãƒƒã‚¯ã‚’ã‚¹ãƒªãƒ åŒ–
  *
- * @param stackinfo	[in] ƒXƒ^ƒbƒNî•ñ
- * @param n			[in] •K—v‚Æ‚³‚ê‚Ä‚¢‚éƒXƒ^ƒbƒN’·
+ * @param stackinfo	[in] ã‚¹ã‚¿ãƒƒã‚¯æƒ…å ±
+ * @param n			[in] å¿…è¦ã¨ã•ã‚Œã¦ã„ã‚‹ã‚¹ã‚¿ãƒƒã‚¯é•·
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NewtStackSlim(newtStack * stackinfo, uint32_t n)
@@ -230,12 +230,12 @@ void NewtStackSlim(newtStack * stackinfo, uint32_t n)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ƒAƒ‰ƒCƒ“‚ğŒvZ
+/** ã‚¢ãƒ©ã‚¤ãƒ³ã‚’è¨ˆç®—
  *
- * @param n			[in] ƒAƒ‰ƒCƒ“‚·‚é’l
- * @param byte		[in] ƒAƒ‰ƒCƒ“‚³‚ê‚é’PˆÊ
+ * @param n			[in] ã‚¢ãƒ©ã‚¤ãƒ³ã™ã‚‹å€¤
+ * @param byte		[in] ã‚¢ãƒ©ã‚¤ãƒ³ã•ã‚Œã‚‹å˜ä½
  *
- * @return			ƒAƒ‰ƒCƒ“‚³‚ê‚½’l
+ * @return			ã‚¢ãƒ©ã‚¤ãƒ³ã•ã‚ŒãŸå€¤
  */
 
 uint32_t NewtAlign(uint32_t n, uint16_t byte)

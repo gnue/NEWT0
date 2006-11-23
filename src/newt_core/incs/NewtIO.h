@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------*/
 /**
  * @file	NewtIO.h
- * @brief   “üo—Íˆ—
+ * @brief   å…¥å‡ºåŠ›å‡¦ç†
  *
  * @author  M.Nukui
  * @date	2004-06-05
@@ -13,27 +13,27 @@
 #ifndef	NEWTIO_H
 #define	NEWTIO_H
 
-/* ƒwƒbƒ_ƒtƒ@ƒCƒ‹ */
+/* ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ« */
 #include <stdio.h>
 #include <stdarg.h>
 
 #include "NewtType.h"
 
 
-/* ƒ}ƒNƒ */
+/* ãƒã‚¯ãƒ­ */
 #define NcGets()				NsGets(kNewtRefNIL)
 #define NcGetc()				NsGetc(kNewtRefNIL)
 #define NcGetch()				NsGetch(kNewtRefNIL)
 
 
-/// “üo—ÍƒXƒgƒŠ[ƒ€
+/// å…¥å‡ºåŠ›ã‚¹ãƒˆãƒªãƒ¼ãƒ 
 typedef struct {
-    FILE *		file;		///< ƒtƒ@ƒCƒ‹ƒ|ƒCƒ“ƒ^
-	newtRefVar	obj;		///< ƒIƒuƒWƒFƒNƒg
+    FILE *		file;		///< ãƒ•ã‚¡ã‚¤ãƒ«ãƒã‚¤ãƒ³ã‚¿
+	newtRefVar	obj;		///< ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 } newtStream_t;
 
 
-/* ŠÖ”ƒvƒƒgƒ^ƒCƒv */
+/* é–¢æ•°ãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ— */
 
 #ifdef __cplusplus
 extern "C" {

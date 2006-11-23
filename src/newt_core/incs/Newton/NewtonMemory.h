@@ -1,8 +1,8 @@
 /*------------------------------------------------------------------------*/
 /**
  * @file	NewtonMemory.h
- * @brief   ƒƒ‚ƒŠƒCƒ“ƒ^ƒtƒF[ƒX
- *			iNewton C++ Tools / Newton.framework ŒİŠ·—pj
+ * @brief   ãƒ¡ãƒ¢ãƒªã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹
+ *			ï¼ˆNewton C++ Tools / Newton.framework äº’æ›ç”¨ï¼‰
  *
  * @author  M.Nukui
  * @date	2005-03-10
@@ -14,7 +14,7 @@
 #define __NEWTONMEMORY_H
 
 
-// –¢À‘•A’è‹`‚·‚é‚±‚Æ
+// æœªå®Ÿè£…ã€å®šç¾©ã™ã‚‹ã“ã¨
 
 
 #endif	/* __NEWTONMEMORY_H */

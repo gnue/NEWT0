@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------*/
 /**
  * @file	NewtObj.h
- * @brief   ƒIƒuƒWƒFƒNƒgƒVƒXƒeƒ€
+ * @brief   ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚·ã‚¹ãƒ†ãƒ 
  *
  * @author  M.Nukui
  * @date	2003-11-07
@@ -14,74 +14,74 @@
 #define	NEWTOBJ_H
 
 
-/* ƒwƒbƒ_ƒtƒ@ƒCƒ‹ */
+/* ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ« */
 #include "NewtType.h"
 
 
-/* ƒ}ƒNƒ */
-/// addr <--> integer@‚ÌƒVƒtƒg
+/* ãƒã‚¯ãƒ­ */
+/// addr <--> integerã€€æ™‚ã®ã‚·ãƒ•ãƒˆ
 //#define NOBJ_ADDR_SHIFT		2
 #define NOBJ_ADDR_SHIFT		0
 
 
-#define NewtRefIsInt30(r)			((r & 3) == 0)						///< 30bit®”ƒIƒuƒWƒFƒNƒg‚©H
-#define	NewtRefToInt30(r)			(int32_t)((int32_t)r >> 2)			///< ƒIƒuƒWƒFƒNƒg‚ğ 30bit®”‚É•ÏŠ·
-#define	NewtMakeInt30(v)			(newtRef)((int32_t)(v) << 2)		///< 30bit®”ƒIƒuƒWƒFƒNƒg‚ğì¬
+#define NewtRefIsInt30(r)			((r & 3) == 0)						///< 30bitæ•´æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‹ï¼Ÿ
+#define	NewtRefToInt30(r)			(int32_t)((int32_t)r >> 2)			///< ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ 30bitæ•´æ•°ã«å¤‰æ›
+#define	NewtMakeInt30(v)			(newtRef)((int32_t)(v) << 2)		///< 30bitæ•´æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆ
 
-#define	NewtRefIsPointer(r)			((r & 3) == 1)						///< ƒ|ƒCƒ“ƒ^ƒIƒuƒWƒFƒNƒg‚©H
-#define	NewtRefToPointer(r)			(newtObjRef)((uint32_t)r - 1)		///< ƒIƒuƒWƒFƒNƒgQÆ‚ğƒ|ƒCƒ“ƒ^‚É•ÏŠ·
-#define	NewtMakePointer(v)			(newtRef)((uint32_t)(v) + 1)		///< ƒ|ƒCƒ“ƒ^ƒIƒuƒWƒFƒNƒg‚ğì¬
+#define	NewtRefIsPointer(r)			((r & 3) == 1)						///< ãƒã‚¤ãƒ³ã‚¿ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‹ï¼Ÿ
+#define	NewtRefToPointer(r)			(newtObjRef)((uint32_t)r - 1)		///< ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§ã‚’ãƒã‚¤ãƒ³ã‚¿ã«å¤‰æ›
+#define	NewtMakePointer(v)			(newtRef)((uint32_t)(v) + 1)		///< ãƒã‚¤ãƒ³ã‚¿ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆ
 
-#define	NewtRefIsCharacter(r)		((r & 0xF) == 6)					///< •¶šƒIƒuƒWƒFƒNƒg‚©H
-#define	NewtRefToCharacter(r)		(int)(((uint32_t)r >> 4) & 0xFFFF)	///< ƒIƒuƒWƒFƒNƒgQÆ‚ğ•¶š‚É•ÏŠ·
-#define	NewtMakeCharacter(v)		(newtRef)(((uint32_t)(v) << 4) | 6)	///< •¶šƒIƒuƒWƒFƒNƒg‚ğì¬
+#define	NewtRefIsCharacter(r)		((r & 0xF) == 6)					///< æ–‡å­—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‹ï¼Ÿ
+#define	NewtRefToCharacter(r)		(int)(((uint32_t)r >> 4) & 0xFFFF)	///< ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§ã‚’æ–‡å­—ã«å¤‰æ›
+#define	NewtMakeCharacter(v)		(newtRef)(((uint32_t)(v) << 4) | 6)	///< æ–‡å­—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆ
 
-#define	NewtRefIsSpecial(r)			((r & 0xF) == 2)					///< “ÁêƒIƒuƒWƒFƒNƒg‚©H
-#define	NewtRefToSpecial(r)			(int32_t)((uint32_t)r >> 2)			///< ƒIƒuƒWƒFƒNƒgQÆ‚ğ“Áê’l‚É•ÏŠ·
+#define	NewtRefIsSpecial(r)			((r & 0xF) == 2)					///< ç‰¹æ®Šã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‹ï¼Ÿ
+#define	NewtRefToSpecial(r)			(int32_t)((uint32_t)r >> 2)			///< ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§ã‚’ç‰¹æ®Šå€¤ã«å¤‰æ›
 
-#define NewtRefIsMagicPointer(r)	((r & 3) == 3)						///< ƒ}ƒWƒbƒNƒ|ƒCƒ“ƒ^‚©H
+#define NewtRefIsMagicPointer(r)	((r & 3) == 3)						///< ãƒã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿ã‹ï¼Ÿ
 
 #ifdef __NAMED_MAGIC_POINTER__
-	#define NewtMakeNamedMP(r)			((newtRef)((uint32_t)NewtMakeSymbol(r) | 3))		///< –¼‘O•tƒ}ƒWƒbƒNƒ|ƒCƒ“ƒ^‚ğì¬
-	#define NewtMPToSymbol(r)			((newtRef)((uint32_t)r & 0xFFFFFFFD))				///< –¼‘O•tƒ}ƒWƒbƒNƒ|ƒCƒ“ƒ^‚ğƒVƒ“ƒ{ƒ‹‚É•ÏŠ·
-	#define NewtSymbolToMP(r)			((newtRef)((uint32_t)r | 3))						///< ƒVƒ“ƒ{ƒ‹‚ğ–¼‘O•tƒ}ƒWƒbƒNƒ|ƒCƒ“ƒ^‚É•ÏŠ·
+	#define NewtMakeNamedMP(r)			((newtRef)((uint32_t)NewtMakeSymbol(r) | 3))		///< åå‰ä»˜ãƒã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿ã‚’ä½œæˆ
+	#define NewtMPToSymbol(r)			((newtRef)((uint32_t)r & 0xFFFFFFFD))				///< åå‰ä»˜ãƒã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿ã‚’ã‚·ãƒ³ãƒœãƒ«ã«å¤‰æ›
+	#define NewtSymbolToMP(r)			((newtRef)((uint32_t)r | 3))						///< ã‚·ãƒ³ãƒœãƒ«ã‚’åå‰ä»˜ãƒã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿ã«å¤‰æ›
 #else
-	#define NewtMakeMagicPointer(t, i)	((newtRef)((t << 14) | ((i & 0x03ff) << 2) | 3))	///< ƒ}ƒWƒbƒNƒ|ƒCƒ“ƒ^‚ğì¬
-	#define	NewtMPToTable(r)			((int32_t)((uint32_t)r >> 14))						///< ƒ}ƒWƒbƒNƒ|ƒCƒ“ƒ^‚Ìƒe[ƒuƒ‹”Ô†‚ğæ“¾
-	#define	NewtMPToIndex(r)			((int32_t)(((uint32_t)r >> 2) & 0x03ff))			///< ƒ}ƒWƒbƒNƒ|ƒCƒ“ƒ^‚ÌƒCƒ“ƒfƒbƒNƒX‚ğæ“¾
+	#define NewtMakeMagicPointer(t, i)	((newtRef)((t << 14) | ((i & 0x03ff) << 2) | 3))	///< ãƒã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿ã‚’ä½œæˆ
+	#define	NewtMPToTable(r)			((int32_t)((uint32_t)r >> 14))						///< ãƒã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿ã®ãƒ†ãƒ¼ãƒ–ãƒ«ç•ªå·ã‚’å–å¾—
+	#define	NewtMPToIndex(r)			((int32_t)(((uint32_t)r >> 2) & 0x03ff))			///< ãƒã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’å–å¾—
 #endif
 
-#define	NewtRefIsNotNIL(v)			(! NewtRefIsNIL(v))								///< NIL ˆÈŠO‚©H
-#define	NewtMakeBoolean(v)			((newtRef)((v)?(kNewtRefTRUE):(kNewtRefNIL)))	///< ƒu[ƒ‹’lƒIƒuƒWƒFƒNƒg‚ğì¬
+#define	NewtRefIsNotNIL(v)			(! NewtRefIsNIL(v))								///< NIL ä»¥å¤–ã‹ï¼Ÿ
+#define	NewtMakeBoolean(v)			((newtRef)((v)?(kNewtRefTRUE):(kNewtRefNIL)))	///< ãƒ–ãƒ¼ãƒ«å€¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆ
 
-#define	NewtRefToBinary(r)			((uint8_t *)NewtRefToData(r))		///< ƒoƒCƒiƒŠƒf[ƒ^‚Ö‚Ìƒ|ƒCƒ“ƒ^‚ğæ“¾
-#define	NewtRefToSymbol(r)			((newtSymDataRef)NewtRefToData(r))	///< ƒVƒ“ƒ{ƒ‹ƒf[ƒ^‚Ö‚Ìƒ|ƒCƒ“ƒ^‚ğæ“¾
-#define	NewtRefToString(r)			((char *)NewtRefToData(r))			///< •¶š—ñƒf[ƒ^‚Ö‚Ìƒ|ƒCƒ“ƒ^‚ğæ“¾
-#define	NewtRefToSlots(r)			((newtRef *)NewtRefToData(r))		///< ƒXƒƒbƒgƒf[ƒ^‚Ö‚Ìƒ|ƒCƒ“ƒ^‚ğæ“¾
-
-//
-#define	NewtArrayLength(r)			NewtSlotsLength(r)					///< ”z—ñ‚Ì’·‚³‚ğæ“¾
-#define	NewtFrameLength(r)			NewtSlotsLength(r)					///< ƒtƒŒ[ƒ€‚Ì’·‚³‚ğæ“¾
+#define	NewtRefToBinary(r)			((uint8_t *)NewtRefToData(r))		///< ãƒã‚¤ãƒŠãƒªãƒ‡ãƒ¼ã‚¿ã¸ã®ãƒã‚¤ãƒ³ã‚¿ã‚’å–å¾—
+#define	NewtRefToSymbol(r)			((newtSymDataRef)NewtRefToData(r))	///< ã‚·ãƒ³ãƒœãƒ«ãƒ‡ãƒ¼ã‚¿ã¸ã®ãƒã‚¤ãƒ³ã‚¿ã‚’å–å¾—
+#define	NewtRefToString(r)			((char *)NewtRefToData(r))			///< æ–‡å­—åˆ—ãƒ‡ãƒ¼ã‚¿ã¸ã®ãƒã‚¤ãƒ³ã‚¿ã‚’å–å¾—
+#define	NewtRefToSlots(r)			((newtRef *)NewtRefToData(r))		///< ã‚¹ãƒ­ãƒƒãƒˆãƒ‡ãƒ¼ã‚¿ã¸ã®ãƒã‚¤ãƒ³ã‚¿ã‚’å–å¾—
 
 //
-#define	NewtObjType(v)				(v->header.h & 3)						///< ƒIƒuƒWƒFƒNƒgƒ^ƒCƒv‚ğæ“¾
-#define	NewtObjIsSlotted(v)			((v->header.h & kNewtObjSlotted) != 0)  ///< ƒIƒuƒWƒFƒNƒgƒf[ƒ^‚ªƒXƒƒbƒg‚©H
-#define	NewtObjIsArray(v)			(NewtObjType(v) == 1)					///< ƒIƒuƒWƒFƒNƒgƒf[ƒ^‚ª”z—ñ‚©H
-#define	NewtObjIsFrame(v)			(NewtObjType(v) == 3)					///< ƒIƒuƒWƒFƒNƒgƒf[ƒ^‚ªƒtƒŒ[ƒ€‚©H
-#define NewtObjIsLiteral(v)			((v->header.h & kNewtObjLiteral) == kNewtObjLiteral)		///< ƒŠƒeƒ‰ƒ‹‚©H
-#define NewtObjIsSweep(v, mark)		(((v->header.h & kNewtObjSweep) == kNewtObjSweep) == mark)  ///< ƒXƒEƒB[ƒv‘ÎÛ‚©H
-#define	NewtObjSize(v)				(v->header.h >> 8)					///< ƒIƒuƒWƒFƒNƒgƒf[ƒ^‚ÌƒTƒCƒY‚ğæ“¾
+#define	NewtArrayLength(r)			NewtSlotsLength(r)					///< é…åˆ—ã®é•·ã•ã‚’å–å¾—
+#define	NewtFrameLength(r)			NewtSlotsLength(r)					///< ãƒ•ãƒ¬ãƒ¼ãƒ ã®é•·ã•ã‚’å–å¾—
+
+//
+#define	NewtObjType(v)				(v->header.h & 3)						///< ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚¿ã‚¤ãƒ—ã‚’å–å¾—
+#define	NewtObjIsSlotted(v)			((v->header.h & kNewtObjSlotted) != 0)  ///< ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿ãŒã‚¹ãƒ­ãƒƒãƒˆã‹ï¼Ÿ
+#define	NewtObjIsArray(v)			(NewtObjType(v) == 1)					///< ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿ãŒé…åˆ—ã‹ï¼Ÿ
+#define	NewtObjIsFrame(v)			(NewtObjType(v) == 3)					///< ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿ãŒãƒ•ãƒ¬ãƒ¼ãƒ ã‹ï¼Ÿ
+#define NewtObjIsLiteral(v)			((v->header.h & kNewtObjLiteral) == kNewtObjLiteral)		///< ãƒªãƒ†ãƒ©ãƒ«ã‹ï¼Ÿ
+#define NewtObjIsSweep(v, mark)		(((v->header.h & kNewtObjSweep) == kNewtObjSweep) == mark)  ///< ã‚¹ã‚¦ã‚£ãƒ¼ãƒ—å¯¾è±¡ã‹ï¼Ÿ
+#define	NewtObjSize(v)				(v->header.h >> 8)					///< ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿ã®ã‚µã‚¤ã‚ºã‚’å–å¾—
 #define NewtObjBinaryClass(v)		(v->as.klass)						///< Low-level API. Use NewtObjClassOf when needed.
 #define NewtObjArrayClass(v)		(v->as.klass)						///< Low-level API. Use NewtObjClassOf when needed.
-#define	NewtObjToBinary(v)			((uint8_t *)NewtObjData(v))			///< ƒoƒCƒiƒŠƒf[ƒ^•”‚Ö‚Ìƒ|ƒCƒ“ƒ^
-#define	NewtObjToSymbol(v)			((newtSymDataRef)NewtObjData(v))	///< ƒVƒ“ƒ{ƒ‹ƒf[ƒ^•”‚Ö‚Ìƒ|ƒCƒ“ƒ^
-#define	NewtObjToString(v)			((char *)NewtObjData(v))			///< •¶š—ñƒf[ƒ^•”‚Ö‚Ìƒ|ƒCƒ“ƒ^
-#define	NewtObjToSlots(v)			((newtRef *)NewtObjData(v))			///< ƒXƒƒbƒgƒf[ƒ^•”‚Ö‚Ìƒ|ƒCƒ“ƒ^
+#define	NewtObjToBinary(v)			((uint8_t *)NewtObjData(v))			///< ãƒã‚¤ãƒŠãƒªãƒ‡ãƒ¼ã‚¿éƒ¨ã¸ã®ãƒã‚¤ãƒ³ã‚¿
+#define	NewtObjToSymbol(v)			((newtSymDataRef)NewtObjData(v))	///< ã‚·ãƒ³ãƒœãƒ«ãƒ‡ãƒ¼ã‚¿éƒ¨ã¸ã®ãƒã‚¤ãƒ³ã‚¿
+#define	NewtObjToString(v)			((char *)NewtObjData(v))			///< æ–‡å­—åˆ—ãƒ‡ãƒ¼ã‚¿éƒ¨ã¸ã®ãƒã‚¤ãƒ³ã‚¿
+#define	NewtObjToSlots(v)			((newtRef *)NewtObjData(v))			///< ã‚¹ãƒ­ãƒƒãƒˆãƒ‡ãƒ¼ã‚¿éƒ¨ã¸ã®ãƒã‚¤ãƒ³ã‚¿
 
 //
-#define NewtHasVar(name)			NVMHasVar(name)						///< •Ï”‚Ì‘¶İƒ`ƒFƒbƒN
-#define NewtObjIsReadonly(obj)		NewtObjIsLiteral(obj)				///< ƒIƒuƒWƒFƒNƒgƒf[ƒ^‚ªƒŠ[ƒhƒIƒ“ƒŠ[‚©H
-#define NewtRefIsReadonly(r)		NewtRefIsLiteral(r)					///< ƒIƒuƒWƒFƒNƒg‚ªƒŠ[ƒhƒIƒ“ƒŠ[‚©H
+#define NewtHasVar(name)			NVMHasVar(name)						///< å¤‰æ•°ã®å­˜åœ¨ãƒã‚§ãƒƒã‚¯
+#define NewtObjIsReadonly(obj)		NewtObjIsLiteral(obj)				///< ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿ãŒãƒªãƒ¼ãƒ‰ã‚ªãƒ³ãƒªãƒ¼ã‹ï¼Ÿ
+#define NewtRefIsReadonly(r)		NewtRefIsLiteral(r)					///< ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒãƒªãƒ¼ãƒ‰ã‚ªãƒ³ãƒªãƒ¼ã‹ï¼Ÿ
 
 #ifdef __USE_OBSOLETE_STYLE__
 // old style
@@ -95,23 +95,23 @@
 #define NewtDefGlobalFunc(sym, funcPtr, numArgs, doc)	NewtDefGlobalFunc0(sym, funcPtr, numArgs, false, doc)	
 
 
-/* ’è” */
+/* å®šæ•° */
 
 enum {
 	kNewtNotFunction			= 0,
-	kNewtCodeBlock,						// ƒoƒCƒgƒR[ƒhŠÖ”
-	kNewtNativeFn,						// ƒlƒCƒeƒBƒuŠÖ”ircvr‚È‚µAold stylej
-	kNewtNativeFunc						// ƒlƒCƒeƒBƒuŠÖ”ircvr‚ ‚èAnew stylej
+	kNewtCodeBlock,						// ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰é–¢æ•°
+	kNewtNativeFn,						// ãƒã‚¤ãƒ†ã‚£ãƒ–é–¢æ•°ï¼ˆrcvrãªã—ã€old styleï¼‰
+	kNewtNativeFunc						// ãƒã‚¤ãƒ†ã‚£ãƒ–é–¢æ•°ï¼ˆrcvrã‚ã‚Šã€new styleï¼‰
 };
 
 
-/* Œ^éŒ¾ */
+/* å‹å®£è¨€ */
 
-/// Šg’£ƒ‰ƒCƒuƒ‰ƒŠ‚ÌƒCƒ“ƒXƒg[ƒ‹—pƒGƒ“ƒgƒŠŠÖ”
+/// æ‹¡å¼µãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ç”¨ã‚¨ãƒ³ãƒˆãƒªé–¢æ•°
 typedef void(*newt_install_t)(void);
 
 
-/* ŠÖ”ƒvƒƒgƒ^ƒCƒv */
+/* é–¢æ•°ãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ— */
 
 #ifdef __cplusplus
 extern "C" {

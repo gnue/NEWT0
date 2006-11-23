@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------*/
 /**
  * @file	NewtIO.c
- * @brief   “üo—Íˆ—
+ * @brief   å…¥å‡ºåŠ›å‡¦ç†
  *
  * @author M.Nukui
  * @date 2004-06-05
@@ -10,7 +10,7 @@
  */
 
 
-/* ƒwƒbƒ_ƒtƒ@ƒCƒ‹ */
+/* ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ« */
 #include <string.h>
 #include <stdio.h>
 #include <errno.h>
@@ -27,7 +27,7 @@
 #endif
 
 
-/* ƒ}ƒNƒ */
+/* ãƒã‚¯ãƒ­ */
 #if defined(HAVE_TERMIOS_H)
 	#define	newt_getch()	tcgetch(0)
 #elif defined(__WIN32__)
@@ -37,18 +37,18 @@
 #endif
 
 
-/* ŠÖ”ƒvƒƒgƒ^ƒCƒv */
+/* é–¢æ•°ãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ— */
 static int	cbreak_and_noecho(int fd, int vmin, struct termios *tiosp);
 static int	tcgetch(int fd);
 
 
 /*------------------------------------------------------------------------*/
-/** “üo—ÍƒXƒgƒŠ[ƒ€\‘¢‘Ì‚Éƒtƒ@ƒCƒ‹‚Ìî•ñ‚ğƒZƒbƒg‚·‚é
+/** å…¥å‡ºåŠ›ã‚¹ãƒˆãƒªãƒ¼ãƒ æ§‹é€ ä½“ã«ãƒ•ã‚¡ã‚¤ãƒ«ã®æƒ…å ±ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
  *
- * @param stream	[out]“üo—ÍƒXƒgƒŠ[ƒ€
- * @param f			[in] ƒtƒ@ƒCƒ‹
+ * @param stream	[out]å…¥å‡ºåŠ›ã‚¹ãƒˆãƒªãƒ¼ãƒ 
+ * @param f			[in] ãƒ•ã‚¡ã‚¤ãƒ«
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NIOSetFile(newtStream_t * stream, FILE * f)
@@ -65,15 +65,15 @@ void NIOSetFile(newtStream_t * stream, FILE * f)
 
 
 /*------------------------------------------------------------------------*/
-/** printf ƒtƒH[ƒ}ƒbƒg‚Åo—Í‚·‚éi•s’è’·j
+/** printf ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã§å‡ºåŠ›ã™ã‚‹ï¼ˆä¸å®šé•·ï¼‰
  *
- * @param stream	[in] o—ÍƒXƒgƒŠ[ƒ€
- * @param format	[in] ƒtƒH[ƒ}ƒbƒg
- * @param ...		[in] printf ˆø”
+ * @param stream	[in] å‡ºåŠ›ã‚¹ãƒˆãƒªãƒ¼ãƒ 
+ * @param format	[in] ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ
+ * @param ...		[in] printf å¼•æ•°
  *
- * @return			printf ‚Ì–ß‚è’l
+ * @return			printf ã®æˆ»ã‚Šå€¤
  *
- * @note			newtStream_t ‚ğg—p
+ * @note			newtStream_t ã‚’ä½¿ç”¨
  */
 
 int NIOFprintf(newtStream_t * stream, const char * format, ...)
@@ -90,16 +90,16 @@ int NIOFprintf(newtStream_t * stream, const char * format, ...)
 
 
 /*------------------------------------------------------------------------*/
-/** vprintf ƒtƒH[ƒ}ƒbƒg‚Åo—Í‚·‚é
+/** vprintf ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã§å‡ºåŠ›ã™ã‚‹
  *
- * @param stream	[in] o—ÍƒXƒgƒŠ[ƒ€
- * @param format	[in] ƒtƒH[ƒ}ƒbƒg
- * @param ap		[in] vprintf ˆø”
+ * @param stream	[in] å‡ºåŠ›ã‚¹ãƒˆãƒªãƒ¼ãƒ 
+ * @param format	[in] ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ
+ * @param ap		[in] vprintf å¼•æ•°
  *
- * @return			vprintf ‚Ì–ß‚è’l
+ * @return			vprintf ã®æˆ»ã‚Šå€¤
  *
- * @note			newtStream_t ‚ğg—p
- *					•¶š—ñ‚É’Ç‰Á‚·‚éê‡‚Ì§ŒÀ NEWT_SNPRINTF_BUFFSIZE (NewtConf.h)
+ * @note			newtStream_t ã‚’ä½¿ç”¨
+ *					æ–‡å­—åˆ—ã«è¿½åŠ ã™ã‚‹å ´åˆã®åˆ¶é™ NEWT_SNPRINTF_BUFFSIZE (NewtConf.h)
  */
 
 int NIOVfprintf(newtStream_t * stream, const char * format, va_list ap)
@@ -130,14 +130,14 @@ int NIOVfprintf(newtStream_t * stream, const char * format, va_list ap)
 
 
 /*------------------------------------------------------------------------*/
-/** •¶š‚ğo—Í‚·‚é
+/** æ–‡å­—ã‚’å‡ºåŠ›ã™ã‚‹
  *
- * @param c			[in] •¶š
- * @param stream	[in] o—ÍƒXƒgƒŠ[ƒ€
+ * @param c			[in] æ–‡å­—
+ * @param stream	[in] å‡ºåŠ›ã‚¹ãƒˆãƒªãƒ¼ãƒ 
  *
- * @return			fputc ‚Ì–ß‚è’l
+ * @return			fputc ã®æˆ»ã‚Šå€¤
  *
- * @note			newtStream_t ‚ğg—p
+ * @note			newtStream_t ã‚’ä½¿ç”¨
  */
 
 int NIOFputc(int c, newtStream_t * stream)
@@ -161,14 +161,14 @@ int NIOFputc(int c, newtStream_t * stream)
 
 
 /*------------------------------------------------------------------------*/
-/** •¶š—ñ‚ğo—Í‚·‚é
+/** æ–‡å­—åˆ—ã‚’å‡ºåŠ›ã™ã‚‹
  *
- * @param str		[in] •¶š—ñ
- * @param stream	[in] o—ÍƒXƒgƒŠ[ƒ€
+ * @param str		[in] æ–‡å­—åˆ—
+ * @param stream	[in] å‡ºåŠ›ã‚¹ãƒˆãƒªãƒ¼ãƒ 
  *
- * @return			fputs ‚Ì–ß‚è’l
+ * @return			fputs ã®æˆ»ã‚Šå€¤
  *
- * @note			newtStream_t ‚ğg—p
+ * @note			newtStream_t ã‚’ä½¿ç”¨
  */
 
 int NIOFputs(const char *str, newtStream_t * stream)
@@ -190,13 +190,13 @@ int NIOFputs(const char *str, newtStream_t * stream)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** printf ƒtƒH[ƒ}ƒbƒg‚Åo—Í‚·‚éi•s’è’·j
+/** printf ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã§å‡ºåŠ›ã™ã‚‹ï¼ˆä¸å®šé•·ï¼‰
  *
- * @param f			[in] o—ÍƒXƒgƒŠ[ƒ€
- * @param format	[in] ƒtƒH[ƒ}ƒbƒg
- * @param ...		[in] printf ˆø”
+ * @param f			[in] å‡ºåŠ›ã‚¹ãƒˆãƒªãƒ¼ãƒ 
+ * @param format	[in] ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ
+ * @param ...		[in] printf å¼•æ•°
  *
- * @return			printf ‚Ì–ß‚è’l
+ * @return			printf ã®æˆ»ã‚Šå€¤
  */
 
 int NewtFprintf(FILE * f, const char * format, ...)
@@ -216,12 +216,12 @@ int NewtFprintf(FILE * f, const char * format, ...)
 
 
 /*------------------------------------------------------------------------*/
-/** •¶š‚Ìo—Í
+/** æ–‡å­—ã®å‡ºåŠ›
  *
- * @param c			[in] •¶š
- * @param f			[in] o—ÍƒXƒgƒŠ[ƒ€
+ * @param c			[in] æ–‡å­—
+ * @param f			[in] å‡ºåŠ›ã‚¹ãƒˆãƒªãƒ¼ãƒ 
  *
- * @return			fputc ‚Ì–ß‚è’l
+ * @return			fputc ã®æˆ»ã‚Šå€¤
  */
 
 int NewtFputc(int c, FILE * f)
@@ -234,12 +234,12 @@ int NewtFputc(int c, FILE * f)
 
 
 /*------------------------------------------------------------------------*/
-/** •¶š‚Ìo—Í
+/** æ–‡å­—ã®å‡ºåŠ›
  *
- * @param str		[in] •¶š—ñ
- * @param f			[in] o—ÍƒXƒgƒŠ[ƒ€
+ * @param str		[in] æ–‡å­—åˆ—
+ * @param f			[in] å‡ºåŠ›ã‚¹ãƒˆãƒªãƒ¼ãƒ 
  *
- * @return			fputs ‚Ì–ß‚è’l
+ * @return			fputs ã®æˆ»ã‚Šå€¤
  */
 
 int NewtFputs(const char *str, FILE * f)
@@ -253,13 +253,13 @@ int NewtFputs(const char *str, FILE * f)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** printf ƒtƒH[ƒ}ƒbƒg‚Åo—Í‚·‚éi•s’è’·j
+/** printf ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã§å‡ºåŠ›ã™ã‚‹ï¼ˆä¸å®šé•·ï¼‰
  *
- * @param title		[in] ƒ^ƒCƒgƒ‹
- * @param format	[in] ƒtƒH[ƒ}ƒbƒg
- * @param ...		[in] printf ˆø”
+ * @param title		[in] ã‚¿ã‚¤ãƒˆãƒ«
+ * @param format	[in] ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ
+ * @param ...		[in] printf å¼•æ•°
  *
- * @return			printf ‚Ì–ß‚è’l
+ * @return			printf ã®æˆ»ã‚Šå€¤
  */
 
 int NewtDebugMsg(const char * title, const char * format, ...)
@@ -287,14 +287,14 @@ int NewtDebugMsg(const char * title, const char * format, ...)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** “ü—ÍƒXƒgƒŠ[ƒ€‚©‚ç•¶š—ñ‚ğæo‚·
+/** å…¥åŠ›ã‚¹ãƒˆãƒªãƒ¼ãƒ ã‹ã‚‰æ–‡å­—åˆ—ã‚’å–å‡ºã™
  *
- * @param stream	[in] “ü—ÍƒXƒgƒŠ[ƒ€
+ * @param stream	[in] å…¥åŠ›ã‚¹ãƒˆãƒªãƒ¼ãƒ 
  *
- * @retval			•¶š—ñƒIƒuƒWƒFƒNƒg	“ü—Íƒf[ƒ^‚ª‘¶İ‚·‚éê‡
- * @retval			NIL				“ü—Íƒf[ƒ^‚ª‘¶İ‚µ‚È‚¢ê‡
+ * @retval			æ–‡å­—åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ	å…¥åŠ›ãƒ‡ãƒ¼ã‚¿ãŒå­˜åœ¨ã™ã‚‹å ´åˆ
+ * @retval			NIL				å…¥åŠ›ãƒ‡ãƒ¼ã‚¿ãŒå­˜åœ¨ã—ãªã„å ´åˆ
  *
- * @note			§ŒÀ NEWT_FGETS_BUFFSIZE (NewtConf.h)
+ * @note			åˆ¶é™ NEWT_FGETS_BUFFSIZE (NewtConf.h)
  */
 
 newtRef NewtFgets(FILE * stream)
@@ -314,21 +314,21 @@ newtRef NewtFgets(FILE * stream)
 		len = strlen(str);
 
 		if (result == kNewtRefNIL)
-		{	// •¶š—ñƒIƒuƒWƒFƒNƒgì¬
+		{	// æ–‡å­—åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆä½œæˆ
 			result = NewtMakeString2(str, len, false);
 
 			if (NewtRefIsNIL(result))
-			{	// ƒƒ‚ƒŠ‚ğŠm•Û‚Å‚«‚È‚©‚Á‚½
+			{	// ãƒ¡ãƒ¢ãƒªã‚’ç¢ºä¿ã§ããªã‹ã£ãŸ
 				return NewtThrow0(kNErrOutOfObjectMemory);
 			}
 		}
 		else
-		{	// ’Ç‰Á
+		{	// è¿½åŠ 
 			oldlen = NewtStringLength(result);
 			result = NewtStrCat2(result, str, len);
 
 			if (NewtStringLength(result) < oldlen + len)
-			{	// ƒƒ‚ƒŠ‚ğŠm•Û‚Å‚«‚È‚©‚Á‚½
+			{	// ãƒ¡ãƒ¢ãƒªã‚’ç¢ºä¿ã§ããªã‹ã£ãŸ
 				return NewtThrow0(kNErrOutOfObjectMemory);
 			}
 		}
@@ -336,7 +336,7 @@ newtRef NewtFgets(FILE * stream)
 		if (len < maxsize)
 			break;
 
-		// ÅŒã‚Ì•¶š‚ğƒ`ƒFƒbƒN
+		// æœ€å¾Œã®æ–‡å­—ã‚’ãƒã‚§ãƒƒã‚¯
 		c = buff[maxsize - 1];
 
 		if (c == '\n')
@@ -344,12 +344,12 @@ newtRef NewtFgets(FILE * stream)
 
 		if (c == '\r')
 		{
-			// ‚P•¶šæ“Ç‚İ
+			// ï¼‘æ–‡å­—å…ˆèª­ã¿
 			c = fgetc(stream);
 
 			if (c != '\n')
-			{	// CRLF ‚Å‚È‚¢iCR ‚Ì‚İjê‡
-				// æ“Ç‚İ‚µ‚½•¶š‚ğƒXƒgƒŠ[ƒ€‚É–ß‚·
+			{	// CRLF ã§ãªã„ï¼ˆCR ã®ã¿ï¼‰å ´åˆ
+				// å…ˆèª­ã¿ã—ãŸæ–‡å­—ã‚’ã‚¹ãƒˆãƒªãƒ¼ãƒ ã«æˆ»ã™
 				ungetc(c, stream);
 				break;
 			}
@@ -361,12 +361,12 @@ newtRef NewtFgets(FILE * stream)
 
 
 /*------------------------------------------------------------------------*/
-/** •W€“ü—Í‚©‚ç•¶š—ñ‚ğæo‚·
+/** æ¨™æº–å…¥åŠ›ã‹ã‚‰æ–‡å­—åˆ—ã‚’å–å‡ºã™
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
  *
- * @retval			•¶š—ñƒIƒuƒWƒFƒNƒg	“ü—Íƒf[ƒ^‚ª‘¶İ‚·‚éê‡
- * @retval			NIL				“ü—Íƒf[ƒ^‚ª‘¶İ‚µ‚È‚¢ê‡
+ * @retval			æ–‡å­—åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ	å…¥åŠ›ãƒ‡ãƒ¼ã‚¿ãŒå­˜åœ¨ã™ã‚‹å ´åˆ
+ * @retval			NIL				å…¥åŠ›ãƒ‡ãƒ¼ã‚¿ãŒå­˜åœ¨ã—ãªã„å ´åˆ
  */
 
 newtRef NsGets(newtRefArg rcvr)
@@ -376,11 +376,11 @@ newtRef NsGets(newtRefArg rcvr)
 
 
 /*------------------------------------------------------------------------*/
-/** “ü—ÍƒXƒgƒŠ[ƒ€‚©‚ç•¶š‚ğæo‚·
+/** å…¥åŠ›ã‚¹ãƒˆãƒªãƒ¼ãƒ ã‹ã‚‰æ–‡å­—ã‚’å–å‡ºã™
  *
- * @param stream	[in] “ü—ÍƒXƒgƒŠ[ƒ€
+ * @param stream	[in] å…¥åŠ›ã‚¹ãƒˆãƒªãƒ¼ãƒ 
  *
- * @retval			•¶šƒIƒuƒWƒFƒNƒg	“ü—Íƒf[ƒ^‚ª‘¶İ‚·‚éê‡
+ * @retval			æ–‡å­—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ	å…¥åŠ›ãƒ‡ãƒ¼ã‚¿ãŒå­˜åœ¨ã™ã‚‹å ´åˆ
  * @retval			NIL				EOF
  */
 
@@ -398,12 +398,12 @@ newtRef NewtFgetc(FILE * stream)
 
 
 /*------------------------------------------------------------------------*/
-/** •W€“ü—Í‚©‚ç•¶š‚ğæo‚·
+/** æ¨™æº–å…¥åŠ›ã‹ã‚‰æ–‡å­—ã‚’å–å‡ºã™
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
  *
- * @retval			•¶šƒIƒuƒWƒFƒNƒg	“ü—Íƒf[ƒ^‚ª‘¶İ‚·‚éê‡
- * @retval			NIL				“ü—Íƒf[ƒ^‚ª‘¶İ‚µ‚È‚¢ê‡
+ * @retval			æ–‡å­—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ	å…¥åŠ›ãƒ‡ãƒ¼ã‚¿ãŒå­˜åœ¨ã™ã‚‹å ´åˆ
+ * @retval			NIL				å…¥åŠ›ãƒ‡ãƒ¼ã‚¿ãŒå­˜åœ¨ã—ãªã„å ´åˆ
  */
 
 newtRef NsGetc(newtRefArg rcvr)
@@ -415,14 +415,14 @@ newtRef NsGetc(newtRefArg rcvr)
 #ifdef HAVE_TERMIOS_H
 
 /*------------------------------------------------------------------------*/
-/** ƒ^[ƒ~ƒiƒ‹‚ğ”ñƒJƒmƒjƒJƒ‹ƒ‚[ƒh‚¨‚æ‚ÑƒGƒR[‚È‚µ‚Éİ’è‚·‚é
+/** ã‚¿ãƒ¼ãƒŸãƒŠãƒ«ã‚’éã‚«ãƒãƒ‹ã‚«ãƒ«ãƒ¢ãƒ¼ãƒ‰ãŠã‚ˆã³ã‚¨ã‚³ãƒ¼ãªã—ã«è¨­å®šã™ã‚‹
  *
- * @param fd		[in] ƒ^[ƒ~ƒiƒ‹
- * @param vmin		[in] ”ñƒJƒmƒjƒJƒ‹“Ç‚İ‚İ‚ÌÅ¬•¶š”
- * @param tiosp		[out]•ÏX‘O‚Ì termios\‘¢‘Ì
+ * @param fd		[in] ã‚¿ãƒ¼ãƒŸãƒŠãƒ«
+ * @param vmin		[in] éã‚«ãƒãƒ‹ã‚«ãƒ«èª­ã¿è¾¼ã¿æ™‚ã®æœ€å°æ–‡å­—æ•°
+ * @param tiosp		[out]å¤‰æ›´å‰ã® termiosæ§‹é€ ä½“
  *
- * @retval			0			³íI—¹
- * @retval			0ˆÈŠO		ƒGƒ‰[
+ * @retval			0			æ­£å¸¸çµ‚äº†
+ * @retval			0ä»¥å¤–		ã‚¨ãƒ©ãƒ¼
  */
 
 int cbreak_and_noecho(int fd, int vmin, struct termios *tiosp)
@@ -445,12 +445,12 @@ int cbreak_and_noecho(int fd, int vmin, struct termios *tiosp)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒ^[ƒ~ƒiƒ‹‚©‚ç“ü—Í•¶š‚ğ‚P•¶šæ“¾
+/** ã‚¿ãƒ¼ãƒŸãƒŠãƒ«ã‹ã‚‰å…¥åŠ›æ–‡å­—ã‚’ï¼‘æ–‡å­—å–å¾—
  *
- * @param fd		[in] ƒ^[ƒ~ƒiƒ‹
+ * @param fd		[in] ã‚¿ãƒ¼ãƒŸãƒŠãƒ«
  *
- * @retval			•¶šƒf[ƒ^	“ü—Íƒf[ƒ^‚ª‘¶İ‚·‚éê‡
- * @retval			0			“ü—Íƒf[ƒ^‚ª‘¶İ‚µ‚È‚¢ê‡
+ * @retval			æ–‡å­—ãƒ‡ãƒ¼ã‚¿	å…¥åŠ›ãƒ‡ãƒ¼ã‚¿ãŒå­˜åœ¨ã™ã‚‹å ´åˆ
+ * @retval			0			å…¥åŠ›ãƒ‡ãƒ¼ã‚¿ãŒå­˜åœ¨ã—ãªã„å ´åˆ
  */
 
 int tcgetch(int fd)
@@ -476,12 +476,12 @@ int tcgetch(int fd)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒL[ƒ{[ƒh‚©‚ç“ü—Í•¶š‚ğ‚P•¶šæ“¾
+/** ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰ã‹ã‚‰å…¥åŠ›æ–‡å­—ã‚’ï¼‘æ–‡å­—å–å¾—
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
  *
- * @retval			•¶šƒIƒuƒWƒFƒNƒg	“ü—Íƒf[ƒ^‚ª‘¶İ‚·‚éê‡
- * @retval			NIL				“ü—Íƒf[ƒ^‚ª‘¶İ‚µ‚È‚¢ê‡
+ * @retval			æ–‡å­—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ	å…¥åŠ›ãƒ‡ãƒ¼ã‚¿ãŒå­˜åœ¨ã™ã‚‹å ´åˆ
+ * @retval			NIL				å…¥åŠ›ãƒ‡ãƒ¼ã‚¿ãŒå­˜åœ¨ã—ãªã„å ´åˆ
  */
 
 newtRef NsGetch(newtRefArg rcvr)

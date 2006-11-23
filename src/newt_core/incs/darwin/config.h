@@ -2,7 +2,7 @@
 /*------------------------------------------------------------------------*/
 /**
  * @file	config.h
- * @brief   ƒRƒ“ƒtƒBƒOİ’è
+ * @brief   ã‚³ãƒ³ãƒ•ã‚£ã‚°è¨­å®š
  *
  * @author  M.Nukui
  * @date	2005-04-30
@@ -15,7 +15,7 @@
 #define	CONFIG_H
 
 
-/* ƒ}ƒNƒ’è‹` */
+/* ãƒã‚¯ãƒ­å®šç¾© */
 #define HAVE_INTTYPES_H 1
 #define HAVE_STDINT_H 1
 #define HAVE_MEMORY_H 1

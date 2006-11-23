@@ -1,6 +1,6 @@
 /**
  * @file	NewtStr.c
- * @brief   •¶š—ñˆ—
+ * @brief   æ–‡å­—åˆ—å‡¦ç†
  *
  * @author  M.Nukui
  * @date	2004-01-25
@@ -9,14 +9,14 @@
  */
 
 
-/* ƒwƒbƒ_ƒtƒ@ƒCƒ‹ */
+/* ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ« */
 #include <string.h>
 
 #include "NewtCore.h"
 #include "NewtStr.h"
 
 
-/* ŠÖ”ƒvƒƒgƒ^ƒCƒv */
+/* é–¢æ•°ãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ— */
 static newtRef  NewtParamStr(char * baseStr, size_t baseStrLen, newtRefArg paramStrArray, bool ifthen);
 static bool		NewtBeginsWith(const char * str, const char * sub);
 static bool		NewtEndsWith(const char * str, const char * sub);
@@ -24,14 +24,14 @@ static bool		NewtEndsWith(const char * str, const char * sub);
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ƒx[ƒX•¶š—ñ‚Ìƒpƒ‰ƒ[ƒ^‚ğ’u‚«Š·‚¦‚ÄV‚µ‚¢•¶š—ñ‚ğì¬‚·‚é
+/** ãƒ™ãƒ¼ã‚¹æ–‡å­—åˆ—ã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’ç½®ãæ›ãˆã¦æ–°ã—ã„æ–‡å­—åˆ—ã‚’ä½œæˆã™ã‚‹
  *
- * @param baseStr		[in] ƒx[ƒX•¶š—ñiC•¶š—ñj
- * @param baseStrLen	[in] ƒx[ƒX•¶š—ñ‚Ì’·‚³
- * @param paramStrArray [in] ƒpƒ‰ƒ[ƒ^”z—ñ
- * @param ifthen		[in] ğŒˆ—
+ * @param baseStr		[in] ãƒ™ãƒ¼ã‚¹æ–‡å­—åˆ—ï¼ˆCæ–‡å­—åˆ—ï¼‰
+ * @param baseStrLen	[in] ãƒ™ãƒ¼ã‚¹æ–‡å­—åˆ—ã®é•·ã•
+ * @param paramStrArray [in] ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿é…åˆ—
+ * @param ifthen		[in] æ¡ä»¶å‡¦ç†
  *
- * @return •¶š—ñƒIƒuƒWƒFƒNƒg
+ * @return æ–‡å­—åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  */
 
 newtRef NewtParamStr(char * baseStr, size_t baseStrLen, newtRefArg paramStrArray, bool ifthen)
@@ -149,13 +149,13 @@ newtRef NewtParamStr(char * baseStr, size_t baseStrLen, newtRefArg paramStrArray
 
 
 /*------------------------------------------------------------------------*/
-/** •¶š—ñ‚Ì‘O”¼•”‚ª•”•ª•¶š—ñ‚Æˆê’v‚·‚é‚©ƒ`ƒFƒbƒN‚·‚é
+/** æ–‡å­—åˆ—ã®å‰åŠéƒ¨ãŒéƒ¨åˆ†æ–‡å­—åˆ—ã¨ä¸€è‡´ã™ã‚‹ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param str		[in] •¶š—ñ
- * @param sub		[in] •”•ª•¶š—ñ
+ * @param str		[in] æ–‡å­—åˆ—
+ * @param sub		[in] éƒ¨åˆ†æ–‡å­—åˆ—
  *
- * @retval			true	‘O”¼•”‚ª•”•ª•¶š—ñ‚Æˆê’v‚·‚é
- * @retval			false	‘O”¼•”‚ª•”•ª•¶š—ñ‚Æˆê’v‚µ‚È‚¢
+ * @retval			true	å‰åŠéƒ¨ãŒéƒ¨åˆ†æ–‡å­—åˆ—ã¨ä¸€è‡´ã™ã‚‹
+ * @retval			false	å‰åŠéƒ¨ãŒéƒ¨åˆ†æ–‡å­—åˆ—ã¨ä¸€è‡´ã—ãªã„
  */
 
 bool NewtBeginsWith(const char * str, const char * sub)
@@ -174,13 +174,13 @@ bool NewtBeginsWith(const char * str, const char * sub)
 
 
 /*------------------------------------------------------------------------*/
-/** •¶š—ñ‚ÌÅŒã”ö‚ª•”•ª•¶š—ñ‚Æˆê’v‚·‚é‚©ƒ`ƒFƒbƒN‚·‚é
+/** æ–‡å­—åˆ—ã®æœ€å¾Œå°¾ãŒéƒ¨åˆ†æ–‡å­—åˆ—ã¨ä¸€è‡´ã™ã‚‹ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param str		[in] •¶š—ñ
- * @param sub		[in] •”•ª•¶š—ñ
+ * @param str		[in] æ–‡å­—åˆ—
+ * @param sub		[in] éƒ¨åˆ†æ–‡å­—åˆ—
  *
- * @retval			true	ÅŒã”ö‚ª•”•ª•¶š—ñ‚Æˆê’v‚·‚é
- * @retval			false	ÅŒã”ö‚ª•”•ª•¶š—ñ‚Æˆê’v‚µ‚È‚¢
+ * @retval			true	æœ€å¾Œå°¾ãŒéƒ¨åˆ†æ–‡å­—åˆ—ã¨ä¸€è‡´ã™ã‚‹
+ * @retval			false	æœ€å¾Œå°¾ãŒéƒ¨åˆ†æ–‡å­—åˆ—ã¨ä¸€è‡´ã—ãªã„
  */
 
 bool NewtEndsWith(const char * str, const char * sub)
@@ -198,14 +198,14 @@ bool NewtEndsWith(const char * str, const char * sub)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ®”‚ğ•¶š‚É•ÏŠ·‚·‚é
+/** æ•´æ•°ã‚’æ–‡å­—ã«å¤‰æ›ã™ã‚‹
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] ®”
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] æ•´æ•°
  *
- * @return			•¶š
+ * @return			æ–‡å­—
  *
- * @note			ƒOƒ[ƒoƒ‹ŠÖ”—p
+ * @note			ã‚°ãƒ­ãƒ¼ãƒãƒ«é–¢æ•°ç”¨
  */
 
 newtRef NsChr(newtRefArg rcvr, newtRefArg r)
@@ -218,14 +218,14 @@ newtRef NsChr(newtRefArg rcvr, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** •¶š‚ğ®”‚É•ÏŠ·‚·‚é
+/** æ–‡å­—ã‚’æ•´æ•°ã«å¤‰æ›ã™ã‚‹
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] •¶š
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] æ–‡å­—
  *
- * @return			®”
+ * @return			æ•´æ•°
  *
- * @note			ƒOƒ[ƒoƒ‹ŠÖ”—p
+ * @note			ã‚°ãƒ­ãƒ¼ãƒãƒ«é–¢æ•°ç”¨
  */
 
 newtRef NsOrd(newtRefArg rcvr, newtRefArg r)
@@ -239,14 +239,14 @@ newtRef NsOrd(newtRefArg rcvr, newtRefArg r)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** •¶š—ñ‚Ì’·‚³‚ğæ“¾
+/** æ–‡å­—åˆ—ã®é•·ã•ã‚’å–å¾—
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] •¶š—ñƒIƒuƒWƒFƒNƒg
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] æ–‡å­—åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			•¶š—ñ‚Ì’·‚³
+ * @return			æ–‡å­—åˆ—ã®é•·ã•
  *
- * @note			ƒOƒ[ƒoƒ‹ŠÖ”—p
+ * @note			ã‚°ãƒ­ãƒ¼ãƒãƒ«é–¢æ•°ç”¨
  */
 
 newtRef NsStrLen(newtRefArg rcvr, newtRefArg r)
@@ -259,14 +259,14 @@ newtRef NsStrLen(newtRefArg rcvr, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚ğ•\¦‰Â”\‚È•¶š—ñ‚É•ÏŠ·‚·‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’è¡¨ç¤ºå¯èƒ½ãªæ–‡å­—åˆ—ã«å¤‰æ›ã™ã‚‹
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			•¶š—ñƒIƒuƒWƒFƒNƒg
+ * @return			æ–‡å­—åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @note			ƒOƒ[ƒoƒ‹ŠÖ”—p
+ * @note			ã‚°ãƒ­ãƒ¼ãƒãƒ«é–¢æ•°ç”¨
  */
 
 newtRef NsSPrintObject(newtRefArg rcvr, newtRefArg r)
@@ -282,15 +282,15 @@ newtRef NsSPrintObject(newtRefArg rcvr, newtRefArg r)
 
 
 /*------------------------------------------------------------------------*/
-/** •¶š—ñ‚ğw’è‚Ì‹æØ‚è•¶š‚Å•ª‰ğ‚·‚é
+/** æ–‡å­—åˆ—ã‚’æŒ‡å®šã®åŒºåˆ‡ã‚Šæ–‡å­—ã§åˆ†è§£ã™ã‚‹
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param r			[in] •¶š—ñƒIƒuƒWƒFƒNƒg
- * @param sep		[in] ‹æØ‚è•¶š
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param r			[in] æ–‡å­—åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param sep		[in] åŒºåˆ‡ã‚Šæ–‡å­—
  *
- * @return			”z—ñƒIƒuƒWƒFƒNƒg
+ * @return			é…åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @note			ƒOƒ[ƒoƒ‹ŠÖ”—p
+ * @note			ã‚°ãƒ­ãƒ¼ãƒãƒ«é–¢æ•°ç”¨
  */
 
 newtRef NsSplit(newtRefArg rcvr, newtRefArg r, newtRefArg sep)
@@ -347,15 +347,15 @@ newtRef NsSplit(newtRefArg rcvr, newtRefArg r, newtRefArg sep)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒx[ƒX•¶š—ñ‚Ìƒpƒ‰ƒ[ƒ^‚ğ’u‚«Š·‚¦‚ÄV‚µ‚¢•¶š—ñ‚ğì¬‚·‚é
+/** ãƒ™ãƒ¼ã‚¹æ–‡å­—åˆ—ã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’ç½®ãæ›ãˆã¦æ–°ã—ã„æ–‡å­—åˆ—ã‚’ä½œæˆã™ã‚‹
  *
- * @param rcvr			[in] ƒŒƒV[ƒo
- * @param baseString	[in] ƒx[ƒX•¶š—ñ
- * @param paramStrArray [in] ƒpƒ‰ƒ[ƒ^”z—ñ
+ * @param rcvr			[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param baseString	[in] ãƒ™ãƒ¼ã‚¹æ–‡å­—åˆ—
+ * @param paramStrArray [in] ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿é…åˆ—
  *
- * @return			•¶š—ñƒIƒuƒWƒFƒNƒg
+ * @return			æ–‡å­—åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @note			ƒOƒ[ƒoƒ‹ŠÖ”—p
+ * @note			ã‚°ãƒ­ãƒ¼ãƒãƒ«é–¢æ•°ç”¨
  */
 
 newtRef NsParamStr(newtRefArg rcvr, newtRefArg baseString, newtRefArg paramStrArray)
@@ -510,14 +510,14 @@ newtRef NsStrExactCompare(newtRefArg rcvr, newtRefArg a, newtRefArg b)
 
 
 /*------------------------------------------------------------------------*/
-/** •¶š—ñ‚Ì‘O”¼•”‚ª•”•ª•¶š—ñ‚Æˆê’v‚·‚é‚©ƒ`ƒFƒbƒN‚·‚é
+/** æ–‡å­—åˆ—ã®å‰åŠéƒ¨ãŒéƒ¨åˆ†æ–‡å­—åˆ—ã¨ä¸€è‡´ã™ã‚‹ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param str		[in] •¶š—ñ
- * @param sub		[in] •”•ª•¶š—ñ
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param str		[in] æ–‡å­—åˆ—
+ * @param sub		[in] éƒ¨åˆ†æ–‡å­—åˆ—
  *
- * @retval			TRUE	‘O”¼•”‚ª•”•ª•¶š—ñ‚Æˆê’v‚·‚é
- * @retval			NIL		‘O”¼•”‚ª•”•ª•¶š—ñ‚Æˆê’v‚µ‚È‚¢
+ * @retval			TRUE	å‰åŠéƒ¨ãŒéƒ¨åˆ†æ–‡å­—åˆ—ã¨ä¸€è‡´ã™ã‚‹
+ * @retval			NIL		å‰åŠéƒ¨ãŒéƒ¨åˆ†æ–‡å­—åˆ—ã¨ä¸€è‡´ã—ãªã„
  */
 
 newtRef NsBeginsWith(newtRefArg rcvr, newtRefArg str, newtRefArg sub)
@@ -537,14 +537,14 @@ newtRef NsBeginsWith(newtRefArg rcvr, newtRefArg str, newtRefArg sub)
 
 
 /*------------------------------------------------------------------------*/
-/** •¶š—ñ‚ÌÅŒã”ö‚ª•”•ª•¶š—ñ‚Æˆê’v‚·‚é‚©ƒ`ƒFƒbƒN‚·‚é
+/** æ–‡å­—åˆ—ã®æœ€å¾Œå°¾ãŒéƒ¨åˆ†æ–‡å­—åˆ—ã¨ä¸€è‡´ã™ã‚‹ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
- * @param str		[in] •¶š—ñ
- * @param sub		[in] •”•ª•¶š—ñ
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
+ * @param str		[in] æ–‡å­—åˆ—
+ * @param sub		[in] éƒ¨åˆ†æ–‡å­—åˆ—
  *
- * @retval			TRUE	ÅŒã”ö‚ª•”•ª•¶š—ñ‚Æˆê’v‚·‚é
- * @retval			NIL		ÅŒã”ö‚ª•”•ª•¶š—ñ‚Æˆê’v‚µ‚È‚¢
+ * @retval			TRUE	æœ€å¾Œå°¾ãŒéƒ¨åˆ†æ–‡å­—åˆ—ã¨ä¸€è‡´ã™ã‚‹
+ * @retval			NIL		æœ€å¾Œå°¾ãŒéƒ¨åˆ†æ–‡å­—åˆ—ã¨ä¸€è‡´ã—ãªã„
  */
 
 newtRef NsEndsWith(newtRefArg rcvr, newtRefArg str, newtRefArg sub)

@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------*/
 /**
  * @file	NewtEnv.h
- * @brief   ÀsŠÂ‹«
+ * @brief   å®Ÿè¡Œç’°å¢ƒ
  *
  * @author  M.Nukui
  * @date	2003-11-07
@@ -14,37 +14,37 @@
 #define	NEWTENV_H
 
 
-/* ƒwƒbƒ_ƒtƒ@ƒCƒ‹ */
+/* ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ« */
 #include "NewtType.h"
 #include "NewtMem.h"
 
 
-/* ƒ}ƒNƒ */
-#define NEWT_DEBUG			(newt_env._debug)				///< ƒfƒoƒbƒOƒtƒ‰ƒO
-#define NEWT_TRACE			(newt_env._trace)				///< ƒgƒŒ[ƒXƒtƒ‰ƒO
-#define NEWT_DUMPLEX		(newt_env._dumpLex)				///< ƒ_ƒ“ƒvš‹å‰ğÍƒtƒ‰ƒO
-#define NEWT_DUMPSYNTAX		(newt_env._dumpSyntax)			///< ƒ_ƒ“ƒv\•¶–Øƒtƒ‰ƒO
-#define NEWT_DUMPBC			(newt_env._dumpBC)				///< ƒ_ƒ“ƒvƒoƒCƒgƒR[ƒhƒtƒ‰ƒO
-#define NEWT_POOL			(newt_env.pool)					///< ƒƒ‚ƒŠƒv[ƒ‹
-#define NEWT_SWEEP			(newt_env.sweep)				///< SWEEPƒtƒ‰ƒO
-#define NEWT_NEEDGC			(newt_env.needgc)				///< GCƒtƒ‰ƒO
-#define NEWT_MODE_NOS2		(newt_env.mode.nos2)			///< NOS2 ƒRƒ“ƒpƒ`ƒuƒ‹
+/* ãƒã‚¯ãƒ­ */
+#define NEWT_DEBUG			(newt_env._debug)				///< ãƒ‡ãƒãƒƒã‚°ãƒ•ãƒ©ã‚°
+#define NEWT_TRACE			(newt_env._trace)				///< ãƒˆãƒ¬ãƒ¼ã‚¹ãƒ•ãƒ©ã‚°
+#define NEWT_DUMPLEX		(newt_env._dumpLex)				///< ãƒ€ãƒ³ãƒ—å­—å¥è§£æãƒ•ãƒ©ã‚°
+#define NEWT_DUMPSYNTAX		(newt_env._dumpSyntax)			///< ãƒ€ãƒ³ãƒ—æ§‹æ–‡æœ¨ãƒ•ãƒ©ã‚°
+#define NEWT_DUMPBC			(newt_env._dumpBC)				///< ãƒ€ãƒ³ãƒ—ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ãƒ•ãƒ©ã‚°
+#define NEWT_POOL			(newt_env.pool)					///< ãƒ¡ãƒ¢ãƒªãƒ—ãƒ¼ãƒ«
+#define NEWT_SWEEP			(newt_env.sweep)				///< SWEEPãƒ•ãƒ©ã‚°
+#define NEWT_NEEDGC			(newt_env.needgc)				///< GCãƒ•ãƒ©ã‚°
+#define NEWT_MODE_NOS2		(newt_env.mode.nos2)			///< NOS2 ã‚³ãƒ³ãƒ‘ãƒãƒ–ãƒ«
 
-#define NSSTR(s)			(NewtMakeString(s, false))		///< •¶š—ñƒIƒuƒWƒFƒNƒg‚Ìì¬
-#define NSSTRCONST(s)		(NewtMakeString(s, true))		///< •¶š—ñ’è”ƒIƒuƒWƒFƒNƒg‚Ìì¬
-#define NSINT(n)			(NewtMakeInteger(n))			///< ®”ƒIƒuƒWƒFƒNƒg‚Ìì¬
-#define NSREAL(n)			(NewtMakeReal(n))				///< •‚“®¬”“_ƒIƒuƒWƒFƒNƒg‚Ìì¬
+#define NSSTR(s)			(NewtMakeString(s, false))		///< æ–‡å­—åˆ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ä½œæˆ
+#define NSSTRCONST(s)		(NewtMakeString(s, true))		///< æ–‡å­—åˆ—å®šæ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ä½œæˆ
+#define NSINT(n)			(NewtMakeInteger(n))			///< æ•´æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ä½œæˆ
+#define NSREAL(n)			(NewtMakeReal(n))				///< æµ®å‹•å°æ•°ç‚¹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ä½œæˆ
 
-#define NSSYM0(name)		newt_sym.name					///< •ÛŠÇêŠ‚©‚çƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg‚ğæ“¾
-#define NSSYM(name)			(NewtMakeSymbol(#name))			///< ƒVƒ“ƒ{ƒ‹ƒIƒuƒWƒFƒNƒg‚Ìì¬
+#define NSSYM0(name)		newt_sym.name					///< ä¿ç®¡å ´æ‰€ã‹ã‚‰ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å–å¾—
+#define NSSYM(name)			(NewtMakeSymbol(#name))			///< ã‚·ãƒ³ãƒœãƒ«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ä½œæˆ
 
-#define NSNAMEDMP(name)		(NewtMakeNamedMP(#name))		///< –¼‘O•tƒ}ƒWƒbƒNƒ|ƒCƒ“ƒ^‚Ìì¬
-#define NSNAMEDMP0(name)	(NewtSymbolToMP(NSSYM0(name)))	///< •ÛŠÇêŠ‚©‚ç–¼‘O•tƒ}ƒWƒbƒNƒ|ƒCƒ“ƒ^‚Ìì¬
-#define NSMP(n)				(NewtMakeMagicPointer(0, n))	///< ƒ}ƒWƒbƒNƒ|ƒCƒ“ƒ^‚Ìì¬
+#define NSNAMEDMP(name)		(NewtMakeNamedMP(#name))		///< åå‰ä»˜ãƒã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿ã®ä½œæˆ
+#define NSNAMEDMP0(name)	(NewtSymbolToMP(NSSYM0(name)))	///< ä¿ç®¡å ´æ‰€ã‹ã‚‰åå‰ä»˜ãƒã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿ã®ä½œæˆ
+#define NSMP(n)				(NewtMakeMagicPointer(0, n))	///< ãƒã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿ã®ä½œæˆ
 
-#define NS_CLASS			NSSYM0(__class)					///< class ƒVƒ“ƒ{ƒ‹
-#define NS_INT				NSSYM0(__int)					///< int ƒVƒ“ƒ{ƒ‹
-#define NS_CHAR				NSSYM0(__char)					///< char ƒVƒ“ƒ{ƒ‹
+#define NS_CLASS			NSSYM0(__class)					///< class ã‚·ãƒ³ãƒœãƒ«
+#define NS_INT				NSSYM0(__int)					///< int ã‚·ãƒ³ãƒœãƒ«
+#define NS_CHAR				NSSYM0(__char)					///< char ã‚·ãƒ³ãƒœãƒ«
 
 #define NcGlobalFnExists(r)				NsGlobalFnExists(kNewtRefNIL, r)
 #define NcGetGlobalFn(r)				NsGetGlobalFn(kNewtRefNIL, r)
@@ -67,34 +67,34 @@
 #define NcSetGlobalVar(r, v)			NsDefGlobalVar(kNewtRefNIL, r, v)
 
 
-/// ÀsŠÂ‹«
+/// å®Ÿè¡Œç’°å¢ƒ
 typedef struct {
-    newtRefVar	sym_table;		///< ƒVƒ“ƒ{ƒ‹ƒe[ƒuƒ‹
-    newtRefVar	root;			///< ƒ‹[ƒg
-    newtRefVar	globals;		///< ƒOƒ[ƒoƒ‹•Ï”ƒe[ƒuƒ‹
-    newtRefVar	global_fns;		///< ƒOƒ[ƒoƒ‹ŠÖ”ƒe[ƒuƒ‹
-    newtRefVar	magic_pointers;	///< ƒ}ƒWƒbƒNƒ|ƒCƒ“ƒ^ƒe[ƒuƒ‹
+    newtRefVar	sym_table;		///< ã‚·ãƒ³ãƒœãƒ«ãƒ†ãƒ¼ãƒ–ãƒ«
+    newtRefVar	root;			///< ãƒ«ãƒ¼ãƒˆ
+    newtRefVar	globals;		///< ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•°ãƒ†ãƒ¼ãƒ–ãƒ«
+    newtRefVar	global_fns;		///< ã‚°ãƒ­ãƒ¼ãƒãƒ«é–¢æ•°ãƒ†ãƒ¼ãƒ–ãƒ«
+    newtRefVar	magic_pointers;	///< ãƒã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿ãƒ†ãƒ¼ãƒ–ãƒ«
 
-	// ƒƒ‚ƒŠŠÖŒW
-    newtPool	pool;			///< ƒƒ‚ƒŠƒv[ƒ‹
-    bool		sweep;			///< Œ»İ‚Ì sweep ó‘ÔiƒgƒOƒ‹‚·‚éj
-    bool		needgc;			///< GC ‚ª•K—v
+	// ãƒ¡ãƒ¢ãƒªé–¢ä¿‚
+    newtPool	pool;			///< ãƒ¡ãƒ¢ãƒªãƒ—ãƒ¼ãƒ«
+    bool		sweep;			///< ç¾åœ¨ã® sweep çŠ¶æ…‹ï¼ˆãƒˆã‚°ãƒ«ã™ã‚‹ï¼‰
+    bool		needgc;			///< GC ãŒå¿…è¦
 
-	/// ƒ‚[ƒh
+	/// ãƒ¢ãƒ¼ãƒ‰
 	struct {
-		bool	nos2;			///< NOS2 ƒRƒ“ƒpƒ`ƒuƒ‹
+		bool	nos2;			///< NOS2 ã‚³ãƒ³ãƒ‘ãƒãƒ–ãƒ«
 	} mode;
 
-    // ƒfƒoƒbƒO
-    bool		_debug;			///< ƒfƒoƒbƒOƒtƒ‰ƒO
-    bool		_trace;			///< ƒgƒŒ[ƒXƒtƒ‰ƒO
-    bool		_dumpLex;		///< š‹å‰ğÍƒ_ƒ“ƒvƒtƒ‰ƒO
-    bool		_dumpSyntax;	///< \•¶–Øƒ_ƒ“ƒvƒtƒ‰ƒO
-    bool		_dumpBC;		///< ƒoƒCƒgƒR[ƒhƒ_ƒ“ƒvƒtƒ‰ƒO
+    // ãƒ‡ãƒãƒƒã‚°
+    bool		_debug;			///< ãƒ‡ãƒãƒƒã‚°ãƒ•ãƒ©ã‚°
+    bool		_trace;			///< ãƒˆãƒ¬ãƒ¼ã‚¹ãƒ•ãƒ©ã‚°
+    bool		_dumpLex;		///< å­—å¥è§£æãƒ€ãƒ³ãƒ—ãƒ•ãƒ©ã‚°
+    bool		_dumpSyntax;	///< æ§‹æ–‡æœ¨ãƒ€ãƒ³ãƒ—ãƒ•ãƒ©ã‚°
+    bool		_dumpBC;		///< ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ãƒ€ãƒ³ãƒ—ãƒ•ãƒ©ã‚°
 } newt_env_t;
 
 
-/// ‚æ‚­g‚¤ƒVƒ“ƒ{ƒ‹
+/// ã‚ˆãä½¿ã†ã‚·ãƒ³ãƒœãƒ«
 typedef struct {
     // frame
     newtRefVar	_proto;				///< _proto
@@ -115,8 +115,8 @@ typedef struct {
 
 	/// function
     struct {
-        newtRefVar	native0;		///< function.native0 ircvr‚È‚µj
-        newtRefVar	native;			///< function.native ircvr‚ ‚èj
+        newtRefVar	native0;		///< function.native0 ï¼ˆrcvrãªã—ï¼‰
+        newtRefVar	native;			///< function.native ï¼ˆrcvrã‚ã‚Šï¼‰
     } _function;
 
     newtRefVar	funcPtr;			///< funcPtr
@@ -142,7 +142,7 @@ typedef struct {
     newtRefVar	weird_immediate;	///< weird_immediate
     newtRefVar	forEachState;		///< forEachState
 
-    // functionsi•K{j
+    // functionsï¼ˆå¿…é ˆï¼‰
     newtRefVar	hasVariable;		///< hasVariable
     newtRefVar	hasVar;				///< hasVar
     newtRefVar	defGlobalFn;		///< defGlobalFn
@@ -214,12 +214,12 @@ typedef struct {
 } newt_sym_t;
 
 
-/* ƒOƒ[ƒoƒ‹•Ï” */
-extern newt_env_t	newt_env;		///< ÀsŠÂ‹«
-extern newt_sym_t	newt_sym;		///< ‚æ‚­g‚¤ƒVƒ“ƒ{ƒ‹‚Ì•ÛŠÇêŠ
+/* ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•° */
+extern newt_env_t	newt_env;		///< å®Ÿè¡Œç’°å¢ƒ
+extern newt_sym_t	newt_sym;		///< ã‚ˆãä½¿ã†ã‚·ãƒ³ãƒœãƒ«ã®ä¿ç®¡å ´æ‰€
 
 
-/* ŠÖ”ƒvƒƒgƒ^ƒCƒv */
+/* é–¢æ•°ãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ— */
 
 #ifdef __cplusplus
 extern "C" {

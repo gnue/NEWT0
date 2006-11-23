@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------*/
 /**
  * @file	NewtFile.h
- * @brief   ƒtƒ@ƒCƒ‹ˆ—
+ * @brief   ãƒ•ã‚¡ã‚¤ãƒ«å‡¦ç†
  *
  * @author  M.Nukui
  * @date	2004-01-25
@@ -14,11 +14,11 @@
 #define	NEWTFILE_H
 
 
-/* ƒwƒbƒ_ƒtƒ@ƒCƒ‹ */
+/* ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ« */
 #include "NewtType.h"
 
 
-/* ƒ}ƒNƒ */
+/* ãƒã‚¯ãƒ­ */
 #define NcLoadLib(r)				NsLoadLib(kNewtRefNIL, r)
 #define NcLoad(r)					NsLoad(kNewtRefNIL, r)
 #define NcRequire(r)				NsRequire(kNewtRefNIL, r)
@@ -30,7 +30,7 @@
 #define NcExpandPath(r)				NsExpandPath(kNewtRefNIL, r)
 
 
-/* ŠÖ”ƒvƒƒgƒ^ƒCƒv */
+/* é–¢æ•°ãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ— */
 
 #ifdef __cplusplus
 extern "C" {

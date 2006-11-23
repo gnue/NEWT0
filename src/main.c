@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------*/
 /**
  * @file	main.c
- * @brief   ƒƒCƒ“ŠÖ”iCUI ƒRƒ}ƒ“ƒhj
+ * @brief   ãƒ¡ã‚¤ãƒ³é–¢æ•°ï¼ˆCUI ã‚³ãƒãƒ³ãƒ‰ï¼‰
  *
  * @author  M.Nukui
  * @date	2003-11-07
@@ -10,7 +10,7 @@
  */
 
 
-/* ƒwƒbƒ_ƒtƒ@ƒCƒ‹ */
+/* ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ« */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -25,9 +25,9 @@
 #include "version.h"
 
 
-/* ’è” */
+/* å®šæ•° */
 
-/// ƒIƒvƒVƒ‡ƒ“
+/// ã‚ªãƒ—ã‚·ãƒ§ãƒ³
 enum {
     optNone			= 0,
     optNos2,
@@ -37,11 +37,11 @@ enum {
 };
 
 
-/* ƒ[ƒJƒ‹•Ï” */
+/* ãƒ­ãƒ¼ã‚«ãƒ«å¤‰æ•° */
 
-/// ƒIƒvƒVƒ‡ƒ“ƒL[ƒ[ƒh‚Ìƒ‹ƒbƒNƒAƒbƒvƒe[ƒuƒ‹
+/// ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰ã®ãƒ«ãƒƒã‚¯ã‚¢ãƒƒãƒ—ãƒ†ãƒ¼ãƒ–ãƒ«
 static keyword_t	reserved_words[] = {
-        // ƒAƒ‹ƒtƒ@ƒxƒbƒg‡‚Éƒ\[ƒg‚µ‚Ä‚¨‚­‚±‚Æ
+        // ã‚¢ãƒ«ãƒ•ã‚¡ãƒ™ãƒƒãƒˆé †ã«ã‚½ãƒ¼ãƒˆã—ã¦ãŠãã“ã¨
         {"copyright",	optCopyright},
         {"newton",		optNos2},
         {"nos2",		optNos2},
@@ -50,11 +50,11 @@ static keyword_t	reserved_words[] = {
     };
 
 
-/// ì‹ÆƒfƒBƒŒƒNƒgƒŠ
+/// ä½œæ¥­ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
 static const char *		newt_currdir;
 
 
-/* ŠÖ”ƒvƒƒgƒ^ƒCƒv */
+/* é–¢æ•°ãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ— */
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -89,12 +89,12 @@ static newtErr  newt_option_with_arg(char c, int argc, const char * argv[], int 
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** Œ‹‰Ê‚ğ•\¦
+/** çµæœã‚’è¡¨ç¤º
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
- * @param err		[in] ƒGƒ‰[ƒR[ƒh
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param err		[in] ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void newt_result_message(newtRefArg r, newtErr err)
@@ -108,13 +108,13 @@ void newt_result_message(newtRefArg r, newtErr err)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“ˆø”‚Åw’è‚³‚ê‚½ŠÖ”‚Ìî•ñ‚ğ•\¦
+/** ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å¼•æ•°ã§æŒ‡å®šã•ã‚ŒãŸé–¢æ•°ã®æƒ…å ±ã‚’è¡¨ç¤º
  *
- * @param argc		[in] ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“ˆø”‚Ì”
- * @param argv		[in] ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“ˆø”‚Ì”z—ñ
- * @param n			[in] ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“ˆø”‚ÌˆÊ’u
+ * @param argc		[in] ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å¼•æ•°ã®æ•°
+ * @param argv		[in] ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å¼•æ•°ã®é…åˆ—
+ * @param n			[in] ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å¼•æ•°ã®ä½ç½®
  *
- * @return			ƒGƒ‰[ƒR[ƒh
+ * @return			ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  */
 
 newtErr newt_info(int argc, const char * argv[], int n)
@@ -134,7 +134,7 @@ newtErr newt_info(int argc, const char * argv[], int n)
         }
     }
     else
-    {   //ˆø”‚ª‚È‚¢ê‡‚ÍŠÖ”ˆê——‚ğ•\¦
+    {   //å¼•æ•°ãŒãªã„å ´åˆã¯é–¢æ•°ä¸€è¦§ã‚’è¡¨ç¤º
         err = NVMInfo(NULL);
         NewtErrMessage(err);
     }
@@ -146,13 +146,13 @@ newtErr newt_info(int argc, const char * argv[], int n)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“ˆø”‚Åw’è‚³‚ê‚½•¶š—ñ‚ğƒCƒ“ƒ^ƒvƒŠƒ^Às‚·‚é
+/** ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å¼•æ•°ã§æŒ‡å®šã•ã‚ŒãŸæ–‡å­—åˆ—ã‚’ã‚¤ãƒ³ã‚¿ãƒ—ãƒªã‚¿å®Ÿè¡Œã™ã‚‹
  *
- * @param argc		[in] ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“ˆø”‚Ì”
- * @param argv		[in] ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“ˆø”‚Ì”z—ñ
- * @param n			[in] ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“ˆø”‚ÌˆÊ’u
+ * @param argc		[in] ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å¼•æ•°ã®æ•°
+ * @param argv		[in] ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å¼•æ•°ã®é…åˆ—
+ * @param n			[in] ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å¼•æ•°ã®ä½ç½®
  *
- * @return			ƒGƒ‰[ƒR[ƒh
+ * @return			ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  */
 
 newtErr newt_interpret_str(int argc, const char * argv[], int n)
@@ -171,13 +171,13 @@ newtErr newt_interpret_str(int argc, const char * argv[], int n)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒtƒ@ƒCƒ‹‚ğƒCƒ“ƒ^ƒvƒŠƒ^Às‚·‚é
+/** ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ã‚¤ãƒ³ã‚¿ãƒ—ãƒªã‚¿å®Ÿè¡Œã™ã‚‹
  *
- * @param argc		[in] ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“ˆø”‚Ì”
- * @param argv		[in] ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“ˆø”‚Ì”z—ñ
- * @param n			[in] ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“ˆø”‚ÌˆÊ’u
+ * @param argc		[in] ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å¼•æ•°ã®æ•°
+ * @param argv		[in] ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å¼•æ•°ã®é…åˆ—
+ * @param n			[in] ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å¼•æ•°ã®ä½ç½®
  *
- * @return			ƒGƒ‰[ƒR[ƒh
+ * @return			ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  */
 
 newtErr newt_interpret_file(int argc, const char * argv[], int n)
@@ -204,7 +204,7 @@ newtErr newt_interpret_file(int argc, const char * argv[], int n)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ì‹ÆƒfƒBƒŒƒNƒgƒŠ‚ğ•ÏX */
+/** ä½œæ¥­ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’å¤‰æ›´ */
 void newt_chdir(void)
 {
 #ifdef HAVE_CHDIR 
@@ -216,14 +216,14 @@ void newt_chdir(void)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ƒRƒs[ƒ‰ƒCƒg‚ğ•\¦ */
+/** ã‚³ãƒ”ãƒ¼ãƒ©ã‚¤ãƒˆã‚’è¡¨ç¤º */
 void newt_show_copyright(void)
 {
     fprintf(stderr, "%s - %s\n", NEWT_NAME, NEWT_COPYRIGHT);
 }
 
 
-/** ƒo[ƒWƒ‡ƒ“î•ñ‚ğ•\¦ */
+/** ãƒãƒ¼ã‚¸ãƒ§ãƒ³æƒ…å ±ã‚’è¡¨ç¤º */
 void newt_show_version(void)
 {
     fprintf(stderr, "%s%s %s(%s)\n", NEWT_NAME, NEWT_PROTO,
@@ -231,7 +231,7 @@ void newt_show_version(void)
 }
 
 
-/** ƒXƒ^ƒbƒtî•ñ‚ğ•\¦ */
+/** ã‚¹ã‚¿ãƒƒãƒ•æƒ…å ±ã‚’è¡¨ç¤º */
 void newt_show_staff(void)
 {
     fprintf(stderr, "%s%s %s\n\n%s\n", NEWT_NAME, NEWT_PROTO, NEWT_VERSION,
@@ -239,7 +239,7 @@ void newt_show_staff(void)
 }
 
 
-/** g—p–@‚ğ•\¦ */
+/** ä½¿ç”¨æ³•ã‚’è¡¨ç¤º */
 void newt_show_usage(void)
 {
     fprintf(stderr, "Usage: %s %s\n%s", NEWT_NAME, NEWT_PARAMS, NEWT_USAGE);
@@ -248,11 +248,11 @@ void newt_show_usage(void)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ƒIƒvƒVƒ‡ƒ“ƒGƒ‰[‚ğ•\¦
+/** ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã‚¨ãƒ©ãƒ¼ã‚’è¡¨ç¤º
  *
- * @param c			[in] ƒIƒvƒVƒ‡ƒ“•¶š
+ * @param c			[in] ã‚ªãƒ—ã‚·ãƒ§ãƒ³æ–‡å­—
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void newt_invalid_option(char c)
@@ -262,11 +262,11 @@ void newt_invalid_option(char c)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒvƒVƒ‡ƒ“ƒXƒCƒbƒ`‚Ì‰ğÍ
+/** ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã‚¹ã‚¤ãƒƒãƒã®è§£æ
  *
- * @param s			[in] ƒIƒvƒVƒ‡ƒ“ƒXƒCƒbƒ`
+ * @param s			[in] ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã‚¹ã‚¤ãƒƒãƒ
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void newt_option_switchs(const char * s)
@@ -317,11 +317,11 @@ void newt_option_switchs(const char * s)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒvƒVƒ‡ƒ“•¶š—ñ‚Ì‰ğÍ
+/** ã‚ªãƒ—ã‚·ãƒ§ãƒ³æ–‡å­—åˆ—ã®è§£æ
  *
- * @param s			[in] ƒIƒvƒVƒ‡ƒ“•¶š—ñ
+ * @param s			[in] ã‚ªãƒ—ã‚·ãƒ§ãƒ³æ–‡å­—åˆ—
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void newt_option(const char * s)
@@ -332,24 +332,24 @@ void newt_option(const char * s)
 
     switch (lookup_words(reserved_words, wlen, s))
     {
-		// NOS2 ƒRƒ“ƒpƒ`ƒuƒ‹
+		// NOS2 ã‚³ãƒ³ãƒ‘ãƒãƒ–ãƒ«
 		case optNos2:
 			NEWT_MODE_NOS2 = true;
 			break;
 
-        // ƒRƒs[ƒ‰ƒCƒg
+        // ã‚³ãƒ”ãƒ¼ãƒ©ã‚¤ãƒˆ
         case optCopyright:
             newt_show_copyright();
             exit(0);
             break;
 
-        // ƒo[ƒWƒ‡ƒ“
+        // ãƒãƒ¼ã‚¸ãƒ§ãƒ³
         case optVersion:
             newt_show_version();
             exit(0);
             break;
 
-        // ƒXƒ^ƒbƒtƒ[ƒ‹
+        // ã‚¹ã‚¿ãƒƒãƒ•ãƒ­ãƒ¼ãƒ«
         case optStaff:
             newt_show_staff();
             exit(0);
@@ -359,14 +359,14 @@ void newt_option(const char * s)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒvƒVƒ‡ƒ“‚Ìˆø”‚ğ‰ğÍ‚·‚é
+/** ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã®å¼•æ•°ã‚’è§£æã™ã‚‹
  *
- * @param c			[in] ƒIƒvƒVƒ‡ƒ“•¶š
- * @param argc		[in] ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“ˆø”‚Ì”
- * @param argv		[in] ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“ˆø”‚Ì”z—ñ
- * @param n			[in] ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“ˆø”‚ÌˆÊ’u
+ * @param c			[in] ã‚ªãƒ—ã‚·ãƒ§ãƒ³æ–‡å­—
+ * @param argc		[in] ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å¼•æ•°ã®æ•°
+ * @param argv		[in] ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å¼•æ•°ã®é…åˆ—
+ * @param n			[in] ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å¼•æ•°ã®ä½ç½®
  *
- * @return			ƒGƒ‰[ƒR[ƒh
+ * @return			ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  */
 
 newtErr newt_option_with_arg(char c, int argc, const char * argv[], int n)
@@ -391,14 +391,14 @@ newtErr newt_option_with_arg(char c, int argc, const char * argv[], int n)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** main ŠÖ”iCUI ƒRƒ}ƒ“ƒh)
+/** main é–¢æ•°ï¼ˆCUI ã‚³ãƒãƒ³ãƒ‰)
  *
- * @brief NewtonScript ƒCƒ“ƒ^ƒvƒŠƒ^
+ * @brief NewtonScript ã‚¤ãƒ³ã‚¿ãƒ—ãƒªã‚¿
  *
- * @param argc		[in] ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“ˆø”‚Ì”
- * @param argv		[in] ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“ˆø”‚Ì”z—ñ
+ * @param argc		[in] ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å¼•æ•°ã®æ•°
+ * @param argv		[in] ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å¼•æ•°ã®é…åˆ—
  *
- * @return			ƒGƒ‰[ƒR[ƒh
+ * @return			ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰
  */
 
 int main (int argc, const char * argv[])
@@ -450,11 +450,11 @@ int main (int argc, const char * argv[])
 
 
 /*------------------------------------------------------------------------*/
-/** ƒp[ƒTƒGƒ‰[
+/** ãƒ‘ãƒ¼ã‚µã‚¨ãƒ©ãƒ¼
  *
- * @param s			[in] ƒGƒ‰[ƒƒbƒZ[ƒW•¶š—ñ
+ * @param s			[in] ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸æ–‡å­—åˆ—
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void yyerror(char * s)

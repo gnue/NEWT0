@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------*/
 /**
  * @file	NewtGC.c
- * @brief   ƒKƒx[ƒWƒRƒŒƒNƒVƒ‡ƒ“
+ * @brief   ã‚¬ãƒ™ãƒ¼ã‚¸ã‚³ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³
  *
  * @author  M.Nukui
  * @date	2003-11-07
@@ -10,7 +10,7 @@
  */
 
 
-/* ƒwƒbƒ_ƒtƒ@ƒCƒ‹ */
+/* ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ« */
 #ifdef HAVE_MEMORY_H
 	#include <memory.h>
 #else
@@ -27,7 +27,7 @@
 #include "NewtPrint.h"
 
 
-/* ŠÖ”ƒvƒƒgƒ^ƒCƒv */
+/* é–¢æ•°ãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ— */
 static void		NewtPoolSnap(const char * title, newtPool pool, int32_t usesize);
 
 static void		NewtObjChain(newtObjRef * objp, newtObjRef obj);
@@ -49,13 +49,13 @@ static void		NewtGCMark(vm_env_t * env, bool mark);
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ƒƒ‚ƒŠƒv[ƒ‹‚ÌƒXƒiƒbƒvƒVƒ‡ƒbƒg‚ğo—Í‚·‚é
+/** ãƒ¡ãƒ¢ãƒªãƒ—ãƒ¼ãƒ«ã®ã‚¹ãƒŠãƒƒãƒ—ã‚·ãƒ§ãƒƒãƒˆã‚’å‡ºåŠ›ã™ã‚‹
  *
- * @param title		[in] ƒ^ƒCƒgƒ‹
- * @param pool		[in] ƒƒ‚ƒŠƒv[ƒ‹
- * @param usesize	[in] GC‘O‚Ìg—pƒTƒCƒY
+ * @param title		[in] ã‚¿ã‚¤ãƒˆãƒ«
+ * @param pool		[in] ãƒ¡ãƒ¢ãƒªãƒ—ãƒ¼ãƒ«
+ * @param usesize	[in] GCå‰ã®ä½¿ç”¨ã‚µã‚¤ã‚º
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NewtPoolSnap(const char * title, newtPool pool, int32_t usesize)
@@ -66,14 +66,14 @@ void NewtPoolSnap(const char * title, newtPool pool, int32_t usesize)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒgƒf[ƒ^‚ğƒ`ƒFƒCƒ“‚·‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿ã‚’ãƒã‚§ã‚¤ãƒ³ã™ã‚‹
  *
- * @param objp		[in] ƒ`ƒFƒCƒ“‚³‚ê‚éƒIƒuƒWƒFƒNƒgƒf[ƒ^‚Ö‚Ìƒ|ƒCƒ“ƒ^
- * @param obj		[in] ƒ`ƒFƒCƒ“‚·‚éƒIƒuƒWƒFƒNƒgƒf[ƒ^
+ * @param objp		[in] ãƒã‚§ã‚¤ãƒ³ã•ã‚Œã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿ã¸ã®ãƒã‚¤ãƒ³ã‚¿
+ * @param obj		[in] ãƒã‚§ã‚¤ãƒ³ã™ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  *
- * @note			objp ‚ÌQÆæ‚ª NULL ‚Ìê‡‚Í obj ‚ğƒZƒbƒg‚µ‚Ä•Ô‚·
+ * @note			objp ã®å‚ç…§å…ˆãŒ NULL ã®å ´åˆã¯ obj ã‚’ã‚»ãƒƒãƒˆã—ã¦è¿”ã™
  */
 
 void NewtObjChain(newtObjRef * objp, newtObjRef obj)
@@ -91,13 +91,13 @@ void NewtObjChain(newtObjRef * objp, newtObjRef obj)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒƒ‚ƒŠƒv[ƒ‹“à‚ÅƒIƒuƒWƒFƒNƒgƒf[ƒ^‚ğƒ`ƒFƒCƒ“‚·‚é
+/** ãƒ¡ãƒ¢ãƒªãƒ—ãƒ¼ãƒ«å†…ã§ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿ã‚’ãƒã‚§ã‚¤ãƒ³ã™ã‚‹
  *
- * @param pool		[in] ƒƒ‚ƒŠƒv[ƒ‹
- * @param obj		[in] ƒ`ƒFƒCƒ“‚·‚éƒIƒuƒWƒFƒNƒgƒf[ƒ^
- * @param literal	[in] ƒŠƒeƒ‰ƒ‹‚©‚Ç‚¤‚©
+ * @param pool		[in] ãƒ¡ãƒ¢ãƒªãƒ—ãƒ¼ãƒ«
+ * @param obj		[in] ãƒã‚§ã‚¤ãƒ³ã™ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿
+ * @param literal	[in] ãƒªãƒ†ãƒ©ãƒ«ã‹ã©ã†ã‹
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NewtPoolChain(newtPool pool, newtObjRef obj, bool literal)
@@ -113,12 +113,12 @@ void NewtPoolChain(newtPool pool, newtObjRef obj, bool literal)
 
 
 /*------------------------------------------------------------------------*/
-/** GC‚ª•K—v‚©ƒ`ƒFƒbƒN‚·‚é
+/** GCãŒå¿…è¦ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
  *
- * @param pool		[in] ƒƒ‚ƒŠƒv[ƒ‹
- * @param size		[in] ’Ç‰ÁƒTƒCƒY
+ * @param pool		[in] ãƒ¡ãƒ¢ãƒªãƒ—ãƒ¼ãƒ«
+ * @param size		[in] è¿½åŠ ã‚µã‚¤ã‚º
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NewtCheckGC(newtPool pool, size_t size)
@@ -131,13 +131,13 @@ void NewtCheckGC(newtPool pool, size_t size)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒƒ‚ƒŠƒv[ƒ‹“à‚ÅƒIƒuƒWƒFƒNƒgƒƒ‚ƒŠ‚ğŠm•Û‚µ‚Äƒ`ƒFƒCƒ“‚·‚é
+/** ãƒ¡ãƒ¢ãƒªãƒ—ãƒ¼ãƒ«å†…ã§ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ¡ãƒ¢ãƒªã‚’ç¢ºä¿ã—ã¦ãƒã‚§ã‚¤ãƒ³ã™ã‚‹
  *
- * @param pool		[in] ƒƒ‚ƒŠƒv[ƒ‹
- * @param size		[in] ƒIƒuƒWƒFƒNƒgƒTƒCƒY
- * @param dataSize	[in] ƒf[ƒ^ƒTƒCƒY
+ * @param pool		[in] ãƒ¡ãƒ¢ãƒªãƒ—ãƒ¼ãƒ«
+ * @param size		[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚µã‚¤ã‚º
+ * @param dataSize	[in] ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º
  *
- * @return			ƒIƒuƒWƒFƒNƒgƒf[ƒ^
+ * @return			ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿
  */
 
 newtObjRef NewtObjChainAlloc(newtPool pool, size_t size, size_t dataSize)
@@ -182,12 +182,12 @@ newtObjRef NewtObjChainAlloc(newtPool pool, size_t size, size_t dataSize)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚ğ‰ğ•ú‚·‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’è§£æ”¾ã™ã‚‹
  *
- * @param pool		[in] ƒƒ‚ƒŠƒv[ƒ‹
- * @param obj		[in] ƒIƒuƒWƒFƒNƒg
+ * @param pool		[in] ãƒ¡ãƒ¢ãƒªãƒ—ãƒ¼ãƒ«
+ * @param obj		[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NewtObjFree(newtPool pool, newtObjRef obj)
@@ -214,12 +214,12 @@ void NewtObjFree(newtPool pool, newtObjRef obj)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒgƒf[ƒ^‚Éƒ`ƒFƒCƒ“‚³‚ê‚Ä‚¢‚é‘S‚Ä‚ÌƒIƒuƒWƒFƒNƒgƒf[ƒ^‚ğ‰ğ•ú‚·‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿ã«ãƒã‚§ã‚¤ãƒ³ã•ã‚Œã¦ã„ã‚‹å…¨ã¦ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿ã‚’è§£æ”¾ã™ã‚‹
  *
- * @param pool		[in] ƒƒ‚ƒŠƒv[ƒ‹
- * @param objp		[i/o]ƒIƒuƒWƒFƒNƒgƒf[ƒ^‚Ö‚Ìƒ|ƒCƒ“ƒ^
+ * @param pool		[in] ãƒ¡ãƒ¢ãƒªãƒ—ãƒ¼ãƒ«
+ * @param objp		[i/o]ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ‡ãƒ¼ã‚¿ã¸ã®ãƒã‚¤ãƒ³ã‚¿
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NewtObjChainFree(newtPool pool, newtObjRef * objp)
@@ -238,11 +238,11 @@ void NewtObjChainFree(newtPool pool, newtObjRef * objp)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒƒ‚ƒŠƒv[ƒ‹‚Ì‰ğ•ú
+/** ãƒ¡ãƒ¢ãƒªãƒ—ãƒ¼ãƒ«ã®è§£æ”¾
  *
- * @param pool		[in] ƒƒ‚ƒŠƒv[ƒ‹
+ * @param pool		[in] ãƒ¡ãƒ¢ãƒªãƒ—ãƒ¼ãƒ«
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NewtPoolRelease(newtPool pool)
@@ -265,11 +265,11 @@ void NewtPoolRelease(newtPool pool)
 #pragma mark -
 #if 0
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚Ìƒ}[ƒN‚ğƒNƒŠƒA‚·‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ãƒãƒ¼ã‚¯ã‚’ã‚¯ãƒªã‚¢ã™ã‚‹
  *
- * @param pool		[in] ƒƒ‚ƒŠƒv[ƒ‹
+ * @param pool		[in] ãƒ¡ãƒ¢ãƒªãƒ—ãƒ¼ãƒ«
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NewtPoolMarkClean(newtPool pool)
@@ -304,12 +304,12 @@ void NewtPoolMarkClean(newtPool pool)
 #endif
 
 /*------------------------------------------------------------------------*/
-/** ƒƒ‚ƒŠƒv[ƒ‹“à‚ÌƒIƒuƒWƒFƒNƒg‚ğƒXƒEƒB[ƒvi‘|œj‚·‚é
+/** ãƒ¡ãƒ¢ãƒªãƒ—ãƒ¼ãƒ«å†…ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ã‚¹ã‚¦ã‚£ãƒ¼ãƒ—ï¼ˆæƒé™¤ï¼‰ã™ã‚‹
  *
- * @param pool		[in] ƒƒ‚ƒŠƒv[ƒ‹
- * @param mark		[in] ƒ}[ƒNƒtƒ‰ƒO
+ * @param pool		[in] ãƒ¡ãƒ¢ãƒªãƒ—ãƒ¼ãƒ«
+ * @param mark		[in] ãƒãƒ¼ã‚¯ãƒ•ãƒ©ã‚°
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NewtPoolSweep(newtPool pool, bool mark)
@@ -359,12 +359,12 @@ void NewtPoolSweep(newtPool pool, bool mark)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒIƒuƒWƒFƒNƒg‚ğƒ}[ƒN‚·‚é
+/** ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒãƒ¼ã‚¯ã™ã‚‹
  *
- * @param r			[in] ƒIƒuƒWƒFƒNƒg
- * @param mark		[in] ƒ}[ƒNƒtƒ‰ƒO
+ * @param r			[in] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param mark		[in] ãƒãƒ¼ã‚¯ãƒ•ãƒ©ã‚°
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NewtGCRefMark(newtRefArg r, bool mark)
@@ -405,12 +405,12 @@ void NewtGCRefMark(newtRefArg r, bool mark)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒŒƒWƒXƒ^“à‚ÌƒIƒuƒWƒFƒNƒg‚ğƒ}[ƒN‚·‚é
+/** ãƒ¬ã‚¸ã‚¹ã‚¿å†…ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒãƒ¼ã‚¯ã™ã‚‹
  *
- * @param reg		[in] ƒŒƒWƒXƒ^
- * @param mark		[in] ƒ}[ƒNƒtƒ‰ƒO
+ * @param reg		[in] ãƒ¬ã‚¸ã‚¹ã‚¿
+ * @param mark		[in] ãƒãƒ¼ã‚¯ãƒ•ãƒ©ã‚°
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NewtGCRegMark(vm_reg_t * reg, bool mark)
@@ -423,12 +423,12 @@ void NewtGCRegMark(vm_reg_t * reg, bool mark)
 
 
 /*------------------------------------------------------------------------*/
-/** ƒXƒ^ƒbƒN“à‚ÌƒIƒuƒWƒFƒNƒg‚ğƒ}[ƒN‚·‚é
+/** ã‚¹ã‚¿ãƒƒã‚¯å†…ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒãƒ¼ã‚¯ã™ã‚‹
  *
- * @param env		[in] ÀsŠÂ‹«
- * @param mark		[in] ƒ}[ƒNƒtƒ‰ƒO
+ * @param env		[in] å®Ÿè¡Œç’°å¢ƒ
+ * @param mark		[in] ãƒãƒ¼ã‚¯ãƒ•ãƒ©ã‚°
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NewtGCStackMark(vm_env_t * env, bool mark)
@@ -437,7 +437,7 @@ void NewtGCStackMark(vm_env_t * env, bool mark)
     vm_reg_t *	callstack;
     uint32_t	i;
 
-    // ƒXƒ^ƒbƒN
+    // ã‚¹ã‚¿ãƒƒã‚¯
     stack = (newtRef *)env->stack.stackp;
 
     for (i = 0; i < env->reg.sp; i++)
@@ -445,7 +445,7 @@ void NewtGCStackMark(vm_env_t * env, bool mark)
         NewtGCRefMark(stack[i], mark);
     }
 
-    // ŠÖ”ŒÄo‚µƒXƒ^ƒbƒN
+    // é–¢æ•°å‘¼å‡ºã—ã‚¹ã‚¿ãƒƒã‚¯
     callstack = (vm_reg_t *)env->callstack.stackp;
 
     for (i = 0; i < env->callstack.sp; i++)
@@ -453,7 +453,7 @@ void NewtGCStackMark(vm_env_t * env, bool mark)
         NewtGCRegMark(&callstack[i], mark);
     }
 
-    // —áŠOƒnƒ“ƒhƒ‰EƒXƒ^ƒbƒN
+    // ä¾‹å¤–ãƒãƒ³ãƒ‰ãƒ©ãƒ»ã‚¹ã‚¿ãƒƒã‚¯
     NewtGCRefMark(env->currexcp, mark);
 
 /*
@@ -474,12 +474,12 @@ void NewtGCStackMark(vm_env_t * env, bool mark)
 
 
 /*------------------------------------------------------------------------*/
-/** QÆ‚³‚ê‚Ä‚¢‚éƒIƒuƒWƒFƒNƒg‚ğƒ}[ƒN‚·‚é
+/** å‚ç…§ã•ã‚Œã¦ã„ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒãƒ¼ã‚¯ã™ã‚‹
  *
- * @param env		[in] ÀsŠÂ‹«
- * @param mark		[in] ƒ}[ƒNƒtƒ‰ƒO
+ * @param env		[in] å®Ÿè¡Œç’°å¢ƒ
+ * @param mark		[in] ãƒãƒ¼ã‚¯ãƒ•ãƒ©ã‚°
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NewtGCMark(vm_env_t * env, bool mark)
@@ -489,18 +489,18 @@ void NewtGCMark(vm_env_t * env, bool mark)
 //    NewtGCRefMark(NSGetGlobalFns(), mark);
 //    NewtGCRefMark(NSGetMagicPointers(), mark);
 
-    // ƒŒƒWƒXƒ^
+    // ãƒ¬ã‚¸ã‚¹ã‚¿
     NewtGCRegMark(&env->reg, mark);
 
-    // ƒXƒ^ƒbƒN
+    // ã‚¹ã‚¿ãƒƒã‚¯
     NewtGCStackMark(env, mark);
 }
 
 
 /*------------------------------------------------------------------------*/
-/** ƒKƒx[ƒWƒRƒŒƒNƒVƒ‡ƒ“‚ÌÀs
+/** ã‚¬ãƒ™ãƒ¼ã‚¸ã‚³ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³ã®å®Ÿè¡Œ
  *
- * @return			‚È‚µ
+ * @return			ãªã—
  */
 
 void NewtGC(void)
@@ -516,13 +516,13 @@ void NewtGC(void)
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
-/** ƒXƒNƒŠƒvƒg‚©‚ç GC@‚ğŒÄo‚·iÀÛ‚É‚Í GC ‚ğ—\–ñ‚·‚é‚¾‚¯j
+/** ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‹ã‚‰ GCã€€ã‚’å‘¼å‡ºã™ï¼ˆå®Ÿéš›ã«ã¯ GC ã‚’äºˆç´„ã™ã‚‹ã ã‘ï¼‰
  *
- * @param rcvr		[in] ƒŒƒV[ƒo
+ * @param rcvr		[in] ãƒ¬ã‚·ãƒ¼ãƒ
  *
  * @return			NIL
  *
- * @note			ƒXƒNƒŠƒvƒg‚©‚ç‚ÌŒÄo‚µ—p
+ * @note			ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‹ã‚‰ã®å‘¼å‡ºã—ç”¨
  */
 
 newtRef	NsGC(newtRefArg rcvr)

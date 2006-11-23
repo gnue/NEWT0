@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------*/
 /**
  * @file	NewtIconv.h
- * @brief   •¶šƒR[ƒhˆ—ilibiconvg—pj
+ * @brief   æ–‡å­—ã‚³ãƒ¼ãƒ‰å‡¦ç†ï¼ˆlibiconvä½¿ç”¨ï¼‰
  *
  * @author  M.Nukui
  * @date	2005-07-17
@@ -14,7 +14,7 @@
 #define	NEWTICONV_H
 
 
-/* ƒwƒbƒ_ƒtƒ@ƒCƒ‹ */
+/* ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ« */
 #include "NewtType.h"
 
 
@@ -22,10 +22,10 @@
 #include <iconv.h>
 
 
-/* ƒ}ƒNƒ */
+/* ãƒã‚¯ãƒ­ */
 
 
-/* ŠÖ”ƒvƒƒgƒ^ƒCƒv */
+/* é–¢æ•°ãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ— */
 
 #ifdef __cplusplus
 extern "C" {

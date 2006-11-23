@@ -1,7 +1,7 @@
 //--------------------------------------------------------------------------
 /**
  * @file  NewtLib.h
- * @brief Šg’£ƒ‰ƒCƒuƒ‰ƒŠ
+ * @brief æ‹¡å¼µãƒ©ã‚¤ãƒ–ãƒ©ãƒª
  *
  * @author M.Nukui
  * @date 2004-06-10
@@ -14,18 +14,18 @@
 #define	NEWTLIB_H
 
 
-/* ƒwƒbƒ_ƒtƒ@ƒCƒ‹ */
+/* ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ« */
 #include "NewtType.h"
 
 
-/* ŠÖ”ƒvƒƒgƒ^ƒCƒv */
+/* é–¢æ•°ãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ— */
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 
-void	newt_install(void);		///< Šg’£ƒ‰ƒCƒuƒ‰ƒŠ‚ÌƒGƒ“ƒgƒŠƒ|ƒCƒ“ƒgiƒCƒ“ƒXƒg[ƒ‹j
+void	newt_install(void);		///< æ‹¡å¼µãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®ã‚¨ãƒ³ãƒˆãƒªãƒã‚¤ãƒ³ãƒˆï¼ˆã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ï¼‰
 
 
 #ifdef __cplusplus

@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------*/
 /**
  * @file	NewtBC.h
- * @brief   ƒoƒCƒgƒR[ƒh‚Ì¶¬
+ * @brief   ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã®ç”Ÿæˆ
  *
  * @author  M.Nukui
  * @date	2003-11-07
@@ -13,22 +13,22 @@
 #ifndef	NEWTBC_H
 #define	NEWTBC_H
 
-/* ƒwƒbƒ_ƒtƒ@ƒCƒ‹ */
+/* ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ« */
 #include "NewtType.h"
 #include "NewtParser.h"
 
 
-/* ƒ}ƒNƒ */
+/* ãƒã‚¯ãƒ­ */
 
 // Instruction Code
-#define kNBCFieldMask				0x07		///< ƒoƒCƒgƒR[ƒhƒtƒB[ƒ‹ƒh‚Ìƒ}ƒXƒN
+#define kNBCFieldMask				0x07		///< ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®ãƒã‚¹ã‚¯
 
-#define	kNBCInstructionsLen			26			///< –½—ßƒZƒbƒgƒe[ƒuƒ‹‚Ì’·‚³
-#define	kNBCSimpleInstructionsLen	8			///< ƒVƒ“ƒvƒ‹–½—ßƒZƒbƒgƒe[ƒuƒ‹‚Ì’·‚³
-#define	kBCFuncsLen					25			///< ŠÖ”ƒe[ƒuƒ‹‚Ì’·‚³
+#define	kNBCInstructionsLen			26			///< å‘½ä»¤ã‚»ãƒƒãƒˆãƒ†ãƒ¼ãƒ–ãƒ«ã®é•·ã•
+#define	kNBCSimpleInstructionsLen	8			///< ã‚·ãƒ³ãƒ—ãƒ«å‘½ä»¤ã‚»ãƒƒãƒˆãƒ†ãƒ¼ãƒ–ãƒ«ã®é•·ã•
+#define	kBCFuncsLen					25			///< é–¢æ•°ãƒ†ãƒ¼ãƒ–ãƒ«ã®é•·ã•
 
 
-/* ’è” */
+/* å®šæ•° */
 
 enum {
     kNBCPop					= 000,	// 000 pop
@@ -98,7 +98,7 @@ enum {
 };
 
 
-/* ŠÖ”ƒvƒƒgƒ^ƒCƒv */
+/* é–¢æ•°ãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ— */
 
 #ifdef __cplusplus
 extern "C" {

@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------*/
 /**
  * @file	NewtPrint.h
- * @brief   ƒvƒŠƒ“ƒgŠÖŒW
+ * @brief   ãƒ—ãƒªãƒ³ãƒˆé–¢ä¿‚
  *
  * @author  M.Nukui
  * @date	2005-04-11
@@ -14,12 +14,12 @@
 #define	NEWTPRINT_H
 
 
-/* ƒwƒbƒ_ƒtƒ@ƒCƒ‹ */
+/* ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ« */
 #include <stdio.h>
 #include "NewtType.h"
 
 
-/* ŠÖ”ƒvƒƒgƒ^ƒCƒv */
+/* é–¢æ•°ãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ— */
 
 #ifdef __cplusplus
 extern "C" {

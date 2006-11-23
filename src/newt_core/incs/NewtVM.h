@@ -14,76 +14,76 @@
 #define	NEWTVM_H
 
 
-/* ƒwƒbƒ_ƒtƒ@ƒCƒ‹ */
+/* ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ« */
 #include <stdio.h>
 #include "NewtType.h"
 #include "NewtMem.h"
 
 
-/* ’è” */
+/* å®šæ•° */
 
-/// ƒCƒeƒŒ[ƒ^‚Ì—v‘fˆÊ’u
+/// ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿ã®è¦ç´ ä½ç½®
 enum {
-    kIterIndex		= 0,	///< ŒJ‚è•Ô‚µ’†‚ÌˆÊ’u
-    kIterValue,				///< ’l
-    kIterObj,				///< ƒIƒuƒWƒFƒNƒg
-    kIterDeeply,			///< deeply ƒtƒ‰ƒO
-    kIterPos,				///< ƒIƒuƒWƒFƒNƒg‚ÌˆÊ’u
-    kIterMax,				///< ƒIƒuƒWƒFƒNƒg‚Ì’·‚³
-    kIterMap,				///< frameƒIƒuƒWƒFƒNƒg‚Ìƒ}ƒbƒv
+    kIterIndex		= 0,	///< ç¹°ã‚Šè¿”ã—ä¸­ã®ä½ç½®
+    kIterValue,				///< å€¤
+    kIterObj,				///< ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+    kIterDeeply,			///< deeply ãƒ•ãƒ©ã‚°
+    kIterPos,				///< ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ä½ç½®
+    kIterMax,				///< ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®é•·ã•
+    kIterMap,				///< frameã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ãƒãƒƒãƒ—
 
     //
-    kIterALength			///< ƒCƒeƒŒ[ƒ^”z—ñ‚Ì’·‚³
+    kIterALength			///< ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿é…åˆ—ã®é•·ã•
 };
 
 
-/// VM ƒŒƒWƒXƒ^
+/// VM ãƒ¬ã‚¸ã‚¹ã‚¿
 typedef struct {
-    newtRefVar	func;	///< FUNC   Às’†‚ÌŠÖ”ƒIƒuƒWƒFƒNƒg
-    uint32_t	pc;		///< PC     Às’†‚Ì instructionƒIƒuƒWƒFƒNƒg‚ÌƒCƒ“ƒfƒbƒNƒX
-    uint32_t	sp;		///< SP     ƒXƒ^ƒbƒNƒ|ƒCƒ“ƒ^
-    newtRefVar	locals;	///< LOCALS Às’†‚Ìƒ[ƒJƒ‹ƒtƒŒ[ƒ€
-    newtRefVar	rcvr;	///< RCVR   Às’†‚ÌƒŒƒV[ƒoifor ƒƒbƒZ[ƒW‘—Mj
-    newtRefVar	impl;	///< IMPL   Às’†‚ÌƒCƒ“ƒvƒŠƒƒ“ƒ^(for ƒƒbƒZ[ƒW‘—M)
+    newtRefVar	func;	///< FUNC   å®Ÿè¡Œä¸­ã®é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+    uint32_t	pc;		///< PC     å®Ÿè¡Œä¸­ã® instructionã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
+    uint32_t	sp;		///< SP     ã‚¹ã‚¿ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿
+    newtRefVar	locals;	///< LOCALS å®Ÿè¡Œä¸­ã®ãƒ­ãƒ¼ã‚«ãƒ«ãƒ•ãƒ¬ãƒ¼ãƒ 
+    newtRefVar	rcvr;	///< RCVR   å®Ÿè¡Œä¸­ã®ãƒ¬ã‚·ãƒ¼ãƒï¼ˆfor ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸é€ä¿¡ï¼‰
+    newtRefVar	impl;	///< IMPL   å®Ÿè¡Œä¸­ã®ã‚¤ãƒ³ãƒ—ãƒªãƒ¡ãƒ³ã‚¿(for ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸é€ä¿¡)
 } vm_reg_t;
 
 
-/// —áŠOƒnƒ“ƒhƒ‰
+/// ä¾‹å¤–ãƒãƒ³ãƒ‰ãƒ©
 typedef struct {
-    uint32_t	callsp;		///< ŒÄo‚µƒXƒ^ƒbƒN‚ÌƒXƒ^ƒbƒNƒ|ƒCƒ“ƒ^
-    uint32_t	excppc;		///< —áŠOƒnƒ“ƒhƒ‰‚ğì¬‚µ‚½‚Æ‚«‚ÌƒvƒƒOƒ‰ƒ€ƒJƒEƒ“ƒ^
+    uint32_t	callsp;		///< å‘¼å‡ºã—ã‚¹ã‚¿ãƒƒã‚¯ã®ã‚¹ã‚¿ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿
+    uint32_t	excppc;		///< ä¾‹å¤–ãƒãƒ³ãƒ‰ãƒ©ã‚’ä½œæˆã—ãŸã¨ãã®ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚«ã‚¦ãƒ³ã‚¿
 
-    newtRefVar	sym;		///< ƒVƒ“ƒ{ƒ‹
-    uint32_t	pc;			///< ƒvƒƒOƒ‰ƒ€ƒJƒEƒ“ƒ^
+    newtRefVar	sym;		///< ã‚·ãƒ³ãƒœãƒ«
+    uint32_t	pc;			///< ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚«ã‚¦ãƒ³ã‚¿
 } vm_excp_t;
 
 
-/// VM ÀsŠÂ‹«
+/// VM å®Ÿè¡Œç’°å¢ƒ
 typedef struct {
-    // ƒoƒCƒgƒR[ƒh
-    uint8_t *	bc;			///< ƒoƒCƒgƒR[ƒh
-    uint32_t	bclen;		///< ƒoƒCƒgƒR[ƒh‚Ì’·‚³
+    // ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰
+    uint8_t *	bc;			///< ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰
+    uint32_t	bclen;		///< ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã®é•·ã•
 
-    // ƒŒƒWƒXƒ^
-    vm_reg_t	reg;		///< ƒŒƒWƒXƒ^
+    // ãƒ¬ã‚¸ã‚¹ã‚¿
+    vm_reg_t	reg;		///< ãƒ¬ã‚¸ã‚¹ã‚¿
 
-    // ƒXƒ^ƒbƒN
-    newtStack	stack;		///< ƒXƒ^ƒbƒN
-    newtStack	callstack;	///< ŠÖ”ŒÄo‚µƒXƒ^ƒbƒN
-    newtStack	excpstack;	///< —áŠOƒnƒ“ƒhƒ‰EƒXƒ^ƒbƒN
+    // ã‚¹ã‚¿ãƒƒã‚¯
+    newtStack	stack;		///< ã‚¹ã‚¿ãƒƒã‚¯
+    newtStack	callstack;	///< é–¢æ•°å‘¼å‡ºã—ã‚¹ã‚¿ãƒƒã‚¯
+    newtStack	excpstack;	///< ä¾‹å¤–ãƒãƒ³ãƒ‰ãƒ©ãƒ»ã‚¹ã‚¿ãƒƒã‚¯
 
-    // —áŠO
-    newtRefVar	currexcp;   ///< Œ»İ‚Ì—áŠO
+    // ä¾‹å¤–
+    newtRefVar	currexcp;   ///< ç¾åœ¨ã®ä¾‹å¤–
 
-	// VM ŠÇ—
-	uint16_t	level;		///< VMŒÄo‚µƒŒƒxƒ‹
+	// VM ç®¡ç†
+	uint16_t	level;		///< VMå‘¼å‡ºã—ãƒ¬ãƒ™ãƒ«
 } vm_env_t;
 
 
-extern vm_env_t		vm_env; ///< VM ÀsŠÂ‹«
+extern vm_env_t		vm_env; ///< VM å®Ÿè¡Œç’°å¢ƒ
 
 
-/* ŠÖ”ƒvƒƒgƒ^ƒCƒv */
+/* é–¢æ•°ãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ— */
 
 #ifdef __cplusplus
 extern "C" {

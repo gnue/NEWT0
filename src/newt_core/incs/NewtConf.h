@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------*/
 /**
  * @file	NewtConf.h
- * @brief   ƒRƒ“ƒtƒBƒOî•ñ
+ * @brief   ã‚³ãƒ³ãƒ•ã‚£ã‚°æƒ…å ±
  *
  * @author  M.Nukui
  * @date	2003-11-07
@@ -14,35 +14,35 @@
 #define	NEWTCONF_H
 
 
-/* ƒ}ƒNƒ */
+/* ãƒã‚¯ãƒ­ */
 
-#define __NAMED_MAGIC_POINTER__					///< –¼‘O•tƒ}ƒWƒbƒNƒ|ƒCƒ“ƒ^‚ğg—p
+#define __NAMED_MAGIC_POINTER__					///< åå‰ä»˜ãƒã‚¸ãƒƒã‚¯ãƒã‚¤ãƒ³ã‚¿ã‚’ä½¿ç”¨
 
 // VM
-#define NEWT_NUM_STACK			512				///< ˆê“x‚ÉŠm•Û‚·‚éƒXƒ^ƒbƒN’·
-#define NEWT_NUM_CALLSTACK		512				///< ˆê“x‚ÉŠm•Û‚·‚éŒÄo‚µƒXƒ^ƒbƒN’·
-#define NEWT_NUM_EXCPSTACK		512				///< ˆê“x‚ÉŠm•Û‚·‚é—áŠOƒXƒ^ƒbƒN’·
+#define NEWT_NUM_STACK			512				///< ä¸€åº¦ã«ç¢ºä¿ã™ã‚‹ã‚¹ã‚¿ãƒƒã‚¯é•·
+#define NEWT_NUM_CALLSTACK		512				///< ä¸€åº¦ã«ç¢ºä¿ã™ã‚‹å‘¼å‡ºã—ã‚¹ã‚¿ãƒƒã‚¯é•·
+#define NEWT_NUM_EXCPSTACK		512				///< ä¸€åº¦ã«ç¢ºä¿ã™ã‚‹ä¾‹å¤–ã‚¹ã‚¿ãƒƒã‚¯é•·
 
 // Parser
-#define NEWT_NUM_STREESTACK		1024			///< ˆê“x‚ÉŠm•Û‚·‚é\•¶–ØƒXƒ^ƒbƒN’·
+#define NEWT_NUM_STREESTACK		1024			///< ä¸€åº¦ã«ç¢ºä¿ã™ã‚‹æ§‹æ–‡æœ¨ã‚¹ã‚¿ãƒƒã‚¯é•·
 
 // Bytecode
-#define NEWT_NUM_BYTECODE		512				///< ˆê“x‚ÉŠm•Û‚·‚é Bytecode ‚Ìƒƒ‚ƒŠ’·
-#define NEWT_NUM_BREAKSTACK		20				///< ˆê“x‚ÉŠm•Û‚·‚é break •¶‚Ìì‹Æ—pƒXƒ^ƒbƒN’·
-#define NEWT_NUM_ONEXCPSTACK	20				///< ˆê“x‚ÉŠm•Û‚·‚é OnException •¶‚Ìì‹Æ—pƒXƒ^ƒbƒN’·
+#define NEWT_NUM_BYTECODE		512				///< ä¸€åº¦ã«ç¢ºä¿ã™ã‚‹ Bytecode ã®ãƒ¡ãƒ¢ãƒªé•·
+#define NEWT_NUM_BREAKSTACK		20				///< ä¸€åº¦ã«ç¢ºä¿ã™ã‚‹ break æ–‡ã®ä½œæ¥­ç”¨ã‚¹ã‚¿ãƒƒã‚¯é•·
+#define NEWT_NUM_ONEXCPSTACK	20				///< ä¸€åº¦ã«ç¢ºä¿ã™ã‚‹ OnException æ–‡ã®ä½œæ¥­ç”¨ã‚¹ã‚¿ãƒƒã‚¯é•·
 
 // Pool
-#define NEWT_POOL_EXPANDSPACE	(1024 * 10)		///<@@ƒƒ‚ƒŠƒv[ƒ‹‚ÌŠg’£ƒTƒCƒY
+#define NEWT_POOL_EXPANDSPACE	(1024 * 10)		///<ã€€ã€€ãƒ¡ãƒ¢ãƒªãƒ—ãƒ¼ãƒ«ã®æ‹¡å¼µã‚µã‚¤ã‚º
 
 // IO
-#define	NEWT_FGETS_BUFFSIZE		2048			///< fgets ‚Ìƒoƒbƒtƒ@ƒTƒCƒY
-#define NEWT_SNPRINTF_BUFFSIZE	255				///< snprintf, vsnprintf ‚Ìƒoƒbƒtƒ@ƒTƒCƒY
+#define	NEWT_FGETS_BUFFSIZE		2048			///< fgets ã®ãƒãƒƒãƒ•ã‚¡ã‚µã‚¤ã‚º
+#define NEWT_SNPRINTF_BUFFSIZE	255				///< snprintf, vsnprintf ã®ãƒãƒƒãƒ•ã‚¡ã‚µã‚¤ã‚º
 
 // lex
-#define	NEWT_LEX_LINEBUFFSIZE	500				///< š‹å‰ğÍ‚Ìsƒoƒbƒtƒ@ƒTƒCƒY
+#define	NEWT_LEX_LINEBUFFSIZE	500				///< å­—å¥è§£æã®è¡Œãƒãƒƒãƒ•ã‚¡ã‚µã‚¤ã‚º
 
 // text encoding
-#define NEWT_DEFAULT_ENCODING	"UTF-8"			///< ƒfƒtƒHƒ‹ƒgƒGƒ“ƒR[ƒfƒBƒ“ƒO
+#define NEWT_DEFAULT_ENCODING	"UTF-8"			///< ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°
 
 
 // for old style compatible

@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------*/
 /**
  * @file	platform.h
- * @brief   �v���b�g�t�H�[���֘A�̃}�N����`
+ * @brief   プラットフォーム関連のマクロ定義
  *
  * @author  M.Nukui
  * @date	2005-03-17
@@ -14,11 +14,11 @@
 #define	PLATFORM_H
 
 
-/* �w�b�_�t�@�C�� */
+/* ヘッダファイル */
 #include "config.h"
 
 
-// ����`�̏ꍇ�̓f�t�H���g�l��ݒ肷��
+// 未定義の場合はデフォルト値を設定する
 #ifndef	__PLATFORM__
 	#define __PLATFORM__			NULL
 #endif

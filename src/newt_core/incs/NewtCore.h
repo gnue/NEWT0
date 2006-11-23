@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------*/
 /**
  * @file	NewtCore.h
- * @brief   •K{ƒwƒbƒ_‚ğƒCƒ“ƒNƒ‹[ƒh
+ * @brief   å¿…é ˆãƒ˜ãƒƒãƒ€ã‚’ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰
  *
  * @author  M.Nukui
  * @date	2004-01-25
@@ -14,7 +14,7 @@
 #define	NEWTCORE_H
 
 
-/* ƒwƒbƒ_ƒtƒ@ƒCƒ‹ */
+/* ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ« */
 #include "NewtType.h"
 #include "NewtErrs.h"
 #include "NewtFns.h"

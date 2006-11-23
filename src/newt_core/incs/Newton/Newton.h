@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------*/
 /**
  * @file	Newton.h
- * @brief   Newton C++ Tools / Newton.framework 互換用
+ * @brief   Newton C++ Tools / Newton.framework 莠呈鋤逕ｨ
  *
  * @author  M.Nukui
  * @date	2005-03-10
@@ -13,7 +13,7 @@
 #define __NEWTON_H
 
 
-/* ヘッダファイル */
+/* 繝倥ャ繝繝輔ぃ繧､繝ｫ */
 #include "NewtType.h"
 #include "NewtErrs.h"
 

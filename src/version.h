@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------*/
 /**
  * @file	version.h
- * @brief   ƒo[ƒWƒ‡ƒ“î•ñ
+ * @brief   ãƒãƒ¼ã‚¸ãƒ§ãƒ³æƒ…å ±
  *
  * @author  M.Nukui
  * @date	2003-11-07
@@ -13,15 +13,15 @@
 #ifndef	NEWTVERSION_H
 #define	NEWTVERSION_H
 
-/* ƒ}ƒNƒ’è‹` */
-#define NEWT_NAME		"newt"									///< ƒRƒ}ƒ“ƒh–¼
-#define NEWT_PROTO		"/0"									///< ƒvƒƒg
-#define NEWT_VERSION	"0.1.1"									///< ƒo[ƒWƒ‡ƒ“
-#define NEWT_COPYRIGHT	"Copyright (C) 2003-2005 Makoto Nukui"  ///< ƒRƒs[ƒ‰ƒCƒg
-#define NEWT_BUILD		"2006-06-10-2"							///< ƒrƒ‹ƒh”Ô†
-#define NEWT_PARAMS		"[switches] [--] [programfile]"			///< ˆø”
+/* ãƒã‚¯ãƒ­å®šç¾© */
+#define NEWT_NAME		"newt"									///< ã‚³ãƒãƒ³ãƒ‰å
+#define NEWT_PROTO		"/0"									///< ãƒ—ãƒ­ãƒˆ
+#define NEWT_VERSION	"0.1.1"									///< ãƒãƒ¼ã‚¸ãƒ§ãƒ³
+#define NEWT_COPYRIGHT	"Copyright (C) 2003-2005 Makoto Nukui"  ///< ã‚³ãƒ”ãƒ¼ãƒ©ã‚¤ãƒˆ
+#define NEWT_BUILD		"2006-06-10-2"							///< ãƒ“ãƒ«ãƒ‰ç•ªå·
+#define NEWT_PARAMS		"[switches] [--] [programfile]"			///< å¼•æ•°
 
-/// g—p•û–@
+/// ä½¿ç”¨æ–¹æ³•
 #define NEWT_USAGE		"  -t              enable trace mode\n"			\
 						"  -l              dump lex info\n"				\
 						"  -s              dump syntax tree\n"			\
@@ -35,7 +35,7 @@
 						"  --copyright     print copyright\n"			\
 						"  --version       print version number\n"
 
-/// ƒXƒ^ƒbƒtƒ[ƒ‹
+/// ã‚¹ã‚¿ãƒƒãƒ•ãƒ­ãƒ¼ãƒ«
 #define NEWT_STAFF		"Program\n"										\
                         "  Makoto Nukui\n"								\
                         "\n"											\

@@ -1,8 +1,8 @@
 /*------------------------------------------------------------------------*/
 /**
  * @file	NewtonExceptions.h
- * @brief   Exception ƒ}ƒNƒ
- *			iNewton C++ Tools / Newton.framework ŒİŠ·—pj
+ * @brief   Exception ãƒã‚¯ãƒ­
+ *			ï¼ˆNewton C++ Tools / Newton.framework äº’æ›ç”¨ï¼‰
  *
  * @author  M.Nukui
  * @date	2005-03-10
@@ -14,7 +14,7 @@
 #define __NEWTONEXCEPTIONS_H
 
 
-// –¢À‘•A’è‹`‚·‚é‚±‚Æ
+// æœªå®Ÿè£…ã€å®šç¾©ã™ã‚‹ã“ã¨
 
 
 #endif	/* __NEWTONEXCEPTIONS_H */
