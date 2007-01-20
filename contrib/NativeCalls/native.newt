@@ -21,6 +21,38 @@ begin
 		{name: "socket",
 		args: ['sint32, 'sint32, 'sint32],
 		result: 'sint32});
+/*
+-- This is on BSD systems. On some systems, there is no sin_len field.
+struct sockaddr_in {
+  uint8_t         sin_len;      // length of structure (16)
+  sa_family_t     sin_family;   // AF_INET
+  in_port_t       sin_port;     // 16-bit TCP or UDP port number
+                                // network byte ordered
+  struct in_addr  sin_addr;     // 32-bit IPv4 address
+                                // network byte ordered
+  char            sin_zero[8];  // unused
+};
+*/
+	libc:DefGlobalFn(
+		'|libc.bind_ipv4|,
+		{name: "bind",
+		args: ['sint32, ['uint8, 'uint8, 'uint16, 'uint8, 'uint8, 'uint8, 'uint8, 'uint8, 'uint8, 'uint8, 'uint8, 'uint8, 'uint8, 'uint8, 'uint8], 'sint32],
+		result: 'sint32});
+	libc:DefGlobalFn(
+		'|libc.connect_ipv4|,
+		{name: "connect",
+		args: ['sint32, ['uint8, 'uint8, 'uint16, 'uint8, 'uint8, 'uint8, 'uint8, 'uint8, 'uint8, 'uint8, 'uint8, 'uint8, 'uint8, 'uint8, 'uint8], 'sint32],
+		result: 'sint32});
+	libc:DefGlobalFn(
+		'|libc.write|,
+		{name: "write",
+		args: ['sint32, 'string, 'sint32],
+		result: 'sint32});
+	libc:DefGlobalFn(
+		'|libc.read|,
+		{name: "read",
+		args: ['sint32, 'string, 'sint32],
+		result: 'sint32});
 	libc:DefGlobalFn(
 		'|libc.close|,
 		{name: "close",
@@ -92,16 +124,64 @@ begin
 	then begin
 		Print("socket returned an error (" & GetErrno() & ")\n");
 	end else begin
-		// To bind the socket, I need to support structures.
-		// ...
-		Print("socket fd: " & socket & "\n");
+		try
+			Print("socket fd: " & socket & "\n");
+			
+			result := |libc.bind_ipv4|(socket, [
+				16 /* length */,
+				AF_INET,
+				0, /* port: any */
+				0, 0, 0, 0, /* address: any */
+				0, 0, 0, 0, /* zero */
+				0, 0, 0, 0  /* zero */], 16);
+	
+			if (result < 0) then
+			begin
+				Throw('|evt.native-errno;type.ref.string|, "bind");
+			end;
+	
+			result := |libc.connect_ipv4|(socket, [
+				16 /* length */,
+				AF_INET,
+				80,
+				66, 249, 89, 104, /* address */	// Google.
+				0, 0, 0, 0, /* zero */
+				0, 0, 0, 0 /* zero */], 16);
+	
+			if (result < 0) then
+			begin
+				Throw('|evt.native-errno;type.ref.string|, "connect");
+			end;
+
+			result := |libc.write|(socket, "GET / HTTP/1.0\n\n", 16);
+	
+			if (result < 0) then
+			begin
+				Throw('|evt.native-errno;type.ref.string|, "write");
+			end;
+
+			local data := MakeBinary(512, 'string);
+			result := |libc.read|(socket, data, 512);
+			P(data);
+	
+			if (result < 0) then
+			begin
+				Throw('|evt.native-errno;type.ref.string|, "read");
+			end;
+			
+		onexception |evt.native-errno| do
+		begin
+			Print("An error occurred with function " &
+				CurrentException().data & " (" &
+				GetErrno() & ")\n");
+		end;
 
 		// Close the socket.
 		result := |libc.close|(socket);
 		
 		if (result < 0) then
 		begin
-			Print("close returned an error (" & errno & ")\n");
+			Print("close returned an error (" & GetErrno() & ")\n");
 		end;
 	end;
 

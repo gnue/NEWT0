@@ -62,6 +62,65 @@ typedef union SStorage {
 	void*		fPointer;
 } SStorage;
 
+typedef struct SBufferZone {
+	int			fNumberBuffers;
+	void**		fBufferTable;
+} SBufferZone;
+
+/**
+ * Allocate an empty storage buffer.
+ *
+ * @param outBuffer	on output, allocated buffer.
+ */
+void
+AllocateBuffer(SBufferZone* outBuffer)
+{
+	outBuffer->fNumberBuffers = 0;
+	outBuffer->fBufferTable = (void**) malloc(0);
+}
+
+/**
+ * Release a storage buffer.
+ *
+ * @param ioBuffer	buffer to release.
+ */
+void
+ReleaseBuffer(SBufferZone* ioBuffer)
+{
+	/* Iterate on all buffers */
+	int indexBuffers;
+	int nbBuffers = ioBuffer->fNumberBuffers;
+	void** cursor = ioBuffer->fBufferTable;
+	
+	for (indexBuffers = 0; indexBuffers < nbBuffers; indexBuffers++)
+	{
+		free(*cursor);
+		*cursor++;
+	}
+	
+	free(ioBuffer->fBufferTable);
+	ioBuffer->fNumberBuffers = 0;
+	ioBuffer->fBufferTable = NULL;
+}
+
+/**
+ * Allocate a segment in a buffer.
+ *
+ * @param ioBuffer	buffer in which to allocate the segment.
+ * @param inSize	segment size.
+ */
+void*
+AllocateBufferSegment(SBufferZone* ioBuffer, int inSize)
+{
+	void* theResult = malloc(inSize);
+	int newBufferCount = ++ioBuffer->fNumberBuffers;
+	ioBuffer->fBufferTable =
+		realloc(ioBuffer->fBufferTable, newBufferCount * sizeof(void*));
+	ioBuffer->fBufferTable[newBufferCount - 1] = theResult;
+	
+	return theResult;
+}
+
 /**
  * Retrieve a pointer stored in a binary.
  *
@@ -303,9 +362,17 @@ CastResult(newtRefArg inNSType, SStorage* inValue)
 	} else if (NewtSymbolEqual(inNSType, NSSYM(longdouble))) {
 		theResult = NewtMakeReal( inValue->fLongDouble );
 	} else if (NewtSymbolEqual(inNSType, NSSYM(string))) {
-		theResult = NewtMakeString((char*) inValue->fPointer, false);
+		if (inValue->fPointer) {
+			theResult = NewtMakeString((char*) inValue->fPointer, false);
+		} else {
+			theResult = kNewtRefNIL;
+		}
 	} else if (NewtSymbolEqual(inNSType, NSSYM(pointer))) {
-		theResult = PointerToBinary(inValue->fPointer);
+		if (inValue->fPointer) {
+			theResult = PointerToBinary(inValue->fPointer);
+		} else {
+			theResult = kNewtRefNIL;
+		}
 	} else {
 		theResult = kNewtRefNIL;
 	}
@@ -363,6 +430,92 @@ CastType(newtRefArg inNSType, ffi_type** outFFIType)
 	return theResult;
 }
 
+/* forward declaration */
+bool
+CastTypeAndValue(
+			newtRefArg inNSType,
+			newtRefArg inNSValue,
+			ffi_type** outFFIType,
+			void* outFFIValue,
+			size_t* outValueSize,
+			SBufferZone* ioStorage);
+
+/**
+ * From an array of types (in NS format), and an array of values, set the ffi
+ * types and cast the values.
+ *
+ * @param inNbArgs		number of args.
+ * @param inNSTypes		ns types.
+ * @param inNSValues	ns values.
+ * @param outFFITypes	ffi types (allocated in the buffer).
+ * @param outFFIValues	ffi values (allocated in the buffer).
+ * @param ioStorage		storage buffer.
+ * @return \c true if the type and value were cast, \c false otherwise, if
+ * there was a typing error (the exception would have already been thrown then).
+ */
+bool
+CastTypesAndValues(
+		int inNbArgs,
+		newtRefVar inNSTypes,
+		newtRefVar inNSValues,
+		ffi_type*** outFFITypes,
+		void*** outFFIValues,
+		void** outStorage,
+		SBufferZone* ioStorage)
+{
+	ffi_type**	ffiArgsTypes;
+	void**		argsValues;
+	SStorage*	argsStorage;
+	void*		cursorStorage;
+	int			indexArgs;
+	int			ffitypes_size = (inNbArgs + 1) * sizeof(ffi_type*);
+	int			storage_size = inNbArgs * sizeof(SStorage);
+	bool 		typeError = false;	
+
+	/* build the ffi lists */
+	ffiArgsTypes = (ffi_type**) AllocateBufferSegment(ioStorage, ffitypes_size);
+	bzero(ffiArgsTypes, ffitypes_size);
+	argsValues = (void**) AllocateBufferSegment(ioStorage, sizeof(void*) * inNbArgs);
+	argsStorage = (SStorage*) AllocateBufferSegment(ioStorage, storage_size);
+	bzero(argsStorage, storage_size);
+	cursorStorage = argsStorage;
+	
+	for (indexArgs = 0; indexArgs < inNbArgs; indexArgs++)
+	{
+		newtRefVar theType, theValue;
+		size_t theSize;
+		
+		theType = NewtGetArraySlot(inNSTypes, indexArgs);
+		theValue = NewtGetArraySlot(inNSValues, indexArgs);
+		/* use the storage */
+		argsValues[indexArgs] = cursorStorage;
+		if (!CastTypeAndValue(
+					theType,
+					theValue,
+					&ffiArgsTypes[indexArgs],
+					cursorStorage,
+					&theSize,
+					ioStorage))
+		{
+			typeError = true;
+			break;
+		}
+		cursorStorage = (void*) (((char*) cursorStorage) + theSize);
+	}
+	
+	*outFFITypes = ffiArgsTypes;
+	if (outFFIValues)
+	{
+		*outFFIValues = argsValues;
+	}
+	if (outStorage)
+	{
+		*outStorage = argsStorage;
+	}
+
+	return !typeError;
+}
+
 /**
  * From a type (in NS format), and a value, set the ffi type and cast the
  * value.
@@ -371,6 +524,7 @@ CastType(newtRefArg inNSType, ffi_type** outFFIType)
  * @param inNSValue		ns value.
  * @param outFFIType	ffi type.
  * @param outFFIValue	ffi value.
+ * @param ioStorage		storage buffer.
  * @return \c true if the type and value were cast, \c false otherwise, if
  * there was a typing error (the exception would have already been thrown then).
  */
@@ -379,17 +533,51 @@ CastTypeAndValue(
 			newtRefArg inNSType,
 			newtRefArg inNSValue,
 			ffi_type** outFFIType,
-			SStorage* outFFIValue)
+			void* outFFIValue,
+			size_t* outValueSize,
+			SBufferZone* ioStorage)
 {
+	size_t theSize = 0;
 	bool theResult = true;
 	
-	if (NewtSymbolEqual(inNSType, NSSYM(uint8)))
+	if (NewtRefIsArray(inNSType))
 	{
+		// Structure.
+		int nbVals = NewtArrayLength(inNSType);
+		if (nbVals != NewtArrayLength(inNSValue))
+		{
+			theResult = false;
+		} else {
+			ffi_type** theTypes;
+			void* theValues;
+			theResult = CastTypesAndValues(
+				nbVals,
+				inNSType,
+				inNSValue,
+				&theTypes,
+				NULL,
+				&theValues,
+				ioStorage);
+			if (theResult) {
+				// Make the record.
+				ffi_type* theType = (ffi_type*)
+					AllocateBufferSegment(ioStorage, sizeof(ffi_type));
+				*outFFIType = theType;
+				theType->size = 0;
+				theType->alignment = 0;
+				theType->type = FFI_TYPE_STRUCT;
+				theType->elements = theTypes;
+				*((void**) outFFIValue) = theValues;
+				theSize = sizeof(void*);
+			}
+		}
+	} else if (NewtSymbolEqual(inNSType, NSSYM(uint8))) {
 		*outFFIType = &ffi_type_uint8;
 		if (NewtRefIsInteger(inNSValue))
 		{
-			outFFIValue->fInt8 =
+			*((uint8_t*) outFFIValue) =
 				(uint8_t) NewtRefToInteger(inNSValue);
+			theSize = sizeof(uint8_t);
 		} else {
 			(void) NewtThrow(kNErrNotAnInteger, inNSValue);
 			theResult = false;
@@ -398,8 +586,9 @@ CastTypeAndValue(
 		*outFFIType = &ffi_type_sint8;
 		if (NewtRefIsInteger(inNSValue))
 		{
-			outFFIValue->fInt8 =
+			*((uint8_t*) outFFIValue) =
 				(uint8_t) (int8_t) NewtRefToInteger(inNSValue);
+			theSize = sizeof(uint8_t);
 		} else {
 			(void) NewtThrow(kNErrNotAnInteger, inNSValue);
 			theResult = false;
@@ -408,8 +597,9 @@ CastTypeAndValue(
 		*outFFIType = &ffi_type_uint16;
 		if (NewtRefIsInteger(inNSValue))
 		{
-			outFFIValue->fInt16 =
+			*((uint16_t*) outFFIValue) =
 				(uint16_t) NewtRefToInteger(inNSValue);
+			theSize = sizeof(uint16_t);
 		} else {
 			(void) NewtThrow(kNErrNotAnInteger, inNSValue);
 			theResult = false;
@@ -418,8 +608,9 @@ CastTypeAndValue(
 		*outFFIType = &ffi_type_sint16;
 		if (NewtRefIsInteger(inNSValue))
 		{
-			outFFIValue->fInt16 =
+			*((uint16_t*) outFFIValue) =
 				(uint16_t) (int16_t) NewtRefToInteger(inNSValue);
+			theSize = sizeof(uint16_t);
 		} else {
 			(void) NewtThrow(kNErrNotAnInteger, inNSValue);
 			theResult = false;
@@ -428,8 +619,9 @@ CastTypeAndValue(
 		*outFFIType = &ffi_type_uint32;
 		if (NewtRefIsInteger(inNSValue))
 		{
-			outFFIValue->fInt32 =
+			*((uint32_t*) outFFIValue) =
 				(uint32_t) NewtRefToInteger(inNSValue);
+			theSize = sizeof(uint32_t);
 		} else {
 			(void) NewtThrow(kNErrNotAnInteger, inNSValue);
 			theResult = false;
@@ -438,8 +630,9 @@ CastTypeAndValue(
 		*outFFIType = &ffi_type_sint32;
 		if (NewtRefIsInteger(inNSValue))
 		{
-			outFFIValue->fInt32 =
+			*((uint32_t*) outFFIValue) =
 				(uint32_t) (int32_t) NewtRefToInteger(inNSValue);
+			theSize = sizeof(uint32_t);
 		} else {
 			(void) NewtThrow(kNErrNotAnInteger, inNSValue);
 			theResult = false;
@@ -448,8 +641,9 @@ CastTypeAndValue(
 		*outFFIType = &ffi_type_uint64;
 		if (NewtRefIsInteger(inNSValue))
 		{
-			outFFIValue->fInt64 =
+			*((uint64_t*) outFFIValue) =
 				(uint64_t) NewtRefToInteger(inNSValue);
+			theSize = sizeof(uint64_t);
 		} else {
 			(void) NewtThrow(kNErrNotAnInteger, inNSValue);
 			theResult = false;
@@ -458,8 +652,9 @@ CastTypeAndValue(
 		*outFFIType = &ffi_type_sint64;
 		if (NewtRefIsInteger(inNSValue))
 		{
-			outFFIValue->fInt64 =
+			*((uint64_t*) outFFIValue) =
 				(uint64_t) (int64_t) NewtRefToInteger(inNSValue);
+			theSize = sizeof(uint64_t);
 		} else {
 			(void) NewtThrow(kNErrNotAnInteger, inNSValue);
 			theResult = false;
@@ -468,8 +663,9 @@ CastTypeAndValue(
 		*outFFIType = &ffi_type_float;
 		if (NewtRefIsReal(inNSValue))
 		{
-			outFFIValue->fFloat =
+			*((float*) outFFIValue) =
 				(float) NewtRefToReal(inNSValue);
+			theSize = sizeof(float);
 		} else {
 			(void) NewtThrow(kNErrNotAReal, inNSValue);
 			theResult = false;
@@ -478,8 +674,9 @@ CastTypeAndValue(
 		*outFFIType = &ffi_type_double;
 		if (NewtRefIsReal(inNSValue))
 		{
-			outFFIValue->fDouble =
+			*((double*) outFFIValue) =
 				(double) NewtRefToReal(inNSValue);
+			theSize = sizeof(double);
 		} else {
 			(void) NewtThrow(kNErrNotAReal, inNSValue);
 			theResult = false;
@@ -488,8 +685,9 @@ CastTypeAndValue(
 		*outFFIType = &ffi_type_longdouble;
 		if (NewtRefIsReal(inNSValue))
 		{
-			outFFIValue->fLongDouble =
+			*((long double*) outFFIValue) =
 				(long double) NewtRefToReal(inNSValue);
+			theSize = sizeof(long double);
 		} else {
 			(void) NewtThrow(kNErrNotAReal, inNSValue);
 			theResult = false;
@@ -499,8 +697,9 @@ CastTypeAndValue(
 		*outFFIType = &ffi_type_pointer;
 		if (NewtRefIsString(inNSValue))
 		{
-			outFFIValue->fPointer =
+			*((void**) outFFIValue) =
 				(void*) NewtRefToString(inNSValue);
+			theSize = sizeof(void*);
 		} else {
 			(void) NewtThrow(kNErrNotAString, inNSValue);
 			theResult = false;
@@ -510,8 +709,9 @@ CastTypeAndValue(
 		*outFFIType = &ffi_type_pointer;
 		if (NewtRefIsBinary(inNSValue))
 		{
-			outFFIValue->fPointer =
+			*((void**) outFFIValue) =
 				(void*) NewtRefToBinary(inNSValue);
+			theSize = sizeof(void*);
 		} else {
 			(void) NewtThrow(kNErrNotABinaryObject, inNSValue);
 			theResult = false;
@@ -520,11 +720,13 @@ CastTypeAndValue(
 		*outFFIType = &ffi_type_pointer;
 		if (NewtRefIsInteger(inNSValue))
 		{
-			outFFIValue->fPointer =
+			*((void**) outFFIValue) =
 				(void*) NewtRefToInteger(inNSValue);
+			theSize = sizeof(void*);
 		} else if (NewtRefIsBinary(inNSValue)) {
-			outFFIValue->fPointer =
+			*((void**) outFFIValue) =
 				BinaryToPointer(inNSValue);
+			theSize = sizeof(void*);
 		} else {
 			(void) NewtThrow(kNErrNotABinaryObject, inNSValue);
 			theResult = false;
@@ -534,37 +736,12 @@ CastTypeAndValue(
 		theResult = false;
 	}
 	
-	return theResult;
-}
-
-/**
- * Provided with an array of FFI types, frees it recursively, handling
- * structures in it. Last item in the array should be NULL. The pointer is
- * freed as well. This function is recursive.
- *
- * @param inTypes	types array to free.
- */
-void
-FreeFFITypes(ffi_type** inTypes)
-{
-	ffi_type** cursor = inTypes;
-	while (*cursor)
+	if (outValueSize)
 	{
-		if ((*cursor)->type == FFI_TYPE_STRUCT)
-		{
-			/* Iterate recursively in this structure. */
-			ffi_type** elements = (*cursor)->elements;
-			if (elements)
-			{
-				FreeFFITypes(elements);
-			}
-		}
-		
-		cursor++;
+		*outValueSize = theSize;
 	}
 	
-	/* free the array */
-	free( inTypes );
+	return theResult;
 }
 
 /**
@@ -576,8 +753,7 @@ GenericFunction(newtRef inRcvr, newtRef inArgs)
 	ffi_cif		cif;
 	ffi_type**	ffiArgsTypes;
 	void**		argsValues;
-	SStorage*	argsStorage;
-	int			indexArgs;
+	SBufferZone	storage;
 	int			nbArgs;
 	SStorage	result;
 	newtRefVar	resultRef = kNewtRefNIL;
@@ -640,28 +816,8 @@ GenericFunction(newtRef inRcvr, newtRef inArgs)
 	}
 
 	/* build the ffi lists */
-	ffiArgsTypes = (ffi_type**) calloc( (nbArgs + 1), sizeof(ffi_type*)  );
-	argsValues = (void**) malloc( sizeof(void*) * nbArgs );
-	argsStorage = (SStorage*) malloc( sizeof(SStorage) * nbArgs );
-	
-	for (indexArgs = 0; indexArgs < nbArgs; indexArgs++)
-	{
-		newtRefVar theType, theValue;
-		
-		theType = NewtGetArraySlot(argTypes, indexArgs);
-		theValue = NewtGetArraySlot(inArgs, indexArgs);
-		/* use the storage */
-		argsValues[indexArgs] = &argsStorage[indexArgs];
-		if (!CastTypeAndValue(
-					theType,
-					theValue,
-					&ffiArgsTypes[indexArgs],
-					&argsStorage[indexArgs]))
-		{
-			typeError = true;
-			break;
-		}
-	}
+	AllocateBuffer(&storage);
+	CastTypesAndValues(nbArgs, argTypes, inArgs, &ffiArgsTypes, &argsValues, NULL, &storage);
 	
 	if (!typeError)
 	{
@@ -688,9 +844,7 @@ GenericFunction(newtRef inRcvr, newtRef inArgs)
 		}
 	}
 
-	FreeFFITypes(ffiArgsTypes);
-	free(argsValues);
-	free(argsStorage);
+	ReleaseBuffer(&storage);
 
 	return resultRef;
 }
@@ -768,8 +922,8 @@ OpenNativeLibrary(
  *	'binary		binary				ffi_type_pointer		not available for result
  *	'iobinary	binary				ffi_type_pointer		not available for result
  *	'pointer	int	or binary		ffi_type_pointer
+ *  [array]		array				ffi_type_struct			not available for result
  *
- * Structures aren't supported yet.
  * string and iostring are identical (strings are I/O). Same with binary and
  * iobinary. This may change in the future.
  *
