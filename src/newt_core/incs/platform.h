@@ -27,5 +27,9 @@
 	#define __DYLIBSUFFIX__		".so"
 #endif
 
+#ifndef NEWT_EXPORT
+	#define NEWT_EXPORT
+#endif
+
 
 #endif /* PLATFORM_H */
