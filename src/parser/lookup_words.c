@@ -13,6 +13,7 @@
 /* ヘッダファイル */
 #include <string.h>
 #include <stdlib.h>
+#include "config.h"
 #include "lookup_words.h"
 
 

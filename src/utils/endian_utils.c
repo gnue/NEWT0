@@ -14,6 +14,14 @@
 #include <string.h>
 #include "utils/endian_utils.h"
 
+#if _MSC_VER==1200
+# define ULL(a) a
+#endif
+
+#ifndef ULL
+# define ULL(a) a##ULL
+#endif
+
 
 #pragma mark -
 /*------------------------------------------------------------------------*/
@@ -30,8 +38,8 @@ double swapd(double d)
 
     memcpy(&tmp, &d, sizeof(d));
 	tmp = (tmp >> 32) | (tmp << 32);
-	tmp = ((tmp & 0xff00ff00ff00ff00ULL) >> 8) | ((tmp & 0x00ff00ff00ff00ffULL) << 8);
-	tmp = ((tmp & 0xffff0000ffff0000ULL) >> 16) | ((tmp & 0x0000ffff0000ffffULL) << 16);
+	tmp = ((tmp & ULL(0xff00ff00ff00ff00)) >> 8) | ((tmp & ULL(0x00ff00ff00ff00ff)) << 8);
+	tmp = ((tmp & ULL(0xffff0000ffff0000)) >> 16) | ((tmp & ULL(0x0000ffff0000ffff)) << 16);
     memcpy(&d, &tmp, sizeof(d));
 
 	return d;

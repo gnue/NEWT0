@@ -791,7 +791,7 @@ void lex_debug(int type)
 
 void nps_yyinit(void)
 {
-	static bool inited = false;
+	static bool inited = 0; // was "false"
 
 	if (! inited)
 	{   //単語テーブルのソート
