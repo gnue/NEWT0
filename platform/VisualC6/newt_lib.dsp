@@ -1,24 +1,24 @@
-# Microsoft Developer Studio Project File - Name="newt_app" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="newt_lib" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
-# TARGTYPE "Win32 (x86) Console Application" 0x0103
+# TARGTYPE "Win32 (x86) Static Library" 0x0104
 
-CFG=newt_app - Win32 Debug
+CFG=newt_lib - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "newt_app.mak".
+!MESSAGE NMAKE /f "newt_lib.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "newt_app.mak" CFG="newt_app - Win32 Debug"
+!MESSAGE NMAKE /f "newt_lib.mak" CFG="newt_lib - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "newt_app - Win32 Release" (based on "Win32 (x86) Console Application")
-!MESSAGE "newt_app - Win32 Debug" (based on "Win32 (x86) Console Application")
+!MESSAGE "newt_lib - Win32 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "newt_lib - Win32 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -28,7 +28,7 @@ CFG=newt_app - Win32 Debug
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "newt_app - Win32 Release"
+!IF  "$(CFG)" == "newt_lib - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -37,52 +37,49 @@ RSC=rc.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "Release"
-# PROP Intermediate_Dir "Release"
-# PROP Ignore_Export_Lib 0
+# PROP Output_Dir "newt_lib_Release"
+# PROP Intermediate_Dir "newt_lib_Release"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O2 /I "../.." /I "../../src" /I "../../src/newt_core/incs" /I "../../src/newt_core/incs/VC6" /I "../../src/parser" /D "NDEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D "HAVE_CONFIG_H" /YX /FD /c
+# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
+# ADD CPP /nologo /W3 /GX /O2 /I "../../src" /I "../../src/newt_core/incs" /I "../../src/newt_core/incs/VC6" /I "../../src/parser" /D "NDEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /D "HAVE_CONFIG_H" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
-LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /out:"..\..\build\newt.exe"
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo
+# ADD LIB32 /nologo /out:"..\..\build\newt.lib"
 
-!ELSEIF  "$(CFG)" == "newt_app - Win32 Debug"
+!ELSEIF  "$(CFG)" == "newt_lib - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "Debug"
-# PROP BASE Intermediate_Dir "Debug"
+# PROP BASE Output_Dir "newt_lib___Win32_Debug"
+# PROP BASE Intermediate_Dir "newt_lib___Win32_Debug"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "Debug"
-# PROP Intermediate_Dir "Debug"
-# PROP Ignore_Export_Lib 0
+# PROP Output_Dir "newt_lib_Debug"
+# PROP Intermediate_Dir "newt_lib_Debug"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "../../src" /I "../../src/newt_core/incs" /I "../../src/newt_core/incs/VC6" /I "../../src/parser" /D "_DEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D "HAVE_CONFIG_H" /YX /FD /GZ /c
-# SUBTRACT CPP /X
+# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
+# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "../../src" /I "../../src/newt_core/incs" /I "../../src/newt_core/incs/VC6" /I "../../src/parser" /D "_DEBUG" /D "WIN32" /D "_MBCS" /D "_LIB" /D "HAVE_CONFIG_H" /YX /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
-LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /out:"..\..\build\newtd.exe" /pdbtype:sept
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo
+# ADD LIB32 /nologo /out:"..\..\build\newtd.lib"
 
 !ENDIF 
 
 # Begin Target
 
-# Name "newt_app - Win32 Release"
-# Name "newt_app - Win32 Debug"
+# Name "newt_lib - Win32 Release"
+# Name "newt_lib - Win32 Debug"
 # Begin Group "src"
 
 # PROP Default_Filter ""
@@ -273,17 +270,9 @@ SOURCE=..\..\src\parser\lookup_words.h
 
 SOURCE=..\..\src\parser\newt.l
 
-!IF  "$(CFG)" == "newt_app - Win32 Release"
+!IF  "$(CFG)" == "newt_lib - Win32 Release"
 
-# Begin Custom Build - Performing Lex Build Step on $(InputPath)
-InputPath=..\..\src\parser\newt.l
-
-"../../build/lex.yy.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	c:\cygwin\bin\flex -o../../build/lex.yy.c ../../src/parser/newt.l
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "newt_app - Win32 Debug"
+!ELSEIF  "$(CFG)" == "newt_lib - Win32 Debug"
 
 # Begin Custom Build - Performing Lex Build Step on $(InputPath)
 InputPath=..\..\src\parser\newt.l
@@ -300,22 +289,9 @@ InputPath=..\..\src\parser\newt.l
 
 SOURCE=..\..\src\parser\newt.y
 
-!IF  "$(CFG)" == "newt_app - Win32 Release"
+!IF  "$(CFG)" == "newt_lib - Win32 Release"
 
-# Begin Custom Build - Performing Bison Build Step on $(InputPath)
-InputPath=..\..\src\parser\newt.y
-
-BuildCmds= \
-	c:\cygwin\bin\bison -d -o ../../build/y.tab.c ../../src/parser/newt.y
-
-"../../build/y.tab.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-   $(BuildCmds)
-
-"../../build/y.tab.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-   $(BuildCmds)
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "newt_app - Win32 Debug"
+!ELSEIF  "$(CFG)" == "newt_lib - Win32 Debug"
 
 # Begin Custom Build - Performing Bison Build Step on $(InputPath)
 InputPath=..\..\src\parser\newt.y
