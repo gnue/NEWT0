@@ -72,8 +72,11 @@ typedef struct {
 #define NBCGenFreq(b)			NBCGenCode(kNBCFreqFunc, b)						///< 関数命令のバイトコードを生成する
 
 
+#ifndef _MSC_VER
 #pragma mark -
 #pragma mark ローカル変数
+#endif
+
 /* ローカル変数 */
 
 /// バイドコード環境
@@ -2655,7 +2658,10 @@ newtRef NBCCompileStr(char * s, bool ret)
 }
 
 
+#ifndef _MSC_VER
 #pragma mark -
+#endif
+
 /*------------------------------------------------------------------------*/
 /** エラーメッセージの表示
  *

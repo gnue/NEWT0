@@ -12,6 +12,8 @@
 /* ヘッダファイル */
 #include <string.h>
 
+#include "config.h"
+
 #include "NewtCore.h"
 #include "NewtStr.h"
 

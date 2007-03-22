@@ -15,6 +15,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "config.h"
+
 #include "NewtCore.h"
 #include "NewtGC.h"
 #include "NewtIO.h"
