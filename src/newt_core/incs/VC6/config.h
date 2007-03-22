@@ -13,7 +13,6 @@
 #ifndef	CONFIG_H
 #define	CONFIG_H
 
-
 /* É}ÉNÉçíËã` */
 #undef HAVE_INTTYPES_H
 #define HAVE_STDINT_H 1
@@ -23,7 +22,7 @@
 #undef HAVE_MACHINE_ENDIAN_H
 #undef HAVE_TERMIOS_H 
 
-#undef HAVE_LIBICONV
+#define HAVE_LIBICONV 1
 #undef HAVE_DLOPEN
 #undef HAVE_MMAP
 #undef HAVE_CHDIR

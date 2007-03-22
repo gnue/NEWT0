@@ -12,9 +12,13 @@
 #ifndef _NEWT_VC6_STD_BOOL_H_
 #define _NEWT_VC6_STD_BOOL_H_
 
+#ifndef __cplusplus
+
 typedef __int8 bool;
 static const bool true = 1;
 static const bool false = 0;
+
+#endif
 
 #endif
 

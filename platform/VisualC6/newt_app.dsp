@@ -109,6 +109,10 @@ SOURCE=..\..\src\newt_core\incs\VC6\endian.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\newt_core\incs\VC6\iconv.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\newt_core\incs\VC6\stdbool.h
 # End Source File
 # Begin Source File
