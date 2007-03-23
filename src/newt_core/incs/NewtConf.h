@@ -16,7 +16,7 @@
 
 /* マクロ */
 
-#define __NAMED_MAGIC_POINTER__					///< 名前付マジックポインタを使用
+#undef __NAMED_MAGIC_POINTER__					///< 名前付マジックポインタを使用
 
 // VM
 #define NEWT_NUM_STACK			512				///< 一度に確保するスタック長
