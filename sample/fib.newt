@@ -10,7 +10,7 @@ begin
 end;
 
 
-for i := 0 to 21 do p(fib(i));
+for i := 0 to 21 do print(fib(i));
 
 
 fib(21);
