@@ -29,6 +29,8 @@
 #undef HAVE_GETCWD
 #undef HAVE_GETPWNAM
 
+#define FIXME_MATTHIAS
+
 #define __PLATFORM__ "WIN32_MSVC6"
 #define __DYLIBSUFFIX__ ".dll"
 

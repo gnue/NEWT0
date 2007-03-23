@@ -2083,11 +2083,19 @@ void NBCGenSend(nps_syntax_node_t * stree, uint32_t code,
     NBCGenBC_op(stree, node->op2);
     numArgs = NBCCountNumArgs(stree, node->op2);
 
+#ifdef FIXME_MATTHIAS
+    // Newton expects the arguments to "send" in this order.
+    // I have not checked if the NEWT VM "send" interprter 
+    // needs arguments to be swapped as well
+    NBCGenReceiver(stree, receiver);
+    NBCGenPUSH(node->op1);
+#else
     // message の生成
     NBCGenPUSH(node->op1);
 
     // receiver の生成
     NBCGenReceiver(stree, receiver);
+#endif
 
     // メッセージ呼出しの生成
     NBCGenCode(code, numArgs);
