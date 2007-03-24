@@ -11,6 +11,7 @@ objdir = $(build)/obj
 
 prefix = @prefix@
 exec_prefix = @exec_prefix@
+sitedir = ${prefix}/lib/newt0
 libdir = @libdir@
 
 LIBREGEX='$(libdir)/libregex.a'
@@ -57,6 +58,10 @@ $(NEWTEXLIB): $(LIBOBJ)
 
 $(LIBOBJ): $(NEWTLIBNAME).c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o $@ $(NEWTLIBNAME).c
+
+install::
+	install -d -m 755 $(DESTDIR)$(sitedir)
+	install -m 644 $(NEWTEXLIB) $(DESTDIR)$(sitedir)
 
 clean:
 	rm -rf $(NEWTEXLIB)

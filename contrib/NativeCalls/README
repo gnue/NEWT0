@@ -8,14 +8,8 @@ It is authored by Paul Guyot and licensed under the MIT license.
 Compiling
 ---------
 NativeCalls can be compiled using GNU Make and libffi.
-It was compiled with libffi-20030921 available from the pyobjc project.
-http://prdownloads.sourceforge.net/pyobjc/libffi-src-20030921.tar.gz?download
-
-By default, NativeCalls considers that libffi is in /opt/local (as installed
-by DarwinPorts). You can select another location with LIBFFI_PREFIX variable.
-For example, if libffi was installed with --prefix=/home/pguyot/unix, you can
-compile NativeCalls with:
-make LIBFFI_PREFIX=/home/pguyot/unix
+By default, configure (in trunk/) will configure the Makefile to use the libffi
+that exists in ${prefix}.
 
 Opening a library
 -----------------

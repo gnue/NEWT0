@@ -536,6 +536,7 @@ newtRef NcRequire0(newtRefArg r)
 		newtRefVar  patharray;
 		newtRefVar  path;
 		uint32_t	len;
+		uint32_t	nb_suffixes;
 		uint32_t	i;
 		uint32_t	j;
 
@@ -546,39 +547,46 @@ newtRef NcRequire0(newtRefArg r)
 
 		if (NewtRefIsNIL(newtlib))
 		{
-			newtRefVar	initPath[] = {NSSTR("."), NcGetGlobalVar(NSSYM0(_EXEDIR_))};
-
+			newtRefVar	initPath[] = {NSSTR(__LIBDIR__), NSSTR(".")};
 			newtlib = NewtMakeArray2(kNewtRefNIL, sizeof(initPath) / sizeof(newtRefVar), initPath);
 		}
 
 		len = NewtLength(newtlib);
+		nb_suffixes = sizeof(lib_exts) / sizeof(lib_exts[0]);
 
-		for (i = 0; i < len; i++)
+		for (j = 0; j < nb_suffixes; j++)
 		{
-			dir = NewtGetArraySlot(newtlib, i);
-			NewtSetArraySlot(patharray, 0, NcJoinPath(dir, r));
+			NewtSetArraySlot(patharray, 1, lib_exts[j].ext);
 
-			for (j = 0; j < sizeof(lib_exts) / sizeof(lib_exts[0]); j++)
+			for (i = 0; i <= len; i++)
 			{
-				NewtSetArraySlot(patharray, 1, lib_exts[j].ext);
-				path = NcStringer(patharray);
-
-				if (NewtFileExists(NewtRefToString(path)))
+				if (i == len) {
+					dir = NcGetGlobalVar(NSSYM0(_EXEDIR_));
+				} else {
+					dir = NewtGetArraySlot(newtlib, i);
+				}
+				if (NewtRefIsString(dir))
 				{
-#ifdef HAVE_DLOPEN
-					if (lib_exts[j].type == typeDylib)
-					{
-						lib = NcLoadLib(path);
-						NcSetSlot(requires, sym, lib);
-					}
-					else
-#endif /* HAVE_DLOPEN */
-					{
-						NcSetSlot(requires, sym, path);
-						NcLoad(path);
-					}
+					NewtSetArraySlot(patharray, 0, NcJoinPath(dir, r));
+					path = NcStringer(patharray);
 
-					return sym;
+					if (NewtFileExists(NewtRefToString(path)))
+					{
+#ifdef HAVE_DLOPEN
+						if (lib_exts[j].type == typeDylib)
+						{
+							lib = NcLoadLib(path);
+							NcSetSlot(requires, sym, lib);
+						}
+						else
+#endif /* HAVE_DLOPEN */
+						{
+							NcSetSlot(requires, sym, path);
+							NcLoad(path);
+						}
+	
+						return sym;
+					}
 				}
 			}
 		}

@@ -4,6 +4,7 @@ DEBUG = # -g
 srcdir = ./src
 build = ./build
 ext = ./ext
+contrib = ./contrib
 utils = $(srcdir)/utils
 parser = $(srcdir)/parser
 core = $(srcdir)/newt_core
@@ -12,7 +13,7 @@ yytmp = $(objdir)/yytmp
 tardir = $(shell basename `pwd`)_$(shell uname)
 docdir = $(build)/html
 
-
+DESTROOT =
 CC = @CC@
 YACC = @YACC@ -d
 LEX = @LEX@
@@ -24,6 +25,10 @@ LDIMPORT = @NEWT_LDIMPORT@
 LDFLAGS = $(DEBUG) -O2 @LDFLAGS@ @NEWT_LDFLAGS@
 LDSHARED = @LIBNEWT_LDSHARED@
 
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+bindir = @bindir@
+sitedir = ${prefix}/lib/newt0
 
 VPATH = $(core)
 STRIP = strip -x
@@ -59,6 +64,9 @@ PARSEROBJS    = $(yytmp)/y.tab.o \
 NEWTLIBS      = $(ext)/protoFILE \
                 $(ext)/protoREGEX
 
+CONTRIBLIBS   = $(contrib)/NewtObjC \
+		$(contrib)/NativeCalls
+
 OBJS          = $(MAINOBJ) $(UTILSOBJS) $(PARSEROBJS) $(COREOBJS)
 
 
@@ -70,8 +78,7 @@ OBJS          = $(MAINOBJ) $(UTILSOBJS) $(PARSEROBJS) $(COREOBJS)
 
 ### all
 
-all: newt @MAKE_EXT@
-
+all: newt @MAKE_EXT@ @MAKE_CONTRIB@
 
 ### make directory
 
@@ -131,6 +138,10 @@ ext: $(NEWTLIBS)
 $(NEWTLIBS)::
 	$(MAKE) -C $@
 
+contrib: $(CONTRIBLIBS)
+
+$(CONTRIBLIBS)::
+	$(MAKE) -C $@
 
 ### strip (for win)
 
@@ -159,6 +170,25 @@ doc:
 	mkdir -p $(docdir)
 	cd misc; doxygen doxygen.conf
 
+### INSTALL
+
+.PHONY : install install_ext install_contrib
+
+install_ext::
+	@for subdir in $(NEWTLIBS); do \
+		(cd $$subdir && $(MAKE) install) || exit 1; \
+	done
+
+install_contrib::
+	@for subdir in $(CONTRIBLIBS); do \
+		(cd $$subdir && $(MAKE) install) || exit 1; \
+	done
+
+install::
+	install -m 755 $(NEWT) $(DESTDIR)$(bindir)
+	install -d -m 755 $(DESTDIR)$(sitedir)
+	test "x@MAKE_EXT@" = x || $(MAKE) install_ext
+	test "x@MAKE_CONTRIB@" = x || $(MAKE) install_contrib
 
 ### TEST
 

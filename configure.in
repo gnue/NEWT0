@@ -102,6 +102,7 @@ case "$target_os" in
   darwin*)
     LIBNEWT_LDSHARED='$(CC) -dynamic -bundle -undefined suppress -flat_namespace'
     DLEXT='dylib'
+    MAKE_CONTRIB='contrib'
     ;;
   cygwin*|mingw*)
 	AC_DEFINE(__WIN32__)
@@ -144,7 +145,6 @@ case "$target_vendor" in
     ;;
 esac
 
-
 case "$HAVE_DLOPEN" in
   yes)
 	AC_DEFINE(HAVE_DLOPEN)
@@ -152,11 +152,26 @@ case "$HAVE_DLOPEN" in
     ;;
 esac
 
+test "x$prefix" = xNONE && prefix=$ac_default_prefix
 
-NEWT_LDFLAGS="$NEWT_LDFLAGS $LIBDL"
+AC_ARG_WITH(sitedir,
+	AS_HELP_STRING([--with-sitedir=DIR],
+		[site libraries in DIR [[PREFIX/lib/newt0]]]),
+	[sitedir=$withval],
+	[sitedir='${prefix}/lib/newt0'])
+SITE_DIR="`eval \"echo ${sitedir}\"`"
+
+AC_ARG_WITH(libffidir,
+	AS_HELP_STRING([--with-libffidir=DIR],
+		[where libffi libraries can be found [[PREFIX]]]),
+	[libffidir=$withval],
+	[libffidir='${prefix}'])
 
 AC_DEFINE_UNQUOTED(__PLATFORM__, "$target_os")
 AC_DEFINE_UNQUOTED(__DYLIBSUFFIX__, ".$DLEXT")
+AC_DEFINE_UNQUOTED(__LIBDIR__, "${SITE_DIR}")
+
+NEWT_LDFLAGS="$NEWT_LDFLAGS $LIBDL"
 
 AC_SUBST(NEWT_LDIMPORT)
 AC_SUBST(NEWT_LDFLAGS)
@@ -164,10 +179,16 @@ AC_SUBST(LIBNEWT_LDSHARED)
 AC_SUBST(LINK_NEWT_APP_)
 AC_SUBST(DLEXT)
 AC_SUBST(MAKE_EXT)
+AC_SUBST(MAKE_CONTRIB)
+AC_SUBST(BINDIR)
+AC_SUBST(sitedir)
+AC_SUBST(libffidir)
 
 AC_SUBST(LIBREGEX)
 
 AC_CONFIG_FILES([Makefile
                  ext/protoFILE/Makefile
-                 ext/protoREGEX/Makefile])
+                 ext/protoREGEX/Makefile
+                 contrib/NativeCalls/Makefile
+                 contrib/NewtObjC/Makefile])
 AC_OUTPUT

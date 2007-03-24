@@ -168,7 +168,7 @@ newtRef		NewtMakeInteger(int32_t v);
 newtRef		NewtMakeInt32(int32_t v);
 newtRef		NewtMakeReal(double v);
 newtRef		NewtMakeArray(newtRefArg klass, uint32_t n);
-newtRef		NewtMakeArray2(newtRefArg klass, uint32_t n, newtRefVar v[]);
+newtRef		NewtMakeArray2(newtRefArg klass, uint32_t n, const newtRefVar v[]);
 newtRef		NewtMakeMap(newtRefArg superMap, uint32_t n, newtRefVar v[]);
 void		NewtSetMapFlags(newtRefArg map, int32_t bit);
 void		NewtClearMapFlags(newtRefArg map, int32_t bit);

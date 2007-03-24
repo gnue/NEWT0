@@ -41,6 +41,7 @@
 
 // NEWT/0
 #include "NewtCore.h"
+#include "config.h"
 
 // NewtObjC
 #import "AppKitFunctions.h"
@@ -60,7 +61,9 @@ void newt_install(void);
 void newt_install(void)
 {
 	// Load the objc-runtime extension dynamic library.
-	if (!NSAddLibraryWithSearching("@executable_path/objc-runtime-x.dylib"))
+	if (!NSAddLibraryWithSearching("@loader_path/objc-runtime-x.dylib")	// Tiger and higher.
+		&& !NSAddLibraryWithSearching("@executable_path/objc-runtime-x.dylib") // In-place.
+		&& !NSAddLibraryWithSearching(__LIBDIR__ "/objc-runtime-x.dylib")) // Installed path.
 	{
 		(void) NewtThrow(kNErrObjCRuntimeErr, NewtMakeString("Couldn't find objc-runtime-x.dylib", true));
 	} else {	
