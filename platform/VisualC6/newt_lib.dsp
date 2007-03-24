@@ -110,6 +110,10 @@ SOURCE=..\..\src\newt_core\incs\VC6\iconv.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\newt_core\incs\VC6\NewtConf.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\newt_core\incs\VC6\stdbool.h
 # End Source File
 # Begin Source File
@@ -124,10 +128,6 @@ SOURCE=..\..\src\newt_core\incs\VC6\unistd.h
 # Begin Source File
 
 SOURCE=..\..\src\newt_core\incs\NewtBC.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\newt_core\incs\NewtConf.h
 # End Source File
 # Begin Source File
 
