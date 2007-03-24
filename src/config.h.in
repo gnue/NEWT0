@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------*/
 /**
  * @file	config.h
- * @brief   ƒRƒ“ƒtƒBƒOİ’è
+ * @brief   ã‚³ãƒ³ãƒ•ã‚£ã‚°è¨­å®š
  *
  * @author  M.Nukui
  * @date	2005-04-30
@@ -14,7 +14,7 @@
 #define	CONFIG_H
 
 
-/* ƒ}ƒNƒ’è‹` */
+/* ãƒã‚¯ãƒ­å®šç¾© */
 #undef HAVE_INTTYPES_H
 #undef HAVE_STDINT_H
 #undef HAVE_MEMORY_H
