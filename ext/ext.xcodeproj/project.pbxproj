@@ -55,8 +55,8 @@
 		F5622F2307E029FC009AAF9A /* NewtonMemory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewtonMemory.h; sourceTree = "<group>"; };
 		F5622F2407E029FC009AAF9A /* NewtonExceptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewtonExceptions.h; sourceTree = "<group>"; };
 		F57E7A0C07FD362400256511 /* NewtNSOF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewtNSOF.h; sourceTree = "<group>"; };
+		F5A713EA0BB503E900F8DB93 /* NewtConf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewtConf.h; sourceTree = "<group>"; };
 		F5ACB05306412D4900DB6CF9 /* NewtBC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewtBC.h; sourceTree = "<group>"; };
-		F5ACB05406412D4900DB6CF9 /* NewtConf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewtConf.h; sourceTree = "<group>"; };
 		F5ACB05506412D4900DB6CF9 /* NewtCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewtCore.h; sourceTree = "<group>"; };
 		F5ACB05606412D4900DB6CF9 /* NewtEnv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewtEnv.h; sourceTree = "<group>"; };
 		F5ACB05706412D4900DB6CF9 /* NewtErrs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewtErrs.h; sourceTree = "<group>"; };
@@ -156,7 +156,6 @@
 				F5F69C0107E8F36E0086BCEA /* platform.h */,
 				F541CF5007D8582D0071DCE6 /* Newton */,
 				F5ACB05306412D4900DB6CF9 /* NewtBC.h */,
-				F5ACB05406412D4900DB6CF9 /* NewtConf.h */,
 				F5ACB05506412D4900DB6CF9 /* NewtCore.h */,
 				F5ACB05606412D4900DB6CF9 /* NewtEnv.h */,
 				F5ACB05706412D4900DB6CF9 /* NewtErrs.h */,
@@ -183,6 +182,7 @@
 			isa = PBXGroup;
 			children = (
 				F5DE1345082AD4A500BB42A5 /* config.h */,
+				F5A713EA0BB503E900F8DB93 /* NewtConf.h */,
 			);
 			path = darwin;
 			sourceTree = "<group>";
