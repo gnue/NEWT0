@@ -219,15 +219,14 @@ void NewtInitSYM(void)
 void NewtInitSysEnv(void)
 {
 	struct {
-		char *		name;
-		newtRefVar  slot;
-		char *		defaultValue;
-		bool		ispath;
+		char *			name;
+		newtRefVar  	slot;
+		const char *	defaultValue;
 	} envs[] = {
-		{"NEWTLIB",		NSSYM0(NEWTLIB),	NULL,				true},
-		{"PLATFORM",	NSSYM(PLATFORM),	__PLATFORM__,		false},
-		{"DYLIBSUFFIX",	NSSYM(DYLIBSUFFIX),	__DYLIBSUFFIX__,	false},
-		{NULL,			kNewtRefUnbind,		NULL,				false}
+		{"NEWTLIB",		NSSYM0(NEWTLIB),	__LIBDIR__ ":."},
+		{"PLATFORM",	NSSYM(PLATFORM),	__PLATFORM__},
+		{"DYLIBSUFFIX",	NSSYM(DYLIBSUFFIX),	__DYLIBSUFFIX__},
+		{NULL,			kNewtRefUnbind,		NULL}
 	};
 
 	newtRefVar  env;
@@ -240,19 +239,25 @@ void NewtInitSysEnv(void)
 
 	for (i = 0; envs[i].name != NULL; i++)
 	{
-		v = NewtGetEnv(envs[i].name);
+		NcSetSlot(proto, envs[i].slot, NewtMakeString(envs[i].defaultValue, true));
+	}
 
-		if (NewtRefIsString(v))
-		{
-			if (envs[i].ispath)
-				v = NcSplit(v, NewtMakeCharacter(':'));
-
-			NcSetSlot(proto, envs[i].slot, v);
-		}
-		else if (envs[i].defaultValue)
-		{
-			NcSetSlot(proto, envs[i].slot, NewtMakeString(envs[i].defaultValue, true));
-		}
+	/* NEWTLIB is a special case, it can be overridden from the value in
+	   the global variables. */
+	v = NewtGetEnv("NEWTLIB");
+	if (NewtRefIsString(v))
+	{
+		v = NcSplit(v, NewtMakeCharacter(':'));
+		NcSetSlot(proto, NSSYM0(NEWTLIB), v);
+	}
+	else
+	{
+		newtRefVar default_newtlib_array[] = {NSSTR(__LIBDIR__), NSSTR(".")};
+		newtRefVar default_newtlib = NewtMakeArray2(
+				kNewtRefNIL,
+				sizeof(default_newtlib_array) / sizeof(newtRefVar),
+				default_newtlib_array);
+		NcSetSlot(proto, NSSYM0(NEWTLIB), default_newtlib);
 	}
 
 	NcSetSlot(env, NSSYM0(_proto), NewtPackLiteral(proto));

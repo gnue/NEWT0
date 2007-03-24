@@ -32,7 +32,7 @@ static newtObjRef   NewtObjBinarySetLength(newtObjRef obj, uint32_t n);
 static uint32_t		NewtObjSymbolLength(newtObjRef obj);
 static uint32_t		NewtObjStringLength(newtObjRef obj);
 static newtObjRef   NewtObjStringSetLength(newtObjRef obj, uint32_t n);
-static void			NewtMakeInitSlots(newtRefArg r, uint32_t st, uint32_t n, uint32_t step, newtRefVar v[]);
+static void			NewtMakeInitSlots(newtRefArg r, uint32_t st, uint32_t n, uint32_t step, const newtRefVar v[]);
 static newtObjRef   NewtObjSlotsSetLength(newtObjRef obj, uint32_t n, newtRefArg v);
 static int			NewtInt32Compare(newtRefArg r1, newtRefArg r2);
 static int			NewtRealCompare(newtRefArg r1, newtRefArg r2);
@@ -1432,7 +1432,7 @@ newtRef NewtMakeArray(newtRefArg klass, uint32_t n)
     return NewtMakeSlotsObj(klass, n, 0);
 }
 
-void NewtMakeInitSlots(newtRefArg r, uint32_t st, uint32_t n, uint32_t step, newtRefVar v[])
+void NewtMakeInitSlots(newtRefArg r, uint32_t st, uint32_t n, uint32_t step, const newtRefVar v[])
 {
     if (v != NULL)
     {
@@ -1460,7 +1460,7 @@ void NewtMakeInitSlots(newtRefArg r, uint32_t st, uint32_t n, uint32_t step, new
  * @return			配列オブジェクト
  */
 
-newtRef NewtMakeArray2(newtRefArg klass, uint32_t n, newtRefVar v[])
+newtRef NewtMakeArray2(newtRefArg klass, uint32_t n, const newtRefVar v[])
 {
     newtRefVar	r;
 

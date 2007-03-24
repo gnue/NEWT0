@@ -311,7 +311,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT YACC LEX LEXLIB LEX_OUTPUT_ROOT AR ac_ct_AR RANLIB ac_ct_RANLIB build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os CPP EGREP LIBOBJS NEWT_LDIMPORT NEWT_LDFLAGS LIBNEWT_LDSHARED LINK_NEWT_APP_ DLEXT MAKE_EXT LIBREGEX LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT YACC LEX LEXLIB LEX_OUTPUT_ROOT AR ac_ct_AR RANLIB ac_ct_RANLIB build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os CPP EGREP LIBOBJS NEWT_LDIMPORT NEWT_LDFLAGS LIBNEWT_LDSHARED LINK_NEWT_APP_ DLEXT MAKE_EXT MAKE_CONTRIB BINDIR sitedir libffidir LIBREGEX LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -845,6 +845,12 @@ if test -n "$ac_init_help"; then
      short | recursive ) echo "Configuration of FULL-PACKAGE-NAME VERSION:";;
    esac
   cat <<\_ACEOF
+
+Optional Packages:
+  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
+  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+  --with-sitedir=DIR      site libraries in DIR [PREFIX/lib/newt0]
+  --with-libffidir=DIR    where libffi libraries can be found [PREFIX]
 
 Some influential environment variables:
   CC          C compiler command
@@ -4869,6 +4875,7 @@ case "$target_os" in
   darwin*)
     LIBNEWT_LDSHARED='$(CC) -dynamic -bundle -undefined suppress -flat_namespace'
     DLEXT='dylib'
+    MAKE_CONTRIB='contrib'
     ;;
   cygwin*|mingw*)
 	cat >>confdefs.h <<\_ACEOF
@@ -4917,7 +4924,6 @@ _ACEOF
     ;;
 esac
 
-
 case "$HAVE_DLOPEN" in
   yes)
 	cat >>confdefs.h <<\_ACEOF
@@ -4928,8 +4934,26 @@ _ACEOF
     ;;
 esac
 
+test "x$prefix" = xNONE && prefix=$ac_default_prefix
 
-NEWT_LDFLAGS="$NEWT_LDFLAGS $LIBDL"
+
+# Check whether --with-sitedir or --without-sitedir was given.
+if test "${with_sitedir+set}" = set; then
+  withval="$with_sitedir"
+  sitedir=$withval
+else
+  sitedir='${prefix}/lib/newt0'
+fi;
+SITE_DIR="`eval \"echo ${sitedir}\"`"
+
+
+# Check whether --with-libffidir or --without-libffidir was given.
+if test "${with_libffidir+set}" = set; then
+  withval="$with_libffidir"
+  libffidir=$withval
+else
+  libffidir='${prefix}'
+fi;
 
 cat >>confdefs.h <<_ACEOF
 #define __PLATFORM__ "$target_os"
@@ -4939,6 +4963,12 @@ cat >>confdefs.h <<_ACEOF
 #define __DYLIBSUFFIX__ ".$DLEXT"
 _ACEOF
 
+cat >>confdefs.h <<_ACEOF
+#define __LIBDIR__ "${SITE_DIR}"
+_ACEOF
+
+
+NEWT_LDFLAGS="$NEWT_LDFLAGS $LIBDL"
 
 
 
@@ -4949,7 +4979,11 @@ _ACEOF
 
 
 
-                              ac_config_files="$ac_config_files Makefile ext/protoFILE/Makefile ext/protoREGEX/Makefile"
+
+
+
+
+                                                  ac_config_files="$ac_config_files Makefile ext/protoFILE/Makefile ext/protoREGEX/Makefile contrib/NativeCalls/Makefile contrib/NewtObjC/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -5478,6 +5512,8 @@ do
   "Makefile" ) CONFIG_FILES="$CONFIG_FILES Makefile" ;;
   "ext/protoFILE/Makefile" ) CONFIG_FILES="$CONFIG_FILES ext/protoFILE/Makefile" ;;
   "ext/protoREGEX/Makefile" ) CONFIG_FILES="$CONFIG_FILES ext/protoREGEX/Makefile" ;;
+  "contrib/NativeCalls/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/NativeCalls/Makefile" ;;
+  "contrib/NewtObjC/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/NewtObjC/Makefile" ;;
   "src/config.h" ) CONFIG_HEADERS="$CONFIG_HEADERS src/config.h" ;;
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
 echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
@@ -5599,6 +5635,10 @@ s,@LIBNEWT_LDSHARED@,$LIBNEWT_LDSHARED,;t t
 s,@LINK_NEWT_APP_@,$LINK_NEWT_APP_,;t t
 s,@DLEXT@,$DLEXT,;t t
 s,@MAKE_EXT@,$MAKE_EXT,;t t
+s,@MAKE_CONTRIB@,$MAKE_CONTRIB,;t t
+s,@BINDIR@,$BINDIR,;t t
+s,@sitedir@,$sitedir,;t t
+s,@libffidir@,$libffidir,;t t
 s,@LIBREGEX@,$LIBREGEX,;t t
 s,@LTLIBOBJS@,$LTLIBOBJS,;t t
 CEOF
