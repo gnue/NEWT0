@@ -1,0 +1,32 @@
+#!@NEWT@
+
+Require("NativeCalls");
+begin
+local libreadline := OpenNativeLibrary("libreadline");
+local readlineFn := libreadline:GetFunction({
+						name: "readline",
+						args: ['string],
+						result: 'string});
+
+repeat
+begin
+	local theString := call readlineFn with ("inwt> ");
+	if (theString = nil) then
+	begin
+		Print("\n");
+		break;
+	end;
+	try
+	begin
+		theFunction := Compile(theString);
+		theResult := call theFunction with ();
+		P(theResult); 
+	end
+	onexception |evt| do
+	begin
+		Print("Some error occurred:\n");
+		P(CurrentException());
+	end;
+end until nil;
+
+end

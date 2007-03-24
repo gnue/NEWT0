@@ -103,7 +103,6 @@ case "$target_os" in
   darwin*)
     LIBNEWT_LDSHARED='$(CC) -dynamic -bundle -undefined suppress -flat_namespace'
     DLEXT='dylib'
-    MAKE_CONTRIB='contrib'
     ;;
   cygwin*|mingw*)
 	AC_DEFINE(__WIN32__)
@@ -174,6 +173,11 @@ AC_ARG_ENABLE(compat,
 		[compat='yes'],
 		[compat='no'])
 
+AC_ARG_ENABLE(contrib,
+	AS_HELP_STRING([--enable-contrib],
+		[include contrib packages (inwt, NativeCalls, and NewtObjC)]),
+		[MAKE_CONTRIB='contrib'])
+
 test "x$compat" = xno && AC_DEFINE(__NAMED_MAGIC_POINTER__)
 
 AC_DEFINE_UNQUOTED(__PLATFORM__, "$target_os")
@@ -199,6 +203,8 @@ AC_SUBST(LIBREGEX)
 AC_CONFIG_FILES([Makefile
                  ext/protoFILE/Makefile
                  ext/protoREGEX/Makefile
+                 contrib/inwt/Makefile
+                 contrib/inwt/inwt
                  contrib/NativeCalls/Makefile
                  contrib/NewtObjC/Makefile])
 AC_OUTPUT

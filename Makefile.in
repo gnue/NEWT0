@@ -64,8 +64,9 @@ PARSEROBJS    = $(yytmp)/y.tab.o \
 NEWTLIBS      = $(ext)/protoFILE \
                 $(ext)/protoREGEX
 
-CONTRIBLIBS   = $(contrib)/NewtObjC \
-		$(contrib)/NativeCalls
+CONTRIBLIBS   = $(contrib)/inwt \
+				$(contrib)/NewtObjC \
+				$(contrib)/NativeCalls
 
 OBJS          = $(MAINOBJ) $(UTILSOBJS) $(PARSEROBJS) $(COREOBJS)
 
@@ -198,5 +199,12 @@ test:
 
 ### CLEAN
 
+clean_contrib::
+	@for subdir in $(CONTRIBLIBS); do \
+		(cd $$subdir && $(MAKE) clean) || exit 1; \
+	done
+
 clean:
 	rm -rf build/*
+	test "x@MAKE_CONTRIB@" = x || $(MAKE) clean_contrib
+
