@@ -4,7 +4,8 @@
 AC_PREREQ(2.57)
 AC_INIT(FULL-PACKAGE-NAME, VERSION, BUG-REPORT-ADDRESS)
 AC_CONFIG_SRCDIR([src/main.c])
-AC_CONFIG_HEADER([src/config.h])
+AC_CONFIG_HEADERS([src/config.h])
+AC_CONFIG_HEADERS([src/newt_core/incs/NewtConf.h])
 
 # Checks for programs.
 AC_PROG_CC
@@ -167,6 +168,14 @@ AC_ARG_WITH(libffidir,
 	[libffidir=$withval],
 	[libffidir='${prefix}'])
 
+AC_ARG_ENABLE(compat,
+	AS_HELP_STRING([--enable-compat],
+		[enable compatibility with the Newton, and break many features on the desktop]),
+		[compat='yes'],
+		[compat='no'])
+
+test "x$compat" = xno && AC_DEFINE(__NAMED_MAGIC_POINTER__)
+
 AC_DEFINE_UNQUOTED(__PLATFORM__, "$target_os")
 AC_DEFINE_UNQUOTED(__DYLIBSUFFIX__, ".$DLEXT")
 AC_DEFINE_UNQUOTED(__LIBDIR__, "${SITE_DIR}")
@@ -183,6 +192,7 @@ AC_SUBST(MAKE_CONTRIB)
 AC_SUBST(BINDIR)
 AC_SUBST(sitedir)
 AC_SUBST(libffidir)
+AC_SUBST(__NAMED_MAGIC_POINTER__)
 
 AC_SUBST(LIBREGEX)
 
