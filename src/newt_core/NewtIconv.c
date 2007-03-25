@@ -71,73 +71,196 @@ char * NewtIconv(iconv_t cd, char * src, size_t srclen, size_t* dstlenp)
 #if _MSC_VER
 
 #include <string.h>
+#include <windows.h>
+#include <winnls.h>
 
-/*
- * This is a minimalistic "iconv" version which simply maps into WIN32
- * native calls (not even at this point!). 
+/**
+ * This is a minimalistic "iconv" for VC6.
+ * This version simply maps into WIN32 native calls and is pretty limited
+ * but likely to be sufficient within NEWT/0.
  * 
- * Requested conversions are:
- *  UTF-16BE to UTF-8 and back
- *  MACROMAN to UTF-8 and back
- *  where UTF-8 is defined at runtime and could be something else...
+ * Requested conversions in NEWT/0 as of 03/24/2007 are:
+ *  UTF-16BE to current code page and back
+ *  MACROMAN to current code page and back
+ *
+ * So we define the iconv_t bits ...00ss00dd where ss is the source format and
+ * dd is the destination format with:
+ *   00 = current code page
+ *   01 = Mac Roman
+ *   10 = UTF-16BE, Newton Format
+ *   11 = UTF-16LE., MSWindows Format
+ * iconv_t is -1 on error or unsupported conversion
+ *
+ * \todo move this into the VC6 directories
  */
 iconv_t iconv_open(const char *tocode, const char *fromcode)
 {
   iconv_t mode = 0;
+  // avoid a crash if the user does not privide encodings
   if (!tocode || !fromcode)
-    return mode;
-  if (strcmp(fromcode, "UTF-16BE")==0)
-    mode |= 1;
-  if (strcmp(tocode, "UTF-16BE")==0)
-    mode |= 2;
-  //printf("Requested iconv form '%s' to '%s' (our code: %d)\n", fromcode, tocode, mode);
+    return -1;
+
+  // determine the source text format
+  // if we can't identify the string, we assume the current codepage
+  if (strcmp(fromcode, "MACROMAN")==0)
+    mode |= 0x10;
+  else if (strcmp(fromcode, "UTF-16BE")==0)
+    mode |= 0x20;
+  else if (strcmp(fromcode, "UTF-16LE")==0)
+    mode |= 0x30;
+
+  // determine the destination text format of the text source
+  if (strcmp(tocode, "MACROMAN")==0)
+    mode |= 0x01;
+  else if (strcmp(tocode, "UTF-16BE")==0)
+    mode |= 0x02;
+  else if (strcmp(tocode, "UTF-16LE")==0)
+    mode |= 0x03;
+
   return mode;
 }
 
+/*
+ * Flip the endianness of a 16 bit per char string
+ */
+static void ic_flip_endian(void *dst, const void *src, int n) {
+  unsigned char *d = (unsigned char *)dst;
+  unsigned char *s = (unsigned char *)src;
+  for ( ; n>0; n--) {
+    unsigned char c = *s++;
+    *d++ = *s++;
+    *d++ = c;
+  }
+}
+
+/**
+ * Convert a string of text from one encoding to another.
+ *
+ * \param cd[in] conversion descriptor, see iconv_open()
+ * \param inbuf[inout] source buffer, will be incremented for each converted character; this
+ *        value may be incorrect if the output buffer is too small.
+ * \param inbytesleft[inout] number of bytes in inbuffer, will be decremented for each conversion
+ * \param outbuf[inout] destination buffer, will be incremented
+ * \param outbytesleft[inout] number of bytes still free in buffer, will be decremented
+ * \return number of characters converted that can not be converted back (not implemented);
+ *         we return 0 for a complete conversion, and -1 for any error
+ */
 size_t iconv(iconv_t cd, const char **inbuf, size_t *inbytesleft, char **outbuf, size_t *outbytesleft)
 {
-  int i, n;
-  const char *s;
-  char *d;
+  // reusable buffer for temporary conversion
+  static unsigned short *wbuf = 0L;
+  static int NWbuf = 0;
+# define MAKE_ROOM(n) if (NWbuf<(n)) { NWbuf=(n)+32; wbuf = realloc(wbuf, NWbuf); }
 
-  if (!inbuf || !*inbuf || !outbuf || !*outbuf) 
+  // addresses require by WIN32 calls
+  static char *dflt = ".";
+  BOOL dfltUsed;
+
+  // some variables
+  const char *src;
+  char *dst;
+  unsigned short *tmp;
+  int sn, dn, tn;
+  size_t ret = 0;
+
+  // handle the special cases first
+  if (inbuf==0L || *inbuf==0L) {
+    if (outbuf==0L || *outbuf==0L) {
+      // sepcial case: initialize converter
+      // (nothing to do here)
+      return 0;
+    } else {
+      // special case: write a format indicator
+      // (not implemented)
+      return 0;
+    }
+  }
+
+  // catch faulty parameters
+  if (!inbytesleft || !outbytesleft || outbuf==0L || *outbuf==0L)
+    return -1;
+
+  src = *inbuf; dst = *outbuf; sn = *inbytesleft; dn = *outbytesleft;
+  if (sn==0) 
     return 0;
 
-  n = *inbytesleft;
-  s = *inbuf;
-  d = *outbuf;
+  // take care of all cases without any conversion
+  if ( (cd&0x3)==((cd>>4)&0x3) ) {
+    if (sn<=dn) {
+      dn = sn;
+    } else {
+      sn = dn;
+      ret = -1;
+    }
+    memcpy(dst, src, sn);
+    goto fixup_return_values;
+  }
 
-  switch (cd) {
-  case 0:
-  case 3:
-    memmove(*outbuf, *inbuf, n);
-    *inbytesleft -= n;
-    *inbuf += n;
-    *outbytesleft -= n;
-    *outbuf += n;
+  // now, the conversion on WIN32 is always a two-step process
+  // because WIN32 can only convert to and from UTF-16LE
+
+  // convert from old format to UTF-16LE
+  switch (cd & 0x30) {
+  case 0x00: // from local code page, WIN32 does that
+    MAKE_ROOM(sn*2);
+    tn = 2 * MultiByteToWideChar(CP_THREAD_ACP, MB_PRECOMPOSED, src, sn, wbuf, sn);
+    tmp = wbuf;
     break;
-  case 1: // from 16bit to 8bit
-    for (i=0; i<n; i++) {
-      s++;
-      *d++ = *s++;
-    }
-    *inbytesleft -= 2*n;
-    *inbuf += 2*n;
-    *outbytesleft -= n;
-    *outbuf += n;
+  case 0x10: // from Mac Roman, WIN32 does that
+    MAKE_ROOM(sn*2);
+    tn = 2 * MultiByteToWideChar(CP_MACCP, MB_PRECOMPOSED, src, sn, wbuf, sn);
+    tmp = wbuf;
     break;
-  case 2: // from 8bit to 16bit
-    for (i=0; i<n; i++) {
-      *d++ = 0;
-      *d++ = *s++;
-    }
-    *inbytesleft -= n;
-    *inbuf += n;
-    *outbytesleft -= 2*n;
-    *outbuf += 2*n;
+  case 0x20: // from UTF-16BE, flip the byte order
+    MAKE_ROOM(sn);
+    ic_flip_endian(wbuf, src, sn/2);
+    tmp = wbuf; tn = sn;
+    break;
+  case 0x30: // from UTF-16LE, make the source buffer the temp buffer
+    tmp = (unsigned short*)src; tn = sn;
     break;
   }
-  return 0;
+
+  // convert from UTF-16LE to new format
+  switch (cd & 0x03) {
+  case 0x00: // to local code page
+    dn = WideCharToMultiByte(CP_THREAD_ACP, 0, tmp, tn/2, dst, dn, dflt, &dfltUsed);
+    if (dn==0) 
+      ret = -1;
+    break;
+  case 0x01: // to Mac Roman
+    dn = WideCharToMultiByte(CP_MACCP, 0, tmp, tn/2, dst, dn, dflt, &dfltUsed);
+    if (dn==0) 
+      ret = -1;
+    break;
+  case 0x02: // to UTF-16BE
+    if (tn<=dn) {
+      dn = tn;
+    } else {
+      tn = dn;
+      ret = -1;
+    }
+    ic_flip_endian(dst, tmp, tn/2);
+    break;
+  case 0x03: // to UTF-16LE
+    if (tn<=dn) {
+      dn = tn;
+    } else {
+      tn = dn;
+      ret = -1;
+    }
+    memcpy(dst, tmp, tn);
+    break;
+  }
+
+fixup_return_values:
+  *inbuf  += sn; *inbytesleft  -= sn;
+  *outbuf += dn; *outbytesleft -= dn;
+  if (ret==-1) 
+    errno = 7;
+  return ret;
+
+#undef MAKE_ROOM
 }
 
 int iconv_close(iconv_t type)
