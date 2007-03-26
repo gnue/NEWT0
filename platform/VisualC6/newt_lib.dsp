@@ -183,6 +183,10 @@ SOURCE=..\..\src\newt_core\incs\NewtParser.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\newt_core\incs\NewtPkg.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\newt_core\incs\NewtPrint.h
 # End Source File
 # Begin Source File
@@ -245,6 +249,10 @@ SOURCE=..\..\src\newt_core\NewtObj.c
 # Begin Source File
 
 SOURCE=..\..\src\newt_core\NewtParser.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\newt_core\NewtPkg.c
 # End Source File
 # Begin Source File
 
