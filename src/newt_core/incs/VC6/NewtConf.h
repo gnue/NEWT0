@@ -17,7 +17,7 @@
 /* マクロ */
 
 /// 名前付マジックポインタを使用
-#define __NAMED_MAGIC_POINTER__ 1
+#undef __NAMED_MAGIC_POINTER__
 
 /* VM */
 
