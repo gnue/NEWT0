@@ -103,6 +103,25 @@ enum {
 };
 
 
+/// Newton Package Format: Part Flags
+enum {
+	kProtocolPart	= 0,		///< part contains protocol data
+	kNOSPart		= 1,		///< part contains NOS data
+	kRawPart		= 2,		///< raw part data, no defined type
+	kAutoLoadFlag	= 0x0010,	///< protocols will be registered automatically
+	kAutoRemoveFlag	= 0x0020,	///< protocols will be unregistered automatically
+	kNotifyFlag		= 0x0080,	///< notify system handler of installation
+	kAutoCopyFlag	= 0x0100	///< part must be moved into precious RAM before activation
+};
+
+
+/// Newton Package Format: Object Header Flags
+enum {
+	kObjSlotted	= 0x01,	///< object is an array
+	kObjFrame	= 0x02,	///< object is a frame if both flags are set
+};
+
+
 /* 型宣言 */
 
 // Ref(Integer, Pointer, Charcter, Spatial, Magic pointer)
