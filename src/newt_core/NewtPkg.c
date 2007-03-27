@@ -82,6 +82,8 @@ typedef struct {
 	pkg_part_t*	part_headers;	///< pointer to first part header - can be used as an array
 	pkg_part_t*	part_header;	///< header of current part
 	uint8_t *	part;			///< start of current part data
+	uint32_t	part_offset;	///< offset of current part to the beginning of data
+	newtRefVar	instances;		///< array holding the previously generated instance of any ref per part
 	newtErr		lastErr;		///< a way to return error from deep below
 #ifdef HAVE_LIBICONV
 	iconv_t		from_utf16;		///< strings in compatible packages are UTF16
@@ -91,6 +93,9 @@ typedef struct {
 
 /* functions */
 uint32_t PkgReadU32(uint8_t *d);
+
+newtRef PkgPartGetInstance(pkg_stream_t *pkg, uint32_t p_obj);
+void    PkgPartSetInstance(pkg_stream_t *pkg, uint32_t p_obj, newtRefArg r);
 
 newtRef PkgReadRef(pkg_stream_t *pkg, uint32_t p_obj);
 newtRef PkgReadBinaryObject(pkg_stream_t *pkg, uint32_t p_obj);
@@ -119,12 +124,39 @@ uint32_t PkgReadU32(uint8_t *d)
 }
 
 /*------------------------------------------------------------------------*/
-/** Generate a ref from package data
+/** Check if there was already an object created for the given offset.
+ * 
+ * @param pkg		[inout] the package
+ * @param p_obj		[in] offset to object
+ *
+ * @retval	ref to previously create object or kNewtRefUnbind
+ */
+newtRef PkgPartGetInstance(pkg_stream_t *pkg, uint32_t p_obj)
+{
+	uint32_t ix = (p_obj - pkg->part_offset) / 4;
+	return NewtGetArraySlot(pkg->instances, ix);
+}
+
+/*------------------------------------------------------------------------*/
+/** Set the object ref for the given offset in the file
+ * 
+ * @param pkg		[inout] the package
+ * @param r			[in] ref to new object
+ * @param p_obj		[in] offset into data block
+ */
+void PkgPartSetInstance(pkg_stream_t *pkg, uint32_t p_obj, newtRefArg r)
+{
+	uint32_t ix = (p_obj - pkg->part_offset) / 4;
+	NewtSetArraySlot(pkg->instances, ix, r);
+}
+
+/*------------------------------------------------------------------------*/
+/** Interprete a ref in the Package data block.
  * 
  * @param pkg		[inout] the package
  * @param p_obj		[in] offset to Ref data relative to package start
  *
- * @retval	Newt object version of package Ref
+ * @retval	Newt version of Package Ref
  */
 newtRef PkgReadRef(pkg_stream_t *pkg, uint32_t p_obj)
 {
@@ -143,19 +175,16 @@ newtRef PkgReadRef(pkg_stream_t *pkg, uint32_t p_obj)
 		else if (ref==kNewtRefNIL) result = kNewtRefNIL;
 		else if (ref&0x0f==0x0a) result = NewtMakeCharacter(ref>>4);
 		else if (ref==kNewtSymbolClass) result = kNewtSymbolClass;
-		else if (ref==0x32) {
-			result = 0x32;
-			printf("*** PkgReader: PkgReadRef - unsupported ref 0x%08x - what is this?\n", ref);
-		} else {
+		else {
 #			ifdef DEBUG_PKG
-				printf("*** PkgReader: PkgReadRef - unsupported ref 0x%08x\n", ref);
+				printf("*** PkgReader: PkgReadRef - unknown ref 0x%08x\n", ref);
 #			endif
 			result = ref; 
 		}
 		break;
 	case 3: // magic pointer
 #		ifdef __NAMED_MAGIC_POINTER__
-			result = kNewtRefNIL; // no timplemented
+			result = kNewtRefNIL; // not implemented
 #		else
 			result = ref; // already a correct magic pointer
 #		endif
@@ -166,7 +195,7 @@ newtRef PkgReadRef(pkg_stream_t *pkg, uint32_t p_obj)
 }
 
 /*------------------------------------------------------------------------*/
-/** Generate a binary object from package data
+/** Generate a binary object from Package data
  * 
  * @param pkg		[inout] the package
  * @param p_obj		[in] offset to binary data object relative to package start
@@ -223,7 +252,7 @@ newtRef PkgReadBinaryObject(pkg_stream_t *pkg, uint32_t p_obj)
 }
 
 /*------------------------------------------------------------------------*/
-/** Generate an array from package data
+/** Generate an Array Object from Package data
  * 
  * @param pkg		[inout] the package
  * @param p_obj		[in] offset to array data relative to package start
@@ -251,7 +280,7 @@ newtRef PkgReadArrayObject(pkg_stream_t *pkg, uint32_t p_obj)
 
 
 /*------------------------------------------------------------------------*/
-/** Generate a frame from package data
+/** Generate a Frame Object from Package data
  * 
  * @param pkg		[inout] the package
  * @param p_obj		[in] offset to frame data relative to package start
@@ -290,8 +319,13 @@ newtRef PkgReadFrameObject(pkg_stream_t *pkg, uint32_t p_obj)
 newtRef PkgReadObject(pkg_stream_t *pkg, uint32_t p_obj)
 {
 	uint32_t obj = PkgReadU32(pkg->data + p_obj);
-	newtRef ret = kNewtRefNIL;
+	newtRef ret = PkgPartGetInstance(pkg, p_obj);
 
+	// avoid generating objects twice
+	if (ret!=kNewtRefUnbind)
+		return ret;
+
+	// create an object based on its low 8 bit type
 	switch (obj & 0xff) {
 	case 0x40: // binary object
 		ret = PkgReadBinaryObject(pkg, p_obj);
@@ -309,6 +343,10 @@ newtRef PkgReadObject(pkg_stream_t *pkg, uint32_t p_obj)
 #		endif
 		break;
 	}
+
+	// remember that we created this object
+	PkgPartSetInstance(pkg, p_obj, ret);
+
 	return ret;
 }
 
@@ -321,8 +359,32 @@ newtRef PkgReadObject(pkg_stream_t *pkg, uint32_t p_obj)
  */
 newtRef PkgReadNOSPart(pkg_stream_t *pkg)
 {
-	uint32_t p_obj = PkgReadU32(pkg->part+12);
-	return PkgReadObject(pkg, p_obj&~3);
+	uint32_t	p_obj;
+	newtRefVar	result;
+
+	// verify that we have a correct header 
+	if (PkgReadU32(pkg->part)!=0x00001041 || PkgReadU32(pkg->part+8)!=0x00000002) {
+#		ifdef DEBUG_PKG
+		printf("*** PkgReader: PkgReadPart - unsupported NOS Part intro at %d\n",
+			pkg->part-pkg->data);
+#		endif
+		return kNewtRefNIL;
+	}
+	
+	// create an array that holds a ref to all creted objects, avoiding double instantiation
+	if (pkg->instances) 
+		NewtSetLength(pkg->instances, ntohl(pkg->part_header->size)/4);
+	else
+		pkg->instances = NewtMakeArray(kNewtRefUnbind, ntohl(pkg->part_header->size)/4);
+
+	// now recursively load all objects
+	p_obj = PkgReadU32(pkg->part+12);
+	result = PkgReadObject(pkg, p_obj&~3);
+
+	// release our helper array
+	NewtSetLength(pkg->instances, 0);
+
+	return result;
 }
 
 /*------------------------------------------------------------------------*/
@@ -346,9 +408,8 @@ newtRef PkgReadPart(pkg_stream_t *pkg, int32_t index)
                         };
 
 	pkg->part_header = pkg->part_headers + index;
-	pkg->part = pkg->data 
-				+ ntohl(pkg->header->directorySize) 
-				+ ntohl(pkg->part_header->offset);
+	pkg->part_offset = ntohl(pkg->header->directorySize) + ntohl(pkg->part_header->offset);
+	pkg->part = pkg->data + pkg->part_offset;
 	flags = ntohl(pkg->part_header->flags);
 
 	frame = NewtMakeFrame2(sizeof(ptv) / (sizeof(newtRefVar) * 2), ptv);
@@ -359,15 +420,6 @@ newtRef PkgReadPart(pkg_stream_t *pkg, int32_t index)
 
 	switch (flags&0x03) {
 	case kNOSPart:
-		if (   PkgReadU32(pkg->part)  !=0x00001041
-			|| PkgReadU32(pkg->part+8)!=0x00000002) 
-		{
-#			ifdef DEBUG_PKG
-				printf("*** PkgReader: PkgReadPart - unsupported NOS Part intro at %d\n",
-					pkg->part-pkg->data);
-#			endif
-			break;
-		}
 		NcSetSlot(frame, NSSYM(info), PkgReadVardataBinary(pkg, &pkg->part_header->info));
 		NcSetSlot(frame, NSSYM(data), PkgReadNOSPart(pkg));
 		break;
