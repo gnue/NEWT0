@@ -92,24 +92,20 @@ typedef struct {
 
 
 /* functions */
-uint32_t PkgReadU32(uint8_t *d);
+static newtRef	PkgPartGetInstance(pkg_stream_t *pkg, uint32_t p_obj);
+static void		PkgPartSetInstance(pkg_stream_t *pkg, uint32_t p_obj, newtRefArg r);
 
-newtRef PkgPartGetInstance(pkg_stream_t *pkg, uint32_t p_obj);
-void    PkgPartSetInstance(pkg_stream_t *pkg, uint32_t p_obj, newtRefArg r);
+static uint32_t	PkgReadU32(uint8_t *d);
+static newtRef	PkgReadRef(pkg_stream_t *pkg, uint32_t p_obj);
+static newtRef	PkgReadBinaryObject(pkg_stream_t *pkg, uint32_t p_obj);
+static newtRef	PkgReadArrayObject(pkg_stream_t *pkg, uint32_t p_obj);
+static newtRef	PkgReadFrameObject(pkg_stream_t *pkg, uint32_t p_obj);
+static newtRef	PkgReadObject(pkg_stream_t *pkg, uint32_t p_obj);
+static newtRef	PkgReadPart(pkg_stream_t *pkg, int32_t index);
+static newtRef	PkgReadVardataString(pkg_stream_t *pkg, pkg_info_ref_t *info_ref);
+static newtRef	PkgReadVardataBinary(pkg_stream_t *pkg, pkg_info_ref_t *info_ref);
+static newtRef	PkgReadHeader(pkg_stream_t *pkg);
 
-newtRef PkgReadRef(pkg_stream_t *pkg, uint32_t p_obj);
-newtRef PkgReadBinaryObject(pkg_stream_t *pkg, uint32_t p_obj);
-newtRef PkgReadArrayObject(pkg_stream_t *pkg, uint32_t p_obj);
-newtRef PkgReadFrameObject(pkg_stream_t *pkg, uint32_t p_obj);
-newtRef PkgReadObject(pkg_stream_t *pkg, uint32_t p_obj);
-
-newtRef PkgReadPart(pkg_stream_t *pkg, int32_t index);
-
-newtRef PkgReadVardataString(pkg_stream_t *pkg, pkg_info_ref_t *info_ref);
-newtRef PkgReadVardataBinary(pkg_stream_t *pkg, pkg_info_ref_t *info_ref);
-newtRef PkgReadHeader(pkg_stream_t *pkg);
-
-newtRef NewtReadPkg(uint8_t * data, size_t size);
 
 /*------------------------------------------------------------------------*/
 /** Endian-neutral conversion of four bytes into one uint32
