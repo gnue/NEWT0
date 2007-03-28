@@ -16,9 +16,9 @@
 /* マクロ定義 */
 #define NEWT_NAME		"newt"									///< コマンド名
 #define NEWT_PROTO		"/0"									///< プロト
-#define NEWT_VERSION	"0.1.2"									///< バージョン
+#define NEWT_VERSION	"0.1.3"									///< バージョン
 #define NEWT_COPYRIGHT	"Copyright (C) 2003-2007 Makoto Nukui"  ///< コピーライト
-#define NEWT_BUILD		"2007-03-24-1"							///< ビルド番号
+#define NEWT_BUILD		"2007-03-29-1"							///< ビルド番号
 #define NEWT_PARAMS		"[switches] [--] [programfile]"			///< 引数
 
 /// 使用方法

@@ -655,20 +655,6 @@ int lex_makereal(double n)
 #ifdef __NAMED_MAGIC_POINTER__
 
 /*------------------------------------------------------------------------*/
-/** マジックポインタトークンの作成
- *
- * @param n			[in] マジックポインタ番号
- *
- * @return			トークンID
- */
-
-int lex_makemagicpointer(int n)
-{
-	return lex_update_tokenpos(kERROR);
-}
-
-
-/*------------------------------------------------------------------------*/
 /** 名前付マジックポインタの作成
  *
  * @param s			[in] 文字列
@@ -700,6 +686,23 @@ int lex_makenamedmp(char *s, bool trunc)
 #else
 
 /*------------------------------------------------------------------------*/
+/** 名前付マジックポインタの作成
+ *
+ * @param s			[in] 文字列
+ * @param trunc		[in] 前後の切り詰め
+ *
+ * @return			トークンID
+ */
+
+int lex_makenamedmp(char *s, bool trunc)
+{
+	return lex_update_tokenpos(kERROR);
+}
+
+#endif
+
+
+/*------------------------------------------------------------------------*/
 /** マジックポインタトークンの作成
  *
  * @param n			[in] マジックポインタ番号
@@ -719,23 +722,6 @@ int lex_makemagicpointer(int n)
 
 	return lex_update_tokenpos(kMAGICPOINTER);
 }
-
-
-/*------------------------------------------------------------------------*/
-/** 名前付マジックポインタの作成
- *
- * @param s			[in] 文字列
- * @param trunc		[in] 前後の切り詰め
- *
- * @return			トークンID
- */
-
-int lex_makenamedmp(char *s, bool trunc)
-{
-	return lex_update_tokenpos(kERROR);
-}
-
-#endif
 
 
 #pragma mark -

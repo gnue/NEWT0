@@ -39,17 +39,19 @@
 #define	NewtRefIsSpecial(r)			((r & 0xF) == 2)					///< 特殊オブジェクトか？
 #define	NewtRefToSpecial(r)			(int32_t)((uint32_t)r >> 2)			///< オブジェクト参照を特殊値に変換
 
-#define NewtRefIsMagicPointer(r)	((r & 3) == 3)						///< マジックポインタか？
+#define NewtRefIsMagicPointer(r)	((r & 3) == 3)										///< マジックポインタか？（数値および名前付）
 
 #ifdef __NAMED_MAGIC_POINTER__
-	#define NewtMakeNamedMP(r)			((newtRef)((uint32_t)NewtMakeSymbol(r) | 3))		///< 名前付マジックポインタを作成
-	#define NewtMPToSymbol(r)			((newtRef)((uint32_t)r & 0xFFFFFFFD))				///< 名前付マジックポインタをシンボルに変換
-	#define NewtSymbolToMP(r)			((newtRef)((uint32_t)r | 3))						///< シンボルを名前付マジックポインタに変換
-#else
-	#define NewtMakeMagicPointer(t, i)	((newtRef)((t << 14) | ((i & 0x03ff) << 2) | 3))	///< マジックポインタを作成
-	#define	NewtMPToTable(r)			((int32_t)((uint32_t)r >> 14))						///< マジックポインタのテーブル番号を取得
-	#define	NewtMPToIndex(r)			((int32_t)(((uint32_t)r >> 2) & 0x03ff))			///< マジックポインタのインデックスを取得
-#endif
+#	define NewtRefIsNamedMP(r)		((r & 0x80000003) == 0x80000003)					///< 名前付マジックポインタか？
+#	define NewtMakeNamedMP(r)		NewtSymbolToMP(NewtMakeSymbol(r))					///< 名前付マジックポインタを作成
+#	define NewtMPToSymbol(r)		((newtRef)((((uint32_t)r << 1) & 0xFFFFFFF8) | 1))	///< 名前付マジックポインタをシンボルに変換
+#	define NewtSymbolToMP(r)		((newtRef)(((uint32_t)r >> 1) | 0x80000003))		///< シンボルを名前付マジックポインタに変換
+#endif /* __NAMED_MAGIC_POINTER__ */
+
+#define NewtRefIsNumberedMP(r)		((r & 0x80000003) == 3)								///< 数値マジックポインタか？
+#define NewtMakeMagicPointer(t, i)	((newtRef)((t << 14) | ((i & 0x03ff) << 2) | 3))	///< マジックポインタを作成
+#define	NewtMPToTable(r)			((int32_t)((uint32_t)r >> 14))						///< マジックポインタのテーブル番号を取得
+#define	NewtMPToIndex(r)			((int32_t)(((uint32_t)r >> 2) & 0x03ff))			///< マジックポインタのインデックスを取得
 
 #define	NewtRefIsNotNIL(v)			(! NewtRefIsNIL(v))								///< NIL 以外か？
 #define	NewtMakeBoolean(v)			((newtRef)((v)?(kNewtRefTRUE):(kNewtRefNIL)))	///< ブール値オブジェクトを作成
