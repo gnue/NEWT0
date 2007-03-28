@@ -75,6 +75,10 @@ typedef struct {
     newtRefVar	global_fns;		///< グローバル関数テーブル
     newtRefVar	magic_pointers;	///< マジックポインタテーブル
 
+#ifdef __NAMED_MAGIC_POINTER__
+    newtRefVar	named_mps;		///< 名前付マジックポインタテーブル
+#endif /* __NAMED_MAGIC_POINTER__ */
+
 	// メモリ関係
     newtPool	pool;			///< メモリプール
     bool		sweep;			///< 現在の sweep 状態（トグルする）
@@ -186,6 +190,7 @@ typedef struct {
     newtRefVar	globals;			///< globals
     newtRefVar	global_fns;			///< global_fns
     newtRefVar	magic_pointers;		///< magic_pointers
+    newtRefVar	named_mps;			///< named_mps
 
     // for print
     newtRefVar	printDepth;			///< printDepth

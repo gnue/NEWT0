@@ -35,6 +35,7 @@ static void			NIOPrintSpecial(newtStream_t * f, newtRefArg r);
 static void			NIOPrintInteger(newtStream_t * f, newtRefArg r);
 static void			NIOPrintReal(newtStream_t * f, newtRefArg r);
 static void			NIOPrintObjCharacter(newtStream_t * f, newtRefArg r);
+static void			NIOPrintObjNamedMP(newtStream_t * f, newtRefArg r);
 static void			NIOPrintObjMagicPointer(newtStream_t * f, newtRefArg r);
 static void			NIOPrintObjBinary(newtStream_t * f, newtRefArg r);
 static void			NIOPrintObjSymbol(newtStream_t * f, newtRefArg r);
@@ -375,7 +376,7 @@ void NIOPrintObjCharacter(newtStream_t * f, newtRefArg r)
 #ifdef __NAMED_MAGIC_POINTER__
 
 /*------------------------------------------------------------------------*/
-/** 出力ファイルにマジックポインタをプリントする
+/** 出力ファイルに名前付マジックポインタをプリントする
  *
  * @param f			[in] 出力ファイル
  * @param r			[in] オブジェクト
@@ -385,7 +386,7 @@ void NIOPrintObjCharacter(newtStream_t * f, newtRefArg r)
  * @note			newtStream_t を使用
  */
 
-void NIOPrintObjMagicPointer(newtStream_t * f, newtRefArg r)
+void NIOPrintObjNamedMP(newtStream_t * f, newtRefArg r)
 {
 	newtRefVar	sym;
 
@@ -395,7 +396,8 @@ void NIOPrintObjMagicPointer(newtStream_t * f, newtRefArg r)
 	NIOPrintObjSymbol(f, sym);
 }
 
-#else
+#endif /* __NAMED_MAGIC_POINTER__ */
+
 
 /*------------------------------------------------------------------------*/
 /** 出力ファイルにマジックポインタをプリントする
@@ -419,7 +421,6 @@ void NIOPrintObjMagicPointer(newtStream_t * f, newtRefArg r)
     NIOFprintf(f, "@%d", index);
 }
 
-#endif
 
 /*------------------------------------------------------------------------*/
 /** 出力ファイルにバイナリオブジェクトをプリントする
@@ -813,6 +814,14 @@ void NIOPrintObj2(newtStream_t * f, newtRefArg r, int32_t depth, bool literal)
 					break;
 				}
 			}
+
+#ifdef __NAMED_MAGIC_POINTER__
+			if (NewtRefIsNamedMP(r))
+			{	// Named Magic Ponter
+				NIOPrintObjNamedMP(f, r);
+				break;
+			}
+#endif /* __NAMED_MAGIC_POINTER__ */
 
 			NIOPrintObjMagicPointer(f, r);
             break;

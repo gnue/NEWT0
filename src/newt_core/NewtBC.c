@@ -1815,21 +1815,23 @@ void NBCGenAsign(nps_syntax_node_t * stree,
         if (ret)
             NBCGenCodeL(kNBCFindVar, lvalue);
     }
-	else if (NewtRefIsMagicPointer(lvalue))
-	{
 #ifdef __NAMED_MAGIC_POINTER__
+	else if (NewtRefIsNamedMP(lvalue))
+	{
 		newtRefVar	sym;
 
 		sym = NewtMPToSymbol(lvalue);
 		NBCGenFunc2(stree, NSSYM0(defMagicPointer), sym, expr);
 		NVCGenNoResult(ret);
-#else
+	}
+#endif /* __NAMED_MAGIC_POINTER__ */
+	else if (NewtRefIsNumberedMP(lvalue))
+	{
 		int32_t	index;
 
 		index = NewtMPToIndex(lvalue);
 		NBCGenFunc2(stree, NSSYM0(defMagicPointer), NewtMakeInteger(index), expr);
 		NVCGenNoResult(ret);
-#endif
 	}
     else if (NPSRefIsSyntaxNode(lvalue))
     {

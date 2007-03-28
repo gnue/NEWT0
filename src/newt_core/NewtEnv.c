@@ -29,6 +29,7 @@
 #define GLOBALS				(newt_env.globals)					///< グローバル変数テーブル
 #define GLOBAL_FNS			(newt_env.global_fns)				///< グローバル関数テーブル
 #define MAGIC_POINTERS		(newt_env.magic_pointers)			///< マジックポインタテーブル
+#define NAMED_MPS			(newt_env.named_mps)				///< 名前付マジックポインタテーブル
 
 #define INITSYM2(sym, str)	sym = NewtMakeSymbol(str)			///< よく使うシンボルの初期化
 #define INITSYM(name)		INITSYM2(newt_sym.name, #name)		///< よく使うシンボルの初期化（特殊文字なし）
@@ -47,6 +48,10 @@ static void		NewtInitSysEnv(void);
 static void		NewtInitARGV(int argc, const char * argv[], int n);
 static void		NewtInitVersInfo(void);
 static void		NewtInitEnv(int argc, const char * argv[], int n);
+
+static newtRef	NcResolveNamedMP(newtRefArg r);
+static newtRef	NsDefNamedMP(newtRefArg rcvr, newtRefArg r, newtRefArg v);
+
 
 
 #pragma mark -
@@ -182,6 +187,9 @@ void NewtInitSYM(void)
     INITSYM(globals);
     INITSYM(global_fns);
     INITSYM(magic_pointers);
+#ifdef __NAMED_MAGIC_POINTER__
+    INITSYM(named_mps);
+#endif /* __NAMED_MAGIC_POINTER__ */
 
     // for print
     INITSYM(printDepth);
@@ -376,17 +384,20 @@ void NewtInitEnv(int argc, const char * argv[], int n)
 	// グローバル関数テーブルの作成
     GLOBAL_FNS = NcMakeFrame();
 	// マジックポインタテーブルの作成
-#ifdef __NAMED_MAGIC_POINTER__
-    MAGIC_POINTERS = NcMakeFrame();
-#else
     MAGIC_POINTERS = NewtMakeArray(kNewtRefUnbind, 0);
-#endif
 
 	// ルートフレームに各テーブルを格納
     NcSetSlot(ROOT, NSSYM0(globals), GLOBALS);
     NcSetSlot(ROOT, NSSYM0(global_fns), GLOBAL_FNS);
     NcSetSlot(ROOT, NSSYM0(magic_pointers), MAGIC_POINTERS);
     NcSetSlot(ROOT, NSSYM0(sym_table), SYM_TABLE);
+
+#ifdef __NAMED_MAGIC_POINTER__
+	// 名前付マジックポインタテーブルの作成
+    NAMED_MPS = NcMakeFrame();
+	// ルートフレームに名前付マジックポインタテーブルの格納
+    NcSetSlot(ROOT, NSSYM0(named_mps), NAMED_MPS);
+#endif /* __NAMED_MAGIC_POINTER__ */
 
 	// 環境変数の初期化
 	NewtInitSysEnv();
@@ -674,31 +685,31 @@ newtRef NsUndefGlobalVar(newtRefArg rcvr, newtRefArg r)
 #ifdef __NAMED_MAGIC_POINTER__
 
 /*------------------------------------------------------------------------*/
-/** マジックポインタの参照を解決する
+/** 名前付マジックポインタの参照を解決する
  *
  * @param r			[in] マジックポインタ
  *
  * @return			オブジェクト
  */
 
-newtRef NcResolveMagicPointer(newtRefArg r)
+newtRef NcResolveNamedMP(newtRefArg r)
 {
 	newtRefVar	sym;
 
-	if (! NewtRefIsMagicPointer(r))
+	if (! NewtRefIsNamedMP(r))
 		return r;
 
 	sym = NewtMPToSymbol(r);
 
-	if (NewtHasSlot(MAGIC_POINTERS, sym))
-		return NcGetSlot(MAGIC_POINTERS, sym);
+	if (NewtHasSlot(NAMED_MPS, sym))
+		return NcGetSlot(NAMED_MPS, sym);
 	else
 		return r;
 }
 
 
 /*------------------------------------------------------------------------*/
-/** マジックポインタの定義
+/** 名前付マジックポインタの定義
  *
  * @param rcvr		[in] レシーバ
  * @param r			[in] マジックポインタ
@@ -707,11 +718,11 @@ newtRef NcResolveMagicPointer(newtRefArg r)
  * @return			オブジェクト
  */
 
-newtRef NsDefMagicPointer(newtRefArg rcvr, newtRefArg r, newtRefArg v)
+newtRef NsDefNamedMP(newtRefArg rcvr, newtRefArg r, newtRefArg v)
 {
 	newtRefVar	sym;
 
-	if (NewtRefIsMagicPointer(r))
+	if (NewtRefIsNamedMP(r))
 	{
 		sym = NewtMPToSymbol(r);
 	}
@@ -724,11 +735,11 @@ newtRef NsDefMagicPointer(newtRefArg rcvr, newtRefArg r, newtRefArg v)
 		return r;
 	}
 
-    return NcSetSlot(MAGIC_POINTERS, sym, v);
+    return NcSetSlot(NAMED_MPS, sym, v);
 }
 
+#endif /* __NAMED_MAGIC_POINTER__ */
 
-#else
 
 /*------------------------------------------------------------------------*/
 /** マジックポインタの参照を解決する
@@ -743,8 +754,14 @@ newtRef NcResolveMagicPointer(newtRefArg r)
 	int32_t	table = 0;
 	int32_t	index;
 
-	if (! NewtRefIsMagicPointer(r))
+	if (! NewtRefIsNumberedMP(r))
+	{
+#ifdef __NAMED_MAGIC_POINTER__
+		return NcResolveNamedMP(r);
+#else
 		return r;
+#endif
+	}
 
 	table = NewtMPToTable(r);
 	index = NewtMPToIndex(r);
@@ -783,7 +800,7 @@ newtRef NsDefMagicPointer(newtRefArg rcvr, newtRefArg r, newtRefArg v)
 	int32_t	table = 0;
 	int32_t	index;
 
-	if (NewtRefIsMagicPointer(r))
+	if (NewtRefIsNumberedMP(r))
 	{
 		table = NewtMPToTable(r);
 		index = NewtMPToIndex(r);
@@ -799,7 +816,11 @@ newtRef NsDefMagicPointer(newtRefArg rcvr, newtRefArg r, newtRefArg v)
 	}
 	else
 	{
+#ifdef __NAMED_MAGIC_POINTER__
+		return NsDefNamedMP(rcvr, r, v);
+#else
 		return kNewtRefUnbind;
+#endif
 	}
 
 	if (NewtLength(MAGIC_POINTERS) <= index)
@@ -809,8 +830,6 @@ newtRef NsDefMagicPointer(newtRefArg rcvr, newtRefArg r, newtRefArg v)
 
 	return NewtSetArraySlot(MAGIC_POINTERS, index, v);
 }
-
-#endif
 
 
 #pragma mark -

@@ -991,7 +991,7 @@ bool NewtRefIsFrameOrArray(newtRefArg r)
 bool NewtRefIsImmediate(newtRefArg r)
 {
 #ifdef __NAMED_MAGIC_POINTER__
-    if (NewtRefIsMagicPointer(r))
+    if (NewtRefIsNamedMP(r))
 		return false;
 #endif /* __NAMED_MAGIC_POINTER__ */
 
