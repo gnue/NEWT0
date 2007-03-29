@@ -12,6 +12,8 @@
 		F541305E096D1EBC00CFD896 /* newt.y in Sources */ = {isa = PBXBuildFile; fileRef = F5E14B0C05798559009742A2 /* newt.y */; };
 		F554741D088A750B001E9DDF /* NewtIconv.c in Sources */ = {isa = PBXBuildFile; fileRef = F554741C088A750B001E9DDF /* NewtIconv.c */; };
 		F55860F407E09F5F0080D223 /* NewtPrint.c in Sources */ = {isa = PBXBuildFile; fileRef = F55860F307E09F5F0080D223 /* NewtPrint.c */; };
+		F55F06870BBC1CE7005849A9 /* NewtPkg.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = F55F06860BBC1CE7005849A9 /* NewtPkg.h */; };
+		F55F06890BBC1D05005849A9 /* NewtPkg.c in Sources */ = {isa = PBXBuildFile; fileRef = F55F06880BBC1D05005849A9 /* NewtPkg.c */; };
 		F57E7A1407FD365100256511 /* NewtNSOF.c in Sources */ = {isa = PBXBuildFile; fileRef = F57E7A1307FD365100256511 /* NewtNSOF.c */; };
 		F5A713760BB5028D00F8DB93 /* NewtConf.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = F5A713750BB5028D00F8DB93 /* NewtConf.h */; };
 		F5ACB07906412D4900DB6CF9 /* NewtBC.c in Sources */ = {isa = PBXBuildFile; fileRef = F5ACB06106412D4900DB6CF9 /* NewtBC.c */; };
@@ -37,6 +39,7 @@
 			dstSubfolderSpec = 0;
 			files = (
 				F5A713760BB5028D00F8DB93 /* NewtConf.h in CopyFiles */,
+				F55F06870BBC1CE7005849A9 /* NewtPkg.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
@@ -55,6 +58,8 @@
 		F55860F307E09F5F0080D223 /* NewtPrint.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = NewtPrint.c; sourceTree = "<group>"; };
 		F55860F907E09F800080D223 /* NewtPrint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewtPrint.h; sourceTree = "<group>"; };
 		F55A5AF70726499E002A520F /* NewtLib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewtLib.h; sourceTree = "<group>"; };
+		F55F06860BBC1CE7005849A9 /* NewtPkg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewtPkg.h; sourceTree = "<group>"; };
+		F55F06880BBC1D05005849A9 /* NewtPkg.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = NewtPkg.c; sourceTree = "<group>"; };
 		F5622ED907E0273B009AAF9A /* Objects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Objects.h; sourceTree = "<group>"; };
 		F5622F2307E029FC009AAF9A /* NewtonMemory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewtonMemory.h; sourceTree = "<group>"; };
 		F5622F2407E029FC009AAF9A /* NewtonExceptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewtonExceptions.h; sourceTree = "<group>"; };
@@ -178,6 +183,7 @@
 				F53BCC6C0670CDBD0013103E /* NewtIO.c */,
 				F5ACB06606412D4900DB6CF9 /* NewtMem.c */,
 				F57E7A1307FD365100256511 /* NewtNSOF.c */,
+				F55F06880BBC1D05005849A9 /* NewtPkg.c */,
 				F5ACB06706412D4900DB6CF9 /* NewtObj.c */,
 				F5ACB06806412D4900DB6CF9 /* NewtParser.c */,
 				F55860F307E09F5F0080D223 /* NewtPrint.c */,
@@ -205,6 +211,7 @@
 				F55A5AF70726499E002A520F /* NewtLib.h */,
 				F5ACB05B06412D4900DB6CF9 /* NewtMem.h */,
 				F57E7A0C07FD362400256511 /* NewtNSOF.h */,
+				F55F06860BBC1CE7005849A9 /* NewtPkg.h */,
 				F5ACB05C06412D4900DB6CF9 /* NewtObj.h */,
 				F5ACB05D06412D4900DB6CF9 /* NewtParser.h */,
 				F55860F907E09F800080D223 /* NewtPrint.h */,
@@ -307,6 +314,7 @@
 				F57E7A1407FD365100256511 /* NewtNSOF.c in Sources */,
 				F503AC6C0851DFD9009BA497 /* endian_utils.c in Sources */,
 				F554741D088A750B001E9DDF /* NewtIconv.c in Sources */,
+				F55F06890BBC1D05005849A9 /* NewtPkg.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

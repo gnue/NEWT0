@@ -51,6 +51,7 @@ COREOBJS      = $(objdir)/NewtBC.o \
                 $(objdir)/NewtIO.o \
                 $(objdir)/NewtMem.o \
                 $(objdir)/NewtNSOF.o \
+                $(objdir)/NewtPkg.o \
                 $(objdir)/NewtObj.o \
                 $(objdir)/NewtParser.o \
                 $(objdir)/NewtPrint.o \
