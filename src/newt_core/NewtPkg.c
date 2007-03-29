@@ -23,15 +23,18 @@
 
 #include "utils/endian_utils.h"
 
+#include <time.h>
+
 #undef DEBUG_PKG_DIS
 #define DEBUG_PKG
 #ifdef DEBUG_PKG
 #	include "NewtPrint.h"
 #endif
 
+
 /* macros */
 
-/// Test first 8 bytes for package signature
+/// Test first 8 bytes for any of the package signatures
 #define PkgIsPackage(data) ((strncmp(data, "package0", 8)==0) || (strncmp(data, "package1", 8)==0))
 
 
@@ -46,7 +49,7 @@ typedef struct {
 /// package header structure
 typedef struct {
 	uint8_t		sig[8];			///< 8 byte signature
-	uint8_t		type[4];		///< 4 bytes describing package class
+	uint32_t	type;			///< 4 bytes describing package class
 	uint32_t	flags;			///< describing how to store and load the package
 	uint32_t	version;		///< user definable; higher numbers are newer version
 	pkg_info_ref_t copyright;	///< utf16 copyright message
@@ -71,9 +74,9 @@ typedef struct {
 	uint32_t	reserverd2;
 } pkg_part_t;
 
-/// structure to manage the package reading process
+/// structure to manage the package reading process 
 typedef struct {
-	int8_t		verno;			///< r  package version 0 or 1
+	uint8_t		pkg_version;	///< rw corrsponds to the last charof the signature
 	uint8_t *	data;			///< rw package data
 	uint32_t	size;			///< rw size of package
 	uint32_t	data_size;		///< w  size of data block
@@ -81,11 +84,13 @@ typedef struct {
 	uint32_t	header_size;	///< w  size of header structure w/o var data
 	uint8_t *	var_data;		///< r  extra data for header
 	uint32_t	var_data_size;	///< w  size of variable length data block
+	uint32_t	directory_size;	///< w  size of all headers plus var data
 	uint32_t	num_parts;		///< r  number of parts in package
 	pkg_part_t*	part_headers;	///< r  pointer to first part header - can be used as an array
 	pkg_part_t*	part_header;	///< r  header of current part
 	uint8_t *	part;			///< r  start of current part data
 	uint32_t	part_offset;	///< r  offset of current part to the beginning of data
+	uint32_t	part_header_offset;	///< r  offset of current part header
 	newtRefVar	instances;		///< rw array holding the previously generated instance of any ref per part
 	newtRefVar	precedents;		///< w  array referencing the instances array
 	newtErr		lastErr;		///< r  a way to return error from deep below
@@ -97,27 +102,44 @@ typedef struct {
 
 
 /* functions */
-static newtRef	PkgPartGetPrecedent(pkg_stream_t *pkg, newtRefArg r);
-static void		PkgPartSetPrecedent(pkg_stream_t *pkg, newtRefArg r, newtRefArg val);
 
+static int32_t	PkgArraySearch(newtRefArg array, newtRefArg r);
+static uint32_t	PkgAlign(pkg_stream_t *pkg, uint32_t offset);
+static uint32_t	PkgGetSlotInt(newtRefArg frame, newtRefArg name, uint32_t def);
+
+static newtRef	PkgPartGetPrecedent(pkg_stream_t *pkg, newtRefArg ref);
+static void		PkgPartSetPrecedent(pkg_stream_t *pkg, newtRefArg ref, newtRefArg val);
+
+static void		PkgMakeRoom(pkg_stream_t *pkg, uint32_t offset, uint32_t size);
+static void		PkgWriteData(pkg_stream_t *pkg, uint32_t offset, void *data, uint32_t size);
+static void		PkgWriteU32(pkg_stream_t *pkg, uint32_t offset, uint32_t v);
+static void		PgkWriteVarData(pkg_stream_t *pkg, uint32_t offset, newtRefVar frame, newtRefVar sym);
+static newtRef	PkgWriteFrame(pkg_stream_t *pkg, newtRefArg frame);
+static newtRef	PkgWriteArray(pkg_stream_t *pkg, newtRefArg array);
+static newtRef	PkgWriteBinary(pkg_stream_t *pkg, newtRefArg obj);
 static newtRef	PkgWriteObject(pkg_stream_t *pkg, newtRefArg obj);
+static void		PkgWritePart(pkg_stream_t *pkg, newtRefArg part);
 
+static uint32_t	PkgReadU32(uint8_t *d) ;
 static newtRef	PkgPartGetInstance(pkg_stream_t *pkg, uint32_t p_obj);
 static void		PkgPartSetInstance(pkg_stream_t *pkg, uint32_t p_obj, newtRefArg r);
-
-static uint32_t	PkgReadU32(uint8_t *d);
 static newtRef	PkgReadRef(pkg_stream_t *pkg, uint32_t p_obj);
 static newtRef	PkgReadBinaryObject(pkg_stream_t *pkg, uint32_t p_obj);
 static newtRef	PkgReadArrayObject(pkg_stream_t *pkg, uint32_t p_obj);
 static newtRef	PkgReadFrameObject(pkg_stream_t *pkg, uint32_t p_obj);
 static newtRef	PkgReadObject(pkg_stream_t *pkg, uint32_t p_obj);
+static newtRef	PkgReadNOSPart(pkg_stream_t *pkg);
 static newtRef	PkgReadPart(pkg_stream_t *pkg, int32_t index);
-static newtRef	PkgReadVardataString(pkg_stream_t *pkg, pkg_info_ref_t *info_ref);
 static newtRef	PkgReadVardataBinary(pkg_stream_t *pkg, pkg_info_ref_t *info_ref);
+static newtRef	PkgReadVardataString(pkg_stream_t *pkg, pkg_info_ref_t *info_ref);
 static newtRef	PkgReadHeader(pkg_stream_t *pkg);
 
+
+/*------------------------------------------------------------------------*/
 /** Duplicate of same function in NSOF.
- * Maybe we could make the original file publicly accessible
+ * Maybe we should make the original file publicly accessible
+ *
+ * @see NewtSearchArray(newtRefArg array, newtRefArg r)
  */
 int32_t PkgArraySearch(newtRefArg array, newtRefArg r)
 {
@@ -150,8 +172,6 @@ newtRef PkgPartGetPrecedent(pkg_stream_t *pkg, newtRefArg ref)
 {
 	int32_t ix = PkgArraySearch(pkg->precedents, ref);
 	if (ix>=0) {
-		printf("*** Multiple: ");
-		NewtPrintObject(stdout, ref);
 		return NewtGetArraySlot(pkg->instances, ix);
 	} else {
 		return kNewtRefUnbind;
@@ -168,6 +188,8 @@ newtRef PkgPartGetPrecedent(pkg_stream_t *pkg, newtRefArg ref)
 void PkgPartSetPrecedent(pkg_stream_t *pkg, newtRefArg ref, newtRefArg val)
 {
 	uint32_t n = NewtArrayLength(pkg->instances);
+	// the code below gets horribly slow and fragments memory
+	// we should consider implementing a binary search tree at some point
 	NewtInsertArraySlot(pkg->instances, n, val);
 	NewtInsertArraySlot(pkg->precedents, n, ref);
 }
@@ -226,7 +248,7 @@ void PkgMakeRoom(pkg_stream_t *pkg, uint32_t offset, uint32_t size)
 
 	if (pkg->data_size<new_size) {
 		uint32_t os = pkg->data_size;
-		uint32_t ns = (new_size+16383) & (~16383); // alocate ein 16k blocks
+		uint32_t ns = (new_size+16383) & (~16383); // alocate in 16k blocks
 		pkg->data = realloc(pkg->data, ns);
 		memset(pkg->data+os, 0xbf, ns-os); // filler byte
 		pkg->data_size = ns;
@@ -441,8 +463,19 @@ newtRef PkgWriteBinary(pkg_stream_t *pkg, newtRefArg obj)
 	klass_ref = PkgWriteObject(pkg, klass);
 	PkgWriteU32(pkg, dst+8, klass_ref);
 
-	// add a verbose copy of the binary data
-	PkgWriteData(pkg, dst+12, data, size-12);
+	// copy the binary data over
+	if (klass==NSSYM0(int32)) {
+		uint32_t *s = (uint32_t*)data;
+		uint32_t  v = htonl(*s);
+		PkgWriteData(pkg, dst+12, &v, sizeof(v));
+	} else if (klass==NSSYM0(real)) {
+		// this code fails miserably if 'double' is not an 8-byte IEEE value!
+		double *s = (double*)data;
+		double  v = htond(*s);
+		PkgWriteData(pkg, dst+12, &v, sizeof(v));
+	} else {
+		PkgWriteData(pkg, dst+12, data, size-12);
+	}
 
 	return NewtMakePointer(dst);
 }
@@ -460,9 +493,10 @@ newtRef PkgWriteObject(pkg_stream_t *pkg, newtRefArg obj)
 	uint32_t dst = pkg->size;
 	newtRef prec;
 
+	// FIXME add handling named magic pointers here
 	if (NewtRefIsImmediate(obj)) {
-		printf("*** immediate: ");
-		NewtPrintObject(stdout, obj);
+		// immediates have the same form in memory as in packages
+		// immediates include magic pointers
 		return obj;
 	} 
 	
@@ -478,11 +512,12 @@ newtRef PkgWriteObject(pkg_stream_t *pkg, newtRefArg obj)
 	} else if (NewtRefIsBinary(obj)) {
 		dst = PkgWriteBinary(pkg, obj);
 	} else {
-		printf("*** unsupported write: ");
-		NewtPrintObject(stdout, obj);
-		PkgMakeRoom(pkg, dst, 16);
-		PkgWriteU32(pkg, dst, 0xdeadbeef);
-		// FIXME add all possible types...
+#		ifdef DEBUG_PKG
+			// we do not know how to write this object
+			printf("*** unsupported write: ");
+			NewtPrintObject(stdout, obj);
+#		endif
+		return kNewtRefNIL; // do not create a precedent
 	}
 
 	// make this ref available for later incarnations of the same object
@@ -494,20 +529,26 @@ newtRef PkgWriteObject(pkg_stream_t *pkg, newtRefArg obj)
 /*------------------------------------------------------------------------*/
 /** Create a part in package format based on this object.
  * 
+ * This function makes heavy use of the "pkg" structure, updating all
+ * members to allow writing multiple consecutive parts by repeatedly
+ * caling this function. Multiple part packages are untested.
+ *
  * @param pkg		[inout] the package
  * @param part		[in] object containing part data
  *
  * @retval	ref to binary part data
  */
-newtRef PkgWritePart(pkg_stream_t *pkg, newtRefArg part)
+void PkgWritePart(pkg_stream_t *pkg, newtRefArg part)
 {
 	uint32_t	dst = pkg->part_offset;
+	uint32_t	hdr = pkg->part_header_offset;
 	int32_t		ix;
 	newtRef		data;
+	uint32_t	part_size;
 
 	ix = NewtFindSlotIndex(part, NSSYM(data));
 	if (ix<0) 
-		return kNewtRefNIL;
+		return;
 	data = NewtGetFrameSlot(part, ix);
 
 	pkg->instances = NewtMakeArray(kNewtRefUnbind, 0);
@@ -522,22 +563,54 @@ newtRef PkgWritePart(pkg_stream_t *pkg, newtRefArg part)
 	NewtSetLength(pkg->precedents, 0);
 	NewtSetLength(pkg->instances, 0);
 
-	return kNewtRefNIL;
+	PkgMakeRoom(pkg, PkgAlign(pkg, pkg->size), 0);
+	part_size = pkg->size - pkg->part_offset;
+		// offset
+	PkgWriteU32(pkg, hdr, pkg->part_offset - pkg->directory_size);
+		// size
+	PkgWriteU32(pkg, hdr+4, part_size);
+		// size2
+	PkgWriteU32(pkg, hdr+8, part_size);
+		// type
+	PkgWriteU32(pkg, hdr+12, PkgGetSlotInt(part, NSSYM(type), 0x666f726d)); // "form"
+		// reserved1
+	PkgWriteU32(pkg, hdr+16, 0); 
+		// flags
+	PkgWriteU32(pkg, hdr+20, PkgGetSlotInt(part, NSSYM(flags), 0));
+		// reserved2
+	PkgWriteU32(pkg, hdr+28, 0); 
+
+	pkg->part_offset += part_size;
 }
 
 /*------------------------------------------------------------------------*/
-/** Create a new binary object that conatins the object tree in package format
+/** Create a new binary object that contains the object tree in package format.
+ *
+ * This function creates a binary object, containing the representaion of
+ * a whole hierarchy of objects in the Newton package format. The binary
+ * data can be written directly to disk to create a Newton readable .pkg file.
  * 
- * @param rpkg	[in] object tree describing the package
+ * NewtWritePkg was tested on hierarchies created by NewtReadPackage, reading
+ * a random bunch of .pkg files containing Newton Script applications. The 
+ * packages created were identiacla to the original packages.
+ *
+ * @todo	NewtWritePkg does not support a relocation table yet which may 
+ *			be needed to save native function of a higher complexity.
+ * @todo	Error handling is not yet implemented.
+ * @todo	Named magic poiners are not supported yet.
+ * @todo	Only NOS parts are currently supported. We still must implement
+ *			Protocol parts and Raw parts. 
+ *
+ * @param rpkg	[in] object hierarchy describing the package
  *
  * @retval	binary object with package
  */
 newtRef NewtWritePkg(newtRefArg package)
 {
 	pkg_stream_t	pkg;
-	int32_t			num_parts, i, ix, directory_size;
-	newtRef			parts;
-	
+	int32_t			num_parts, i, ix;
+	newtRef			parts, result;
+
 	// setup pkg_stream_t
 	memset(&pkg, 0, sizeof(pkg));
 
@@ -547,6 +620,7 @@ newtRef NewtWritePkg(newtRefArg package)
 	}
 #	endif /* HAVE_LIBICONV */
 
+	// find the array of parts that we will write
 	ix = NewtFindSlotIndex(package, NSSYM(parts));
 	if (ix>=0) {
 		parts = NewtGetFrameSlot(package, ix);
@@ -556,8 +630,9 @@ newtRef NewtWritePkg(newtRefArg package)
 		// start setting up the header with whatever we know
 			// sig
 		PkgWriteData(&pkg, 0, "package0", 8);
+		pkg.data[7] = (uint8_t)('0' + PkgGetSlotInt(package, NSSYM(pkg_version), 0));
 			// type
-		PkgWriteData(&pkg, 8, "xxxx", 4);
+		PkgWriteU32(&pkg, 8, PkgGetSlotInt(package, NSSYM(type), 0x78787878)); // "xxxx"
 			// flags
 		PkgWriteU32(&pkg, 12, PkgGetSlotInt(package, NSSYM(flags), 0));
 			// version
@@ -567,7 +642,7 @@ newtRef NewtWritePkg(newtRefArg package)
 			// name
 		PgkWriteVarData(&pkg, 24, package, NSSYM(name));
 			// date
-		PkgWriteU32(&pkg, 32, 0xc2296aa5); // FIXME some fake creation date
+		PkgWriteU32(&pkg, 32, time(0L)+2082844800);
 			// reserved2
 		PkgWriteU32(&pkg, 36, 0); 
 			// reserved3
@@ -587,36 +662,15 @@ newtRef NewtWritePkg(newtRefArg package)
 			pkg.var_data_size += sizeof(msg);
 		}
 
-		pkg.part_offset = directory_size = PkgAlign(&pkg, pkg.header_size + pkg.var_data_size);
+		pkg.part_offset = pkg.directory_size = PkgAlign(&pkg, pkg.header_size + pkg.var_data_size);
 			// directorySize
-		PkgWriteU32(&pkg, 44, directory_size);
+		PkgWriteU32(&pkg, 44, pkg.directory_size);
 
 		// create all parts
 		for (i=0; i<num_parts; i++) {
-			uint32_t part_size;
-			uint32_t hdr = sizeof(pkg_header_t) + i*sizeof(pkg_part_t);
 			newtRef part = NewtGetArraySlot(parts, i);
-
+			pkg.part_header_offset = sizeof(pkg_header_t) + i*sizeof(pkg_part_t);
 			PkgWritePart(&pkg, part);
-			PkgMakeRoom(&pkg, PkgAlign(&pkg, pkg.size), 0);
-			part_size = pkg.size - pkg.part_offset;
-				// offset
-			PkgWriteU32(&pkg, hdr, pkg.part_offset - directory_size);
-				// size & size2
-			PkgWriteU32(&pkg, hdr+4, part_size);
-			PkgWriteU32(&pkg, hdr+8, part_size);
-				// type
-			// FIXME the 'type' field is actually always a fourcc like 'form'
-			// FIXME which Newt object should we use here? Binary? Int32? Symbol?
-			PkgWriteU32(&pkg, hdr+12, PkgGetSlotInt(part, NSSYM(type), 0x666f726d)); 
-				// reserved1
-			PkgWriteU32(&pkg, hdr+16, 0); 
-				// flags
-			PkgWriteU32(&pkg, hdr+20, PkgGetSlotInt(part, NSSYM(flags), 0));
-				// reserved2
-			PkgWriteU32(&pkg, hdr+28, 0); 
-
-			pkg.part_offset += part_size;
 		}
 	}
 
@@ -624,19 +678,17 @@ newtRef NewtWritePkg(newtRefArg package)
 		// size
 	PkgWriteU32(&pkg, 28, pkg.size);
 
-	// convert pkg_stream_t into binary package
-	// return new object
+	result = NewtMakeBinary(NSSYM(package), pkg.data, pkg.size, false);
 
-	{	FILE *f = fopen("d:/home/matt/dev/Newton/ntk2/helloWRT.pkg", "wb");
-		fwrite(pkg.data, 1, pkg.size, f);
-		fclose(f);
-	}
+	// clean up our allocations
+	if (pkg.data) 
+		free(pkg.data);
 
 #	ifdef HAVE_LIBICONV
 		iconv_close(pkg.to_utf16);
 #	endif /* HAVE_LIBICONV */
 
-	return kNewtRefNIL;
+	return result;
 }
 
 /*------------------------------------------------------------------------*/
@@ -699,23 +751,13 @@ newtRef PkgReadRef(pkg_stream_t *pkg, uint32_t p_obj)
 		result = PkgReadObject(pkg, ref&~3);
 		break;
 	case 2: // special
-		if (ref==kNewtRefTRUE) result = kNewtRefTRUE;
-		else if (ref==kNewtRefNIL) result = kNewtRefNIL;
-		else if (ref&0x0f==0x0a) result = NewtMakeCharacter(ref>>4);
-		else if (ref==kNewtSymbolClass) result = kNewtSymbolClass;
-		else {
-#			ifdef DEBUG_PKG
-				printf("*** PkgReader: PkgReadRef - unknown ref 0x%08x\n", ref);
-#			endif
-			result = ref; 
-		}
+		// special refs are immedites, encoded in the same format in
+		// memory as in package files (at least for all instances I could find)
+		result = ref; 
 		break;
 	case 3: // magic pointer
-#		ifdef __NAMED_MAGIC_POINTER__
-			result = kNewtRefNIL; // not implemented
-#		else
-			result = ref; // already a correct magic pointer
-#		endif
+		// FIXME we must implement special code for name magic pointers here!
+		result = ref; // already a correct magic pointer
 		break;
 	}
 
@@ -747,11 +789,11 @@ newtRef PkgReadBinaryObject(pkg_stream_t *pkg, uint32_t p_obj)
 			size_t buflen;
 			char *buf = NewtIconv(pkg->from_utf16, src, sze, &buflen);
 			if (buf) {
-				result = NewtMakeString2(buf, buflen-1, false); // NewtMakeString2 appends another null
+				result = NewtMakeString2(buf, buflen-1, true); // NewtMakeString2 appends another null
 			}
 #		endif /* HAVE_LIBICONV */
 		if (result==kNewtRefNIL)
-			result = NewtMakeString2(src, sze, false);
+			result = NewtMakeString2(src, sze, true);
 	} else if (klass==NSSYM0(int32)) {
 		uint32_t v = PkgReadU32(pkg->data + p_obj + 12);
 		result = NewtMakeInt32(v);
@@ -759,21 +801,21 @@ newtRef PkgReadBinaryObject(pkg_stream_t *pkg, uint32_t p_obj)
 		double *v = (double*)(pkg->data + p_obj + 12);
 		result = NewtMakeReal(ntohd(*v));
 	} else if (klass==NSSYM0(instructions)) {
-		result = NewtMakeBinary(klass, pkg->data + p_obj + 12, size-12, false);
+		result = NewtMakeBinary(klass, pkg->data + p_obj + 12, size-12, true);
 #		ifdef DEBUG_PKG_DIS
 			printf("*** PkgReader: PkgReadBinaryObject - dumping byte code\n");
 			NVMDumpBC(stdout, result);
 #		endif
 	} else {
-		// bits: the bits in the icon
-		// mask: the transparency mask for the icon
 #		ifdef DEBUG_PKG
+			// This output is helpful to find more binary classes that may need 
+			// endianness fixes like the floating point class
 			if (klass) {
 				printf("*** PkgReader: PkgReadBinaryObject - unknown class ");
 				NewtPrintObject(stdout, klass);
 			}
 #		endif
-		result = NewtMakeBinary(klass, pkg->data + p_obj + 12, size-12, false);
+		result = NewtMakeBinary(klass, pkg->data + p_obj + 12, size-12, true);
 	}
 
 	return result;
@@ -890,7 +932,7 @@ newtRef PkgReadNOSPart(pkg_stream_t *pkg)
 	uint32_t	p_obj;
 	newtRefVar	result;
 
-	// verify that we have a correct header 
+	// verify that we have a correct lead-in 
 	if (PkgReadU32(pkg->part)!=0x00001041 || PkgReadU32(pkg->part+8)!=0x00000002) {
 #		ifdef DEBUG_PKG
 		printf("*** PkgReader: PkgReadPart - unsupported NOS Part intro at %d\n",
@@ -899,11 +941,8 @@ newtRef PkgReadNOSPart(pkg_stream_t *pkg)
 		return kNewtRefNIL;
 	}
 	
-	// create an array that holds a ref to all creted objects, avoiding double instantiation
-	if (pkg->instances) 
-		NewtSetLength(pkg->instances, ntohl(pkg->part_header->size)/4);
-	else
-		pkg->instances = NewtMakeArray(kNewtRefUnbind, ntohl(pkg->part_header->size)/4);
+	// create an array that holds a ref to all created objects, avoiding double instantiation
+	pkg->instances = NewtMakeArray(kNewtRefUnbind, ntohl(pkg->part_header->size)/4);
 
 	// now recursively load all objects
 	p_obj = PkgReadU32(pkg->part+12);
@@ -943,8 +982,7 @@ newtRef PkgReadPart(pkg_stream_t *pkg, int32_t index)
 	frame = NewtMakeFrame2(sizeof(ptv) / (sizeof(newtRefVar) * 2), ptv);
 
 	NcSetSlot(frame, NSSYM(flags), NewtMakeInt32(flags));
-	NcSetSlot(frame, NSSYM(type), NewtMakeBinary(kNewtRefUnbind, 
-				(uint8_t*)&pkg->part_header->type, 4, true));
+	NcSetSlot(frame, NSSYM(type), NewtMakeInt32(ntohl(pkg->part_header->type)));
 
 	switch (flags&0x03) {
 	case kNOSPart:
@@ -1000,10 +1038,10 @@ newtRef PkgReadVardataString(pkg_stream_t *pkg, pkg_info_ref_t *info_ref)
 			size_t buflen;
 			char *buf = NewtIconv(pkg->from_utf16, src, size, &buflen);
 			if (buf) {
-				return NewtMakeString2(buf, buflen-1, false);
+				return NewtMakeString2(buf, buflen-1, true);
 			}
 #		endif /* HAVE_LIBICONV */
-		return NewtMakeString2(src, size, false);
+		return NewtMakeString2(src, size, true);
 	}
 }
 
@@ -1018,6 +1056,8 @@ newtRef PkgReadHeader(pkg_stream_t *pkg)
 {
     newtRefVar	fnv[] = {
                             NS_CLASS,				NSSYM(PackageHeader),
+                            NSSYM(type),			kNewtRefNIL,
+                            NSSYM(pkg_version),		kNewtRefNIL,
                             NSSYM(version),			kNewtRefNIL,
                             NSSYM(copyright),		kNewtRefNIL,
                             NSSYM(name),			kNewtRefNIL,
@@ -1027,12 +1067,12 @@ newtRef PkgReadHeader(pkg_stream_t *pkg)
 	newtRefVar	frame = NewtMakeFrame2(sizeof(fnv) / (sizeof(newtRefVar) * 2), fnv);
 	newtRefVar	parts;
 
-	NcSetSlot(frame, NSSYM(flags), NewtMakeInt32(ntohl(pkg->header->flags)));
+    NcSetSlot(frame, NSSYM(type), NewtMakeInt32(ntohl(pkg->header->type)));
+    NcSetSlot(frame, NSSYM(pkg_version), NewtMakeInteger(pkg->pkg_version));
     NcSetSlot(frame, NSSYM(version), NewtMakeInt32(ntohl(pkg->header->version)));
 	NcSetSlot(frame, NSSYM(copyright), PkgReadVardataString(pkg, &pkg->header->copyright));
 	NcSetSlot(frame, NSSYM(name), PkgReadVardataString(pkg, &pkg->header->name));
-	// all other header values can be derived form the archive itself
-	// or can be calculated at creation time
+	NcSetSlot(frame, NSSYM(flags), NewtMakeInt32(ntohl(pkg->header->flags)));
 
 	parts = NewtMakeArray(kNewtRefNIL, pkg->num_parts);
 
@@ -1054,12 +1094,29 @@ newtRef PkgReadHeader(pkg_stream_t *pkg)
 /*------------------------------------------------------------------------*/
 /** Read a Package and create an array of parts
  *
+ * This function creates a hierarchy of Newt objects from a block of data
+ * interpreted as Package data. Usually this data would be a verbatim
+ * copy of a .pkg file.
+ *
+ * NewtReadPkg was tested on a random bunch of .pkg files containing Newton
+ * Script applications. 
+ *
+ * The iconv library is required at compile-time to read Newton-compatible 
+ * packages. 
+ *
+ * @todo	NewtReadPkg does not support a relocation table yet which may 
+ *			be needed to load native function of a higher complexity.
+ * @todo	Error handling is not yet implemented.
+ * @todo	Named magic poiners are not supported yet.
+ * @todo	Only NOS parts are currently supported. We still must implement
+ *			Protocol parts and Raw parts. 
+ * @todo	A function should be added that creates a working default 
+ *			Package hierarchy.
+ *
  * @param data		[in] Package data memory, can be read-only
  * @param size		[in] size of memory array
  *
- * @retval	Newt array containing all parts of the Package
- * 
- * @todo	There is no support for relocation data yet.
+ * @retval	Newt array containing some descriptions and all parts of the Package
  */
 newtRef NewtReadPkg(uint8_t * data, size_t size)
 {
@@ -1073,7 +1130,7 @@ newtRef NewtReadPkg(uint8_t * data, size_t size)
 		return kNewtRefNIL;
 
 	memset(&pkg, 0, sizeof(pkg));
-	pkg.verno = data[7]-'0';
+	pkg.pkg_version = data[7]-'0';
 	pkg.data = data;
 	pkg.size = size;
 	pkg.header = (pkg_header_t*)data;
