@@ -26,6 +26,7 @@
 #include "NewtIO.h"
 #include "NewtPrint.h"
 #include "NewtNSOF.h"
+#include "NewtPkg.h"
 
 
 /* 型宣言 */
@@ -3582,6 +3583,9 @@ void NVMInitExGlobalFns(void)
 
 	NewtDefGlobalFunc(NSSYM(MakeNSOF),	NsMakeNSOF,			2, "MakeNSOF(obj, ver)");
 	NewtDefGlobalFunc(NSSYM(ReadNSOF),	NsReadNSOF,			1, "ReadNSOF(nsof)");
+
+	NewtDefGlobalFunc(NSSYM(MakePkg),	NsMakePkg,			1, "MakePkg(obj)");
+	NewtDefGlobalFunc(NSSYM(ReadPkg),	NsReadPkg,			1, "ReadPkg(pkg)");
 
     NewtDefGlobalFunc(NSSYM(GetEnv),	NsGetEnv,			1, "GetEnv(str)");
 

@@ -24,6 +24,9 @@ extern "C" {
 newtRef		NewtReadPkg(uint8_t * data, size_t size);
 newtRef		NewtWritePkg(newtRefArg pkg);
 
+newtRef		NsReadPkg(newtRefArg rcvr, newtRefArg r);
+newtRef		NsMakePkg(newtRefArg rcvr, newtRefArg r);
+
 
 #ifdef __cplusplus
 }

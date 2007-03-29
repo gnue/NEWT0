@@ -657,7 +657,7 @@ newtRef NewtWritePkg(newtRefArg package)
 		}
 
 		// the original file has this (c) message embedded
-		{	char msg[] = "Newtonª ToolKit Package © 1992-1997, Apple Computer, Inc.";
+		{	char msg[] = "Newtonï½ª ToolKit Package ï½© 1992-1997, Apple Computer, Inc.";
 			PkgWriteData(&pkg, pkg.header_size + pkg.var_data_size, msg, sizeof(msg));
 			pkg.var_data_size += sizeof(msg);
 		}
@@ -1153,5 +1153,42 @@ newtRef NewtReadPkg(uint8_t * data, size_t size)
 }
 
 
+/*------------------------------------------------------------------------*/
+/** Read a Package and create an array of parts
+ *
+ * @param rcvr	[in] receiver
+ * @param r		[in] Package binary object
+ *
+ * @retval		Newt array containing some descriptions and all parts of the Package
+ *
+ * @note		for script call
+ */
+
+newtRef NsReadPkg(newtRefArg rcvr, newtRefArg r)
+{
+	uint32_t	len;
+
+    if (! NewtRefIsBinary(r))
+        return NewtThrow(kNErrNotABinaryObject, r);
+
+	len = NewtBinaryLength(r);
+
+	return NewtReadPkg(NewtRefToBinary(r), len);
+}
 
 
+/*------------------------------------------------------------------------*/
+/** Create a new binary object that contains the object tree in package format.
+ *
+ * @param rcvr	[in] receiver
+ * @param r		[in] object hierarchy describing the package
+ *
+ * @retval		binary object with package
+ *
+ * @note		for script call
+ */
+
+newtRef NsMakePkg(newtRefArg rcvr, newtRefArg r)
+{
+	return NewtWritePkg(r);
+}
