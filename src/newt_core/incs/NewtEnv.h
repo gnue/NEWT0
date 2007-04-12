@@ -25,6 +25,7 @@
 #define NEWT_DUMPLEX		(newt_env._dumpLex)				///< ダンプ字句解析フラグ
 #define NEWT_DUMPSYNTAX		(newt_env._dumpSyntax)			///< ダンプ構文木フラグ
 #define NEWT_DUMPBC			(newt_env._dumpBC)				///< ダンプバイトコードフラグ
+#define NEWT_INDENT			(newt_env._indent)				///< Enable indenting when printing
 #define NEWT_POOL			(newt_env.pool)					///< メモリプール
 #define NEWT_SWEEP			(newt_env.sweep)				///< SWEEPフラグ
 #define NEWT_NEEDGC			(newt_env.needgc)				///< GCフラグ
@@ -95,6 +96,8 @@ typedef struct {
     bool		_dumpLex;		///< 字句解析ダンプフラグ
     bool		_dumpSyntax;	///< 構文木ダンプフラグ
     bool		_dumpBC;		///< バイトコードダンプフラグ
+	int32_t		_indent;		///< number of tabs for indenting a printout
+	int32_t		_indentDepth;	///< base for calculating the indent depth
 } newt_env_t;
 
 

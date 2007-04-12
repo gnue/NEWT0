@@ -657,7 +657,12 @@ newtRef NewtWritePkg(newtRefArg package)
 		}
 
 		// the original file has this (c) message embedded
-		{	char msg[] = "Newtonｪ ToolKit Package ｩ 1992-1997, Apple Computer, Inc.";
+		{	
+#ifdef _MSC_VER
+			char msg[] = "Newton� ToolKit Package � 1992-1997, Apple Computer, Inc.";
+#else
+			char msg[] = "Newtonｪ ToolKit Package ｩ 1992-1997, Apple Computer, Inc.";
+#endif
 			PkgWriteData(&pkg, pkg.header_size + pkg.var_data_size, msg, sizeof(msg));
 			pkg.var_data_size += sizeof(msg);
 		}

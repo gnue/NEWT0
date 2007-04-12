@@ -29,6 +29,7 @@ static bool			NewtSymbolIsPrint(char * str, int len);
 static bool			NewtStrIsPrint(char * str, int len);
 static char *		NewtCharToEscape(int c);
 
+static void			NIOPrintIndent(newtStream_t * f, int32_t level);
 static void			NIOPrintEscapeStr(newtStream_t * f, char * str, int len);
 static void			NIOPrintRef(newtStream_t * f, newtRefArg r);
 static void			NIOPrintSpecial(newtStream_t * f, newtRefArg r);
@@ -102,6 +103,7 @@ int32_t NewtGetPrintDepth(void)
 
 
 #pragma mark -
+
 /*------------------------------------------------------------------------*/
 /** シンボル文字列が表示可能か調べる
  *
@@ -200,6 +202,29 @@ char * NewtCharToEscape(int c)
 	}
 
 	return s;
+}
+
+
+/*------------------------------------------------------------------------*/
+/** Print a NewLine character and some spaces to indent the following text. 
+ * @param f			[in] destination stream
+ * @param depth		[in] max indent level minus current indent level
+ */
+void NIOPrintIndent(newtStream_t * f, int32_t depth)
+{
+	int32_t i, n = newt_env._indentDepth - depth;
+	NIOFputc('\n', f);
+	if (NEWT_INDENT>0) {
+		n *= NEWT_INDENT;
+		for (i=0; i<n; i++) {
+			NIOFputc('\t', f);
+		}
+	} else {
+		n *= -NEWT_INDENT;
+		for (i=0; i<n; i++) {
+			NIOFputc(' ', f);
+		}
+	}
 }
 
 
@@ -567,6 +592,7 @@ void NIOPrintObjArray(newtStream_t * f, newtRefArg r, int32_t depth, bool litera
     
         if (NewtRefIsNotNIL(klass) && ! NewtRefEqual(klass, NSSYM0(array)))
         {
+			if (NEWT_INDENT) NIOPrintIndent(f, depth-1);
             NIOPrintObj2(f, klass, 0, true);
             NIOFputs(": ", f);
         }
@@ -593,10 +619,13 @@ void NIOPrintObjArray(newtStream_t * f, newtRefArg r, int32_t depth, bool litera
 					break;
 				}
 
+				if (NEWT_INDENT) NIOPrintIndent(f, depth);
                 NIOPrintObj2(f, slots[i], depth, literal);
             }
+			depth++;
         }
 
+		if (NEWT_INDENT) NIOPrintIndent(f, depth);
         NIOFputs("]", f);
     }
 }
@@ -711,14 +740,17 @@ void NIOPrintObjFrame(newtStream_t * f, newtRefArg r, int32_t depth, bool litera
 
         for (i = 0; i < len; i++)
         {
-            if (0 < i)
+            if (0 < i) {
                 NIOFputs(", ", f);
+			}
 
 			if (printLength <= i)
 			{
 				NIOFputs("...", f);
+				if (NEWT_INDENT) NIOPrintIndent(f, depth);
 				break;
 			}
+			if (NEWT_INDENT) NIOPrintIndent(f, depth);
 
             slot = NewtGetMapIndex(obj->as.map, i, &index);
 			if (slot == kNewtRefUnbind) break;
@@ -726,7 +758,9 @@ void NIOPrintObjFrame(newtStream_t * f, newtRefArg r, int32_t depth, bool litera
             NIOPrintObjSymbol(f, slot);
             NIOFputs(": ", f);
             NIOPrintObj2(f, slots[i], depth, literal);
+
         }
+		if (NEWT_INDENT) NIOPrintIndent(f, depth+1);
     }
 
     NIOFputs("}", f);
@@ -869,7 +903,9 @@ void NIOPrintObj2(newtStream_t * f, newtRefArg r, int32_t depth, bool literal)
 
 void NIOPrintObj(newtStream_t * f, newtRefArg r)
 {
-    NIOPrintObj2(f, r, NewtGetPrintDepth(), false);
+	int32_t depth = NewtGetPrintDepth();
+	newt_env._indentDepth = depth;
+    NIOPrintObj2(f, r, depth, false);
 }
 
 

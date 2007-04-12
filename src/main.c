@@ -295,6 +295,10 @@ void newt_option_switchs(const char * s)
                 NEWT_DUMPBC = true;
                 break;
 
+            case 'I':
+                NEWT_INDENT = 1;
+                break;
+
             case 'v':
                 newt_show_version();
                 exit(0);
