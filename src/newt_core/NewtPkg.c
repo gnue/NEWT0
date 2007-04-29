@@ -349,7 +349,6 @@ newtRef PkgWriteFrame(pkg_stream_t *pkg, newtRefArg frame)
 
 	// calculate the size of this chunk
 	dst = PkgAlign(pkg, pkg->size);
-	PkgPartSetPrecedent(pkg, frame, dst);
 	n = NewtFrameLength(frame);
 	size = (n+3)*4;
 
@@ -389,7 +388,6 @@ newtRef PkgWriteArray(pkg_stream_t *pkg, newtRefArg array)
 
 	// calculate the size of this chunk
 	dst = PkgAlign(pkg, pkg->size);
-	PkgPartSetPrecedent(pkg, array, dst);
 	n = NewtArrayLength(array);
 	size = (n+3)*4;
 
@@ -429,7 +427,6 @@ newtRef PkgWriteBinary(pkg_stream_t *pkg, newtRefArg obj)
 
 	// calculate the size of this chunk
 	dst = PkgAlign(pkg, pkg->size);
-	PkgPartSetPrecedent(pkg, obj, dst);
 	size = NewtBinaryLength(obj);
 	data = NewtRefToBinary(obj);
 
@@ -522,6 +519,9 @@ newtRef PkgWriteObject(pkg_stream_t *pkg, newtRefArg obj)
 #		endif
 		return kNewtRefNIL; // do not create a precedent
 	}
+
+	// make this ref available for later incarnations of the same object
+	PkgPartSetPrecedent(pkg, obj, dst);
 
 	return dst;
 }
