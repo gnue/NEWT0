@@ -25,6 +25,10 @@ LDIMPORT = @NEWT_LDIMPORT@
 LDFLAGS = $(DEBUG) -O2 @LDFLAGS@ @NEWT_LDFLAGS@
 LDSHARED = @LIBNEWT_LDSHARED@
 
+# declarations needed to creat a static library
+LIBCOMMAND    = @LIBCOMMAND@
+LIBEXT        = @LIBEXT@
+
 prefix = @prefix@
 exec_prefix = @exec_prefix@
 bindir = @bindir@
@@ -37,6 +41,8 @@ CPPFLAGS = -I. -I$(srcdir) -I$(core)/incs -I$(srcdir)/parser -I$(yytmp) @CPPFLAG
 
 
 NEWT          = $(build)/newt$(EXEEXT)
+
+LIBNEWT       = $(build)/libnewt$(LIBEXT)
 
 MAINOBJ       = $(objdir)/main.o
 
@@ -71,6 +77,8 @@ CONTRIBLIBS   = $(contrib)/inwt \
 
 OBJS          = $(MAINOBJ) $(UTILSOBJS) $(PARSEROBJS) $(COREOBJS)
 
+LIBOBJS       = $(UTILSOBJS) $(PARSEROBJS) $(COREOBJS)
+
 
 ######
 
@@ -101,6 +109,13 @@ newt: $(build) $(objdir) $(yytmp) $(NEWT) $(LDIMPORT)
 $(NEWT): $(OBJS)
 	$(CC) $(LDFLAGS) $(LIBS) $(OBJS) $(LIBS) -o $@
 
+
+### LIBNEWT static library
+
+libnewt: $(build) $(objdir) $(yytmp) $(LIBNEWT) $(LDIMPORT)
+
+$(LIBNEWT): $(LIBOBJS)
+	$(LIBCOMMAND) $@ $(LIBOBJS) 
 
 
 ### MAIN

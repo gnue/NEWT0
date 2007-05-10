@@ -200,6 +200,24 @@ AC_SUBST(__NAMED_MAGIC_POINTER__)
 
 AC_SUBST(LIBREGEX)
 
+dnl
+dnl How to create static libraries
+dnl
+AC_PROG_RANLIB
+AC_PATH_PROG(AR, ar)
+if test "x$AR" = "x:"; then
+    AC_MSG_ERROR(Configure could not find the library archiver, aborting.)
+fi
+if test "x$RANLIB" != "x:"; then
+    LIBCOMMAND="$AR cr"
+else
+    LIBCOMMAND="$AR crs"
+fi
+AC_SUBST(LIBCOMMAND)
+LIBEXT=".a"
+AC_SUBST(LIBEXT)
+
+
 AC_CONFIG_FILES([Makefile
                  ext/protoFILE/Makefile
                  ext/protoREGEX/Makefile
