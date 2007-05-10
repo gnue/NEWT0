@@ -1,4 +1,4 @@
-prefix		= /usr/local
+prefix		= /opt/local
 exec_prefix	= ${prefix}
 bindir		= ${exec_prefix}/bin
 NEWT		= $(bindir)/newt
