@@ -611,7 +611,7 @@ newtRef NsGetVariable(newtRefArg rcvr, newtRefArg frame, newtRefArg slot)
 
 
 /*------------------------------------------------------------------------*/
-/** プロト・ペアレント継承でフレームからスロットの値を取得
+/** プロト・ペアレント継承でフレームのスロットに値をセット
  *
  * @param rcvr		[in] レシーバ
  * @param frame		[in] フレーム
