@@ -3535,6 +3535,7 @@ bool NewtAssignment(newtRefArg start, newtRefArg name, newtRefArg value)
 {
     newtRefVar	current;
     newtRefVar	left = start;
+NcPrintObject(start);
 
     while (NewtRefIsNotNIL(left))
     {
@@ -3549,7 +3550,7 @@ bool NewtAssignment(newtRefArg start, newtRefArg name, newtRefArg value)
 
             if (NewtHasSlot(current, name))
             {
-                NcSetSlot(current, name, value);
+                NcSetSlot(left, name, value);
                 return true;
             }
      
