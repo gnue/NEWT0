@@ -3535,7 +3535,6 @@ bool NewtAssignment(newtRefArg start, newtRefArg name, newtRefArg value)
 {
     newtRefVar	current;
     newtRefVar	left = start;
-NcPrintObject(start);
 
     while (NewtRefIsNotNIL(left))
     {
