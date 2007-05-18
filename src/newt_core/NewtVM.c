@@ -1878,7 +1878,7 @@ newtRef	vm_send(int16_t b, newtErr * errP)
 		return name;
 	}
 
-	if (! NewtRefIsFrame(receiver))
+	if (! NewtRefIsFrame(receiver) && ! NewtRefIsNIL(receiver))
 	{
 		NVMThrowBC(kNErrNotAFrame, receiver, b, true);
 		return name;
