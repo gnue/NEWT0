@@ -21,6 +21,7 @@
  */
 /*
  * 2006-06-16	Creation of the file from code of objc-msg-i386.s
+ * 2007-05-30	Replace _objc_methodCallv_stret by _objc_msgSendv_stret based
  */
 //////////////////////////////////////////////////////////////////////
 //
@@ -62,6 +63,14 @@ $0:
 	method          = 12
 	marg_size       = 16
 	marg_list       = 20
+
+	struct_addr     = 4
+
+	self_stret      = 8
+	selector_stret  = 12
+	method_stret    = 16
+	marg_size_stret = 20
+	marg_list_stret = 24
 
 /********************************************************************
  * id		objc_methodCallv(id	self,
@@ -120,19 +129,21 @@ ArgsOK:
 	END_ENTRY	_objc_methodCallv
 
 /********************************************************************
- * double objc_methodCallv_stret(
- 				id self,
- 				SEL _cmd,
- 				IMP method,
- 				unsigned size,
- 				marg_list frame);
+ * void objc_methodCallv_stret(
+				void* stretAddr,
+				id self,
+				SEL _cmd,
+				IMP method,
+				unsigned arg_size,
+				marg_list arg_frame);
  *
  * On entry:
- *		(sp+4)  is the message receiver,
- *		(sp+8)	is the selector,
- *		(sp+12) is the method to call,
- *		(sp+16) is the size of the marg_list, in bytes,
- *		(sp+20) is the address of the marg_list
+ *		(sp+4)  is the address in which the returned struct is put,
+ *		(sp+8)  is the message receiver,
+ *		(sp+12) is the selector,
+ *		(sp+26) is the method to call,
+ *		(sp+20) is the size of the marg_list, in bytes,
+ *		(sp+24) is the address of the marg_list
  *
  ********************************************************************/
 
@@ -140,13 +151,13 @@ ArgsOK:
 
 	pushl	%ebp
 	movl	%esp, %ebp
-	// stack is currently aligned assuming no extra arguments
-	movl	(marg_list+4)(%ebp), %edx
+	subl    $12, %esp	// align stack assuming no extra arguments
+	movl	(marg_list_stret+4)(%ebp), %edx
 	addl	$8, %edx			// skip self & selector
-	movl	(marg_size+4)(%ebp), %ecx
-	subl    $8, %ecx			// skip self & selector
+	movl	(marg_size_stret+4)(%ebp), %ecx
+	subl	$5, %ecx			// skip self & selector
 	shrl	$2, %ecx
-	je      FpretArgsOK
+	je      StretArgsOK
 
 	// %esp = %esp - (16 - ((numVariableArguments & 3) << 2))
 	movl    %ecx, %eax			// 16-byte align stack
@@ -155,18 +166,20 @@ ArgsOK:
 	subl    $16, %esp
 	addl    %eax, %esp
 
-FpretArgLoop:
+StretArgLoop:
 	decl	%ecx
 	movl	0(%edx, %ecx, 4), %eax
 	pushl	%eax
-	jg	FpretArgLoop
+	jg	StretArgLoop
 
-FpretArgsOK:
-	movl	(selector+4)(%ebp), %ecx
+StretArgsOK:
+	movl	(selector_stret+4)(%ebp), %ecx
 	pushl	%ecx
-	movl	(self+4)(%ebp),%ecx
+	movl	(self_stret+4)(%ebp),%ecx
 	pushl	%ecx
-	movl	(method+4)(%ebp),%ecx
+	movl	(struct_addr+4)(%ebp),%ecx
+	pushl	%ecx
+	movl	(method_stret+4)(%ebp),%ecx
 	call	%ecx
 	movl	%ebp,%esp
 	popl	%ebp
