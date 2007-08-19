@@ -40,7 +40,7 @@
 #define NSSYM(name)			(NewtMakeSymbol(#name))			///< シンボルオブジェクトの作成
 
 #define NSNAMEDMP(name)		(NewtMakeNamedMP(#name))		///< 名前付マジックポインタの作成
-#define NSNAMEDMP0(name)	(NewtSymbolToMP(NSSYM0(name)))	///< 保管場所から名前付マジックポインタの作成
+#define NSNAMEDMP0(name)	(NewtSymbolToMP(NSSYM0(name)))	///< 保管場所から名前付マジックポインタを取得
 #define NSMP(n)				(NewtMakeMagicPointer(0, n))	///< マジックポインタの作成
 
 #define NS_CLASS			NSSYM0(__class)					///< class シンボル

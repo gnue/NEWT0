@@ -12,6 +12,7 @@
 
 /* ヘッダファイル */
 #include <stdlib.h>
+#include <stdarg.h>
 
 #include "NewtErrs.h"
 #include "NewtVM.h"
@@ -98,6 +99,8 @@ static void			stk_pop_n(int32_t n, newtRef a[]);
 static void			stk_remove(uint16_t n);
 static newtRef		stk_top(void);
 static void			stk_push(newtRefArg value);
+static void			stk_push_varg(int argc, va_list ap);
+static void			stk_push_array(newtRefVar argArray);
 
 static bool			excp_push(newtRefArg sym, newtRefArg pc);
 static void			excp_pop(void);
@@ -186,6 +189,9 @@ static void			is_new_handlers(int16_t b);
 static void			NVMDumpInstResult(FILE * f);
 static void			NVMDumpInstCode(FILE * f, uint8_t * bc, uint32_t pc, uint16_t len);
 
+static void			vm_env_push(vm_env_t * next);
+static void			vm_env_pop(void);
+
 static void			NVMInitREG(void);
 static void			NVMInitSTACK(void);
 static void			NVMCleanSTACK(void);
@@ -203,6 +209,9 @@ static void			NVMClean(void);
 static void			NVMLoop(uint32_t callsp);
 
 static newtRef		NVMInterpret2(nps_syntax_node_t * stree, uint32_t numStree, newtErr * errP);
+
+static newtRef		NVMFuncCallWithValist(newtRefArg fn, int argc, va_list ap);
+static newtRef		NVMMessageSendWithValist(newtRefArg impl, newtRefArg receiver, newtRefArg fn, int argc, va_list ap);
 
 
 /* ローカル変数 */
@@ -820,6 +829,48 @@ void stk_push(newtRefArg value)
 
     STACK[SP] = value;
     SP++;
+}
+
+
+/*------------------------------------------------------------------------*/
+/** 可変引数をスタックにプッシュする
+ *
+ * @param argc		[in] 引数の数
+ * @param ap		[in] 可変引数
+ *
+ * @return			なし
+ */
+
+void stk_push_varg(int argc, va_list ap)
+{
+	int		i;
+
+	for (i = 0; i < argc; i++)
+	{
+		stk_push(va_arg(ap, newtRefArg));
+	}
+}
+
+
+/*------------------------------------------------------------------------*/
+/** 配列の要素をスタックにプッシュする
+ *
+ * @param argArray	[in] 引数配列
+ *
+ * @return			なし
+ */
+
+void stk_push_array(newtRefVar argArray)
+{
+	int		numArgs;
+	int		i;
+
+	numArgs = NewtArrayLength(argArray);
+
+	for (i = 0; i < numArgs; i++)
+	{
+		stk_push(NewtGetArraySlot(argArray, i));
+	}
 }
 
 
@@ -3416,6 +3467,36 @@ void NVMDumpStacks(FILE * f)
 #pragma mark *** インタプリタ
 #endif
 
+/*------------------------------------------------------------------------*/
+/** VM環境をプッシュする
+ *
+ * @param next		[in] 新しいVM環境
+ *
+ * @return			なし
+ */
+
+void vm_env_push(vm_env_t * next)
+{
+	*next = vm_env;
+	vm_env.next = next;
+}
+
+
+/*------------------------------------------------------------------------*/
+/** VM環境をポップする
+ *
+ * @return			なし
+ */
+
+void vm_env_pop(void)
+{
+	vm_env_t *	next = vm_env.next;
+
+	if (next)
+	{
+		vm_env = *next;
+	}
+}
 
 
 /*------------------------------------------------------------------------*/
@@ -3789,15 +3870,22 @@ void NVMFnCall(newtRefArg fn, int16_t numArgs)
 
 newtRef NVMCall(newtRefArg fn, int16_t numArgs, newtErr * errP)
 {
-
 	newtRefVar	result = kNewtRefUnbind;
 	newtErr		err = kNErrNone;
 
     if (NewtRefIsNotNIL(fn))
     {
+		vm_env_t	saveVM;
+
+		// save the VM
+		vm_env_push(&saveVM);
+
         NVMFnCall(fn, numArgs);
         NVMLoop(CALLSP - 1);
         result = stk_top();
+
+		// restore the VM
+		vm_env_pop();
     }
 
     if (errP != NULL)
@@ -3987,8 +4075,8 @@ NVMMessageSendWithArgArray(
 	int			indexArgs;
 
 	/* save the VM */
-	saveVM = vm_env;
-	
+	vm_env_push(&saveVM);
+
 	nbArgs = NewtArrayLength(inArgs);
 	/* Push the arguments on the stack */
 	for (indexArgs = 0; indexArgs < nbArgs; indexArgs++)
@@ -4002,7 +4090,372 @@ NVMMessageSendWithArgArray(
 	result = stk_top();
 
 	/* restore the VM */
-	vm_env = saveVM;
+	vm_env_pop();
+
+	return result;
+}
+
+
+/*------------------------------------------------------------------------*/
+/** 関数オブジェクトを va_list で実行
+ *
+ * @param fn		[in] 関数オブジェクト
+ * @param argc		[in] 引数の数
+ * @param ap		[in] va_list
+ *
+ * @return			スタックのトップオブジェクト
+ */
+
+newtRef NVMFuncCallWithValist(newtRefArg fn, int argc, va_list ap)
+{
+	vm_env_t	saveVM;
+	newtRefVar	result;
+
+	// save the VM
+	vm_env_push(&saveVM);
+
+	// Push the arguments on the stack
+	stk_push_varg(argc, ap);
+
+	// Call function
+	NVMFuncCall(fn, argc);
+	NVMLoop(CALLSP - 1);
+	result = stk_top();
+
+	// restore the VM
+	vm_env_pop();
+
+	return result;
+}
+
+
+/*------------------------------------------------------------------------*/
+/** メソッドを va_list で実行
+ *
+ * @param impl		[in] インプリメンタ
+ * @param receiver	[in] レシーバー
+ * @param fn		[in] 関数オブジェクト
+ * @param argc		[in] 引数の数
+ * @param ap		[in] va_list
+ *
+ * @return			スタックのトップオブジェクト
+ */
+
+newtRef NVMMessageSendWithValist(newtRefArg impl, newtRefArg receiver, newtRefArg fn, int argc, va_list ap)
+{
+	newtRefVar	result;
+	vm_env_t	saveVM;
+
+	// save the VM
+	vm_env_push(&saveVM);
+	
+	// Push the arguments on the stack
+	stk_push_varg(argc, ap);
+
+	// Send the message
+	NVMMessageSend(impl, receiver, fn, argc);
+	NVMLoop(CALLSP - 1);
+	result = stk_top();
+
+	/* restore the VM */
+	vm_env_pop();
+
+	return result;
+}
+
+
+/*------------------------------------------------------------------------*/
+/** 関数オブジェクトを可変引数で実行
+ *
+ * @param fn		[in] 関数オブジェクト
+ * @param argc		[in] 引数の数
+ *
+ * @return			スタックのトップオブジェクト
+ */
+
+newtRef NcCall(newtRefArg fn, int argc, ...)
+{
+	newtRefVar	result;
+	va_list		ap;
+
+	va_start(ap, argc);
+	result = NVMFuncCallWithValist(fn, argc, ap);
+	va_end(ap);
+
+	return result;
+}
+
+
+/*------------------------------------------------------------------------*/
+/** 配列を引数にして関数オブジェクトを実行
+ *
+ * @param fn		[in] 関数オブジェクト
+ * @param args		[in] 配列
+ *
+ * @return			スタックのトップオブジェクト
+ */
+
+newtRef NcCallWithArgArray(newtRefArg fn, newtRefArg args)
+{
+	vm_env_t	saveVM;
+	newtRefVar	result;
+	newtErr		err;
+
+	if (! NewtRefIsFrame(args))
+	{
+		return NewtThrow(kNErrNotAFrame, args);
+	}
+
+	// save the VM
+	vm_env_push(&saveVM);
+
+	stk_push_array(args);
+	result = NVMCall(fn, NewtArrayLength(args), &err);
+
+	// restore the VM
+	vm_env_pop();
+
+	return result;
+}
+
+
+/*------------------------------------------------------------------------*/
+/** グローバル関数を可変引数で実行
+ *
+ * @param sym		[in] シンボル
+ * @param argc		[in] 引数の数
+ *
+ * @return			スタックのトップオブジェクト
+ */
+
+newtRef NcCallGlobalFn(newtRefArg sym, int argc, ...)
+{
+	newtRefVar	result;
+    newtRefVar	fn;
+	va_list		ap;
+
+    fn = NcGetGlobalFn(sym);
+    if (NewtRefIsNIL(fn))
+	{
+		return NewtThrow(kNErrUndefinedGlobalFunction, sym);
+	}
+
+	va_start(ap, argc);
+	result = NVMFuncCallWithValist(fn, argc, ap);
+	va_end(ap);
+
+	return result;
+}
+
+
+/*------------------------------------------------------------------------*/
+/** 配列を引数にしてグローバル関数を実行
+ *
+ * @param sym		[in] シンボル
+ * @param args		[in] 配列
+ *
+ * @return			スタックのトップオブジェクト
+ */
+
+newtRef NcCallGlobalFnWithArgArray(newtRefArg sym, newtRefArg args)
+{
+    newtRefVar	fn;
+
+    fn = NcGetGlobalFn(sym);
+    if (NewtRefIsNIL(fn))
+	{
+		return NewtThrow(kNErrUndefinedGlobalFunction, sym);
+	}
+
+	return NcCallWithArgArray(fn, args);
+}
+
+
+/*------------------------------------------------------------------------*/
+/** メソッドを可変引数で実行
+ *
+ * @param receiver	[in] レシーバー
+ * @param sym		[in] シンボル
+ * @param ignore	[in] メソッド未定定義の例外を無視する
+ * @param argc		[in] 引数の数
+ *
+ * @return			スタックのトップオブジェクト
+ */
+
+newtRef NcSend(newtRefArg receiver, newtRefArg sym, bool ignore, int argc, ...)
+{
+	newtRefVar	result = kNewtRefUnbind;
+    newtRefVar	impl;
+    newtRefVar	fn;
+
+	if (! NewtRefIsSymbol(sym))
+	{
+		return NewtThrow(kNErrNotASymbol, sym);
+	}
+
+	if (! NewtRefIsFrame(receiver) && ! NewtRefIsNIL(receiver))
+	{
+		return NewtThrow(kNErrNotAFrame, receiver);
+	}
+
+    impl = NcFullLookupFrame(receiver, sym);
+
+    if (impl != kNewtRefUnbind)
+	{
+		va_list		ap;
+
+		fn = NcGetSlot(impl, sym);
+
+		va_start(ap, argc);
+		result = NVMMessageSendWithValist(impl, receiver, fn, argc, ap);
+		va_end(ap);
+    }
+	else
+	{
+		if (! ignore)
+			return NewtThrow(kNErrUndefinedMethod, sym);
+	}
+
+	return result;
+}
+
+
+/*------------------------------------------------------------------------*/
+/** 配列を引数にしてメソッドを実行
+ *
+ * @param receiver	[in] レシーバー
+ * @param sym		[in] シンボル
+ * @param ignore	[in] メソッド未定定義の例外を無視する
+ * @param args		[in] 配列
+ *
+ * @return			スタックのトップオブジェクト
+ */
+
+newtRef NcSendWithArgArray(newtRefArg receiver, newtRefArg sym, bool ignore, newtRefArg args)
+{
+	newtRefVar	result = kNewtRefUnbind;
+    newtRefVar	impl;
+    newtRefVar	fn;
+
+	if (! NewtRefIsSymbol(sym))
+	{
+		return NewtThrow(kNErrNotASymbol, sym);
+	}
+
+	if (! NewtRefIsFrame(receiver) && ! NewtRefIsNIL(receiver))
+	{
+		return NewtThrow(kNErrNotAFrame, receiver);
+	}
+
+    impl = NcFullLookupFrame(receiver, sym);
+
+    if (impl != kNewtRefUnbind)
+	{
+		fn = NcGetSlot(impl, sym);
+		result = NVMMessageSendWithArgArray(impl, receiver, fn, args);
+    }
+	else
+	{
+		if (! ignore)
+			return NewtThrow(kNErrUndefinedMethod, sym);
+	}
+
+	return result;
+}
+
+
+/*------------------------------------------------------------------------*/
+/** メソッドを可変引数で実行（プロト呼出し）
+ *
+ * @param receiver	[in] レシーバー
+ * @param sym		[in] シンボル
+ * @param ignore	[in] メソッド未定定義の例外を無視する
+ * @param argc		[in] 引数の数
+ *
+ * @return			スタックのトップオブジェクト
+ *
+ * @note			プロト継承のみ行う
+ */
+
+newtRef NcSendProto(newtRefArg receiver, newtRefArg sym, bool ignore, int argc, ...)
+{
+	newtRefVar	result = kNewtRefUnbind;
+    newtRefVar	impl;
+    newtRefVar	fn;
+
+	if (! NewtRefIsSymbol(sym))
+	{
+		return NewtThrow(kNErrNotASymbol, sym);
+	}
+
+	if (! NewtRefIsFrame(receiver) && ! NewtRefIsNIL(receiver))
+	{
+		return NewtThrow(kNErrNotAFrame, receiver);
+	}
+
+	impl = NcProtoLookupFrame(receiver, sym);
+
+    if (impl != kNewtRefUnbind)
+	{
+		va_list		ap;
+
+		fn = NcGetSlot(impl, sym);
+
+		va_start(ap, argc);
+		result = NVMMessageSendWithValist(impl, receiver, fn, argc, ap);
+		va_end(ap);
+    }
+	else
+	{
+		if (! ignore)
+			return NewtThrow(kNErrUndefinedMethod, sym);
+	}
+
+	return result;
+}
+
+
+/*------------------------------------------------------------------------*/
+/** 配列を引数にしてメソッドを実行（プロト呼出し）
+ *
+ * @param receiver	[in] レシーバー
+ * @param sym		[in] シンボル
+ * @param ignore	[in] メソッド未定定義の例外を無視する
+ * @param args		[in] 配列
+ *
+ * @return			スタックのトップオブジェクト
+ *
+ * @note			プロト継承のみ行う
+ */
+
+newtRef NcSendProtoWithArgArray(newtRefArg receiver, newtRefArg sym, bool ignore, newtRefArg args)
+{
+	newtRefVar	result = kNewtRefUnbind;
+    newtRefVar	impl;
+    newtRefVar	fn;
+
+	if (! NewtRefIsSymbol(sym))
+	{
+		return NewtThrow(kNErrNotASymbol, sym);
+	}
+
+	if (! NewtRefIsFrame(receiver) && ! NewtRefIsNIL(receiver))
+	{
+		return NewtThrow(kNErrNotAFrame, receiver);
+	}
+
+	impl = NcProtoLookupFrame(receiver, sym);
+
+    if (impl != kNewtRefUnbind)
+	{
+		fn = NcGetSlot(impl, sym);
+		result = NVMMessageSendWithArgArray(impl, receiver, fn, args);
+    }
+	else
+	{
+		if (! ignore)
+			return NewtThrow(kNErrUndefinedMethod, sym);
+	}
 
 	return result;
 }
