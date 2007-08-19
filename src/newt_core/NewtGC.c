@@ -506,7 +506,13 @@ void NewtGCMark(vm_env_t * env, bool mark)
 void NewtGC(void)
 {
 //    NewtPoolMarkClean(NEWT_POOL);
-    NewtGCMark(&vm_env, NEWT_SWEEP);
+	vm_env_t *	env;
+
+	for (env = &vm_env; env; env = env->next)
+	{
+		NewtGCMark(&vm_env, NEWT_SWEEP);
+	}
+
 	NewtPoolSweep(NEWT_POOL, NEWT_SWEEP);
 
     NEWT_SWEEP = ! NEWT_SWEEP;
