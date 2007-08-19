@@ -188,7 +188,9 @@ int NIOFputs(const char *str, newtStream_t * stream)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** printf フォーマットで出力する（不定長）
  *
@@ -251,7 +253,9 @@ int NewtFputs(const char *str, FILE * f)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** printf フォーマットで出力する（不定長）
  *
@@ -285,7 +289,9 @@ int NewtDebugMsg(const char * title, const char * format, ...)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** 入力ストリームから文字列を取出す
  *

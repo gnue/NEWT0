@@ -86,7 +86,9 @@ static newtRef		NSOFReadSmallRect(nsof_stream_t * nsof);
 static newtRef		NSOFReadNSOF(nsof_stream_t * nsof);
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** オブジェクトが 0〜255 の整数かチェックする
  *
@@ -167,7 +169,9 @@ int32_t NewtArraySearch(newtRefArg array, newtRefArg r)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** 1byte を NSOF でバッファに書込む
  *
@@ -279,7 +283,9 @@ int32_t NSOFReadXlong(nsof_stream_t * nsof)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** 出現済みデータを NSOF でバッファに書込む
  *
@@ -800,7 +806,9 @@ newtRef NsMakeNSOF(newtRefArg rcvr, newtRefArg r, newtRefArg ver)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** NSOFバッファを読込んでバイナリオブジェクトに変換する
  *

@@ -24,7 +24,9 @@ static bool		NewtBeginsWith(const char * str, const char * sub);
 static bool		NewtEndsWith(const char * str, const char * sub);
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** ベース文字列のパラメータを置き換えて新しい文字列を作成する
  *
@@ -198,7 +200,9 @@ bool NewtEndsWith(const char * str, const char * sub)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** 整数を文字に変換する
  *
@@ -239,7 +243,9 @@ newtRef NsOrd(newtRefArg rcvr, newtRefArg r)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** 文字列の長さを取得
  *

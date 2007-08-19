@@ -53,7 +53,9 @@ static bool			NewtStrIsSubclass(char * sub, uint32_t sublen, char * supr, uint32
 static bool			NewtStrHasSubclass(char * sub, uint32_t sublen, char * supr, uint32_t suprlen);
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** シンボルのハッシュ値を計算
  *
@@ -254,7 +256,9 @@ const char*	NewtSymbolGetName(newtRefArg inSymbol)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** オブジェクトのオブジェクトタイプの取得
  *
@@ -364,7 +368,9 @@ uint16_t NewtGetObjectType(newtObjRef obj, bool detail)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** オブジェクトデータの実データサイズを計算
  *
@@ -663,7 +669,9 @@ newtRef NewtPackLiteral(newtRefArg r)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** オブジェクのデータ部をバッファに取出す
  *
@@ -686,7 +694,9 @@ void NewtGetObjData(newtRefArg r, uint8_t * data, uint32_t len)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** オブジェクトがリテラルかチェックする
  *
@@ -1150,7 +1160,9 @@ void * NewtRefToAddress(newtRefArg r)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** バイナリオブジェクトを作成する
  *
@@ -1809,7 +1821,9 @@ newtRef NewtMakeAddress(void * addr)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** エラー番号の例外を発生する
  *
@@ -1972,7 +1986,9 @@ void NewtErrMessage(int32_t err)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** 32bit整数の比較
  *
@@ -2126,7 +2142,9 @@ int NewtBinaryCompare(newtRefArg r1, newtRefArg r2)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** 計算可能な引数ならば計算結果のオブジェクトタイプを返す
  *
@@ -2319,7 +2337,9 @@ bool NewtSymbolEqual(newtRefArg r1, newtRefArg r2)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** オブジェクトの長さを取得する
  *
@@ -2489,7 +2509,9 @@ uint32_t NewtDeeplyFrameLength(newtRefArg r)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** フレームのオブジェクトデータが _proto スロットを持つかチェックする
  *
@@ -2804,7 +2826,9 @@ void NewtObjRemoveSlot(newtObjRef obj, newtRefArg slot)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** マップから指定位置のスロットシンボルを取出す
  *
@@ -2966,7 +2990,9 @@ newtRef NewtFrameMap(newtRefArg r)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** フレームオブジェクトからスロットの位置を探す
  *
@@ -3519,7 +3545,9 @@ newtRef NewtSetARef(newtRefArg r, uint32_t p, newtRefArg v)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** 検索された変数の保存場所に値をセットする
  *
@@ -3666,7 +3694,9 @@ bool NewtHasVariable(newtRefArg r, newtRefArg name)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** ネイティブ関数の関数オブジェクトから関数のポインタを取得する
  *
@@ -3800,7 +3830,9 @@ newtRef NewtDefGlobalFunc0(newtRefArg sym, void * funcPtr, uint32_t numArgs, boo
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** 文字列の前半部が部分文字列と一致するかチェックする
  *
@@ -3953,7 +3985,9 @@ bool NewtIsInstance(newtRefArg obj, newtRefArg r)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** 文字列オブジェクトの最後に文字列を追加する
  *
@@ -4013,7 +4047,9 @@ newtRef NewtStrCat2(newtRefArg r, char * s, uint32_t slen)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** 環境変数の取得
  *
