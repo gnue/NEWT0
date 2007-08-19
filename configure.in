@@ -222,7 +222,6 @@ AC_CONFIG_FILES([Makefile
                  ext/protoFILE/Makefile
                  ext/protoREGEX/Makefile
                  contrib/inwt/Makefile
-                 contrib/inwt/inwt
                  contrib/NativeCalls/Makefile
                  contrib/NewtObjC/Makefile])
 AC_OUTPUT
