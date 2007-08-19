@@ -72,13 +72,10 @@ typedef struct {
 #define NBCGenFreq(b)			NBCGenCode(kNBCFreqFunc, b)						///< 関数命令のバイトコードを生成する
 
 
-#ifndef _MSC_VER
-
+#if 0
 #pragma mark -
-
-#pragma mark ローカル変数
+#pragma mark *** ローカル変数
 #endif
-
 
 
 /* ローカル変数 */
@@ -106,7 +103,10 @@ static freq_func_t freq_func_tb[] =
     };
 
 
+#if 0
 #pragma mark -
+#endif
+
 /* 関数プロトタイプ */
 static int16_t			NBCAddLiteralEnv(nbc_env_t * env, newtRefArg r);
 static void				NBCGenCodeEnv(nbc_env_t * env, uint8_t a, int16_t b);
@@ -179,7 +179,9 @@ static newtRef			NBCGenMakeFrameSlots(nps_syntax_node_t * stree, nps_node_t r);
 static void				NBCGenBC_sub(nps_syntax_node_t * stree, uint32_t n, bool ret);
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** リテラルリストにオブジェクトを追加する
  *
@@ -292,7 +294,9 @@ int16_t NBCGenPushLiteralEnv(nbc_env_t * env, newtRefArg r)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** オブジェクトをプッシュするバイトコードを生成
  *
@@ -549,7 +553,9 @@ uint32_t NBCGenBranch(uint8_t a)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** ローカル変数を定義するバイトコードを生成
  *
@@ -582,7 +588,9 @@ void NBCDefLocal(newtRefArg type, newtRefArg r, bool init)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** バイトコードをバックパッチする
  *
@@ -649,7 +657,9 @@ void NBCBreakBackPatchs(uint32_t loop_head, uint32_t cx)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** 例外処理命令の位置をスタックする
  *
@@ -754,7 +764,9 @@ void NBCOnexcpBackPatchL(uint32_t sp, int32_t pc)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** 関数オブジェクトを作成する
  *
@@ -945,7 +957,9 @@ void NBCCleanup(void)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** 文のバイトコードを生成する
  *
@@ -2666,13 +2680,9 @@ newtRef NBCCompileStr(char * s, bool ret)
 }
 
 
-#ifndef _MSC_VER
-
+#if 0
 #pragma mark -
-
 #endif
-
-
 /*------------------------------------------------------------------------*/
 /** エラーメッセージの表示
  *

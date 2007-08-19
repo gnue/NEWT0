@@ -58,7 +58,9 @@ static void			NIOPrint(newtStream_t * f, newtRefArg r);
 static void			NIOInfo(newtStream_t * f, newtRefArg r);
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** 配列またはフレームのプリント可能な長さを返す
  *
@@ -102,8 +104,9 @@ int32_t NewtGetPrintDepth(void)
 }
 
 
+#if 0
 #pragma mark -
-
+#endif
 /*------------------------------------------------------------------------*/
 /** シンボル文字列が表示可能か調べる
  *
@@ -287,7 +290,9 @@ void NIOPrintEscapeStr(newtStream_t * f, char * str, int len)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** 出力ファイルにオブジェクト参照を１６進数でプリントする
  *

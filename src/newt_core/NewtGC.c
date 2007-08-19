@@ -47,7 +47,9 @@ static void		NewtGCStackMark(vm_env_t * env, bool mark);
 static void		NewtGCMark(vm_env_t * env, bool mark);
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** メモリプールのスナップショットを出力する
  *
@@ -64,7 +66,9 @@ void NewtPoolSnap(const char * title, newtPool pool, int32_t usesize)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** オブジェクトデータをチェインする
  *
@@ -180,7 +184,9 @@ newtObjRef NewtObjChainAlloc(newtPool pool, size_t size, size_t dataSize)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** オブジェクトを解放する
  *
@@ -262,7 +268,10 @@ void NewtPoolRelease(newtPool pool)
 }
 
 
+#if 0
 #pragma mark -
+#endif
+
 #if 0
 /*------------------------------------------------------------------------*/
 /** オブジェクトのマークをクリアする
@@ -520,7 +529,9 @@ void NewtGC(void)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** スクリプトから GC　を呼出す（実際には GC を予約するだけ）
  *

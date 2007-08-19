@@ -29,7 +29,9 @@ static newtRef		NewtObjSetClass(newtRefArg r, newtRefArg c);
 static bool			NewtArgsIsNumber(newtRefArg r1, newtRefArg r2, bool * real);
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** プロト継承でシンボルを検索（フレームを見つける）
  *
@@ -175,7 +177,9 @@ newtRef NcFullLookup(newtRefArg start, newtRefArg name)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** シンボルテーブルからシンボルを検索
  *
@@ -650,7 +654,9 @@ newtRef NsHasVar(newtRefArg rcvr, newtRefArg name)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** オブジェクトタイプを対応するクラスシンボルに変換する
  *
@@ -985,7 +991,9 @@ newtRef NsIsInstance(newtRefArg rcvr, newtRefArg obj, newtRefArg r)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** r が配列かチェックする
  *
@@ -1194,7 +1202,9 @@ newtRef NsIsReadonly(newtRefArg rcvr, newtRefArg r)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** 配列オブジェクトに値を追加する
  *
@@ -1373,7 +1383,9 @@ newtRef NsMakeBinary(newtRefArg rcvr, newtRefArg length, newtRefArg klass)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** 整数のビットAND
  *
@@ -1433,7 +1445,9 @@ newtRef NcBNot(newtRefArg r)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** ブール演算 AND
  *
@@ -1476,7 +1490,9 @@ newtRef NsOr(newtRefArg rcvr, newtRefArg r1, newtRefArg r2)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** 数値引数のチェック
  *
@@ -1766,7 +1782,9 @@ newtRef NsShiftRight(newtRefArg rcvr, newtRefArg r1, newtRefArg r2)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** オブジェクトの大小比較(r1 < r2)
  *
@@ -1839,7 +1857,9 @@ newtRef NcLessOrEqual(newtRefArg r1, newtRefArg r2)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** 正規表現オブジェクト（フレーム）の生成
  *
@@ -1881,7 +1901,9 @@ newtRef NsMakeRegex(newtRefArg rcvr, newtRefArg pattern, newtRefArg opt)
 #endif /* __NAMED_MAGIC_POINTER__ */
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** 標準出力にオブジェクトをプリント
  *
@@ -1989,7 +2011,9 @@ newtRef NsInfo(newtRefArg rcvr, newtRefArg r)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** 文字列オブジェクトをコンパイル
  *
@@ -2030,7 +2054,9 @@ newtRef NsGetEnv(newtRefArg rcvr, newtRefArg r)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** オフセット位置から符号付きの1バイトを取り出す。 
  *

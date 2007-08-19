@@ -53,8 +53,9 @@ static newtRef	NcResolveNamedMP(newtRefArg r);
 static newtRef	NsDefNamedMP(newtRefArg rcvr, newtRefArg r, newtRefArg v);
 
 
-
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** 文字列の文字を指定された文字で置き換える
  *
@@ -78,7 +79,9 @@ char * replacechr(char * str, char src, char dest)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** 環境変数からデフォルトエンコーディングを取得
  *
@@ -103,7 +106,9 @@ char * NewtDefaultEncoding(void)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** よく使うシンボルの初期化
  *
@@ -447,7 +452,9 @@ void NewtCleanup(void)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** シンボルテーブルからシンボルを検索する
  *
@@ -462,7 +469,9 @@ newtRef NewtLookupSymbolTable(const char * name)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** グローバル関数の有無を調べる
  *
@@ -493,7 +502,9 @@ bool NewtHasGlobalVar(newtRefArg r)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** グローバル関数の有無を調べる
  *
@@ -832,7 +843,9 @@ newtRef NsDefMagicPointer(newtRefArg rcvr, newtRefArg r, newtRefArg v)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** ルートオブジェクトの取得
  *

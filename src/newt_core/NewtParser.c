@@ -61,7 +61,9 @@ static void		NPSPrintNode(FILE * f, nps_node_t r);
 static void		NPSPrintSyntaxCode(FILE * f, uint32_t code);
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** 構文解析する文字列をセットする
  *
@@ -126,7 +128,9 @@ int nps_yyinput(FILE * yyin, char * buff, int max_size)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** 構文解析のための初期化
  *
@@ -266,7 +270,9 @@ void NPSCleanup(void)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** 構文木のノードを印字する
  *
@@ -443,7 +449,9 @@ void NPSDumpSyntaxTree(FILE * f, nps_syntax_node_t * stree, uint32_t size)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** 引数０のノードを作成
  *
@@ -771,7 +779,9 @@ nps_node_t NPSGenGlobalFn(nps_node_t name, nps_node_t args, nps_node_t expr)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 //--------------------------------------------------------------------------
 /** 参照パスオブジェクトの作成
  *
@@ -977,7 +987,9 @@ newtRef NPSAddARef(newtRefArg r, newtRefArg v)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 //--------------------------------------------------------------------------
 /** エラーメッセージの表示
  *

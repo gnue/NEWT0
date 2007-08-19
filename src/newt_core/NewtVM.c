@@ -40,10 +40,8 @@ typedef newtRef(*nvm_func_t)();						///< ネイティブ関数
 vm_env_t	vm_env;
 
 
-#ifndef _MSC_VER
-
+#if 0
 #pragma mark -
-
 #endif
 
 
@@ -72,10 +70,8 @@ vm_env_t	vm_env;
 #define	IMPL				((REG).impl)							///< インプリメンタ
 
 
-#ifndef _MSC_VER
-
+#if 0
 #pragma mark -
-
 #endif
 
 
@@ -366,10 +362,8 @@ static char *	vm_instruction_names[] =
             };
 
 
-#ifndef _MSC_VER
-
+#if 0
 #pragma mark -
-
 #endif
 
 
@@ -603,13 +597,9 @@ void NVMClearException(void)
 }
 
 
-#ifndef _MSC_VER
-
+#if 0
 #pragma mark -
-
 #endif
-
-
 /*------------------------------------------------------------------------*/
 /** 関数オブジェクトを現在の実行関数にする
  *
@@ -651,9 +641,9 @@ void NVMNoStackFrameForReturn(void)
     CALLSP = 0;
 }
 
-#ifndef _MSC_VER
-#pragma mark *** 呼出しスタック
 
+#if 0
+#pragma mark *** 呼出しスタック
 #endif
 /*------------------------------------------------------------------------*/
 /** レジスタの巻き戻し
@@ -727,13 +717,9 @@ void reg_save(int32_t sp)
 }
 
 
-
-#ifndef _MSC_VER
+#if 0
 #pragma mark *** スタック
-
 #endif
-
-
 /*------------------------------------------------------------------------*/
 /** スタックのポップ
  *
@@ -874,13 +860,9 @@ void stk_push_array(newtRefVar argArray)
 }
 
 
-#ifndef _MSC_VER
-
+#if 0
 #pragma mark *** 例外ハンドラスタック
-
 #endif
-
-
 /*------------------------------------------------------------------------*/
 /** 例外スタックにプッシュ
  *
@@ -973,13 +955,9 @@ void excp_pop_handlers(void)
 }
 
 
-#ifndef _MSC_VER
-
+#if 0
 #pragma mark *** Literals
-
 #endif
-
-
 /*------------------------------------------------------------------------*/
 /** リテラルを取出す
  *
@@ -1001,13 +979,9 @@ newtRef liter_get(int16_t n)
 }
 
 
-#ifndef _MSC_VER
-
+#if 0
 #pragma mark *** Iterator
-
 #endif
-
-
 /*------------------------------------------------------------------------*/
 /** イテレータオブジェクトを作成する
  *
@@ -1150,13 +1124,9 @@ bool iter_done(newtRefArg iter)
 }
 
 
-#ifndef _MSC_VER
-
+#if 0
 #pragma mark -
-
 #endif
-
-
 /*------------------------------------------------------------------------*/
 /** 引数をスタックから取出して配列にする
  *
@@ -2011,15 +1981,10 @@ newtRef vm_resend(int16_t b, newtErr * errP)
 }
 
 
-#ifndef _MSC_VER
-
+#if 0
 #pragma mark -
-
 #pragma mark *** Simple instructions
 #endif
-
-
-
 /*------------------------------------------------------------------------*/
 /** スタックのポップ
  *
@@ -2133,15 +2098,10 @@ void si_pop_handlers(void)
 }
 
 
-#ifndef _MSC_VER
-
+#if 0
 #pragma mark -
-
 #pragma mark *** Primitive functions
 #endif
-
-
-
 /*------------------------------------------------------------------------*/
 /** 加算
  *
@@ -2588,15 +2548,10 @@ void fn_classof(void)
 }
 
 
-#ifndef _MSC_VER
-
+#if 0
 #pragma mark -
-
 #pragma mark *** Instructions
 #endif
-
-
-
 /*------------------------------------------------------------------------*/
 /** 命令セットテーブル登録用のダミー
  *
@@ -3213,13 +3168,9 @@ void is_new_handlers(int16_t b)
 }
 
 
-#ifndef _MSC_VER
-
+#if 0
 #pragma mark *** ダンプ
-
 #endif
-
-
 /*------------------------------------------------------------------------*/
 /** 出力ファイルに命令コードの名前をダンプ出力
  *
@@ -3460,13 +3411,10 @@ void NVMDumpStacks(FILE * f)
 }
 
 
-#ifndef _MSC_VER
-
+#if 0
 #pragma mark -
-
 #pragma mark *** インタプリタ
 #endif
-
 /*------------------------------------------------------------------------*/
 /** VM環境をプッシュする
  *
@@ -3990,13 +3938,9 @@ newtErr NVMInfo(const char * name)
 }
 
 
-#ifndef _MSC_VER
-
+#if 0
 #pragma mark -
-
 #endif
-
-
 /*------------------------------------------------------------------------*/
 /** ファイルを読込んでスクリプトを実行
  *

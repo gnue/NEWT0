@@ -87,7 +87,9 @@ static void		newt_option(const char * s);
 static newtErr  newt_option_with_arg(char c, int argc, const char * argv[], int n);
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** 結果を表示
  *
@@ -106,7 +108,9 @@ void newt_result_message(newtRefArg r, newtErr err)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** コマンドライン引数で指定された関数の情報を表示
  *
@@ -202,7 +206,9 @@ newtErr newt_interpret_file(int argc, const char * argv[], int n)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** 作業ディレクトリを変更 */
 void newt_chdir(void)
@@ -214,7 +220,9 @@ void newt_chdir(void)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** コピーライトを表示 */
 void newt_show_copyright(void)
@@ -246,7 +254,9 @@ void newt_show_usage(void)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** オプションエラーを表示
  *
@@ -393,7 +403,9 @@ newtErr newt_option_with_arg(char c, int argc, const char * argv[], int n)
 }
 
 
+#if 0
 #pragma mark -
+#endif
 /*------------------------------------------------------------------------*/
 /** main 関数（CUI コマンド)
  *
