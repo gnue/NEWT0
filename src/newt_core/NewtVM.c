@@ -200,8 +200,6 @@ static void			NVMInitGlobalFns(void);
 
 static void			NVMInitGlobalVars(void);
 
-static void			NVMInit(void);
-static void			NVMClean(void);
 static void			NVMLoop(uint32_t callsp);
 
 static newtRef		NVMInterpret2(nps_syntax_node_t * stree, uint32_t numStree, newtErr * errP);
