@@ -105,6 +105,9 @@ extern "C" {
 #endif
 
 
+void		NBCInit(void);
+void		NBCCleanup(void);
+newtRef		NBCConstantTable(void);
 newtRef		NBCGenBC(nps_syntax_node_t * stree, uint32_t size, bool ret);
 newtRef		NBCCompileFile(char * s, bool ret);
 newtRef		NBCCompileStr(char * s, bool ret);
