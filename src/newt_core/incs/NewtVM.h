@@ -135,6 +135,8 @@ extern "C" {
 #endif
 
 
+void			NVMInit(void);
+void			NVMClean(void);
 newtRef		NVMSelf(void);
 newtRef		NVMCurrentFunction(void);
 newtRef		NVMCurrentImplementor(void);
