@@ -136,9 +136,6 @@ static nbc_env_t *		NBCEnvNew(nbc_env_t * parent);
 static void				NBCEnvFree(nbc_env_t * env);
 static newtRef			NBCFnDone(nbc_env_t ** envP);
 
-static void				NBCInit(void);
-static void				NBCCleanup(void);
-
 static void				NBCGenBC_stmt(nps_syntax_node_t * stree, nps_node_t r, bool ret);
 static void				NBCGenConstant(nps_syntax_node_t * stree, nps_node_t r);
 static void				NBCGenGlobalVar(nps_syntax_node_t * stree, nps_node_t r);
@@ -935,6 +932,7 @@ newtRef NBCFnDone(nbc_env_t ** envP)
 void NBCInit(void)
 {
     NBCInitFreqFuncTable();
+    newt_bc_env = NBCEnvNew(NULL);
 }
 
 
@@ -2595,13 +2593,8 @@ newtRef NBCGenBC(nps_syntax_node_t * stree, uint32_t size, bool ret)
 {
     newtRefVar	fn;
 
-    NBCInit();
-
-    newt_bc_env = NBCEnvNew(NULL);
     NBCGenBC_sub(stree, size - 1, ret);
     fn = NBCFnDone(&newt_bc_env);
-
-    NBCCleanup();
 
     if (NewtRefIsNotNIL(fn))
     {
@@ -2639,7 +2632,9 @@ newtRef NBCCompileFile(char * s, bool ret)
 
     if (stree != NULL)
     {
+        NBCInit();
         fn = NBCGenBC(stree, numStree, ret);
+        NBCCleanup();
         NPSCleanup();
     }
 
@@ -2667,7 +2662,9 @@ newtRef NBCCompileStr(char * s, bool ret)
 
     if (stree != NULL)
     {
+        NBCInit();
         fn = NBCGenBC(stree, numStree, ret);
+        NBCCleanup();
         NPSCleanup();
     }
     
@@ -2717,3 +2714,7 @@ void NBError(int32_t err)
     NewtFprintf(stderr, "%s", msg);
 }
 
+newtRef NBCConstantTable(void)
+{
+    return (CONSTANT);
+}
