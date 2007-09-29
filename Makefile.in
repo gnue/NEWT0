@@ -12,6 +12,7 @@ objdir = $(build)/obj
 yytmp = $(objdir)/yytmp
 tardir = $(shell basename `pwd`)_$(shell uname)
 docdir = $(build)/html
+headerdir = $(core)/incs
 
 DESTROOT =
 CC = @CC@
@@ -33,6 +34,7 @@ prefix = @prefix@
 exec_prefix = @exec_prefix@
 bindir = @bindir@
 sitedir = ${prefix}/lib/newt0
+includedir = @includedir@/newt0
 
 VPATH = $(core)
 STRIP = strip -x
@@ -79,6 +81,28 @@ OBJS          = $(MAINOBJ) $(UTILSOBJS) $(PARSEROBJS) $(COREOBJS)
 
 LIBOBJS       = $(UTILSOBJS) $(PARSEROBJS) $(COREOBJS)
 
+HEADERS       = $(headerdir)/NewtBC.h \
+                $(headerdir)/NewtConf.h \
+                $(headerdir)/NewtCore.h \
+                $(headerdir)/NewtEnv.h \
+                $(headerdir)/NewtErrs.h \
+                $(headerdir)/NewtFile.h \
+                $(headerdir)/NewtFns.h \
+                $(headerdir)/NewtGC.h \
+                $(headerdir)/NewtIconv.h \
+                $(headerdir)/NewtIO.h \
+                $(headerdir)/NewtLib.h \
+                $(headerdir)/NewtMem.h \
+                $(headerdir)/NewtNSOF.h \
+                $(headerdir)/NewtObj.h \
+                $(headerdir)/NewtParser.h \
+                $(headerdir)/NewtPkg.h \
+                $(headerdir)/NewtPrint.h \
+                $(headerdir)/NewtStr.h \
+                $(headerdir)/NewtType.h \
+                $(headerdir)/NewtVM.h \
+                $(headerdir)/platform.h \
+                $(srcdir)/config.h
 
 ######
 
@@ -204,6 +228,7 @@ install_contrib::
 install::
 	install -m 755 $(NEWT) $(DESTDIR)$(bindir)
 	install -d -m 755 $(DESTDIR)$(sitedir)
+	install -m 644 $(HEADERS) $(DESTDIR)$(includedir)
 	test "x@MAKE_EXT@" = x || $(MAKE) install_ext
 	test "x@MAKE_CONTRIB@" = x || $(MAKE) install_contrib
 
