@@ -35,6 +35,7 @@ exec_prefix = @exec_prefix@
 bindir = @bindir@
 sitedir = ${prefix}/lib/newt0
 includedir = @includedir@/newt0
+libdir = @{prefix}/lib
 
 VPATH = $(core)
 STRIP = strip -x
@@ -112,7 +113,7 @@ HEADERS       = $(headerdir)/NewtBC.h \
 
 ### all
 
-all: newt @MAKE_EXT@ @MAKE_CONTRIB@
+all: newt libnewt @MAKE_EXT@ @MAKE_CONTRIB@
 
 ### make directory
 
@@ -227,6 +228,7 @@ install_contrib::
 
 install::
 	install -m 755 $(NEWT) $(DESTDIR)$(bindir)
+	install -m 644 $(LIBNEWT) $(DESTDIR)$(libdir)
 	install -d -m 755 $(DESTDIR)$(sitedir)
 	install -m 644 $(HEADERS) $(DESTDIR)$(includedir)
 	test "x@MAKE_EXT@" = x || $(MAKE) install_ext
