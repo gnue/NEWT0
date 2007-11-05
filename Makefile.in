@@ -35,7 +35,7 @@ exec_prefix = @exec_prefix@
 bindir = @bindir@
 sitedir = ${prefix}/lib/newt0
 includedir = @includedir@/newt0
-libdir = @{prefix}/lib
+libdir = ${prefix}/lib
 
 VPATH = $(core)
 STRIP = strip -x
