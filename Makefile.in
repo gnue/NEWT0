@@ -1,4 +1,7 @@
-DEBUG = # -g
+
+# use the first setting for debugging and the second setting for optimized compilation
+DEBUG = -g
+#DEBUG = -O2
 
 
 srcdir = ./src
@@ -23,7 +26,7 @@ LIBS = @LIBS@
 DLEXT = @DLEXT@
 EXEEXT = @EXEEXT@
 LDIMPORT = @NEWT_LDIMPORT@
-LDFLAGS = $(DEBUG) -O2 @LDFLAGS@ @NEWT_LDFLAGS@
+LDFLAGS = $(DEBUG) @LDFLAGS@ @NEWT_LDFLAGS@
 LDSHARED = @LIBNEWT_LDSHARED@
 
 # declarations needed to creat a static library
@@ -38,7 +41,7 @@ includedir = @includedir@/newt0
 
 VPATH = $(core)
 STRIP = strip -x
-CFLAGS = $(DEBUG) $(DEFS) -O2 -pipe
+CFLAGS = $(DEBUG) $(DEFS) -pipe
 CPPFLAGS = -I. -I$(srcdir) -I$(core)/incs -I$(srcdir)/parser -I$(yytmp) @CPPFLAGS@
 
 
@@ -112,7 +115,7 @@ HEADERS       = $(headerdir)/NewtBC.h \
 
 ### all
 
-all: newt @MAKE_EXT@ @MAKE_CONTRIB@
+all: libnewt newt @MAKE_EXT@ @MAKE_CONTRIB@
 
 ### make directory
 

@@ -953,8 +953,11 @@ newtRef NSOFReadFrame(nsof_stream_t * nsof)
 
 	xlen = NSOFReadXlong(nsof);
 
-	if (xlen == 0)
-		return NcMakeFrame();
+	if (xlen == 0) {
+		r = NcMakeFrame();
+		NcAddArraySlot(nsof->precedents, r);
+		return r;
+	}
 
 	map = NewtMakeMap(kNewtRefNIL, xlen, NULL);
 	r = NewtMakeFrame(map, xlen);
