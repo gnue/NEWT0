@@ -22,33 +22,33 @@
 /* VM */
 
 /// 一度に確保するスタック長
-#define NEWT_NUM_STACK			512
+#define NEWT_NUM_STACK			1024
 /// 一度に確保する呼出しスタック長
-#define NEWT_NUM_CALLSTACK		512
+#define NEWT_NUM_CALLSTACK		1024
 /// 一度に確保する例外スタック長
-#define NEWT_NUM_EXCPSTACK		512
+#define NEWT_NUM_EXCPSTACK		1024
 
 /* Parser */
 /// 一度に確保する構文木スタック長
-#define NEWT_NUM_STREESTACK		1024
+#define NEWT_NUM_STREESTACK		2048
 
 /* Bytecode */
 /// 一度に確保する Bytecode のメモリ長
-#define NEWT_NUM_BYTECODE		512
+#define NEWT_NUM_BYTECODE		1024
 /// 一度に確保する break 文の作業用スタック長
-#define NEWT_NUM_BREAKSTACK		20
+#define NEWT_NUM_BREAKSTACK		40
 /// 一度に確保する OnException 文の作業用スタック長
-#define NEWT_NUM_ONEXCPSTACK	20
+#define NEWT_NUM_ONEXCPSTACK	40
 
 /* Pool */
 ///　　メモリプールの拡張サイズ
-#define NEWT_POOL_EXPANDSPACE	(1024 * 10)
+#define NEWT_POOL_EXPANDSPACE	(2048 * 10)
 
 /* IO */
 /// fgets のバッファサイズ
-#define	NEWT_FGETS_BUFFSIZE		2048
+#define	NEWT_FGETS_BUFFSIZE		4096
 /// snprintf, vsnprintf のバッファサイズ
-#define NEWT_SNPRINTF_BUFFSIZE	255
+#define NEWT_SNPRINTF_BUFFSIZE	512
 
 /* lex */
 /// 字句解析の行バッファサイズ
