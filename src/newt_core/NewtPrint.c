@@ -165,7 +165,7 @@ bool NewtStrIsPrint(char * str, int len)
 		if (str[i] == '"')
 			return false;
 
-		if (! isprint(str[i]))
+		if (! isprint((unsigned char)str[i]))
 			return false;
 	}
 
@@ -266,7 +266,7 @@ void NIOPrintEscapeStr(newtStream_t * f, char * str, int len)
 
 			NIOFputs(s, f);
 		}
-		else if (isprint(c))
+		else if (isprint((unsigned char)c))
 		{
 			if (unicode)
 			{
