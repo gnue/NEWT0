@@ -117,7 +117,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="../../src,../../src/newt_core/incs,../../src/newt_core/incs/VC6,../../src/parser"
-				PreprocessorDefinitions="_DEBUG;WIN32;_LIB;HAVE_CONFIG_H"
+				PreprocessorDefinitions="_DEBUG;WIN32;_LIB;HAVE_CONFIG_H;YYERROR_VERBOSE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"

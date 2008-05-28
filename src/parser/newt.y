@@ -455,7 +455,7 @@ message_send
 if_expr
 		: kIF expr kTHEN expr					{ $$ = NPSGenIfThenElse($2, $4, kNewtRefUnbind); }
 		| kIF expr kTHEN expr kELSE expr		{ $$ = NPSGenIfThenElse($2, $4, $6); }
-		| kIF expr kTHEN expr ';' kELSE expr	{ $$ = NPSGenIfThenElse($2, $4, $7); }
+//		| kIF expr kTHEN expr ';' kELSE expr	{ $$ = NPSGenIfThenElse($2, $4, $7); }
 		;
 
 iteration
