@@ -43,7 +43,7 @@
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="../../src,../../src/newt_core/incs,../../src/newt_core/incs/VC6,../../src/parser"
-				PreprocessorDefinitions="NDEBUG;WIN32;_LIB;HAVE_CONFIG_H"
+				PreprocessorDefinitions="NDEBUG;WIN32;_LIB;HAVE_CONFIG_H;YYERROR_VERBOSE"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -118,7 +118,7 @@
 				Optimization="0"
 				AdditionalIncludeDirectories="../../src,../../src/newt_core/incs,../../src/newt_core/incs/VC6,../../src/parser"
 				PreprocessorDefinitions="_DEBUG;WIN32;_LIB;HAVE_CONFIG_H;YYERROR_VERBOSE"
-				MinimalRebuild="true"
+				MinimalRebuild="false"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				PrecompiledHeaderFile=".\newt_lib_Debug/newt_lib.pch"
@@ -127,7 +127,7 @@
 				ProgramDataBaseFileName=".\newt_lib_Debug/"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
-				DebugInformationFormat="4"
+				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"

@@ -95,7 +95,7 @@ typedef struct {
     bool		_trace;			///< トレースフラグ
     bool		_dumpLex;		///< 字句解析ダンプフラグ
     bool		_dumpSyntax;	///< 構文木ダンプフラグ
-    bool		_dumpBC;		///< バイトコードダンプフラグ
+  int8_t		_dumpBC;		///< バイトコードダンプフラグ
 	int32_t		_indent;		///< number of tabs for indenting a printout
 	int32_t		_indentDepth;	///< base for calculating the indent depth
 } newt_env_t;

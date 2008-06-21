@@ -2554,7 +2554,7 @@ void NBCGenBC_sub(nps_syntax_node_t * stree, uint32_t n, bool ret)
         case kNPSGetPath:
             NBCGenBC_op(stree, node->op1);
             NBCGenBC_op(stree, node->op2);
-            NBCGenCode(node->code, 2);
+            NBCGenCode(node->code, 1);
             break;
 
         default:

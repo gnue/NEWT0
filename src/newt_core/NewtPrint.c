@@ -714,10 +714,22 @@ void NIOPrintObjFrame(newtStream_t * f, newtRefArg r, int32_t depth, bool litera
     uint32_t	len;
     uint32_t	i;
 
-    if (NewtRefIsFunction(r) && ! NEWT_DUMPBC)
+    if (NewtRefIsFunction(r))
     {
-        NIOPrintFnFrame(f, r);
-        return;
+      if (NEWT_DUMPBC==0) 
+      {
+          NIOPrintFnFrame(f, r);
+          return;
+      } 
+      else if (NEWT_DUMPBC==2) 
+      {
+          NEWT_DUMPBC = 1;
+          NewtFprintf(f->file, "*** byte code ***\n");
+          NVMDumpFn(f->file, r);
+          NewtFprintf(f->file, "\n");
+          NEWT_DUMPBC = 2;
+          return;
+      } // else fall through
     }
 
     if (NewtRefIsRegex(r) && ! NEWT_DUMPBC)
