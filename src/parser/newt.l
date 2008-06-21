@@ -91,7 +91,7 @@ SYMBOL					({ALPHA}|"_")({ALPHA}|{DIGIT}|"_")*
 SYMBOL-SEQUENCE			("\\"[|\\]|{SYMBOL-CHARACTER})*
 REGEX-SEQUENCE			([^*/]|{ESCAPE-SEQUENCE})({REGEX-CHARACTER}|{ESCAPE-SEQUENCE})*{TRUNCATED-ESCAPE}?
 
-ELSE					(e|E)(l|L)(s|S)(e|E)
+ELSE					[Ee][Ll][Ss][Ee]
 
 %%
 
