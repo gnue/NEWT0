@@ -3901,7 +3901,9 @@ newtRef NVMInterpret2(nps_syntax_node_t * stree, uint32_t numStree, newtErr * er
     {
         newtRefVar	fn = kNewtRefNIL;
 
+        NBCInit();
         fn = NBCGenBC(stree, numStree, true);
+        NBCCleanup();
         NPSCleanup();
 
         result = NVMInterpret(fn, errP);
