@@ -91,6 +91,8 @@ SYMBOL					({ALPHA}|"_")({ALPHA}|{DIGIT}|"_")*
 SYMBOL-SEQUENCE			("\\"[|\\]|{SYMBOL-CHARACTER})*
 REGEX-SEQUENCE			([^*/]|{ESCAPE-SEQUENCE})({REGEX-CHARACTER}|{ESCAPE-SEQUENCE})*{TRUNCATED-ESCAPE}?
 
+ELSE					(e|E)(l|L)(s|S)(e|E)
+
 %%
 
 %{
@@ -189,6 +191,8 @@ __LINE__						{ return lex_makeinteger(nps_env.lineno); }
 "0x"{HEX-DIGIT}+				{ return lex_makeinteger(lex_htoi(yytext + 2, -1)); }
 
 {REAL}							{ return lex_makereal(atof(yytext)); }
+
+";"({NEWLINE}|{SPACE})*{ELSE}	{ return lex_update_tokenpos(kELSE); }
 
 .								{ return lex_update_tokenpos(yytext[0]); }
 
