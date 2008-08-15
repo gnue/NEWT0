@@ -230,6 +230,7 @@ install::
 	install -m 755 $(NEWT) $(DESTDIR)$(bindir)
 	install -m 644 $(LIBNEWT) $(DESTDIR)$(libdir)
 	install -d -m 755 $(DESTDIR)$(sitedir)
+	install -d -m 755 $(DESTDIR)$(includedir)
 	install -m 644 $(HEADERS) $(DESTDIR)$(includedir)
 	test "x@MAKE_EXT@" = x || $(MAKE) install_ext
 	test "x@MAKE_CONTRIB@" = x || $(MAKE) install_contrib
