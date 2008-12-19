@@ -138,6 +138,7 @@
 		08FB7793FE84155DC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = F541302B096D1DEB00CFD896 /* Build configuration list for PBXProject "newt_all" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 1;
 			mainGroup = 08FB7794FE84155DC02AAC07 /* newt */;
 			projectDirPath = "";
@@ -155,6 +156,7 @@
 					ProjectRef = F5D8906B0A45437A004C7582 /* newt.xcodeproj */;
 				},
 			);
+			projectRoot = "";
 			targets = (
 				DA16688F0A438DE6005937AA /* All */,
 			);
