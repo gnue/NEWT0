@@ -1,7 +1,9 @@
 /*------------------------------------------------------------------------*/
 /**
  * @file	main.c
- * @brief   メイン関数（CUI コマンド）
+ * \~japanese @brief メイン関数（CUI コマンド）
+ * \~english  @brief the main function (CUI command)
+ * \~
  *
  * @author  M.Nukui
  * @date	2003-11-07
@@ -91,12 +93,20 @@ static newtErr  newt_option_with_arg(char c, int argc, const char * argv[], int 
 #pragma mark -
 #endif
 /*------------------------------------------------------------------------*/
-/** 結果を表示
- *
+/** 
+ * \~japanese
+ * 結果を表示
  * @param r			[in] オブジェクト
  * @param err		[in] エラーコード
- *
  * @return			なし
+ 
+ * \~english
+ * Show message for this error code
+ * @param r [in] object 
+ * @param err [in] error code 
+ * @return no return value  
+ 
+ * \~ 
  */
 
 void newt_result_message(newtRefArg r, newtErr err)
