@@ -1,0 +1,148 @@
+  NEWT/0, the basics 
+----------------------
+
+   This document assumes that the reader has a basic knowledge of Unix shell
+   commands and is familiar with setting the required path variables.
+
+
+   Basic use:
+
+     As with most shell commands, the -h option briefly describe all command
+     line options:
+
+       % newt -h 
+
+       Usage: newt [switches] [-] [programfile] 
+         -t               enable trace mode
+         -l               dump lex info, dispaly the lexical analysis stage of 
+                          compilation
+         -s               dump syntax tree
+         -b               dump byte code
+         -C directory     change working directory
+         -e 'command'     compile and run one line of script
+         -i [symbols]     print function info: see a description of the built-in
+                          function name 'symbol' or of all functions 
+         -v               print version number
+         -h               print this help message
+         --newton, --nos2 generate Newton OS 2.0 compatible code
+         --copyright      print copyright information
+         --version        print version number (same as -v)
+
+     How to compile and run scripts: 
+
+       % newt name        run the script file name. 
+       % newt             read a script from standard input 
+       % script           run the script if the first line of the script file
+                          is "#! newt" *1
+
+       * 1) NewtonScript comments are delimited with /* */ and // only, The 
+           Unix "#!" notation is treated as a comment in the first line of 
+           the file only.
+
+   ○ built-in functions
+
+       List all built-in function using the command line option -i
+
+   % newt -i 
+
+         HasVariable (frame, name) 
+         HasVar (name) 
+         DefGlobalFn (name, fn) 
+         DefGlobalVar (name, value) 
+         Mod (n1, n2) 
+         (...)
+         StrCat (str1, str2) ... concatenate two strings (side effects) (*2) 
+         P (obj) ... print the object
+         Print (obj) ... print the object (*2) 
+         LoadLib (file) ... load external libraries (*2) 
+         Load (file) ... load and run a script file (*2) 
+         Require (str) ... load a require library  (*2) 
+         GetEnv (str) ... obtain environment variables (*2) 
+         FileExists (path) ... confirm the existence of a file (*2) 
+         DirName (path) ... extract the path to the directory name (*2) 
+         BaseName (path) ... extract the path to the file name (*2) 
+         JoinPath (dir, fname) ... join a directory and a path name (*2) 
+         ExpandPath (path) ... convert a relative to the absolute path (*2) 
+         Split (str, sep) ... split in a string at the delimiter to generate 
+                              an array (*2) 
+         DumpFn (fn) ... dump a function (*3). If the argument is nil, the 
+                         currently running function is dumped
+         DumpBC (instructions) ... dump an instruction as byte code (*3) 
+         DumpStacks () ... VM stack dump (*3) 
+         Gets () ... obtain a line from standard input
+         Getc () ... Gets character from standard input 
+         Getch () ... Gets a character directly from the keyboard
+
+         And (n1, n2) ... (*4) 
+         Or (n1, n2) ... (*4) 
+         ShiftLeft (n1, n2) ... (*4) 
+         ShiftRight (n1, n2) ... (*4) 
+         ObjectEqual (obj1, obj2) ... (*4) 
+         DefMagicPointer (mp, value) ... (*4) 
+         MakeRegex (pattern, opt) ... (*4) 
+
+         Clone (obj) ... (*5) 
+         ClassOf (obj) ... (*5) 
+         Length (obj) ... (*5) 
+
+       *2) extended function 
+       *3) debugging function 
+       *4) syntax (operators, etc.) automatically extracted from the function 
+       *5) function will be inlined into byte code
+
+       In addition to the above functions the usual mathematical operators 
+       are supported.
+
+       Only the most important functions are implemented at the moment. Regular
+       use of newt/0 will show which functions of the NewtonScript manual must
+      still be written.
+
+   ○ external libraries 
+
+     External libraries written in "C" can be used by calling 
+
+       LoadLib ( "samplelib.dylib"); 
+
+       * libraries can be loaded using a full path name as well
+
+     External libraries in the sample is loaded in the following two additional functions 
+     . 
+
+        GetGlobalFn (name) ... global function, the function returns an object 
+        info (obj) ... functions specified by the object or symbol 
+                                         See the description of global functions 
+
+   ○ Require request for the library by 
+
+     Require outside the library (extension. Dylib,. So) or 
+     Source code (the extension. Newt) only once can be loaded. 
+     Rhodes was once the library is not loaded. Library search path 
+     Look for the library to load. 
+
+        Require ( "protoFILE"); 
+
+
+   ○ library search path 
+
+     NEWTLIB environment variable to the library search path was set by 
+     Will be searched. NEWTLIB has not been set for the current path 
+     And running a file from a directory will be searched. 
+
+
+   ○ for the library initialization 
+
+     Library of egg.newt exists in the search path, newt starts 
+     Automatically when the motion was pounded into reading. 
+
+
+   ○ global variables 
+
+         A directory of executable files _EXEDIR_ ... 
+         _ARGV_ ... When you start the command of the arguments (not a command name) 
+         _ENV_ ... Environment variables (NEWTLIB currently only) may be stored 
+         About _VERSION_ ... 
+         _STDOUT_ ... Standard output (usually the NIL, if the string is the string will be added to the output)
+         _STDERR_ ... Standard error output (usually the NIL, if the string is the string will be added to the output) 
+         The library requires ... Require information 
+
+   ※ changes the future may be

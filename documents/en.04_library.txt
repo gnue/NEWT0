@@ -1,0 +1,57 @@
+Extended library 
+------------- 
+
+
+■ protoFILE 
+
+Description: The file input and output 
+How to use: 
+
+/ / Extension request for library 
+Require ( "protoFILE"); 
+
+/ / Create a frame 
+File: = (_proto: @ protoFILE); 
+/ / Open (mode refers to a man fopen) 
+File: open (path, mode); 
+
+/ / Output 
+File: print (str); 
+/ / 1 line input 
+Line: = file: gets (); 
+/ / Binary input 
+Binary: = file: read (len); 
+/ / EOF check 
+File: eof (); 
+/ / Seek 
+file: seek (offset, whence); / / whence: 'set,' curr or 'end 
+/ / Retrieve the file pointer 
+File: tell (); 
+/ / File pointer back to 0 
+File: rewind (); 
+
+/ / Close 
+File: close (); 
+
+
+■ protoREGEX 
+
+Description: The regular expression 
+How to use: 
+
+/ / Extension request for library 
+Require ( "protoREGEX"); 
+
+/ / Create a regular expression object 
+/ / You can use regular expressions refer to the man regex 
+/ / M i and that option is available 
+reg: = / regular expression pattern / options; 
+
+/ / Pattern matching run 
+/ / Str ... a string of search 
+/ / Return value fails nil ... 
+/ / Returns an array ... success (partial matching elements of a string into an array) 
+Matchs = reg: match (str); 
+
+/ / Clean up (NewtonScript do not have a destructor) 
+Reg: cleanup ();

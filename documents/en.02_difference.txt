@@ -1,0 +1,88 @@
+And the differences between upstream and 
+------------------ 
+
+
+And the differences between upstream and ○ 
+
+String 1 Byte (ASCII) code 
+
+※ probably in Japanese ShiftJIS, EUC, UTF-8 that will be done in 
+
+The type int, array definition and functions of the native words are ignored 
+Is a literal read-only. The operation has side effects and use a Clone 
+Must be (treated the same package) 
+
+○ unique extension 
+
+Back to file the first line of comment # treatment (#! Execution) 
+
+NIL # UNBIND Apart from the internal state (of special immediate value) is added. At present 
+# UNBIND input on how the syntax does not exist. NIL work the same way as on 
+Will be treated to 
+
+Add operator == 
+
+= Operator and stronger than the comparison 
+
+Support for indefinite number of長引 
+
+Example: func (a1, a2, args ...) 
+A leader in 3-point args as the rest of the arguments the array will be binding. 
+
+Add pointer with the magic name 
+
+@ name format pointer of the Magic (Magic pointer with the name: Named Magic 
+Pointer) can be used. 
+
+The magic of the original Newton pointer (@ 1 format) and can not be combined. 
+For compatibility "NewtConf.h" in the __NAMED_MAGIC_POINTER__ 
+Newton commented that the use of the original pointer magic 
+You can choose. 
+
+Add the definition of a pointer syntax magic 
+
+@ name: = (a: 1, b: 2); / / name pointer with Magic 
+@ 1: = (a: 1, b: 2); / / Newton pointer to the magic of the original 
+
+Add a binary object of expression 
+
+Binary objects in the original description could not be directly, 
+In the following syntax to write directly to a binary object that is able to 
+Did 
+
+          <# class: n1, n2, ....> 
+          <# N1, n2, ....> 
+
+※ n1, n2, ... the numbers (in decimal, hexadecimal) 
+
+Signed integer support 32bit 
+
+Add a regular expression object representation 
+
+/ Regular expression pattern / Options 
+Example: / [a-zA-Z] + / im 
+
+When the above regular expressions to perform (_proto: @ protoREGEX, pattern: "[a-zA-Z] +", option: "im") 
+Will be deployed as. 
+
+Important: The actual use of regular expressions to protoREGEX extension library is required. 
+The library will depend on the extended features. 
+
+○ Other 
+
+NewtonScript upstream to dump a function of the object 
+
+       fn: = '( 
+                class: CodeBlock, 
+                instructions: <# instructions: 0x27, 0x00, 0x08, 0xA8, 0x70, 0x02>, 
+                literals: [literals: a], 
+                argFrame: (_nextArgFrame: NIL, _parent: NIL, _implementor: NIL), 
+                numArgs: 0 
+              ); 
+
+       call fn with (); 
+
+And by expressing the original byte code NewtonScript to perform 
+.
+ >  vertauschen		
+ 	Eine bessere Übersetzung vorschlagen
