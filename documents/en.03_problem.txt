@@ -1,0 +1,61 @@
+Known issues and limitations 
+------------------------ 
+
+
+○ Restrictions 
+
+GC will not only determine the location of 
+
+GC occur on the C language stack (arguments, automatic variable) to refer not only freed 
+SHIMAWANAI measures are not taken place. The timing of any 
+GC and cause a problem occurs. Now look at the amount of memory used in the GC 
+Will need a fresh VM flag of the loop only in a specific location, the process line GC 
+To the right. Heap memory in this way in machines with less clear 
+Tikal situation may not be able to handle the problem. 
+
+GC ruby is a conservative approach to C-language traverses the stack. 
+Newton, C + + class (RefVar, RefArg) to use this problem in well 
+That is to be resolved. 
+
+Known issues ○ 
+
+Else if in a statement before; but not 
+
+For example: 
+
+           if a = 0 then 
+             a: = 1 / /; there will be errors 
+           else 
+             a: = 2; 
+
+Onexception try in a statement that offers onexception of the way if you have multiple; but not 
+
+For example: 
+
+           try 
+             a: = 1; 
+           onexception | ext.ex.msg | do 
+             a: = 2 / /; there will be errors 
+           onexception | ext.ex | do 
+             a: = 3; 
+
+I wrote in both yacc ※ It's going well, but I did not. 
+In part to correct a little bit and is a common, but others have a syntax error 
+Have not been to not work hard. 
+
+○ implemented 
+
+0割算on. Inf (infinite) 
+
+In the upstream and 0 to割算without errors and returns a value of Inf. 
+0割算to present an error (exceptions) is to occur. 
+
+Its own memory management 
+2 byte character support (Japanese) 
+
+○ Other 
+
+An error message is poor 
+Check for errors is poor 
+Syntax error in a message is not appropriate 
+Constant does not optimize

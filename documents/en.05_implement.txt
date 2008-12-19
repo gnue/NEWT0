@@ -1,0 +1,37 @@
+How to achieve interpreter 
+---------------------- 
+
+Are interested in is how much people do not know whether the outline of the procedure is performed. 
+newt, the following steps (Steps) is running. 
+
+1. Source code - (parsing) -> syntax tree - (BC generator) -> byte code - (VM) -> Run 
+
+※ lexical analysis of the lex, the parsing used yacc 
+
+
+[Help] 
+
+- If the original Newton 
+
+1. Source code - (NTK) -> byte code 
+2. Byte code - (Newton) -> Run 
+
+※ byte code exists in the form of the package. 
+※ Inspector debug the source code to generate byte code that could run directly 
+
+
+- Ruby case 
+
+1. Source code - (parsing) -> syntax tree - (eval) -> Run 
+
+※ analysis of the wording in the C language, syntax analysis using the yacc 
+※ ruby2 (Rite) uses byte code I hear you 
+
+
+- Java case 
+
+1. Source code - (Java compiler) -> byte code 
+2. Byte code - (Java VM) -> Run 
+
+
+※ ruby and java out about your mistakes if you please
