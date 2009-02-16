@@ -198,7 +198,9 @@ void NewtInitSYM(void)
 
     // for print
     INITSYM(printDepth);
+    INITSYM(printIndent);
     INITSYM(printLength);
+    INITSYM(printBinaries);
 
 	// for regex
     INITSYM(protoREGEX);

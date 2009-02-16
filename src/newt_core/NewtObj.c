@@ -1210,6 +1210,37 @@ newtRef NewtMakeBinary(newtRefArg klass, uint8_t * data, uint32_t size, bool lit
 
 
 /*------------------------------------------------------------------------*/
+/** Make a binary object from a string of hexadecimal numbers.
+ *
+ * @param klass         [in] new class 
+ * @param hex           [in] string of hexadecimal numbers
+ * @param literal       [in] make new object a literal
+ *
+ * @return                      new binary object
+ */
+
+newtRef NewtMakeBinaryFromHex(newtRefArg klass, const char *hex, bool literal)
+{
+    uint32_t size = strlen(hex)/2;
+    newtObjRef obj = NewtMakeBinary(klass, 0, size, literal);
+    if (obj) {
+        uint32_t i;
+        const char *src = hex;
+        uint8_t *dst = NewtRefToBinary(obj);
+        for (i=0; i<size; i++) {
+            uint8_t c = *src++, v = 0;
+            if (c>='a') v = c-'a'+10; else if (c>='A') v = c-'A'+10; else v = c-'0';
+            c = *src++; v = v<<4;
+            if (c>='a') v += c-'a'+10; else if (c>='A') v += c-'A'+10; else v += c-'0';
+            *dst++ = v;
+        }
+        return obj;
+    }
+    return kNewtRefUnbind;
+}
+
+
+/*------------------------------------------------------------------------*/
 /** バイナリオブジェクトのオブジェクトデータのサイズを変更する
  *
  * @param obj		[in] オブジェクトデータ

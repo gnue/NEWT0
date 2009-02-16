@@ -758,3 +758,65 @@ newtRef NsExpandPath(newtRefArg rcvr, newtRefArg r)
 
     return NewtExpandPath(NewtRefToString(r));
 }
+
+
+/*------------------------------------------------------------------------*/
+/** Read a file and create a binary object.
+ *
+ * @param rcvr		[in] receiver
+ * @param r		[in] filename
+ *
+ * @return		binary object containing the entire file data
+ */
+
+newtRef NsLoadBinary(newtRefArg rcvr, newtRefArg r)
+{
+    if (NewtRefIsString(r)) {
+        char *filename = NewtRefToString(r);
+        FILE *f = fopen(filename, "rb");
+        if (!f)
+            return NewtThrow(kNErrFileNotFound, r);
+        fseek(f, 0, SEEK_END);
+        size_t size = ftell(f);
+        fseek(f, 0, SEEK_SET);
+        uint8_t *data = (uint8_t*)malloc(size);
+        int err = fread(data, size, 1, f);
+        fclose(f);
+        return NewtMakeBinary(NSSYM(data), data, size, false); 
+    } else {
+        return NewtThrow(kNErrNotAString, r);
+    }
+}
+
+/*------------------------------------------------------------------------*/
+/** Save a binary object to a file.
+ *
+ * @param rcvr		[in] receiver
+ * @param r1		[in] binary object
+ * @param r2		[in] filename
+ *
+ * @return		error code
+ */
+
+newtRef NsSaveBinary(newtRefArg rcvr, newtRefArg r1, newtRefArg r2)
+{
+    if (NewtRefIsBinary(r1)) {
+        if (NewtRefIsString(r2)) {
+            char *filename = NewtRefToString(r2);
+            FILE *f = fopen(filename, "wb");
+            if (!f)
+                return NewtThrow(kNErrFileNotFound, r2);
+            uint8_t *data = NewtRefToBinary(r1);
+            int size = NewtBinaryLength(r1);
+            fwrite(data, size, 1, f);
+            fclose(f);
+            return kNewtRefNIL;
+        } else {
+            return NewtThrow(kNErrNotAString, r2);
+        }
+    } else {
+        return NewtThrow(kNErrNotABinaryObject, r1);
+    }
+}
+
+

@@ -24,6 +24,8 @@
 
 static int32_t		NewtGetPrintLength(void);
 static int32_t		NewtGetPrintDepth(void);
+static int32_t		NewtGetPrintIndent(void);
+static int32_t		NewtGetPrintBinaries(void);
 
 static bool			NewtSymbolIsPrint(char * str, int len);
 static bool			NewtStrIsPrint(char * str, int len);
@@ -101,6 +103,46 @@ int32_t NewtGetPrintDepth(void)
         depth = NewtRefToInteger(n);
 
 	return depth;
+}
+
+
+/*------------------------------------------------------------------------*/
+/** Get the number of tabs (or spaces if negative) for indenting.
+ *
+ * @return			number of characters to indent
+ */
+
+int32_t NewtGetPrintIndent(void)
+{
+    newtRefVar	n;
+    int32_t		indent = 1;
+
+    n = NcGetGlobalVar(NSSYM0(printIndent));
+
+    if (NewtRefIsInteger(n))
+        indent = NewtRefToInteger(n);
+
+	return indent;
+}
+
+
+/*------------------------------------------------------------------------*/
+/** If set, brint binary objects as well.
+ *
+ * @return			0 or 1
+ */
+
+int32_t NewtGetPrintBinaries(void)
+{
+    newtRefVar	n;
+    int32_t		pb = 0;
+
+    n = NcGetGlobalVar(NSSYM0(printBinaries));
+
+    if (NewtRefIsInteger(n))
+        pb = NewtRefToInteger(n);
+
+	return pb;
 }
 
 
@@ -471,19 +513,30 @@ void NIOPrintObjBinary(newtStream_t * f, newtRefArg r)
 
     ptr = r;
     len = NewtBinaryLength(r);
-    NIOFputs("<Binary, ", f);
-
-    //
     klass = NcClassOf(r);
-
-    if (NewtRefIsSymbol(klass))
+    if (newt_env._printBinaries)
     {
-        NIOFputs("class \"", f);
-        NIOPrintObj2(f, klass, 0, true);
-        NIOFputs("\", ", f);
+        uint8_t *data = NewtRefToBinary(r);
+        NIOFputs("MakeBinaryFromHex(\"", f);
+        int i; for (i=0; i<len; i++) NIOFprintf(f, "%02X", data[i]);
+        if (NewtRefIsSymbol(klass))
+        {
+            NIOFputs("\", '", f);
+            NIOPrintObj2(f, klass, 0, true);
+            NIOFputs(")", f);
+        } else {
+            NIOFputs("\", NIL)", f);
+        }
+    } else {
+        NIOFputs("<Binary, ", f);
+        if (NewtRefIsSymbol(klass))
+        {
+            NIOFputs("class \"", f);
+            NIOPrintObj2(f, klass, 0, true);
+            NIOFputs("\", ", f);
+        }
+        NIOFprintf(f, "length %d>", len);
     }
-
-    NIOFprintf(f, "length %d>", len);
 }
 
 
@@ -910,6 +963,10 @@ void NIOPrintObj(newtStream_t * f, newtRefArg r)
 {
 	int32_t depth = NewtGetPrintDepth();
 	newt_env._indentDepth = depth;
+	int32_t indent = NewtGetPrintIndent();
+	newt_env._indent = indent;
+	int32_t pb = NewtGetPrintBinaries();
+	newt_env._printBinaries = pb;
     NIOPrintObj2(f, r, depth, false);
 }
 
