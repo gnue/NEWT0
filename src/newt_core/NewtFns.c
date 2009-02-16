@@ -1383,6 +1383,25 @@ newtRef NsMakeBinary(newtRefArg rcvr, newtRefArg length, newtRefArg klass)
 }
 
 
+/*------------------------------------------------------------------------*/
+/** Create a binary object from a string containing hexadecimal numbers.
+ *
+ * @param rcvr		[in] receiver
+ * @param hex		[in] hexadecimal number pairs
+ * @param klass		[in] class of new binary object
+ *
+ * @return			a new binary object
+ */
+
+newtRef NsMakeBinaryFromHex(newtRefArg rcvr, newtRefArg hex, newtRefArg klass)
+{
+    if (! NewtRefIsString(hex))
+        return NewtThrow(kNErrNotAString, hex);
+
+	return NewtMakeBinaryFromHex(klass, NewtRefToString(hex), false);
+}
+
+
 #if 0
 #pragma mark -
 #endif

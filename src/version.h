@@ -33,7 +33,8 @@
 						"  -h              print this help message\n"	\
 						"  --newton,--nos2 Newton OS 2.0 compatible	\n"	\
 						"  --copyright     print copyright\n"			\
-						"  --version       print version number\n"
+						"  --version       print version number\n"	\
+						"  --staff         list of developers\n"
 
 /// スタッフロール
 #define NEWT_STAFF		"Program\n"										\
@@ -41,7 +42,7 @@
                         "\n"											\
                         "Contribute\n"									\
                         "  Paul Guyot\n"								\
-                        "  Matthias\n"									\
+                        "  Matthias Melcher\n"									\
                         "\n"											\
                         "Special Thanks\n"								\
                         "  sumim\n"										\

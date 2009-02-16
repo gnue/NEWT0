@@ -98,6 +98,7 @@ typedef struct {
     bool		_dumpBC;		///< バイトコードダンプフラグ
 	int32_t		_indent;		///< number of tabs for indenting a printout
 	int32_t		_indentDepth;	///< base for calculating the indent depth
+	int32_t		_printBinaries;	///< print binary objects so that they can be regenerated from the printout
 } newt_env_t;
 
 
@@ -197,7 +198,9 @@ typedef struct {
 
     // for print
     newtRefVar	printDepth;			///< printDepth
+    newtRefVar	printIndent;			///< printIndent
     newtRefVar	printLength;		///< printLength
+    newtRefVar	printBinaries;		///< printBinaries
 
     // for regex
     newtRefVar	protoREGEX;			///< @protoREGEX

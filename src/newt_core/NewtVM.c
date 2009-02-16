@@ -3608,6 +3608,10 @@ void NVMInitExGlobalFns(void)
     NewtDefGlobalFunc(NSSYM(Load),		NsLoad,				1, "Load(file)");
 	NewtDefGlobalFunc(NSSYM(Require),	NsRequire,			1, "Require(str)");
 
+    NewtDefGlobalFunc(NSSYM(LoadBinary),		NsLoadBinary,		1, "LoadBinary(filename)");
+    NewtDefGlobalFunc(NSSYM(SaveBinary),		NsSaveBinary,		2, "SaveBinary(data, filename)");
+    NewtDefGlobalFunc(NSSYM(MakeBinaryFromHex),		NsMakeBinaryFromHex,	2, "MakeBinaryFromHex(hexString, class)");
+
 	NewtDefGlobalFunc(NSSYM(MakeNSOF),	NsMakeNSOF,			2, "MakeNSOF(obj, ver)");
 	NewtDefGlobalFunc(NSSYM(ReadNSOF),	NsReadNSOF,			1, "ReadNSOF(nsof)");
 
@@ -3673,7 +3677,9 @@ void NVMInitGlobalFns(void)
 void NVMInitGlobalVars(void)
 {
     NcDefGlobalVar(NSSYM0(printDepth), NSINT(3));
+    NcDefGlobalVar(NSSYM0(printIndent), NSINT(1));
     NcDefGlobalVar(NSSYM0(printLength), NSINT(10));
+    NcDefGlobalVar(NSSYM0(printBinaries), NSINT(0));
 
     NcDefGlobalVar(NSSYM0(_STDOUT_), kNewtRefNIL);
     NcDefGlobalVar(NSSYM0(_STDERR_), kNewtRefNIL);

@@ -61,6 +61,8 @@ newtRef		NsBaseName(newtRefArg rcvr, newtRefArg r);
 newtRef		NsJoinPath(newtRefArg rcvr, newtRefArg r1, newtRefArg r2);
 newtRef		NsExpandPath(newtRefArg rcvr, newtRefArg r);
 
+newtRef		NsLoadBinary(newtRefArg rcvr, newtRefArg r);
+newtRef		NsSaveBinary(newtRefArg rcvr, newtRefArg r1, newtRefArg r2);
 
 #ifdef __cplusplus
 }
