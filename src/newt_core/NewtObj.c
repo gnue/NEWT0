@@ -1222,7 +1222,7 @@ newtRef NewtMakeBinary(newtRefArg klass, uint8_t * data, uint32_t size, bool lit
 newtRef NewtMakeBinaryFromHex(newtRefArg klass, const char *hex, bool literal)
 {
     uint32_t size = strlen(hex)/2;
-    newtObjRef obj = NewtMakeBinary(klass, 0, size, literal);
+    newtRef obj = NewtMakeBinary(klass, 0, size, literal);
     if (obj) {
         uint32_t i;
         const char *src = hex;
