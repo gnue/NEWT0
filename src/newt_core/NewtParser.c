@@ -1019,7 +1019,18 @@ void NPSErrorStr(char c, char * s)
 		NewtFprintf(stderr, "\"%s\" ", nps_env.fname);
 
     NewtFprintf(stderr, "lines %d: %s:\n%s\n", nps_env.lineno, s, nps_env.linebuf);
+#ifdef NEWT0_IGNORE_TABS
     NewtFprintf(stderr, "%*s\n", nps_env.tokenpos - nps_env.yyleng + 1, "^");
+#else
+    int i = 0, n = nps_env.tokenpos - nps_env.yyleng, m = strlen(nps_env.linebuf);
+    for ( ; i<n; ++i ) {
+        if (i<m && nps_env.linebuf[i]=='\t') 
+            NewtFprintf(stderr, "\t");
+        else
+            NewtFprintf(stderr, " ");
+    }
+    NewtFprintf(stderr, "^\n");
+#endif
 }
 
 
