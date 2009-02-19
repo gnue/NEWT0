@@ -32,7 +32,7 @@ static bool			NewtStrIsPrint(char * str, int len);
 static char *		NewtCharToEscape(int c);
 
 static void			NIOPrintIndent(newtStream_t * f, int32_t level);
-static void			NIOPrintEscapeStr(newtStream_t * f, char * str, int len);
+static void			NIOPrintEscapeStr(newtStream_t * f, char * str, int len, char bar);
 static void			NIOPrintRef(newtStream_t * f, newtRefArg r);
 static void			NIOPrintSpecial(newtStream_t * f, newtRefArg r);
 static void			NIOPrintInteger(newtStream_t * f, newtRefArg r);
@@ -216,6 +216,27 @@ bool NewtStrIsPrint(char * str, int len)
 
 
 /*------------------------------------------------------------------------*/
+/** Convert a bunch characters into their escaped variant.
+ *  This is required when printing symbols containing vertical bars.
+ *
+ * @param c			[in] unicode character
+ *
+ * @return		 	ASCII string or NULL
+ */
+
+char * NewtCharAndBarToEscape(int c)
+{	
+	if (c=='|') {
+		return "\\|";
+	} else if (c=='\\') { 
+		return "\\\\";
+	} else {
+		return NewtCharToEscape(c);
+	}
+}
+
+
+/*------------------------------------------------------------------------*/
 /** 文字をエスケープ文字列に変換する
  *
  * @param c			[in] 文字
@@ -276,16 +297,18 @@ void NIOPrintIndent(newtStream_t * f, int32_t depth)
 /*------------------------------------------------------------------------*/
 /** 文字列をエスケープでプリントする
  *
- * @param f			[in] 出力ファイル
+ * @param f		[in] 出力ファイル
  * @param str		[in] 文字列
  * @param len		[in] 文字列の長さ
+ * @param bar		[in] set to 1 to also create an escape sequence 
+ *			     for the vertical bar character
  *
  * @return			なし
  *
  * @note			newtStream_t を使用
  */
 
-void NIOPrintEscapeStr(newtStream_t * f, char * str, int len)
+void NIOPrintEscapeStr(newtStream_t * f, char * str, int len, char bar)
 {
 	bool	unicode = false;
 	char *	s;
@@ -296,7 +319,10 @@ void NIOPrintEscapeStr(newtStream_t * f, char * str, int len)
 	{
 		c = str[i];
 
-		s = NewtCharToEscape(c);
+		if (bar)
+			s = NewtCharAndBarToEscape(c);
+		else
+			s = NewtCharToEscape(c);
 
 		if (s != NULL)
 		{
@@ -566,7 +592,7 @@ void NIOPrintObjSymbol(newtStream_t * f, newtRefArg r)
 	else
 	{
 		NIOFputc('|', f);
-		NIOPrintEscapeStr(f, sym->name, len);
+		NIOPrintEscapeStr(f, sym->name, len, 1);
 		NIOFputc('|', f);
 	}
 }
@@ -601,7 +627,7 @@ void NIOPrintObjString(newtStream_t * f, newtRefArg r)
 	else
 	{
 		NIOFputc('"', f);
-		NIOPrintEscapeStr(f, s, len);
+		NIOPrintEscapeStr(f, s, len, 0);
 		NIOFputc('"', f);
 	}
 }
