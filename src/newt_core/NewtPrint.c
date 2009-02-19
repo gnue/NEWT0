@@ -767,16 +767,19 @@ void NIOPrintObjFrame(newtStream_t * f, newtRefArg r, int32_t depth, bool litera
     uint32_t	len;
     uint32_t	i;
 
-    if (NewtRefIsFunction(r) && ! NEWT_DUMPBC)
+    if (!newt_env._printBinaries)
     {
-        NIOPrintFnFrame(f, r);
-        return;
-    }
+        if (NewtRefIsFunction(r) && ! NEWT_DUMPBC)
+        {
+            NIOPrintFnFrame(f, r);
+            return;
+        }
 
-    if (NewtRefIsRegex(r) && ! NEWT_DUMPBC)
-    {
-        NIOPrintRegexFrame(f, r);
-        return;
+        if (NewtRefIsRegex(r) && ! NEWT_DUMPBC)
+        {
+            NIOPrintRegexFrame(f, r);
+            return;
+        }
     }
 
     obj = NewtRefToPointer(r);
