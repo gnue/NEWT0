@@ -102,8 +102,10 @@
 				F53ECFBB0A453BA900F079DB /* ext.xcodeproj */,
 				F53ECFCA0A453BED00F079DB /* contrib.xcodeproj */,
 			);
+			indentWidth = 4;
 			name = newt;
 			sourceTree = "<group>";
+			tabWidth = 4;
 		};
 		F53ECFBC0A453BA900F079DB /* Products */ = {
 			isa = PBXGroup;
@@ -139,7 +141,11 @@
 			isa = PBXProject;
 			buildConfigurationList = F541302B096D1DEB00CFD896 /* Build configuration list for PBXProject "newt_all" */;
 			compatibilityVersion = "Xcode 2.4";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				en,
+			);
 			mainGroup = 08FB7794FE84155DC02AAC07 /* newt */;
 			projectDirPath = "";
 			projectReferences = (

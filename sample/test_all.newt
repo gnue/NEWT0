@@ -2,6 +2,7 @@
 
 
 local testFiles := [
+	{file: "listpkg.newt", newline: true},
 	{file: "easter.newt", newline: true},
 	{file: "fib.newt", success: 17711, newline: true},
 	{file: "regex.newt", success: "123;foo"},

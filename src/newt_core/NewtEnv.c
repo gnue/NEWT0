@@ -49,8 +49,10 @@ static void		NewtInitARGV(int argc, const char * argv[], int n);
 static void		NewtInitVersInfo(void);
 static void		NewtInitEnv(int argc, const char * argv[], int n);
 
+#ifdef __NAMED_MAGIC_POINTER__
 static newtRef	NcResolveNamedMP(newtRefArg r);
 static newtRef	NsDefNamedMP(newtRefArg rcvr, newtRefArg r, newtRefArg v);
+#endif /* __NAMED_MAGIC_POINTER__ */
 
 
 #if 0

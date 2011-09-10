@@ -18,6 +18,7 @@
 #include "NewtObj.h"
 #include "NewtEnv.h"
 #include "NewtIO.h"
+#include "NewtVM.h"
 
 
 /* 関数プロトタイプ */
@@ -36,7 +37,9 @@ static void			NIOPrintSpecial(newtStream_t * f, newtRefArg r);
 static void			NIOPrintInteger(newtStream_t * f, newtRefArg r);
 static void			NIOPrintReal(newtStream_t * f, newtRefArg r);
 static void			NIOPrintObjCharacter(newtStream_t * f, newtRefArg r);
+#ifdef __NAMED_MAGIC_POINTER__
 static void			NIOPrintObjNamedMP(newtStream_t * f, newtRefArg r);
+#endif /* __NAMED_MAGIC_POINTER__ */
 static void			NIOPrintObjMagicPointer(newtStream_t * f, newtRefArg r);
 static void			NIOPrintObjBinary(newtStream_t * f, newtRefArg r);
 static void			NIOPrintObjSymbol(newtStream_t * f, newtRefArg r);
@@ -649,11 +652,14 @@ void NIOPrintObjArray(newtStream_t * f, newtRefArg r, int32_t depth, bool litera
 
 void NIOPrintFnFrame(newtStream_t * f, newtRefArg r)
 {
+    newtRefVar  numArgsSlot;
 	newtRefVar	indefinite;
-    int32_t		numArgs;
+    int32_t		numArgs = 0;
 	char *		indefiniteStr = "";
 
-    numArgs = NewtRefToInteger(NcGetSlot(r, NSSYM0(numArgs)));
+    numArgsSlot = NcGetSlot(r, NSSYM0(numArgs));
+    if (NewtRefIsNotNIL(numArgsSlot))
+        numArgs = NewtRefToInteger(numArgsSlot);
 	indefinite = NcGetSlot(r, NSSYM0(indefinite));
 
 	if (NewtRefIsNotNIL(indefinite))

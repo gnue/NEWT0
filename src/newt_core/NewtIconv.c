@@ -41,7 +41,7 @@ char * NewtIconv(iconv_t cd, char * src, size_t srclen, size_t* dstlenp)
 
 		if (dst)
 		{
-			const char *	inbuf_p = src;
+			char *	inbuf_p = src;
 			char *	outbuf_p = dst;
 			size_t	inbytesleft = srclen;
 			size_t	outbytesleft = bufflen;

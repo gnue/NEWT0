@@ -71,7 +71,9 @@ static newtErr		NSOFWriteImmediate(nsof_stream_t * nsof, newtRefArg r);
 static newtErr		NSOFWriteCharacter(nsof_stream_t * nsof, newtRefArg r);
 static newtErr		NSOFWriteBinary(nsof_stream_t * nsof, newtRefArg r, uint16_t objtype);
 static newtErr		NSOFWriteSymbol(nsof_stream_t * nsof, newtRefArg r);
+#ifdef __NAMED_MAGIC_POINTER__
 static newtErr		NSOFWriteNamedMP(nsof_stream_t * nsof, newtRefArg r);
+#endif
 static newtErr		NSOFWriteArray(nsof_stream_t * nsof, newtRefArg r);
 static newtErr		NSOFWriteFrame(nsof_stream_t * nsof, newtRefArg r);
 static newtErr		NSOFWriteSmallRect(nsof_stream_t * nsof, newtRefArg r);
@@ -81,7 +83,9 @@ static newtRef		NSOFReadBinary(nsof_stream_t * nsof, int type);
 static newtRef		NSOFReadArray(nsof_stream_t * nsof, int type);
 static newtRef		NSOFReadFrame(nsof_stream_t * nsof);
 static newtRef		NSOFReadSymbol(nsof_stream_t * nsof);
+#ifdef __NAMED_MAGIC_POINTER__
 static newtRef		NSOFReadNamedMP(nsof_stream_t * nsof);
+#endif
 static newtRef		NSOFReadSmallRect(nsof_stream_t * nsof);
 static newtRef		NSOFReadNSOF(nsof_stream_t * nsof);
 
