@@ -41,11 +41,17 @@
 #include "NewtVM.h"
 
 // AppKit
-#include <AppKit/AppKit.h>
+#if !TARGET_OS_IPHONE
+# include <AppKit/AppKit.h>
+#else
+# include <UIKit/UIKit.h>
+#endif
 
 // NewtObjC
 #include "Utils.h"
 
+
+#if !TARGET_OS_IPHONE
 /**
  * Native function: NewtNSApplicationMain.
  * Bridge to NSApplicationMain
@@ -103,6 +109,65 @@ NewtNSApplicationMain(newtRefArg inRcvr, newtRefArg inArgv)
 	
 	return theResultObj;
 }
+#else // !TARGET_OS_IPHONE
+/**
+ * Native function: NewtUIApplicationMain.
+ * Bridge to UIApplicationMain
+ *
+ * @param inRcvr		self.
+ * @param inArgv		array of arguments (strings) to pass
+ *						to UIApplicationMain.
+ * @return the result of UIApplicationMain (an int).
+ */
+newtRef
+NewtUIApplicationMain(newtRefArg inRcvr, newtRefArg inArgv)
+{
+	newtRefVar theResultObj;
+  
+	// Translate the args
+	if (!NewtRefIsArray(inArgv))
+	{
+		return NewtThrow(kNErrNotAnArray, inArgv);
+	}
+  
+	NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+  
+	int nbArgs = NewtArrayLength(inArgv);
+	const char** argv = (const char**) malloc(sizeof(const char*) * (nbArgs + 1));
+	int indexArgs;
+	for (indexArgs = 0; indexArgs < nbArgs; indexArgs++)
+	{
+		newtRefVar someArg = NewtSlotsGetSlot( inArgv, indexArgs );
+		if (!NewtRefIsString(someArg))
+		{
+			free(argv);
+			return NewtThrow(kNErrNotAString, someArg);
+		}
+		
+		argv[indexArgs] = NewtRefToString(someArg);
+	}
+	argv[nbArgs] = NULL;
+	
+	NS_DURING
+	
+	int theResult = UIApplicationMain(nbArgs, argv, NULL, NULL);
+	theResultObj = NewtMakeInteger(theResult);
+	
+	NS_HANDLER
+  // Convert the exception and throw it as a NS exception.
+  newtRefVar theExceptionFrame = CastExToNS(localException);
+  NVMThrowData(
+               NcGetSlot(theExceptionFrame, NSSYM(name)), theExceptionFrame);
+  theResultObj = kNewtRefNIL;
+	NS_ENDHANDLER
+	
+	[pool release];
+  
+	free(argv);
+	
+	return theResultObj;
+}
+#endif
 
 // ============================================================= //
 // Memory fault -- core...uh...um...core... Oh dammit, I forget! //
