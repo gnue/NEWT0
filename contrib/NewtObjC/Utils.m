@@ -41,7 +41,12 @@
 #include <objc/objc.h>
 #include <objc/objc-class.h>
 #include <objc/objc-runtime.h>
-#include <Cocoa/Cocoa.h>
+
+#if !TARGET_OS_IPHONE
+# include <Cocoa/Cocoa.h>
+#else
+# include <UIKit/UIKit.h>
+#endif
 
 // NEWT/0
 #include "NewtCore.h"
@@ -180,25 +185,6 @@ RefToCharConverting(newtRefVar inRef)
 }
 
 /**
- * Convert a reference (frame) to a NSPoint.
- *
- * @param inRef			reference to the structure.
- * @param outPoint		pointer to the point.
- */
-void
-RefToPoint(newtRefArg inRef, NSPoint* outPoint)
-{
-	if (NewtRefIsFrame(inRef)) {
-		outPoint->x =
-			RefToDoubleConverting(NcGetSlot(inRef, NSSYM(x)));
-		outPoint->y =
-			RefToDoubleConverting(NcGetSlot(inRef, NSSYM(y)));
-	} else {
-		(void) NewtThrow(kNErrNotAFrame, inRef);
-	}				
-}
-
-/**
  * Convert a reference (frame) to a NSRange.
  *
  * @param inRef			reference to the structure.
@@ -217,6 +203,26 @@ RefToRange(newtRefArg inRef, NSRange* outRange)
 	}				
 }
 
+#if !TARGET_OS_IPHONE
+/**
+ * Convert a reference (frame) to a NSPoint.
+ *
+ * @param inRef			reference to the structure.
+ * @param outPoint		pointer to the point.
+ */
+void
+RefToNSPoint(newtRefArg inRef, NSPoint* outPoint)
+{
+	if (NewtRefIsFrame(inRef)) {
+		outPoint->x =
+    RefToDoubleConverting(NcGetSlot(inRef, NSSYM(x)));
+		outPoint->y =
+    RefToDoubleConverting(NcGetSlot(inRef, NSSYM(y)));
+	} else {
+		(void) NewtThrow(kNErrNotAFrame, inRef);
+	}				
+}
+
 /**
  * Convert a reference (frame) to a NSRect.
  *
@@ -224,7 +230,7 @@ RefToRange(newtRefArg inRef, NSRange* outRange)
  * @param outRect		pointer to the rect.
  */
 void
-RefToRect(newtRefArg inRef, NSRect* outRect)
+RefToNSRect(newtRefArg inRef, NSRect* outRect)
 {
 	if (NewtRefIsFrame(inRef)) {
 		float top = RefToDoubleConverting(NcGetSlot(inRef, NSSYM(top)));
@@ -244,7 +250,7 @@ RefToRect(newtRefArg inRef, NSRect* outRect)
  * @param outSize		pointer to the size.
  */
 void
-RefToSize(newtRefArg inRef, NSSize* outSize)
+RefToNSSize(newtRefArg inRef, NSSize* outSize)
 {
 	if (NewtRefIsFrame(inRef)) {
 		outSize->width =
@@ -255,20 +261,64 @@ RefToSize(newtRefArg inRef, NSSize* outSize)
 		(void) NewtThrow(kNErrNotAFrame, inRef);
 	}				
 }
+#endif
 
 /**
- * Convert a NSPoint to a frame.
+ * Convert a reference (frame) to a CGPoint.
  *
- * @param inPoint		the point.
- * @return a frame.
+ * @param inRef			reference to the structure.
+ * @param outPoint		pointer to the point.
  */
-newtRef
-PointToRef(NSPoint inPoint)
+void
+RefToCGPoint(newtRefArg inRef, CGPoint* outPoint)
 {
-	newtRefVar theFrame = NcMakeFrame();
-	NcSetSlot(theFrame, NSSYM(x), NewtMakeReal(inPoint.x));
-	NcSetSlot(theFrame, NSSYM(y), NewtMakeReal(inPoint.y));
-	return theFrame;
+	if (NewtRefIsFrame(inRef)) {
+		outPoint->x =
+    RefToDoubleConverting(NcGetSlot(inRef, NSSYM(x)));
+		outPoint->y =
+    RefToDoubleConverting(NcGetSlot(inRef, NSSYM(y)));
+	} else {
+		(void) NewtThrow(kNErrNotAFrame, inRef);
+	}				
+}
+
+/**
+ * Convert a reference (frame) to a CGRect.
+ *
+ * @param inRef			reference to the structure.
+ * @param outRect		pointer to the rect.
+ */
+void
+RefToCGRect(newtRefArg inRef, CGRect* outRect)
+{
+	if (NewtRefIsFrame(inRef)) {
+		float top = RefToDoubleConverting(NcGetSlot(inRef, NSSYM(top)));
+		float left = RefToDoubleConverting(NcGetSlot(inRef, NSSYM(left)));
+		float bottom = RefToDoubleConverting(NcGetSlot(inRef, NSSYM(bottom)));
+		float right = RefToDoubleConverting(NcGetSlot(inRef, NSSYM(right)));
+		*outRect = CGRectMake(left, top, right - left, bottom - top);
+	} else {
+		(void) NewtThrow(kNErrNotAFrame, inRef);
+	}				
+}
+
+/**
+ * Convert a reference (frame) to a CGSize.
+ *
+ * @param inRef			reference to the structure.
+ * @param outSize		pointer to the size.
+ */
+void
+RefToCGSize(newtRefArg inRef, CGSize* outSize)
+{
+	if (NewtRefIsFrame(inRef)) {
+		outSize->width =
+    RefToDoubleConverting(NcGetSlot(inRef, NSSYM(width)));
+		outSize->height =
+    RefToDoubleConverting(NcGetSlot(inRef, NSSYM(height)));
+	} else {
+		(void) NewtThrow(kNErrNotAFrame, inRef);
+	}				
 }
 
 /**
@@ -286,6 +336,22 @@ RangeToRef(NSRange inRange)
 	return theFrame;
 }
 
+#if !TARGET_OS_IPHONE
+/**
+ * Convert a NSPoint to a frame.
+ *
+ * @param inPoint		the point.
+ * @return a frame.
+ */
+newtRef
+NSPointToRef(NSPoint inPoint)
+{
+	newtRefVar theFrame = NcMakeFrame();
+	NcSetSlot(theFrame, NSSYM(x), NewtMakeReal(inPoint.x));
+	NcSetSlot(theFrame, NSSYM(y), NewtMakeReal(inPoint.y));
+	return theFrame;
+}
+
 /**
  * Convert a NSRect to a frame.
  *
@@ -293,7 +359,7 @@ RangeToRef(NSRange inRange)
  * @return a frame.
  */
 newtRef
-RectToRef(NSRect inRect)
+NSRectToRef(NSRect inRect)
 {
 	newtRefVar theFrame = NcMakeFrame();
 	NcSetSlot(theFrame, NSSYM(top), NewtMakeReal(NSMinY(inRect)));
@@ -310,7 +376,54 @@ RectToRef(NSRect inRect)
  * @return a frame.
  */
 newtRef
-SizeToRef(NSSize inSize)
+NSSizeToRef(NSSize inSize)
+{
+	newtRefVar theFrame = NcMakeFrame();
+	NcSetSlot(theFrame, NSSYM(width), NewtMakeReal(inSize.width));
+	NcSetSlot(theFrame, NSSYM(height), NewtMakeReal(inSize.height));
+	return theFrame;
+}
+#endif
+/**
+ * Convert a CGPoint to a frame.
+ *
+ * @param inPoint		the point.
+ * @return a frame.
+ */
+newtRef
+CGPointToRef(CGPoint inPoint)
+{
+	newtRefVar theFrame = NcMakeFrame();
+	NcSetSlot(theFrame, NSSYM(x), NewtMakeReal(inPoint.x));
+	NcSetSlot(theFrame, NSSYM(y), NewtMakeReal(inPoint.y));
+	return theFrame;
+}
+
+/**
+ * Convert a CGRect to a frame.
+ *
+ * @param inRect		the rect.
+ * @return a frame.
+ */
+newtRef
+CGRectToRef(CGRect inRect)
+{
+	newtRefVar theFrame = NcMakeFrame();
+	NcSetSlot(theFrame, NSSYM(top), NewtMakeReal(CGMinY(inRect)));
+	NcSetSlot(theFrame, NSSYM(left), NewtMakeReal(CGMinX(inRect)));
+	NcSetSlot(theFrame, NSSYM(bottom), NewtMakeReal(CGMaxY(inRect)));
+	NcSetSlot(theFrame, NSSYM(right), NewtMakeReal(CGMaxX(inRect)));
+	return theFrame;
+}
+
+/**
+ * Convert a CGSize to a frame.
+ *
+ * @param inPoint		the point.
+ * @return a frame.
+ */
+newtRef
+CGSizeToRef(CGSize inSize)
 {
 	newtRefVar theFrame = NcMakeFrame();
 	NcSetSlot(theFrame, NSSYM(width), NewtMakeReal(inSize.width));
@@ -851,21 +964,38 @@ CastParamToObjC(
 				NSRange theRange;
 				RefToRange(inObject, &theRange);
 				marg_setValue(marg_list, inOffset, NSRange, theRange);
+#if !TARGET_OS_IPHONE
 			} else if ((strncmp(inType, "{_NSRect}", 9) == 0)
 				|| (strncmp(inType, "{_NSRect=", 9) == 0)) {
 				NSRect theRect;
-				RefToRect(inObject, &theRect);
+				RefToNSRect(inObject, &theRect);
 				marg_setValue(marg_list, inOffset, NSRect, theRect);
 			} else if ((strncmp(inType, "{_NSPoint}", 10) == 0)
 				|| (strncmp(inType, "{_NSPoint=", 10) == 0)) {
 				NSPoint thePoint;
-				RefToPoint(inObject, &thePoint);
+				RefToNSPoint(inObject, &thePoint);
 				marg_setValue(marg_list, inOffset, NSPoint, thePoint);
 			} else if ((strncmp(inType, "{_NSSize}", 9) == 0)
 				|| (strncmp(inType, "{_NSSize=", 9) == 0)) {
 				NSSize theSize;
-				RefToSize(inObject, &theSize);
+				RefToNSSize(inObject, &theSize);
 				marg_setValue(marg_list, inOffset, NSSize, theSize);
+#endif
+      } else if ((strncmp(inType, "{_CGRect}", 9) == 0)
+                 || (strncmp(inType, "{_CGRect=", 9) == 0)) {
+				CGRect theRect;
+				RefToCGRect(inObject, &theRect);
+				marg_setValue(marg_list, inOffset, CGRect, theRect);
+			} else if ((strncmp(inType, "{_CGPoint}", 10) == 0)
+                 || (strncmp(inType, "{_CGPoint=", 10) == 0)) {
+				CGPoint thePoint;
+				RefToCGPoint(inObject, &thePoint);
+				marg_setValue(marg_list, inOffset, CGPoint, thePoint);
+			} else if ((strncmp(inType, "{_CGSize}", 9) == 0)
+                 || (strncmp(inType, "{_CGSize=", 9) == 0)) {
+				CGSize theSize;
+				RefToCGSize(inObject, &theSize);
+				marg_setValue(marg_list, inOffset, CGSize, theSize);
 			} else {
 				printf( "unhandled type: %s (structure)\n", inType );
 			}

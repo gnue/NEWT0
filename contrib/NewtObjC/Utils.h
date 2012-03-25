@@ -40,7 +40,12 @@
 // ObjC & Cocoa
 #include <objc/objc.h>
 #include <objc/objc-runtime.h>
-#include <Cocoa/Cocoa.h>
+
+#if !TARGET_OS_IPHONE
+# include <Cocoa/Cocoa.h>
+#else
+# include <UIKit/UIKit.h>
+#endif
 
 // NEWT/0
 #include "NewtType.h"
@@ -51,14 +56,27 @@ newtRef PointerToBinary(void*);
 double RefToDoubleConverting(newtRefVar);
 int RefToIntConverting(newtRefVar);
 char RefToCharConverting(newtRefVar);
-void RefToPoint(newtRefArg, NSPoint*);
+
 void RefToRange(newtRefArg, NSRange*);
-void RefToRect(newtRefArg, NSRect*);
-void RefToSize(newtRefArg, NSSize*);
-newtRef PointToRef(NSPoint);
-newtRef RangeToRef(NSRange);
-newtRef RectToRef(NSRect);
-newtRef SizeToRef(NSSize);
+#if !TARGET_OS_IPHONE
+void RefToNSPoint(newtRefArg, NSPoint*);
+void RefToNSRect(newtRefArg, NSRect*);
+void RefToNSSize(newtRefArg, NSSize*);
+#endif
+void RefToCGPoint(newtRefArg, CGPoint*);
+void RefToCGRect(newtRefArg, CGRect*);
+void RefToCGSize(newtRefArg, CGSize*);
+
+newtRef NSRangeToRef(NSRange);
+#if !TARGET_OS_IPHONE
+newtRef NSPointToRef(NSPoint);
+newtRef NSRectToRef(NSRect);
+newtRef NSSizeToRef(NSSize);
+#endif
+newtRef CGPointToRef(CGPoint);
+newtRef CGRectToRef(CGRect);
+newtRef CGSizeToRef(CGSize);
+
 char* ObjCNSNameTranslation(const char*);
 newtRef CastToNS(id*, const char*);
 newtRef CastStructToNS(void*, const char*);
