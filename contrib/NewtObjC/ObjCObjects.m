@@ -43,7 +43,7 @@
 #include <objc/objc.h>
 #include <objc/objc-class.h>
 #include <objc/objc-runtime.h>
-#include <Cocoa/Cocoa.h>
+#include <Foundation/Foundation.h>
 #include "objc-runtime-x/objc-runtime-x.h"
 
 // NEWT/0
