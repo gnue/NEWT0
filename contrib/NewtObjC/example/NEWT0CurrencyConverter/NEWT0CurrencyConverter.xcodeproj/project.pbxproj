@@ -9,12 +9,43 @@
 /* Begin PBXBuildFile section */
 		8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
-		DA6E8B3B07E57943007F101D /* newt in CopyFiles */ = {isa = PBXBuildFile; fileRef = DA6E8B3407E5791F007F101D /* newt */; };
-		DA6E8B3C07E57943007F101D /* NewtObjC.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = DA6E8B3507E5791F007F101D /* NewtObjC.dylib */; };
 		DA6E8B3D07E57943007F101D /* NEWT0CurrencyConverter.newt in CopyFiles */ = {isa = PBXBuildFile; fileRef = DA6E8B2807E578BF007F101D /* NEWT0CurrencyConverter.newt */; };
 		DA6E8B5707E57C9C007F101D /* NEWT0AppRuntime.sh in CopyFiles */ = {isa = PBXBuildFile; fileRef = DA6E8B5407E57C4A007F101D /* NEWT0AppRuntime.sh */; };
-		DA73137C07ED7FD700CF5354 /* objc-runtime-x.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = DA73137907ED7F8100CF5354 /* objc-runtime-x.dylib */; };
+		F18C4CA0151EDF7200E64530 /* NewtObjC.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = F18C4C9D151EDEFC00E64530 /* NewtObjC.dylib */; };
+		F18C4CA1151EDF7500E64530 /* objc-runtime-x.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = F18C4C9F151EDEFC00E64530 /* objc-runtime-x.dylib */; };
+		F18C4CA2151EDF7800E64530 /* newt in CopyFiles */ = {isa = PBXBuildFile; fileRef = F18C4C8E151EDEE700E64530 /* newt */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		F18C4C8D151EDEE700E64530 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F18C4C85151EDEE700E64530 /* newt.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8DD76FB20486AB0100D96B5E;
+			remoteInfo = newt;
+		};
+		F18C4C9A151EDEFC00E64530 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F18C4C90151EDEFC00E64530 /* contrib.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = DAE3D2F90A429D6A00FE1B1F;
+			remoteInfo = NativeCalls;
+		};
+		F18C4C9C151EDEFC00E64530 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F18C4C90151EDEFC00E64530 /* contrib.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = DAE3D43C0A42ADB900FE1B1F;
+			remoteInfo = NewtObjC;
+		};
+		F18C4C9E151EDEFC00E64530 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F18C4C90151EDEFC00E64530 /* contrib.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = DAE3D4630A42AE3A00FE1B1F;
+			remoteInfo = "objc-runtime-x";
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		DA6E8B3A07E57931007F101D /* CopyFiles */ = {
@@ -23,11 +54,11 @@
 			dstPath = "";
 			dstSubfolderSpec = 6;
 			files = (
-				DA73137C07ED7FD700CF5354 /* objc-runtime-x.dylib in CopyFiles */,
-				DA6E8B3B07E57943007F101D /* newt in CopyFiles */,
-				DA6E8B3C07E57943007F101D /* NewtObjC.dylib in CopyFiles */,
 				DA6E8B5707E57C9C007F101D /* NEWT0AppRuntime.sh in CopyFiles */,
 				DA6E8B3D07E57943007F101D /* NEWT0CurrencyConverter.newt in CopyFiles */,
+				F18C4CA2151EDF7800E64530 /* newt in CopyFiles */,
+				F18C4CA1151EDF7500E64530 /* objc-runtime-x.dylib in CopyFiles */,
+				F18C4CA0151EDF7200E64530 /* NewtObjC.dylib in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -39,10 +70,9 @@
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* NEWT0CurrencyConverter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NEWT0CurrencyConverter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA6E8B2807E578BF007F101D /* NEWT0CurrencyConverter.newt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = NEWT0CurrencyConverter.newt; sourceTree = "<group>"; };
-		DA6E8B3407E5791F007F101D /* newt */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = newt; path = ../../../../../gnue/svn/NEWT0/build/Release/newt; sourceTree = "<group>"; };
-		DA6E8B3507E5791F007F101D /* NewtObjC.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = NewtObjC.dylib; path = ../../../../../gnue/svn/NEWT0/build/Release/NewtObjC.dylib; sourceTree = "<group>"; };
 		DA6E8B5407E57C4A007F101D /* NEWT0AppRuntime.sh */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.sh; path = NEWT0AppRuntime.sh; sourceTree = "<group>"; };
-		DA73137907ED7F8100CF5354 /* objc-runtime-x.dylib */ = {isa = PBXFileReference; explicitFileType = file; name = "objc-runtime-x.dylib"; path = "../../../../../gnue/svn/NEWT0/build/Release/objc-runtime-x.dylib"; sourceTree = "<group>"; };
+		F18C4C85151EDEE700E64530 /* newt.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = newt.xcodeproj; path = ../../../../src/newt.xcodeproj; sourceTree = "<group>"; };
+		F18C4C90151EDEFC00E64530 /* contrib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = contrib.xcodeproj; path = ../../../contrib.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +97,8 @@
 		29B97314FDCFA39411CA2CEA /* NEWT0CurrencyConverter */ = {
 			isa = PBXGroup;
 			children = (
+				F18C4C90151EDEFC00E64530 /* contrib.xcodeproj */,
+				F18C4C85151EDEE700E64530 /* newt.xcodeproj */,
 				DA6E8B2707E578B3007F101D /* Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
@@ -87,30 +119,28 @@
 		DA6E8B2707E578B3007F101D /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				DA6E8B3307E5790C007F101D /* Release */,
 				DA6E8B2807E578BF007F101D /* NEWT0CurrencyConverter.newt */,
 				DA6E8B5407E57C4A007F101D /* NEWT0AppRuntime.sh */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
 		};
-		DA6E8B2C07E578C4007F101D /* build */ = {
+		F18C4C86151EDEE700E64530 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				DA73137907ED7F8100CF5354 /* objc-runtime-x.dylib */,
-				DA6E8B3407E5791F007F101D /* newt */,
-				DA6E8B3507E5791F007F101D /* NewtObjC.dylib */,
+				F18C4C8E151EDEE700E64530 /* newt */,
 			);
-			name = build;
+			name = Products;
 			sourceTree = "<group>";
 		};
-		DA6E8B3307E5790C007F101D /* Release */ = {
+		F18C4C91151EDEFC00E64530 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				DA6E8B2C07E578C4007F101D /* build */,
+				F18C4C9B151EDEFC00E64530 /* NativeCalls.dylib */,
+				F18C4C9D151EDEFC00E64530 /* NewtObjC.dylib */,
+				F18C4C9F151EDEFC00E64530 /* objc-runtime-x.dylib */,
 			);
-			name = Release;
-			path = ../../../../build/Release;
+			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -142,14 +172,61 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = DAD393B30863DDEE00A77FBE /* Build configuration list for PBXProject "NEWT0CurrencyConverter" */;
+			compatibilityVersion = "Xcode 2.4";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				en,
+			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* NEWT0CurrencyConverter */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = F18C4C91151EDEFC00E64530 /* Products */;
+					ProjectRef = F18C4C90151EDEFC00E64530 /* contrib.xcodeproj */;
+				},
+				{
+					ProductGroup = F18C4C86151EDEE700E64530 /* Products */;
+					ProjectRef = F18C4C85151EDEE700E64530 /* newt.xcodeproj */;
+				},
+			);
+			projectRoot = "";
 			targets = (
 				8D1107260486CEB800E47090 /* NEWT0CurrencyConverter */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		F18C4C8E151EDEE700E64530 /* newt */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = newt;
+			remoteRef = F18C4C8D151EDEE700E64530 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F18C4C9B151EDEFC00E64530 /* NativeCalls.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = NativeCalls.dylib;
+			remoteRef = F18C4C9A151EDEFC00E64530 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F18C4C9D151EDEFC00E64530 /* NewtObjC.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = NewtObjC.dylib;
+			remoteRef = F18C4C9C151EDEFC00E64530 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		F18C4C9F151EDEFC00E64530 /* objc-runtime-x.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = "objc-runtime-x.dylib";
+			remoteRef = F18C4C9E151EDEFC00E64530 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		8D1107290486CEB800E47090 /* Resources */ = {
@@ -212,12 +289,15 @@
 		DAD393B20863DDEE00A77FBE /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = NEWT0CurrencyConverter_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = /Users/paul/Projets/Unix/NEWT0/build;
+				LIBRARY_SEARCH_PATHS = "";
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				PRODUCT_NAME = NEWT0CurrencyConverter;
 				WRAPPER_EXTENSION = app;
 			};
