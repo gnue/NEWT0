@@ -331,8 +331,9 @@ void NewtInitARGV(int argc, const char * argv[], int n)
 	}
 #endif
 
-	if (NewtRefIsNIL(exepath))
-		exepath = NewtExpandPath(argv[0]);
+	if (NewtRefIsNIL(exepath) && argc > 0) {
+    exepath = NewtExpandPath(argv[0]);
+  }
 
     NcSetSlot(GLOBALS, NSSYM0(_EXEDIR_), NcDirName(exepath));
 }
