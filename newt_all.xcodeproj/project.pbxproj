@@ -139,7 +139,11 @@
 			isa = PBXProject;
 			buildConfigurationList = F541302B096D1DEB00CFD896 /* Build configuration list for PBXProject "newt_all" */;
 			compatibilityVersion = "Xcode 2.4";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				en,
+			);
 			mainGroup = 08FB7794FE84155DC02AAC07 /* newt */;
 			projectDirPath = "";
 			projectReferences = (
@@ -230,21 +234,31 @@
 		DA16689C0A438E15005937AA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = i386;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				PRODUCT_NAME = All;
+				SDKROOT = macosx;
+				SDKROOT_i386 = macosx;
+				SDKROOT_ppc = macosx;
 			};
 			name = Debug;
 		};
 		DA16689D0A438E15005937AA /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = i386;
 				COPY_PHASE_STRIP = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				PRODUCT_NAME = All;
+				SDKROOT = macosx;
+				SDKROOT_i386 = macosx;
+				SDKROOT_ppc = macosx;
 				ZERO_LINK = NO;
 			};
 			name = Release;
