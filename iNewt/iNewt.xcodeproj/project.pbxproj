@@ -73,6 +73,9 @@
 		F1ABAEDE151F8D120054D84B /* prep_cif.c in Sources */ = {isa = PBXBuildFile; fileRef = F1ABAECE151F8D120054D84B /* prep_cif.c */; };
 		F1ABAEDF151F8D120054D84B /* raw_api.c in Sources */ = {isa = PBXBuildFile; fileRef = F1ABAECF151F8D120054D84B /* raw_api.c */; };
 		F1ABAEE0151F8D120054D84B /* types.c in Sources */ = {isa = PBXBuildFile; fileRef = F1ABAED0151F8D120054D84B /* types.c */; };
+		F1ABAFAF151FAD3A0054D84B /* protoFILE.c in Sources */ = {isa = PBXBuildFile; fileRef = F1ABAFAE151FAD3A0054D84B /* protoFILE.c */; };
+		F1ABAFB1151FAD410054D84B /* protoREGEX.c in Sources */ = {isa = PBXBuildFile; fileRef = F1ABAFB0151FAD410054D84B /* protoREGEX.c */; };
+		F1ABAFB3151FADD70054D84B /* iNewt.c in Sources */ = {isa = PBXBuildFile; fileRef = F1ABAFB2151FADD70054D84B /* iNewt.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -144,6 +147,10 @@
 		F1ABAECE151F8D120054D84B /* prep_cif.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = prep_cif.c; path = ffi/prep_cif.c; sourceTree = "<group>"; };
 		F1ABAECF151F8D120054D84B /* raw_api.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = raw_api.c; path = ffi/raw_api.c; sourceTree = "<group>"; };
 		F1ABAED0151F8D120054D84B /* types.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = types.c; path = ffi/types.c; sourceTree = "<group>"; };
+		F1ABAFAE151FAD3A0054D84B /* protoFILE.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = protoFILE.c; path = ../ext/protoFILE/protoFILE.c; sourceTree = "<group>"; };
+		F1ABAFB0151FAD410054D84B /* protoREGEX.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = protoREGEX.c; path = ../ext/protoREGEX/protoREGEX.c; sourceTree = "<group>"; };
+		F1ABAFB2151FADD70054D84B /* iNewt.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = iNewt.c; sourceTree = "<group>"; };
+		F1ABAFB4151FADDE0054D84B /* iNewt.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = iNewt.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -161,6 +168,8 @@
 		F1ABADC0151F723C0054D84B = {
 			isa = PBXGroup;
 			children = (
+				F1ABAFAD151FAD290054D84B /* protoFILE */,
+				F1ABAFAC151FAD260054D84B /* protoREGEX */,
 				F1ABADDC151F72630054D84B /* NativeCalls */,
 				F1ABADDB151F72550054D84B /* newt */,
 				F1ABADD1151F723C0054D84B /* Supporting Files */,
@@ -189,6 +198,8 @@
 			isa = PBXGroup;
 			children = (
 				F1ABADD2151F723C0054D84B /* iNewt-Prefix.pch */,
+				F1ABAFB4151FADDE0054D84B /* iNewt.h */,
+				F1ABAFB2151FADD70054D84B /* iNewt.c */,
 			);
 			name = "Supporting Files";
 			path = iNewt;
@@ -331,6 +342,22 @@
 			path = "libffi-ios";
 			sourceTree = "<group>";
 		};
+		F1ABAFAC151FAD260054D84B /* protoREGEX */ = {
+			isa = PBXGroup;
+			children = (
+				F1ABAFB0151FAD410054D84B /* protoREGEX.c */,
+			);
+			name = protoREGEX;
+			sourceTree = "<group>";
+		};
+		F1ABAFAD151FAD290054D84B /* protoFILE */ = {
+			isa = PBXGroup;
+			children = (
+				F1ABAFAE151FAD3A0054D84B /* protoFILE.c */,
+			);
+			name = protoFILE;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -456,6 +483,9 @@
 				F1ABAEDE151F8D120054D84B /* prep_cif.c in Sources */,
 				F1ABAEDF151F8D120054D84B /* raw_api.c in Sources */,
 				F1ABAEE0151F8D120054D84B /* types.c in Sources */,
+				F1ABAFAF151FAD3A0054D84B /* protoFILE.c in Sources */,
+				F1ABAFB1151FAD410054D84B /* protoREGEX.c in Sources */,
+				F1ABAFB3151FADD70054D84B /* iNewt.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -475,13 +505,26 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
+				"GCC_PREPROCESSOR_DEFINITIONS[sdk=iphoneos*]" = (
+					"TARGET_OS_IPHONE=1",
+					"TARGET_IPHONE_SIMULATOR=0",
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[sdk=iphonesimulator*]" = (
+					"TARGET_OS_IPHONE=1",
+					"TARGET_IPHONE_SIMULATOR=1",
+					"DEBUG=1",
+					"$(inherited)",
+				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
 				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -492,12 +535,22 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				"GCC_PREPROCESSOR_DEFINITIONS[sdk=iphoneos*]" = (
+					"TARGET_OS_IPHONE=1",
+					"TARGET_IPHONE_SIMULATOR=0",
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[sdk=iphonesimulator*]" = (
+					"TARGET_OS_IPHONE=1",
+					"TARGET_IPHONE_SIMULATOR=1",
+				);
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
 				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

@@ -7,10 +7,8 @@
 //
 
 #import "NWViewController.h"
+#import "iNewt.h"
 
-#import "NewtCore.h"
-#import "NewtParser.h"
-#import "NewtVM.h"
 
 @interface NWViewController ()
 
@@ -49,21 +47,20 @@ void newt_result_message(newtRefArg r, newtErr err)
 - (void) interpretNewtFile:(NSString *)file {
   NSLog(@"%s %@", __PRETTY_FUNCTION__, file);
 
-  
-  NewtInit(0, NULL, 0);
   newtErr	err;
   newtRefVar result = NVMInterpretFile([file fileSystemRepresentation], &err);
   newt_result_message(result, err);
-  NewtCleanup();
 }
 
 - (void) viewWillAppear:(BOOL)animated {
   [super viewWillAppear:animated];
   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    iNewt_Setup();
     NSArray *newtScripts = [[NSBundle mainBundle] pathsForResourcesOfType:@"newt" inDirectory:nil];
     for (NSString *aScriptPath in newtScripts) {
       [self interpretNewtFile:aScriptPath];
     }
+    iNewt_Cleanup();
   });
 }
 

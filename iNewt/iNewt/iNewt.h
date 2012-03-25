@@ -9,6 +9,11 @@
 #ifndef iNewt_iNewt_h
 #define iNewt_iNewt_h
 
+#import "NewtCore.h"
+#import "NewtParser.h"
+#import "NewtVM.h"
 
+void iNewt_Setup(void);
+void iNewt_Cleanup(void);
 
 #endif
