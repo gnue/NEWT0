@@ -340,6 +340,8 @@
 				PREBINDING = NO;
 				PRODUCT_NAME = protoFILE;
 				SDKROOT = macosx;
+				SDKROOT_i386 = macosx;
+				SDKROOT_ppc = macosx;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost";
 				ZERO_LINK = YES;
@@ -374,6 +376,8 @@
 				PREBINDING = NO;
 				PRODUCT_NAME = protoFILE;
 				SDKROOT = macosx;
+				SDKROOT_i386 = macosx;
+				SDKROOT_ppc = macosx;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost";
 				ZERO_LINK = NO;
@@ -410,6 +414,8 @@
 				PREBINDING = NO;
 				PRODUCT_NAME = protoREGEX;
 				SDKROOT = macosx;
+				SDKROOT_i386 = macosx;
+				SDKROOT_ppc = macosx;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost";
 				ZERO_LINK = YES;
@@ -444,6 +450,8 @@
 				PREBINDING = NO;
 				PRODUCT_NAME = protoREGEX;
 				SDKROOT = macosx;
+				SDKROOT_i386 = macosx;
+				SDKROOT_ppc = macosx;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost";
 				ZERO_LINK = NO;
