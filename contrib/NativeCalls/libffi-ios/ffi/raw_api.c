@@ -28,6 +28,8 @@
 
 #include "ffi.h"
 #include "ffi_common.h"
+#include <stdlib.h>
+#include <string.h>
 
 #if !FFI_NO_RAW_API
 

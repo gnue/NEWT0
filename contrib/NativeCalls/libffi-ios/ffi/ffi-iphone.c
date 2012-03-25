@@ -32,6 +32,7 @@
 #include "ffi_common.h"
 
 #include <stdlib.h>
+#include <string.h>
 
 /* ffi_prep_args is called by the assembly routine once stack space
    has been allocated for the function's arguments */
