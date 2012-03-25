@@ -37,7 +37,7 @@
 #include <limits.h>
 #include <errno.h>
 #include <dlfcn.h>
-#include <ffi.h>
+#include <ffi/ffi.h>
 #include <libgen.h>
 #include <sys/types.h>
 #include <dirent.h>
