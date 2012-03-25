@@ -73,7 +73,7 @@ typedef struct SBufferZone {
  * @param outBuffer	on output, allocated buffer.
  */
 void
-AllocateBuffer(SBufferZone* outBuffer)
+NativeCalls_AllocateBuffer(SBufferZone* outBuffer)
 {
 	outBuffer->fNumberBuffers = 0;
 	outBuffer->fBufferTable = (void**) malloc(0);
@@ -85,7 +85,7 @@ AllocateBuffer(SBufferZone* outBuffer)
  * @param ioBuffer	buffer to release.
  */
 void
-ReleaseBuffer(SBufferZone* ioBuffer)
+NativeCalls_ReleaseBuffer(SBufferZone* ioBuffer)
 {
 	/* Iterate on all buffers */
 	int indexBuffers;
@@ -110,7 +110,7 @@ ReleaseBuffer(SBufferZone* ioBuffer)
  * @param inSize	segment size.
  */
 void*
-AllocateBufferSegment(SBufferZone* ioBuffer, int inSize)
+NativeCalls_AllocateBufferSegment(SBufferZone* ioBuffer, int inSize)
 {
 	void* theResult = malloc(inSize);
 	int newBufferCount = ++ioBuffer->fNumberBuffers;
@@ -129,7 +129,7 @@ AllocateBufferSegment(SBufferZone* ioBuffer, int inSize)
  *			a binary.
  */
 void*
-BinaryToPointer(newtRefArg inPointerBinary)
+NativeCalls_BinaryToPointer(newtRefArg inPointerBinary)
 {
 	void* theResult = NULL;
 
@@ -149,7 +149,7 @@ BinaryToPointer(newtRefArg inPointerBinary)
  * @return a binary holding this pointer.
  */
 newtRef
-PointerToBinary(void* inPointer)
+NativeCalls_PointerToBinary(void* inPointer)
 {
 	return NewtMakeBinary(
 				kNewtRefUnbind,
@@ -165,12 +165,12 @@ PointerToBinary(void* inPointer)
  * @param inLib	a reference to the library frame.
  */
 void
-CloseLib(newtRefArg inPointerBinary)
+NativeCalls_CloseLib(newtRefArg inPointerBinary)
 {
 	void* theHandle;
 
 	/* Get the handle */
-	theHandle = BinaryToPointer(inPointerBinary);
+	theHandle = NativeCalls_BinaryToPointer(inPointerBinary);
 	
 	if (theHandle)
 	{
@@ -187,7 +187,7 @@ CloseLib(newtRefArg inPointerBinary)
  * @return a handle or NULL
  */
 void*
-DoOpenLib(const char* inPath)
+NativeCalls_DoOpenLib(const char* inPath)
 {
 	void* theResult = NULL;
 	char* theDirNameBuf = NULL;
@@ -280,7 +280,7 @@ DoOpenLib(const char* inPath)
  * @return a reference to a library object.
  */
 newtRef
-OpenLib(const char* inPath)
+NativeCalls_OpenLib(const char* inPath)
 {
 	newtRefVar result;
 	char thePath[PATH_MAX];
@@ -296,7 +296,7 @@ OpenLib(const char* inPath)
 						"/lib/%s",
 						inPath );
 			thePath[PATH_MAX - 1] = 0;
-			theHandle = DoOpenLib(thePath);
+			theHandle = NativeCalls_DoOpenLib(thePath);
 			if (theHandle) break;
 	
 			/* try with /usr/lib/<inPath> */
@@ -306,19 +306,19 @@ OpenLib(const char* inPath)
 						"/usr/lib/%s",
 						inPath );
 			thePath[PATH_MAX - 1] = 0;
-			theHandle = DoOpenLib(thePath);
+			theHandle = NativeCalls_DoOpenLib(thePath);
 			if (theHandle) break;
 		}
 
 		/* try directly */
-		theHandle = DoOpenLib(inPath);
+		theHandle = NativeCalls_DoOpenLib(inPath);
 		if (theHandle) break;
 	} while (false);
 
 	if (theHandle)
 	{
 		/* Create a new binary */
-		result = PointerToBinary(theHandle);
+		result = NativeCalls_PointerToBinary(theHandle);
 	} else {
 		/* dlopen failed, let's throw the error string */
 		result = NewtThrow(kNErrNative, NewtMakeString(dlerror(), false));
@@ -335,7 +335,7 @@ OpenLib(const char* inPath)
  * @return the NS value, or nil if it couldn't be cast (or if the type is void).
  */
 newtRef
-CastResult(newtRefArg inNSType, SStorage* inValue)
+NativeCalls_CastResult(newtRefArg inNSType, SStorage* inValue)
 {
 	newtRefVar theResult;
 	
@@ -369,7 +369,7 @@ CastResult(newtRefArg inNSType, SStorage* inValue)
 		}
 	} else if (NewtSymbolEqual(inNSType, NSSYM(pointer))) {
 		if (inValue->fPointer) {
-			theResult = PointerToBinary(inValue->fPointer);
+			theResult = NativeCalls_PointerToBinary(inValue->fPointer);
 		} else {
 			theResult = kNewtRefNIL;
 		}
@@ -389,7 +389,7 @@ CastResult(newtRefArg inNSType, SStorage* inValue)
  * unknown (the exception would have already been thrown then).
  */
 bool
-CastType(newtRefArg inNSType, ffi_type** outFFIType)
+NativeCalls_CastType(newtRefArg inNSType, ffi_type** outFFIType)
 {
 	bool theResult = true;
 		
@@ -432,7 +432,7 @@ CastType(newtRefArg inNSType, ffi_type** outFFIType)
 
 /* forward declaration */
 bool
-CastTypeAndValue(
+NativeCalls_CastTypeAndValue(
 			newtRefArg inNSType,
 			newtRefArg inNSValue,
 			ffi_type** outFFIType,
@@ -454,7 +454,7 @@ CastTypeAndValue(
  * there was a typing error (the exception would have already been thrown then).
  */
 bool
-CastTypesAndValues(
+NativeCalls_CastTypesAndValues(
 		int inNbArgs,
 		newtRefVar inNSTypes,
 		newtRefVar inNSValues,
@@ -473,10 +473,10 @@ CastTypesAndValues(
 	bool 		typeError = false;	
 
 	/* build the ffi lists */
-	ffiArgsTypes = (ffi_type**) AllocateBufferSegment(ioStorage, ffitypes_size);
+	ffiArgsTypes = (ffi_type**) NativeCalls_AllocateBufferSegment(ioStorage, ffitypes_size);
 	bzero(ffiArgsTypes, ffitypes_size);
-	argsValues = (void**) AllocateBufferSegment(ioStorage, sizeof(void*) * inNbArgs);
-	argsStorage = (SStorage*) AllocateBufferSegment(ioStorage, storage_size);
+	argsValues = (void**) NativeCalls_AllocateBufferSegment(ioStorage, sizeof(void*) * inNbArgs);
+	argsStorage = (SStorage*) NativeCalls_AllocateBufferSegment(ioStorage, storage_size);
 	bzero(argsStorage, storage_size);
 	cursorStorage = argsStorage;
 	
@@ -489,7 +489,7 @@ CastTypesAndValues(
 		theValue = NewtGetArraySlot(inNSValues, indexArgs);
 		/* use the storage */
 		argsValues[indexArgs] = cursorStorage;
-		if (!CastTypeAndValue(
+		if (!NativeCalls_CastTypeAndValue(
 					theType,
 					theValue,
 					&ffiArgsTypes[indexArgs],
@@ -529,7 +529,7 @@ CastTypesAndValues(
  * there was a typing error (the exception would have already been thrown then).
  */
 bool
-CastTypeAndValue(
+NativeCalls_CastTypeAndValue(
 			newtRefArg inNSType,
 			newtRefArg inNSValue,
 			ffi_type** outFFIType,
@@ -550,7 +550,7 @@ CastTypeAndValue(
 		} else {
 			ffi_type** theTypes;
 			void* theValues;
-			theResult = CastTypesAndValues(
+			theResult = NativeCalls_CastTypesAndValues(
 				nbVals,
 				inNSType,
 				inNSValue,
@@ -561,7 +561,7 @@ CastTypeAndValue(
 			if (theResult) {
 				// Make the record.
 				ffi_type* theType = (ffi_type*)
-					AllocateBufferSegment(ioStorage, sizeof(ffi_type));
+					NativeCalls_AllocateBufferSegment(ioStorage, sizeof(ffi_type));
 				*outFFIType = theType;
 				theType->size = 0;
 				theType->alignment = 0;
@@ -725,7 +725,7 @@ CastTypeAndValue(
 			theSize = sizeof(void*);
 		} else if (NewtRefIsBinary(inNSValue)) {
 			*((void**) outFFIValue) =
-				BinaryToPointer(inNSValue);
+				NativeCalls_BinaryToPointer(inNSValue);
 			theSize = sizeof(void*);
 		} else {
 			(void) NewtThrow(kNErrNotABinaryObject, inNSValue);
@@ -748,7 +748,7 @@ CastTypeAndValue(
  * Generic (global) function with any number of arguments.
  */
 newtRef
-GenericFunction(newtRef inRcvr, newtRef inArgs)
+NativeCalls_GenericFunction(newtRef inRcvr, newtRef inArgs)
 {
 	ffi_cif		cif;
 	ffi_type**	ffiArgsTypes;
@@ -798,7 +798,7 @@ GenericFunction(newtRef inRcvr, newtRef inArgs)
 		return NewtThrow(kNErrNotAFrame, nativeLib);
 	}
 	theHandleRef = NcGetSlot(nativeLib, NSSYM(_handle));
-	theHandle = BinaryToPointer(theHandleRef);
+	theHandle = NativeCalls_BinaryToPointer(theHandleRef);
 	if (theHandle == NULL)
 	{
 		/* some problem occurred */
@@ -816,12 +816,12 @@ GenericFunction(newtRef inRcvr, newtRef inArgs)
 	}
 
 	/* build the ffi lists */
-	AllocateBuffer(&storage);
-	CastTypesAndValues(nbArgs, argTypes, inArgs, &ffiArgsTypes, &argsValues, NULL, &storage);
+	NativeCalls_AllocateBuffer(&storage);
+	NativeCalls_CastTypesAndValues(nbArgs, argTypes, inArgs, &ffiArgsTypes, &argsValues, NULL, &storage);
 	
 	if (!typeError)
 	{
-		if (!CastType( resultType, &ffiResultType ))
+		if (!NativeCalls_CastType( resultType, &ffiResultType ))
 		{
 			typeError = true;
 		}
@@ -836,7 +836,7 @@ GenericFunction(newtRef inRcvr, newtRef inArgs)
 			ffi_call(&cif, theSymbolPtr, &result, argsValues);
 			
 			/* Cast the result. */
-			resultRef = CastResult(resultType, &result);
+			resultRef = NativeCalls_CastResult(resultType, &result);
 		} else {
 			resultRef = NewtThrow(
 						kNErrNative,
@@ -844,7 +844,7 @@ GenericFunction(newtRef inRcvr, newtRef inArgs)
 		}
 	}
 
-	ReleaseBuffer(&storage);
+	NativeCalls_ReleaseBuffer(&storage);
 
 	return resultRef;
 }
@@ -861,7 +861,7 @@ GenericFunction(newtRef inRcvr, newtRef inArgs)
  * @return NIL
  */
 newtRef
-OpenNativeLibrary(
+NativeCalls_OpenNativeLibrary(
 	newtRefArg inRcvr,
 	newtRefArg inName)
 {
@@ -877,7 +877,7 @@ OpenNativeLibrary(
 	}
 
 	/* grab the handle on the lib */
-	theHandleRef = OpenLib(NewtRefToString(inName));
+	theHandleRef = NativeCalls_OpenLib(NewtRefToString(inName));
 	if (NewtRefIsNotNIL(theHandleRef))
 	{
 		/* create the frame */
@@ -932,7 +932,7 @@ OpenNativeLibrary(
  * @return NIL
  */
 newtRef
-GetFunction(
+NativeCalls_GetFunction(
 	newtRefArg inRcvr,
 	newtRefArg inSpec)
 {
@@ -974,7 +974,7 @@ GetFunction(
 	
 	/* create the function object */
 	functionObject = 
-		NewtMakeNativeFunc0(GenericFunction, 0, true, (char*) NewtRefToString(functionName));
+		NewtMakeNativeFunc0(NativeCalls_GenericFunction, 0, true, (char*) NewtRefToString(functionName));
 	
 	/* stuff information to call the native function */
 	NcSetSlot(functionObject, NSSYM(_lib), inRcvr);
@@ -1000,7 +1000,7 @@ GetFunction(
  * @return NIL
  */
 newtRef
-DefGlobalFn(
+NativeCalls_DefGlobalFn(
 	newtRefArg inRcvr,
 	newtRefArg inSymbol,
 	newtRefArg inSpec)
@@ -1017,7 +1017,7 @@ DefGlobalFn(
 	}
 	
 	/* Get the object */
-	functionObject = GetFunction(inRcvr, inSpec);
+	functionObject = NativeCalls_GetFunction(inRcvr, inSpec);
 	
 	/* add the function to the list */
 	libList = NcGetSlot(inRcvr, NSSYM(_globalFns));
@@ -1040,7 +1040,7 @@ DefGlobalFn(
  * @param inRcvr	self.
  */
 newtRef
-GetErrno(newtRefArg inRcvr)
+NativeCalls_GetErrno(newtRefArg inRcvr)
 {
 	(void) inRcvr;
 
@@ -1056,7 +1056,7 @@ GetErrno(newtRefArg inRcvr)
  * @return nil
  */
 newtRef
-Close(newtRefArg inRcvr)
+NativeCalls_Close(newtRefArg inRcvr)
 {
 	newtRefVar theHandleRef;
 	newtRefVar theGlobalFnsList;
@@ -1086,7 +1086,7 @@ Close(newtRefArg inRcvr)
 		void* theHandle;
 	
 		/* Get the handle */
-		theHandle = BinaryToPointer(theHandleRef);
+		theHandle = NativeCalls_BinaryToPointer(theHandleRef);
 		
 		if (theHandle)
 		{
@@ -1104,40 +1104,46 @@ Close(newtRefArg inRcvr)
 /**
  * Install the global functions and the global variable.
  */
-
-void newt_install(void)
+void NativeCalls_install(void) 
 {
 	newtRefVar magicPtr;
-
+  
 	// Add the OpenNativeLibrary global function.
 	NewtDefGlobalFunc(
-		NSSYM(OpenNativeLibrary),
-		OpenNativeLibrary,
-		1,
-		"OpenNativeLibrary(lib)");
-
+                    NSSYM(OpenNativeLibrary),
+                    NativeCalls_OpenNativeLibrary,
+                    1,
+                    "OpenNativeLibrary(lib)");
+  
 	// Add the GetErrno global function.
 	NewtDefGlobalFunc(
-		NSSYM(GetErrno),
-		GetErrno,
-		0,
-		"GetErrno()");
-
+                    NSSYM(GetErrno),
+                    NativeCalls_GetErrno,
+                    0,
+                    "GetErrno()");
+  
 	// Create magic pointer (for libraries methods).
 	magicPtr = NcMakeFrame();
-
+  
 	NcSetSlot(magicPtr,
-		NSSYM(Close),
-		NewtMakeNativeFunc(
-			Close, 0, "Close()"));
+            NSSYM(Close),
+            NewtMakeNativeFunc(
+                               NativeCalls_Close, 0, "Close()"));
 	NcSetSlot(magicPtr,
-		NSSYM(GetFunction),
-		NewtMakeNativeFunc(
-			GetFunction, 1, "GetFunction(spec)"));
+            NSSYM(GetFunction),
+            NewtMakeNativeFunc(
+                               NativeCalls_GetFunction, 1, "GetFunction(spec)"));
 	NcSetSlot(magicPtr,
-		NSSYM(DefGlobalFn),
-		NewtMakeNativeFunc(
-			DefGlobalFn, 2, "DefGlobalFn(symbol, spec)"));
-
+            NSSYM(DefGlobalFn),
+            NewtMakeNativeFunc(
+                               NativeCalls_DefGlobalFn, 2, "DefGlobalFn(symbol, spec)"));
+  
 	NcDefMagicPointer(kLibParentMagicPtrKey, magicPtr);
 }
+
+#if !TARGET_OS_IPHONE
+void newt_install(void)
+{
+  NativeCalls_install();
+}
+#endif
