@@ -38,7 +38,7 @@
 
 // ObjC & Cocoa
 #import <objc/objc.h>
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 
 // NEWT/0
 #include "NewtCore.h"
