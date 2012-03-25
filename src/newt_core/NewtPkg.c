@@ -299,7 +299,7 @@ void PkgWriteU32(pkg_stream_t *pkg, uint32_t offset, uint32_t v)
 void PgkWriteVarData(pkg_stream_t *pkg, uint32_t offset, newtRefVar frame, newtRefVar sym)
 {
 	newtRef info;
-	uint32_t ix;
+	int32_t ix;
 	
 	PkgWriteU32(pkg, offset, 0);
 
