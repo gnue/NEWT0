@@ -159,7 +159,7 @@ extern ffi_type ffi_type_float;
 extern ffi_type ffi_type_double;
 extern ffi_type ffi_type_pointer;
 
-#if 1 /* @HAVE_LONG_DOUBLE@ */
+#if 0 /* @HAVE_LONG_DOUBLE@ */
 extern ffi_type ffi_type_longdouble;
 #else
 #define ffi_type_longdouble ffi_type_double
