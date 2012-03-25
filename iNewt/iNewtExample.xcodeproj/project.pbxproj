@@ -16,13 +16,14 @@
 		F1ABAF08151F8E500054D84B /* NWViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1ABAF07151F8E500054D84B /* NWViewController.m */; };
 		F1ABAF0B151F8E500054D84B /* NWViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = F1ABAF09151F8E500054D84B /* NWViewController_iPhone.xib */; };
 		F1ABAF0E151F8E500054D84B /* NWViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = F1ABAF0C151F8E500054D84B /* NWViewController_iPad.xib */; };
-		F1ABAF60151F91210054D84B /* basicFns.newt in Resources */ = {isa = PBXBuildFile; fileRef = F1ABAF56151F91210054D84B /* basicFns.newt */; };
-		F1ABAF62151F91210054D84B /* easter.newt in Resources */ = {isa = PBXBuildFile; fileRef = F1ABAF58151F91210054D84B /* easter.newt */; };
-		F1ABAF64151F91210054D84B /* exception.newt in Resources */ = {isa = PBXBuildFile; fileRef = F1ABAF5A151F91210054D84B /* exception.newt */; };
-		F1ABAF65151F91210054D84B /* fib.newt in Resources */ = {isa = PBXBuildFile; fileRef = F1ABAF5B151F91210054D84B /* fib.newt */; };
-		F1ABAF66151F91210054D84B /* inherit.newt in Resources */ = {isa = PBXBuildFile; fileRef = F1ABAF5C151F91210054D84B /* inherit.newt */; };
 		F1ABAF79151F91DF0054D84B /* libiNewt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F1ABAF78151F91D70054D84B /* libiNewt.a */; };
 		F1ABAF7C151F937C0054D84B /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F1ABAF7B151F937C0054D84B /* libiconv.dylib */; };
+		F1ABAFBE151FB2650054D84B /* basicFns.newt in Resources */ = {isa = PBXBuildFile; fileRef = F1ABAFB5151FB2650054D84B /* basicFns.newt */; };
+		F1ABAFC0151FB2650054D84B /* easter.newt in Resources */ = {isa = PBXBuildFile; fileRef = F1ABAFB7151FB2650054D84B /* easter.newt */; };
+		F1ABAFC2151FB2650054D84B /* exception.newt in Resources */ = {isa = PBXBuildFile; fileRef = F1ABAFB9151FB2650054D84B /* exception.newt */; };
+		F1ABAFC3151FB2650054D84B /* fib.newt in Resources */ = {isa = PBXBuildFile; fileRef = F1ABAFBA151FB2650054D84B /* fib.newt */; };
+		F1ABAFC4151FB2650054D84B /* inherit.newt in Resources */ = {isa = PBXBuildFile; fileRef = F1ABAFBB151FB2650054D84B /* inherit.newt */; };
+		F1ABAFC6151FB2650054D84B /* regex.newt in Resources */ = {isa = PBXBuildFile; fileRef = F1ABAFBD151FB2650054D84B /* regex.newt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,13 +51,14 @@
 		F1ABAF07151F8E500054D84B /* NWViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NWViewController.m; sourceTree = "<group>"; };
 		F1ABAF0A151F8E500054D84B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/NWViewController_iPhone.xib; sourceTree = "<group>"; };
 		F1ABAF0D151F8E500054D84B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/NWViewController_iPad.xib; sourceTree = "<group>"; };
-		F1ABAF56151F91210054D84B /* basicFns.newt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = basicFns.newt; path = ../../sample/basicFns.newt; sourceTree = "<group>"; };
-		F1ABAF58151F91210054D84B /* easter.newt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = easter.newt; path = ../../sample/easter.newt; sourceTree = "<group>"; };
-		F1ABAF5A151F91210054D84B /* exception.newt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = exception.newt; path = ../../sample/exception.newt; sourceTree = "<group>"; };
-		F1ABAF5B151F91210054D84B /* fib.newt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = fib.newt; path = ../../sample/fib.newt; sourceTree = "<group>"; };
-		F1ABAF5C151F91210054D84B /* inherit.newt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = inherit.newt; path = ../../sample/inherit.newt; sourceTree = "<group>"; };
 		F1ABAF70151F91D70054D84B /* iNewt.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = iNewt.xcodeproj; sourceTree = "<group>"; };
 		F1ABAF7B151F937C0054D84B /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
+		F1ABAFB5151FB2650054D84B /* basicFns.newt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = basicFns.newt; path = ../../sample/basicFns.newt; sourceTree = "<group>"; };
+		F1ABAFB7151FB2650054D84B /* easter.newt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = easter.newt; path = ../../sample/easter.newt; sourceTree = "<group>"; };
+		F1ABAFB9151FB2650054D84B /* exception.newt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = exception.newt; path = ../../sample/exception.newt; sourceTree = "<group>"; };
+		F1ABAFBA151FB2650054D84B /* fib.newt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = fib.newt; path = ../../sample/fib.newt; sourceTree = "<group>"; };
+		F1ABAFBB151FB2650054D84B /* inherit.newt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = inherit.newt; path = ../../sample/inherit.newt; sourceTree = "<group>"; };
+		F1ABAFBD151FB2650054D84B /* regex.newt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = regex.newt; path = ../../sample/regex.newt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,11 +135,12 @@
 		F1ABAF55151F91060054D84B /* Newt Scripts */ = {
 			isa = PBXGroup;
 			children = (
-				F1ABAF56151F91210054D84B /* basicFns.newt */,
-				F1ABAF58151F91210054D84B /* easter.newt */,
-				F1ABAF5A151F91210054D84B /* exception.newt */,
-				F1ABAF5B151F91210054D84B /* fib.newt */,
-				F1ABAF5C151F91210054D84B /* inherit.newt */,
+				F1ABAFB5151FB2650054D84B /* basicFns.newt */,
+				F1ABAFB7151FB2650054D84B /* easter.newt */,
+				F1ABAFB9151FB2650054D84B /* exception.newt */,
+				F1ABAFBA151FB2650054D84B /* fib.newt */,
+				F1ABAFBB151FB2650054D84B /* inherit.newt */,
+				F1ABAFBD151FB2650054D84B /* regex.newt */,
 			);
 			name = "Newt Scripts";
 			sourceTree = "<group>";
@@ -220,11 +223,12 @@
 				F1ABAEFF151F8E500054D84B /* InfoPlist.strings in Resources */,
 				F1ABAF0B151F8E500054D84B /* NWViewController_iPhone.xib in Resources */,
 				F1ABAF0E151F8E500054D84B /* NWViewController_iPad.xib in Resources */,
-				F1ABAF60151F91210054D84B /* basicFns.newt in Resources */,
-				F1ABAF62151F91210054D84B /* easter.newt in Resources */,
-				F1ABAF64151F91210054D84B /* exception.newt in Resources */,
-				F1ABAF65151F91210054D84B /* fib.newt in Resources */,
-				F1ABAF66151F91210054D84B /* inherit.newt in Resources */,
+				F1ABAFBE151FB2650054D84B /* basicFns.newt in Resources */,
+				F1ABAFC0151FB2650054D84B /* easter.newt in Resources */,
+				F1ABAFC2151FB2650054D84B /* exception.newt in Resources */,
+				F1ABAFC3151FB2650054D84B /* fib.newt in Resources */,
+				F1ABAFC4151FB2650054D84B /* inherit.newt in Resources */,
+				F1ABAFC6151FB2650054D84B /* regex.newt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -324,6 +328,7 @@
 				HEADER_SEARCH_PATHS = (
 					../src/newt_core/incs/,
 					../src/newt_core/incs/darwin,
+					iNewt,
 				);
 				INFOPLIST_FILE = "iNewtExample/iNewtExample-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -339,6 +344,7 @@
 				HEADER_SEARCH_PATHS = (
 					../src/newt_core/incs/,
 					../src/newt_core/incs/darwin,
+					iNewt,
 				);
 				INFOPLIST_FILE = "iNewtExample/iNewtExample-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";

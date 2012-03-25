@@ -60,6 +60,15 @@ void newt_result_message(newtRefArg r, newtErr err)
     for (NSString *aScriptPath in newtScripts) {
       [self interpretNewtFile:aScriptPath];
     }
+    NVMInterpretStr("local libc := OpenNativeLibrary(\"libc\");\
+                    libc:DefGlobalFn(\
+                                     '|libc.printf|,\
+                                     {name: \"printf\",\
+                                     args: ['string],\
+                                     result: 'sint32});\
+                    |libc.printf|(\"Hello from NEWT0!\\n\");\
+                    libc:Close();\
+                    ", NULL);
     iNewt_Cleanup();
   });
 }
