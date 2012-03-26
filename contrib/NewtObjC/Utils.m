@@ -409,10 +409,10 @@ newtRef
 CGRectToRef(CGRect inRect)
 {
 	newtRefVar theFrame = NcMakeFrame();
-	NcSetSlot(theFrame, NSSYM(top), NewtMakeReal(CGMinY(inRect)));
-	NcSetSlot(theFrame, NSSYM(left), NewtMakeReal(CGMinX(inRect)));
-	NcSetSlot(theFrame, NSSYM(bottom), NewtMakeReal(CGMaxY(inRect)));
-	NcSetSlot(theFrame, NSSYM(right), NewtMakeReal(CGMaxX(inRect)));
+	NcSetSlot(theFrame, NSSYM(top), NewtMakeReal(CGRectGetMinY(inRect)));
+	NcSetSlot(theFrame, NSSYM(left), NewtMakeReal(CGRectGetMinX(inRect)));
+	NcSetSlot(theFrame, NSSYM(bottom), NewtMakeReal(CGRectGetMaxY(inRect)));
+	NcSetSlot(theFrame, NSSYM(right), NewtMakeReal(CGRectGetMaxX(inRect)));
 	return theFrame;
 }
 

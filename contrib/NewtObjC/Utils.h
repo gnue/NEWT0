@@ -43,8 +43,9 @@
 
 #if !TARGET_OS_IPHONE
 # include <Cocoa/Cocoa.h>
-#else
-# include <UIKit/UIKit.h>
+#else 
+# include <CoreGraphics/CGGeometry.h>
+# include <Foundation/NSRange.h>
 #endif
 
 // NEWT/0
