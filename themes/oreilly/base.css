@@ -1,0 +1,24 @@
+/* mixin */
+/* basic style */
+body {
+  color: #333;
+  font-size: 14px;
+  font-family: Arial,Verdana,'Bitstream Vera Sans',Helvetica,sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased; }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: Arial,Verdana,'Bitstream Vera Sans',Helvetica,sans-serif;
+  font-weight: bold;
+  letter-spacing: -0.018em;
+  page-break-after: avoid; }
+
+/* code */
+code {
+  display: block;
+  font-family: monospace;
+  white-space: pre;
+  background: #F7F7F7;
+  border: 1px solid #D7D7D7;
+  padding: 4px 12px 4px;
+  margin-left: 1em; }

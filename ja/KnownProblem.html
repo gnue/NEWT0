@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet" type="text/css" href="http://gnue.github.com/NEWT0/themes/oreilly/style.css" />
+
+<title>既知の問題 ≪ NEWT/0</title>
+
+</head>
+
+<body>
+
+<div id="page">
+
+<header>
+
+
+<a href="http://gnue.github.com/NEWT0/ja"><img src="http://gnue.github.com/NEWT0/images/iguana.jpg" class="logo" alt="logo" height="64px" /></a>
+
+
+</header>
+
+<div class="content">
+<h4>制限事項</h4>
+
+<ul>
+<li>GC を特定の場所でしか行いません</li>
+</ul>
+
+
+<p>GC 発生時にＣ言語のスタック上（引数、自動変数）にしかない参照が解放されてしまわない対策が行われていません。そのため任意のタイミングでGC を発生させると問題が発生します。現在はメモリの使用量を見て GC が必要になるとフラグをたてて VM ループの特定の場所でのみ GC 処理を行うようにしています。この方法には Heap メモリの少ないマシンでのクリティカルな状況に対応できないという問題があります。</p>
+
+<p>ruby は保守的 GC という手法でＣ言語のスタックを走査しています。<br/>
+Newton は C++ のクラス（RefVar, RefArg）をうまく使うことでこの問題を解決しているようです。</p>
+
+<h4>既知の問題</h4>
+
+<ul>
+<li><p>if 文で else の前に ; が使えない</p>
+
+<p>  if a = 0 then</p>
+
+<pre><code>a := 1                              // ; があるとエラーになる
+</code></pre>
+
+  else
+
+<pre><code>a := 2;
+</code></pre></li>
+<li><p>try 文で onexception が複数ある場合途中の onexception では ; が使えない</p>
+
+<p>  try</p>
+
+<pre><code>a := 1;
+</code></pre>
+
+  onexception |ext.ex.msg| do
+
+<pre><code>a := 2                              // ; があるとエラーになる
+</code></pre>
+
+  onexception |ext.ex| do
+
+<pre><code>a := 3;
+</code></pre></li>
+</ul>
+
+
+<p>※どちらも yacc でちゃんと書いたつもりなのですがうまくいってません。少し修正すると部分的にはよくなりますが、他の構文でエラーが出るようになってしまってなかなかうまくいきません...</p>
+
+<h4>未実装</h4>
+
+<ul>
+<li>0 での割算。Inf（無限大）</li>
+</ul>
+
+
+<p>本家では 0 で割算をするとエラーを発生せずに Inf という値を返します。<br/>
+現在は 0 で割算をするとエラー（例外）を発生するようになっています。</p>
+
+<ul>
+<li>独自のメモリ管理</li>
+<li>2 byte 文字対応（日本語）</li>
+</ul>
+
+
+<h4>その他</h4>
+
+<ul>
+<li>エラーメッセージが貧弱です</li>
+<li>エラーチェックが貧弱です</li>
+<li>構文エラーで適切なメッセージを出していません</li>
+<li>定数の最適化を行っていません</li>
+</ul>
+
+
+</div>
+
+<footer>
+<div id="lang"><a href="http://gnue.github.com/NEWT0/">English</a> | <a href="http://gnue.github.com/NEWT0/ja">Japanese</a></div>
+</footer>
+
+</div>
+</body>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet" type="text/css" href="http://gnue.github.com/NEWT0/themes/oreilly/style.css" />
+
+<title>使い方 ≪ NEWT/0</title>
+
+</head>
+
+<body>
+
+<div id="page">
+
+<header>
+
+
+<a href="http://gnue.github.com/NEWT0/ja"><img src="http://gnue.github.com/NEWT0/images/iguana.jpg" class="logo" alt="logo" height="64px" /></a>
+
+
+</header>
+
+<div class="content">
+<h4>使い方</h4>
+
+<p>まずは UNIX コマンドのお約束、-h オプションで Usage が見れます</p>
+
+<pre><code>% newt -h
+
+Usage: newt [switches] [--] [programfile]
+  -t              enable trace mode           …  トレースモードで実行します
+  -l              dump lex info               …  字句解析時の情報表示
+  -s              dump syntax tree            …  構文木を表示
+  -b              dump byte code              …  バイトコードを表示
+  -C directory    change working directory    …  作業ディレクトリの変更
+  -e 'command'    one line of script          …  引数のスクリプトを実行
+  -i [symbols]    print function info         …  組込み関数の説明を表示
+                                                 引数がなければ全関数を表示
+  -v              print version number        …  バージョンを表示
+  -h              print this help message     …  このメッセージを表示
+  --copyright     print copyright             …  コピーライトを表示
+  --version       print version number        …  バージョンを表示（-v と同じ）
+</code></pre>
+
+<p>スクリプトの実行。ま、普通のスクリプト言語とほぼ同じです。</p>
+
+<pre><code>% newt ファイル名         …  スクリプトファイルを実行
+% newt &lt; ファイル名       …  標準入力から読込んで実行
+% ファイル名              …  スクリプトファイルの１行目が #!newt の場合(*1)
+</code></pre>
+
+<p><em>1) NewtonScript のコメントは /</em> */ と // のみですが、UNIX の #! を使えるようにするために、ファイルの１文字目が # のときのみその行はコメントとして扱われる特別処置をしています</p>
+
+</div>
+
+<footer>
+<div id="lang"><a href="http://gnue.github.com/NEWT0/">English</a> | <a href="http://gnue.github.com/NEWT0/ja">Japanese</a></div>
+</footer>
+
+</div>
+</body>

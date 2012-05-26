@@ -1,0 +1,130 @@
+/* mixin */
+/* basic style */
+body {
+  color: #333;
+  font-size: 14px;
+  font-family: Arial,Verdana,'Bitstream Vera Sans',Helvetica,sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased; }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: Arial,Verdana,'Bitstream Vera Sans',Helvetica,sans-serif;
+  font-weight: bold;
+  letter-spacing: -0.018em;
+  page-break-after: avoid; }
+
+/* code */
+code {
+  display: block;
+  font-family: monospace;
+  white-space: pre;
+  background: #F7F7F7;
+  border: 1px solid #D7D7D7;
+  padding: 4px 12px 4px;
+  margin-left: 1em; }
+
+/* GitHub Badge */
+#github {
+  right: -24px;
+  top: 32px;
+  position: absolute;
+  text-decoration: none;
+  text-align: right;
+  width: 320px;
+  -moz-transform: translate(60px, 42px) rotate(45deg);
+  -webkit-transform: translate(60px, 42px) rotate(45deg);
+  transform: translate(60px, 42px) rotate(45deg); }
+  #github span {
+    background: black;
+    color: white;
+    font-size: 14px;
+    left: 0;
+    padding: 5px 0;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    font-family: Arial,Verdana,'Bitstream Vera Sans',Helvetica,sans-serif;
+    font-weight: bold;
+    -moz-box-shadow: rgba(0, 0, 0, 0.2) 1px 1px 10px;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.2) 1px 1px 10px;
+    box-shadow: rgba(0, 0, 0, 0.2) 1px 1px 10px; }
+
+/* O'reilly Like Style */
+#page {
+  width: 800px;
+  margin: auto;
+  border: 1px solid #888;
+  padding: 0 36px 0;
+  position: relative;
+  -moz-box-shadow: 2px 2px 6px rgba(100, 100, 100, 0.6);
+  -webkit-box-shadow: 2px 2px 6px rgba(100, 100, 100, 0.6);
+  box-shadow: 2px 2px 6px rgba(100, 100, 100, 0.6); }
+
+header {
+  border-top: 12px solid #00cc99;
+  padding: 0; }
+
+header a:link {
+  text-decoration: none; }
+
+.top-page header {
+  text-align: center; }
+
+footer {
+  text-align: center;
+  padding: 0 0 8px; }
+
+#lang {
+  font-size: 11px;
+  font-weight: bold; }
+
+#lang a:link,
+#lang a:visited {
+  text-decoration: none;
+  color: #444; }
+
+.tagline {
+  color: black;
+  font-family: garamond, times new roman, times, serif;
+  font-style: italic;
+  font-weight: normal;
+  font-size: 21px;
+  padding: 0 0 20px 0;
+  margin: 8px 0 0;
+  text-align: center; }
+
+.subtitle {
+  color: black;
+  font-family: garamond, times new roman, times, serif;
+  font-style: italic;
+  font-weight: normal;
+  font-size: 28px;
+  padding: 0;
+  margin: 0 0 4px;
+  text-align: left; }
+
+.title {
+  background: #00cc99;
+  color: white;
+  font-family: garamond, times new roman, times, serif;
+  font-weight: normal;
+  font-size: 84px;
+  text-align: center;
+  margin: 0 0 30px 0;
+  line-height: 100%; }
+
+.logo {
+  margin: 12px; }
+
+.content {
+  margin: 24px 30px 24px; }
+
+#author {
+  color: black;
+  font-family: garamond, times new roman, times, serif;
+  font-style: italic;
+  font-weight: normal;
+  font-size: 18px;
+  padding: 0;
+  margin: 0;
+  text-align: right; }

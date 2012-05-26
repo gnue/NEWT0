@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet" type="text/css" href="http://gnue.github.com/NEWT0/themes/oreilly/style.css" />
+
+<title>本家との相違点など ≪ NEWT/0</title>
+
+</head>
+
+<body>
+
+<div id="page">
+
+<header>
+
+
+<a href="http://gnue.github.com/NEWT0/ja"><img src="http://gnue.github.com/NEWT0/images/iguana.jpg" class="logo" alt="logo" height="64px" /></a>
+
+
+</header>
+
+<div class="content">
+<h4>本家との相違点など</h4>
+
+<ul>
+<li><p>文字列は 1 Byte（ASCII）コード</p>
+
+<p>※日本語対応はたぶん ShiftJIS, EUC, UTF-8 で行うことになると思う</p></li>
+<li><p>型指定の int, array と関数定義の native キーワードは無視されます</p></li>
+<li>リテラルはリードオンリーです。副作用がある操作は Clone して使う必要があります（パッケージと同じ扱い）</li>
+</ul>
+
+
+<h4>独自拡張</h4>
+
+<ul>
+<li>ファイル先頭の # は１行目をコメント扱い（#! 実行に対応）</li>
+<li><p>NIL とは別に #UNBIND という内部状態（特殊即値）を追加。</p>
+
+<p>いまのところ #UNBIND は構文上では入力方法がありません。動作上は NIL と同じように扱われます</p></li>
+<li><p>== 演算子の追加</p>
+
+<p>= 演算子よりも強い比較を行いします</p></li>
+<li><p>不定長引数のサポート</p>
+
+<p>３点リーダーのある args に残りの引数が配列として束縛されます。</p>
+
+<p>  例：　 func(a1, a2, args...)</p></li>
+<li><p>名前付マジックポインタの追加</p>
+
+<p>@name 形式のマジックポインタ（名前付マジックポインタ：Named Magic Pointer）を使用できるようにしました。<br/>
+Newton オリジナルのマジックポインタ（@1 形式）とは併用できません。<br/>
+互換性のため "NewtConf.h" で <code>__NAMED_MAGIC_POINTER__</code> をコメントアウトすることにより Newton オリジナルのマジックポインタの使用を選択することができます。</p></li>
+<li><p>マジックポインタの定義構文を追加</p>
+
+<p>  @name := {a: 1, b: 2};      // 名前付マジックポインタ
+  @1 := {a: 1, b: 2};     // Newton オリジナルのマジックポインタ</p></li>
+<li><p>バイナリオブジェクト表現の追加</p>
+
+<p>本家ではバイナリオブジェクトを直接記述することはできませんでしたが、次の構文でバイナリオブジェクトを直接記述することをできるようにしました</p>
+
+<pre><code>  &lt;#class: n1, n2, ....&gt;
+  &lt;# n1, n2, ....&gt;
+
+  ※ n1, n2, ... は数値（１０進数、１６進数） 
+</code></pre></li>
+<li><p>32bit 符号付き整数のサポート</p></li>
+<li><p>正規表現オブジェクト表現を追加</p>
+
+<p>/正規表現のパターン/オプション</p>
+
+<p>  例： /[a-zA-Z]+/im</p>
+
+<p>上記の正規表現は実行時に</p>
+
+<pre><code>  {_proto: @protoREGEX, pattern: "[a-zA-Z]+", option: "im"}
+</code></pre>
+
+<p>として展開されます。</p>
+
+<p>重要：実際に正規表現の機能を使用するには拡張ライブラリ protoREGEX が必要です。その機能は拡張ライブラリに依存します。</p></li>
+</ul>
+
+
+<h4>その他</h4>
+
+<p>本家 NewtonScript の関数オブジェクトをダンプして</p>
+
+<pre><code>fn := '{
+    class: CodeBlock,
+    instructions: &lt;#instructions: 0x27, 0x00, 0x08, 0xA8, 0x70, 0x02&gt;,
+    literals: [literals: a],
+    argFrame: {_nextArgFrame: NIL, _parent: NIL, _implementor: NIL},
+    numArgs: 0
+};
+
+call fn with ();
+</code></pre>
+
+<p>と表現することにより、本家 NewtonScript のバイトコードを実行することができます。</p>
+
+</div>
+
+<footer>
+<div id="lang"><a href="http://gnue.github.com/NEWT0/">English</a> | <a href="http://gnue.github.com/NEWT0/ja">Japanese</a></div>
+</footer>
+
+</div>
+</body>
