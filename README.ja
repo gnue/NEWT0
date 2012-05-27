@@ -1,11 +1,11 @@
 
 
-* NEWT/0 ‚É‚Â‚¢‚Ä
+* NEWT/0 ã«ã¤ã„ã¦
 
-NEWT/0 ‚Í Apple ‚Ì PDA gNewtonh ‚É‚¨‚¢‚Ä“®ì‚µ‚Ä‚¢‚½ƒvƒƒgƒ^ƒCƒvŽwŒüŒ¾Œê NewtonScript ‚ÌƒIƒŠƒWƒiƒ‹ŽÀ‘•‚Å‚·BƒRƒ}ƒ“ƒhƒ‰ƒCƒ“‚æ‚è NewtonScript ‚Ìƒ\[ƒXƒR[ƒh‚ð“Çž‚ñ‚ÅŽÀs‚·‚é‚±‚Æ‚ª‚Å‚«‚Ü‚·B
+NEWT/0 ã¯ Apple ã® PDA â€œNewtonâ€ ã«ãŠã„ã¦å‹•ä½œã—ã¦ã„ãŸãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ—æŒ‡å‘è¨€èªž NewtonScript ã®ã‚ªãƒªã‚¸ãƒŠãƒ«å®Ÿè£…ã§ã™ã€‚ã‚³ãƒžãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³ã‚ˆã‚Š NewtonScript ã®ã‚½ãƒ¼ã‚¹ã‚³ãƒ¼ãƒ‰ã‚’èª­è¾¼ã‚“ã§å®Ÿè¡Œã™ã‚‹ã“ã¨ãŒã§ãã¾ã™ã€‚
 
 
-* “®ìŠÂ‹«
+* å‹•ä½œç’°å¢ƒ
 
   Mac OS X
   Darwin
@@ -15,44 +15,44 @@ NEWT/0 ‚Í Apple ‚Ì PDA gNewtonh ‚É‚¨‚¢‚Ä“®ì‚µ‚Ä‚¢‚½ƒvƒƒgƒ^ƒCƒvŽwŒüŒ¾Œê Newto
   BeOS
 
 
-* ƒRƒ“ƒpƒCƒ‹•û–@
+* ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«æ–¹æ³•
 
- - Mac OS X 10.3 ˆÈã
-   Xcode ‚É‚æ‚èŠg’£Žq .xcode ‚ÌƒvƒƒWƒFƒNƒg‚ðƒRƒ“ƒpƒCƒ‹‚µ‚Ü‚·
+ - Mac OS X 10.3 ä»¥ä¸Š
+   Xcode ã«ã‚ˆã‚Šæ‹¡å¼µå­ .xcode ã®ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆã‚’ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã—ã¾ã™
 
- - Mac OS X 10.2 ˆÈ‰º^Darwin
+ - Mac OS X 10.2 ä»¥ä¸‹ï¼Darwin
  - Linux
  - BeOS
-   make ‚µ‚Ü‚·
+   make ã—ã¾ã™
 
  - FreeBSD
-   GNU make(gmake) ‚ðŽg—p‚µ make ‚µ‚Ü‚·
+   GNU make(gmake) ã‚’ä½¿ç”¨ã— make ã—ã¾ã™
 
  - Windows
-   MinGW+MSYS ã‚Å make ‚µ‚Ü‚·
+   MinGW+MSYS ä¸Šã§ make ã—ã¾ã™
 
 
-* doxygen ‚É‚Â‚¢‚Ä
+* doxygen ã«ã¤ã„ã¦
 
-  doxygen doxygen.conf ‚Åƒ\[ƒXƒR[ƒh‚æ‚èƒhƒLƒ…ƒƒ“ƒg‚ð¶¬‚·‚é‚±‚Æ‚ª‚Å‚«‚Ü‚·B
-  ŠÂ‹«‚É‡‚í‚¹‚Ä doxygen.conf@‚ðC³‚µ‚Ä‰º‚³‚¢B
+  doxygen doxygen.conf ã§ã‚½ãƒ¼ã‚¹ã‚³ãƒ¼ãƒ‰ã‚ˆã‚Šãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã‚’ç”Ÿæˆã™ã‚‹ã“ã¨ãŒã§ãã¾ã™ã€‚
+  ç’°å¢ƒã«åˆã‚ã›ã¦ doxygen.confã€€ã‚’ä¿®æ­£ã—ã¦ä¸‹ã•ã„ã€‚
 
-  —áF
+  ä¾‹ï¼š
     # cd misc
     # doxygen Doxyfile
 
 
-* ‚»‚Ì‘¼
+* ãã®ä»–
 
- - Mac OS X ‚Åì‹Æ‚ð‚µ‚Ä‚¢‚é‚½‚ß .DS_Store ‚È‚Ç‚ÌƒSƒ~ƒtƒ@ƒCƒ‹‚ª¬Ý‚µ‚Ä‚¢‚éê‡‚ª‚ ‚è‚Ü‚·
+ - Mac OS X ã§ä½œæ¥­ã‚’ã—ã¦ã„ã‚‹ãŸã‚ .DS_Store ãªã©ã®ã‚´ãƒŸãƒ•ã‚¡ã‚¤ãƒ«ãŒæ··åœ¨ã—ã¦ã„ã‚‹å ´åˆãŒã‚ã‚Šã¾ã™
  
 
-* ”z•zðŒ
+* é…å¸ƒæ¡ä»¶
 
-COPYING.jaƒtƒ@ƒCƒ‹‚ðŽQÆ‚µ‚Ä‚­‚¾‚³‚¢B
+COPYING.jaãƒ•ã‚¡ã‚¤ãƒ«ã‚’å‚ç…§ã—ã¦ãã ã•ã„ã€‚
 
 
-* ’˜ŽÒ
+* è‘—è€…
 
-ƒRƒƒ“ƒgCƒoƒOƒŒƒ|[ƒg‚»‚Ì‘¼‚Í gnue@so-kukan.com ‚Ü‚ÅD
+ã‚³ãƒ¡ãƒ³ãƒˆï¼Œãƒã‚°ãƒ¬ãƒãƒ¼ãƒˆãã®ä»–ã¯ gnue@so-kukan.com ã¾ã§ï¼Ž
 http://www.so-kukan.com/gnue/

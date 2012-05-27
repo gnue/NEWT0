@@ -1,57 +1,57 @@
-Šg’£ƒ‰ƒCƒuƒ‰ƒŠ
+æ‹¡å¼µãƒ©ã‚¤ãƒ–ãƒ©ãƒª
 -------------
 
 
-¡protoFILE
+â– protoFILE
 
-@à–¾Fƒtƒ@ƒCƒ‹“üo—Í
-@Žg—p•û–@F
+ã€€èª¬æ˜Žï¼šãƒ•ã‚¡ã‚¤ãƒ«å…¥å‡ºåŠ›
+ã€€ä½¿ç”¨æ–¹æ³•ï¼š
 
-@@//Šg’£ƒ‰ƒCƒuƒ‰ƒŠ‚Ì—v‹
-@@Require("protoFILE");
+ã€€ã€€//æ‹¡å¼µãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®è¦æ±‚
+ã€€ã€€Require("protoFILE");
 
-@@//ƒtƒŒ[ƒ€‚Ìì¬
-@@file := {_proto: @protoFILE};
-@@//ƒI[ƒvƒ“(mode ‚Í man fopen ‚ðŽQÆj
-@@file:open(path, mode);
+ã€€ã€€//ãƒ•ãƒ¬ãƒ¼ãƒ ã®ä½œæˆ
+ã€€ã€€file := {_proto: @protoFILE};
+ã€€ã€€//ã‚ªãƒ¼ãƒ—ãƒ³(mode ã¯ man fopen ã‚’å‚ç…§ï¼‰
+ã€€ã€€file:open(path, mode);
 
-@@//o—Í
-@@file:print(str);
-@@//‚Ps“ü—Í
-@@line := file:gets();
-@@//ƒoƒCƒiƒŠ“ü—Í
-@@binary := file:read(len);
-@@//EOF ‚Ìƒ`ƒFƒbƒN
-@@file:eof();
-@@//ƒV[ƒN
-@@file:seek(offset, whence);	// whence: 'set, 'curr or 'end
-@@//ƒtƒ@ƒCƒ‹ƒ|ƒCƒ“ƒ^‚ÌŽæ“¾
-@@file:tell();
-@@//ƒtƒ@ƒCƒ‹ƒ|ƒCƒ“ƒ^‚ð 0 ‚É–ß‚·
-@@file:rewind();
+ã€€ã€€//å‡ºåŠ›
+ã€€ã€€file:print(str);
+ã€€ã€€//ï¼‘è¡Œå…¥åŠ›
+ã€€ã€€line := file:gets();
+ã€€ã€€//ãƒã‚¤ãƒŠãƒªå…¥åŠ›
+ã€€ã€€binary := file:read(len);
+ã€€ã€€//EOF ã®ãƒã‚§ãƒƒã‚¯
+ã€€ã€€file:eof();
+ã€€ã€€//ã‚·ãƒ¼ã‚¯
+ã€€ã€€file:seek(offset, whence);	// whence: 'set, 'curr or 'end
+ã€€ã€€//ãƒ•ã‚¡ã‚¤ãƒ«ãƒã‚¤ãƒ³ã‚¿ã®å–å¾—
+ã€€ã€€file:tell();
+ã€€ã€€//ãƒ•ã‚¡ã‚¤ãƒ«ãƒã‚¤ãƒ³ã‚¿ã‚’ 0 ã«æˆ»ã™
+ã€€ã€€file:rewind();
 
-@@//ƒNƒ[ƒY
-@@file:close();
+ã€€ã€€//ã‚¯ãƒ­ãƒ¼ã‚º
+ã€€ã€€file:close();
 
 
-¡protoREGEX
+â– protoREGEX
 
-@à–¾F³‹K•\Œ»
-@Žg—p•û–@F
+ã€€èª¬æ˜Žï¼šæ­£è¦è¡¨ç¾
+ã€€ä½¿ç”¨æ–¹æ³•ï¼š
 
-@@//Šg’£ƒ‰ƒCƒuƒ‰ƒŠ‚Ì—v‹
-@@Require("protoREGEX");
+ã€€ã€€//æ‹¡å¼µãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®è¦æ±‚
+ã€€ã€€Require("protoREGEX");
 
-@@//³‹K•\Œ»ƒIƒuƒWƒFƒNƒg‚Ìì¬
-@@// Žg—p‚Å‚«‚é³‹K•\Œ»‚Í man regex ‚ðŽQÆ
-@@// ƒIƒvƒVƒ‡ƒ“‚Í i ‚Æ m ‚ªŽg—p‰Â”\
-@@reg := /³‹K•\Œ»‚Ìƒpƒ^[ƒ“/ƒIƒvƒVƒ‡ƒ“;
+ã€€ã€€//æ­£è¦è¡¨ç¾ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ä½œæˆ
+ã€€ã€€// ä½¿ç”¨ã§ãã‚‹æ­£è¦è¡¨ç¾ã¯ man regex ã‚’å‚ç…§
+ã€€ã€€// ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã¯ i ã¨ m ãŒä½¿ç”¨å¯èƒ½
+ã€€ã€€reg := /æ­£è¦è¡¨ç¾ã®ãƒ‘ã‚¿ãƒ¼ãƒ³/ã‚ªãƒ—ã‚·ãƒ§ãƒ³;
 
-@@//ƒpƒ^[ƒ“ƒ}ƒbƒ`‚ÌŽÀs
-@@// str c@ŒŸõ‘ÎÛ‚Ì•¶Žš—ñ
-@@// –ß‚è’l nil c Ž¸”s
-@@// –ß‚è’l ”z—ñ c ¬Œ÷iƒ}ƒbƒ`‚µ‚½•”•ª•¶Žš—ñ‚ª”z—ñ‚Ì—v‘f‚É“ü‚éj
-@@matchs = reg:match(str);
+ã€€ã€€//ãƒ‘ã‚¿ãƒ¼ãƒ³ãƒžãƒƒãƒã®å®Ÿè¡Œ
+ã€€ã€€// str â€¦ã€€æ¤œç´¢å¯¾è±¡ã®æ–‡å­—åˆ—
+ã€€ã€€// æˆ»ã‚Šå€¤ nil â€¦ å¤±æ•—
+ã€€ã€€// æˆ»ã‚Šå€¤ é…åˆ— â€¦ æˆåŠŸï¼ˆãƒžãƒƒãƒã—ãŸéƒ¨åˆ†æ–‡å­—åˆ—ãŒé…åˆ—ã®è¦ç´ ã«å…¥ã‚‹ï¼‰
+ã€€ã€€matchs = reg:match(str);
 
-@@//ŒãŽn––iNewtonScript ‚ÉƒfƒXƒgƒ‰ƒNƒ^‚ª‚È‚¢‚½‚ßj
-@@reg:cleanup();
+ã€€ã€€//å¾Œå§‹æœ«ï¼ˆNewtonScript ã«ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ãŒãªã„ãŸã‚ï¼‰
+ã€€ã€€reg:cleanup();

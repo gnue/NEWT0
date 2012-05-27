@@ -1,1 +1,189 @@
-Šî–{“I‚Èg‚¢•û--------------  “Á‚Éà–¾‚µ‚Ü‚¹‚ñ‚ªAUNIX ‚ÌŠî–{ƒ‹[ƒ‹iÀsƒpƒX“™j‚ª‚í‚©‚Á‚Ä‚¢‚é‚à‚Ì‚Æ‚µ‚Ü‚·B  ›Šî–{“I‚Èg‚¢•û    ‚Ü‚¸‚Í UNIX ƒRƒ}ƒ“ƒh‚Ì‚¨–ñ‘©A-h ƒIƒvƒVƒ‡ƒ“‚Å Usage ‚ª    Œ©‚ê‚Ü‚·      % newt -h      Usage: newt [switches] [--] [programfile]        -t              enable trace mode           c  ƒgƒŒ[ƒXƒ‚[ƒh‚ÅÀs‚µ‚Ü‚·        -l              dump lex info               c  š‹å‰ğÍ‚Ìî•ñ•\¦        -s              dump syntax tree            c  \•¶–Ø‚ğ•\¦        -b              dump byte code              c  ƒoƒCƒgƒR[ƒh‚ğ•\¦        -C directory    change working directory    c  ì‹ÆƒfƒBƒŒƒNƒgƒŠ‚Ì•ÏX        -e 'command'    one line of script          c  ˆø”‚ÌƒXƒNƒŠƒvƒg‚ğÀs        -i [symbols]    print function info         c  ‘g‚İŠÖ”‚Ìà–¾‚ğ•\¦                                                        ˆø”‚ª‚È‚¯‚ê‚Î‘SŠÖ”‚ğ•\¦        -v              print version number        c  ƒo[ƒWƒ‡ƒ“‚ğ•\¦        -h              print this help message     c  ‚±‚ÌƒƒbƒZ[ƒW‚ğ•\¦        --copyright     print copyright             c  ƒRƒs[ƒ‰ƒCƒg‚ğ•\¦        --version       print version number        c  ƒo[ƒWƒ‡ƒ“‚ğ•\¦i-v ‚Æ“¯‚¶j    ƒXƒNƒŠƒvƒg‚ÌÀsB‚ÜA•’Ê‚ÌƒXƒNƒŠƒvƒgŒ¾Œê‚Æ‚Ù‚Ú“¯‚¶‚Å‚·B      % newt ƒtƒ@ƒCƒ‹–¼         c  ƒXƒNƒŠƒvƒgƒtƒ@ƒCƒ‹‚ğÀs      % newt < ƒtƒ@ƒCƒ‹–¼       c  •W€“ü—Í‚©‚ç“Ç‚ñ‚ÅÀs      % ƒtƒ@ƒCƒ‹–¼              c  ƒXƒNƒŠƒvƒgƒtƒ@ƒCƒ‹‚Ì‚Ps–Ú‚ª #!newt ‚Ìê‡(*1)      *1) NewtonScript ‚ÌƒRƒƒ“ƒg‚Í /* */ ‚Æ // ‚Ì‚İ‚Å‚·‚ªAUNIX ‚Ì #! ‚ğg‚¦‚é‚æ‚¤          ‚É‚·‚é‚½‚ß‚ÉAƒtƒ@ƒCƒ‹‚Ì‚P•¶š–Ú‚ª # ‚Ì‚Æ‚«‚Ì‚İ‚»‚Ìs‚ÍƒRƒƒ“ƒg‚Æ‚µ‚Äˆµ‚í          ‚ê‚é“Á•Êˆ’u‚ğ‚µ‚Ä‚¢‚Ü‚·  ›g‚¦‚é‘g‚İŠÖ”      -i ƒIƒvƒVƒ‡ƒ“‚Å‘g‚İŠÖ”‚Ìˆê——‚ª•\¦‚³‚ê‚Ü‚·B  % newt -i        HasVariable(frame, name)        HasVar(name)        DefGlobalFn(name, fn)        DefGlobalVar(name, value)        Mod(n1, n2)        RemoveSlot(obj, slot)        Throw(name, data)        Rethrow()        CurrentException()        PrimClassOf(obj)        TotalClone(obj)        HasSubclass(sub, super)        IsSubclass(sub, super)        IsInstance(obj, class)        IsArray(obj)        IsFrame(obj)        IsSymbol(obj)        IsString(obj)        IsCharacter(obj)        IsInteger(obj)        IsReal(obj)        IsNumber(obj)        IsImmediate(obj)        IsFunction(obj)        IsReadonly(obj)        Intern(str)        MakeBinary(length, class)        SetLength(obj, len)        HasSlot(frame, slot)        GetSlot(frame, slot)        SetSlot(frame, slot, v)        GetVariable(frame, slot)        SetVariable(frame, slot, v)        GetRoot()        GetGlobals()        GC()        Compile(str)        GetGlobalFn(symbol)        GetGlobalVar(symbol)        GlobalFnExists(symbol)        GlobalVarExists(symbol)        UndefGlobalFn(symbol)        UndefGlobalVar(symbol)        Chr(integer)        Ord(char)        StrLen(str)        SubStr(str, start, count)        StrEqual(a, b)        StrExactCompare(a, b)        StrCat(str1, str2)                      c  •¶š‚ğŒ‹‡‚·‚éi•›ì—p‚ ‚èj(*2)        SPrintObject(obj)        SymbolCompareLex(symbol1, symbol2)        P(obj)                                  c  ƒIƒuƒWƒFƒNƒg‚ğ•\Œ»Œ`‚ÅƒvƒŠƒ“ƒgB‹Œ—ˆ‚Ì Print ŠÖ”‚É‘Š“–        Print(obj)                              c  ƒIƒuƒWƒFƒNƒg‚ğƒvƒŠƒ“ƒgB‘OŒã‚É " ‚Ío—Í‚³‚ê‚Ü‚¹‚ñ(*2)        ParamStr(baseString, paramStrArray)        LoadLib(file)                           c  ŠO•”ƒ‰ƒCƒuƒ‰ƒŠ‚ğƒ[ƒh(*2)        Load(file)                              c  ƒXƒNƒŠƒvƒgƒtƒ@ƒCƒ‹‚ğƒ[ƒh‚µ‚ÄÀs(*2)        Require(str)                            c  ƒ‰ƒCƒuƒ‰ƒŠ‚ğ—v‹(*2)        GetEnv(str)                             c  ŠÂ‹«•Ï”‚ğæ“¾(*2)        FileExists(path)                        c  ƒtƒ@ƒCƒ‹‚Ì‘¶İŠm”F(*2)        DirName(path)                           c  ƒpƒX‚©‚çƒfƒBƒŒƒNƒgƒŠ–¼‚ğæo‚·(*2)        BaseName(path)                          c  ƒpƒX‚©‚çƒtƒ@ƒCƒ‹–¼‚ğæo‚·(*2)        JoinPath(dir, fname)                    c  ƒfƒBƒŒƒNƒgƒŠ–¼‚Æƒtƒ@ƒCƒ‹–¼‚©‚çƒpƒX‚ğ¶¬(*2)        ExpandPath(path)                        c  ‘Š‘ÎƒpƒX‚ğâ‘ÎƒpƒX‚É“WŠJ‚·‚é(*2)        Split(str, sep)                         c  •¶š—ñ‚ğ‹æØ‚è•¶š‚Å•ªŠ„‚µ‚Ä”z—ñ‚ğ¶¬(*2)        DumpFn(fn)                              c  ŠÖ”‚ğƒ_ƒ“ƒv•\¦(*3)                                                    ˆø”‚ª nil ‚Ìê‡‚ÍŒ»İÀs’†‚ÌŠÖ”‚ğƒ_ƒ“ƒv•\¦        DumpBC(instructions)                    c  ƒoƒCƒgƒR[ƒhiƒoƒCƒiƒŠj‚ğƒ_ƒ“ƒv•\¦(*3)        DumpStacks()                            c  VM ƒXƒ^ƒbƒN‚ğƒ_ƒ“ƒv•\¦(*3)        Gets()                                  c  •W€“ü—Í‚©‚ç‚Ps•ª‚Ì•¶š—ñ‚ğæ“¾        Getc()                                  c  •W€“ü—Í‚©‚ç‚P•¶š‚ğæ“¾        Getch()                                 c  ƒL[ƒ{[ƒh‚©‚ç“ü—Í•¶š‚ğ‚P•¶šæ“¾        And(n1, n2)                             c  (*4)        Or(n1, n2)                              c  (*4)        ShiftLeft(n1, n2)                       c  (*4)        ShiftRight(n1, n2)                      c  (*4)        ObjectEqual(obj1, obj2)                 c  (*4)        DefMagicPointer(mp, value)              c  (*4)        MakeRegex(pattern, opt)                 c  (*4)        Clone(obj)                              c  (*5)        ClassOf(obj)                            c  (*5)        Length(obj)                             c  (*5)      *2) “Æ©Šg’£‚ÌŠÖ”      *3) ƒfƒoƒbƒO—p‚ÌŠÖ”      *4) \•¶iƒIƒyƒŒ[ƒ^“™j‚©‚ç©“®“I‚É“WŠJ‚³‚ê‚éŠÖ”      *5) ƒoƒCƒgƒR[ƒh‚É•ÏŠ·‚³‚ê‚éŠÖ”Anewt -i ‚Å‚Í•\¦‚³‚ê‚Ü‚¹‚ñ      ã‹L‚ÌŠÖ”‚Ì‘¼‚É‚ÍƒIƒyƒŒ[ƒ^i‰‰Zqj‚ªg‚¦‚Ü‚·B      ¦Œ©‚Ä‚Ì’Ê‚è‚Ü‚¾Œ¾Œê‚ğ“®ì‚³‚¹‚é‚½‚ß‚ÉÅ’áŒÀ•K—v‚ÈŠÖ”‚Ì‚İ‚ÅAg‚¦        ‚éŠÖ”‚ª‚Ù‚Æ‚ñ‚Ç‚ ‚è‚Ü‚¹‚ñBNewtonScript ‚ÌŒ¾Œêƒ}ƒjƒ…ƒAƒ‹‚Ì’†‚©‚ç        ‘g‚İŠÖ”‚Æ‚µ‚Ä•K—v‚ÈŠÖ”‚ğƒŠƒXƒgƒAƒbƒv‚·‚é•K—v‚ª‚ ‚è‚Ü‚·  ›ŠO•”ƒ‰ƒCƒuƒ‰ƒŠ‚É‚Â‚¢‚Ä    ‚bŒ¾Œê‚Åì¬‚µ‚½ŠO•”ƒ‰ƒCƒuƒ‰ƒŠ‚ªg‚¦‚é‚æ‚¤‚É‚È‚Á‚Ä‚¢‚Ü‚·B      LoadLib("samplelib.dylib");      ¦â‘ÎƒpƒX‚à‚µ‚­‚Í‘Š‘ÎƒpƒX‚Åƒtƒ@ƒCƒ‹–¼‚ğw’è‚µ‚Ä‰º‚³‚¢    ‚ÅƒTƒ“ƒvƒ‹‚ÌŠO•”ƒ‰ƒCƒuƒ‰ƒŠ‚ªƒ[ƒh‚³‚êˆÈ‰º‚Ì‚Q‚Â‚ÌŠÖ”‚ª’Ç‰Á    ‚³‚ê‚Ü‚·B       GetGlobalFn(name)            c  ƒOƒ[ƒoƒ‹ŠÖ”‚ÌŠÖ”ƒIƒuƒWƒFƒNƒg‚ğ•Ô‚·       info(obj)                    c  ŠÖ”ƒIƒuƒWƒFƒNƒg‚à‚µ‚­‚ÍƒVƒ“ƒ{ƒ‹‚Åw’è‚³‚ê‚½                                        ƒOƒ[ƒoƒ‹ŠÖ”‚Ìà–¾‚ğ•\¦  ›Require ‚É‚æ‚éƒ‰ƒCƒuƒ‰ƒŠ—v‹‚É‚Â‚¢‚Ä    Require ‚É‚æ‚èŠO•”ƒ‰ƒCƒuƒ‰ƒŠ(Šg’£q .dylib, .soj‚Ü‚½‚Í    ƒ\[ƒXƒR[ƒhiŠg’£q .newtj‚ğˆê‰ñ‚¾‚¯ƒ[ƒh‚·‚é‚±‚Æ‚ª‚Å‚«‚Ü‚·B    ˆê“xƒ[ƒh‚³‚ê‚½ƒ‰ƒCƒuƒ‰ƒŠ‚Íƒ[ƒh‚³‚ê‚Ü‚¹‚ñBƒ‰ƒCƒuƒ‰ƒŠŒŸõƒpƒX    ‚É‚æ‚èƒ[ƒh‚·‚éƒ‰ƒCƒuƒ‰ƒŠ‚ğ’T‚µ‚Ü‚·B       Require("protoFILE");  ›ƒ‰ƒCƒuƒ‰ƒŠŒŸõƒpƒX‚É‚Â‚¢‚Ä    ƒ‰ƒCƒuƒ‰ƒŠ‚ÍŠÂ‹«•Ï” NEWTLIB ‚Éİ’è‚³‚ê‚½ŒŸõƒpƒX‚É‚æ‚è    ŒŸõ‚³‚ê‚Ü‚·BNEWTLIB  ‚ªİ’è‚³‚ê‚Ä‚¢‚È‚¢ê‡‚ÍƒJƒŒƒ“ƒgƒpƒX    ‚¨‚æ‚ÑÀsƒtƒ@ƒCƒ‹‚Ì‚ ‚éƒfƒBƒŒƒNƒgƒŠ‚©‚çŒŸõ‚³‚ê‚Ü‚·B  ›‰Šú‰»ƒ‰ƒCƒuƒ‰ƒŠ‚É‚Â‚¢‚Ä    egg.newt ‚ªƒ‰ƒCƒuƒ‰ƒŠŒŸõƒpƒX‚É‘¶İ‚·‚éê‡Anewt ‚ª‹N    “®‚³‚ê‚½‚Æ‚«‚É©“®“I‚É“Ç‚Ü‚ê‚Ü‚·B  ›ƒOƒ[ƒoƒ‹•Ï”        _EXEDIR_                                c  Àsƒtƒ@ƒCƒ‹‚Ì‚ ‚éƒfƒBƒŒƒNƒgƒŠ        _ARGV_                                  c  ƒRƒ}ƒ“ƒh‚ª‹N“®‚³‚ê‚½‚Æ‚«‚Ìˆø”iƒRƒ}ƒ“ƒh–¼‚Í“ü‚ç‚È‚¢j        _ENV_                                   c  ŠÂ‹«•Ï”iŒ»İ‚Í NEWTLIB ‚Ì‚İj‚ªŠi”[‚³‚ê‚é‚±‚Æ‚ª‚ ‚é        _VERSION_                               c  ƒo[ƒWƒ‡ƒ“î•ñ        _STDOUT_                                c  •W€o—Íi’Êí‚Í NILA•¶š—ñ‚Ìê‡‚»‚Ì•¶š—ñ‚Éo—Í‚ª’Ç‰Á‚³‚ê‚éj        _STDERR_                                c  •W€ƒGƒ‰[o—Íi’Êí‚Í NILA•¶š—ñ‚Ìê‡‚»‚Ì•¶š—ñ‚Éo—Í‚ª’Ç‰Á‚³‚ê‚éj        requires                                c  Require ‚³‚ê‚½ƒ‰ƒCƒuƒ‰ƒŠ‚Ìî•ñ  ¦«—ˆ•ÏX‚³‚ê‚é‚±‚Æ‚ª‚ ‚é‚©‚à‚µ‚ê‚Ü‚¹‚ñ
+åŸºæœ¬çš„ãªä½¿ã„æ–¹
+--------------
+
+
+  ç‰¹ã«èª¬æ˜ã—ã¾ã›ã‚“ãŒã€UNIX ã®åŸºæœ¬ãƒ«ãƒ¼ãƒ«ï¼ˆå®Ÿè¡Œãƒ‘ã‚¹ç­‰ï¼‰ãŒã‚ã‹ã£ã¦ã„ã‚‹ã‚‚ã®ã¨ã—ã¾ã™ã€‚
+
+
+  â—‹åŸºæœ¬çš„ãªä½¿ã„æ–¹
+
+    ã¾ãšã¯ UNIX ã‚³ãƒãƒ³ãƒ‰ã®ãŠç´„æŸã€-h ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã§ Usage ãŒ
+    è¦‹ã‚Œã¾ã™
+
+      % newt -h
+
+      Usage: newt [switches] [--] [programfile]
+        -t              enable trace mode           â€¦  ãƒˆãƒ¬ãƒ¼ã‚¹ãƒ¢ãƒ¼ãƒ‰ã§å®Ÿè¡Œã—ã¾ã™
+        -l              dump lex info               â€¦  å­—å¥è§£ææ™‚ã®æƒ…å ±è¡¨ç¤º
+        -s              dump syntax tree            â€¦  æ§‹æ–‡æœ¨ã‚’è¡¨ç¤º
+        -b              dump byte code              â€¦  ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã‚’è¡¨ç¤º
+        -C directory    change working directory    â€¦  ä½œæ¥­ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®å¤‰æ›´
+        -e 'command'    one line of script          â€¦  å¼•æ•°ã®ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‚’å®Ÿè¡Œ
+        -i [symbols]    print function info         â€¦  çµ„è¾¼ã¿é–¢æ•°ã®èª¬æ˜ã‚’è¡¨ç¤º
+                                                        å¼•æ•°ãŒãªã‘ã‚Œã°å…¨é–¢æ•°ã‚’è¡¨ç¤º
+        -v              print version number        â€¦  ãƒãƒ¼ã‚¸ãƒ§ãƒ³ã‚’è¡¨ç¤º
+        -h              print this help message     â€¦  ã“ã®ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’è¡¨ç¤º
+        --copyright     print copyright             â€¦  ã‚³ãƒ”ãƒ¼ãƒ©ã‚¤ãƒˆã‚’è¡¨ç¤º
+        --version       print version number        â€¦  ãƒãƒ¼ã‚¸ãƒ§ãƒ³ã‚’è¡¨ç¤ºï¼ˆ-v ã¨åŒã˜ï¼‰
+
+    ã‚¹ã‚¯ãƒªãƒ—ãƒˆã®å®Ÿè¡Œã€‚ã¾ã€æ™®é€šã®ã‚¹ã‚¯ãƒªãƒ—ãƒˆè¨€èªã¨ã»ã¼åŒã˜ã§ã™ã€‚
+
+      % newt ãƒ•ã‚¡ã‚¤ãƒ«å         â€¦  ã‚¹ã‚¯ãƒªãƒ—ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã‚’å®Ÿè¡Œ
+      % newt < ãƒ•ã‚¡ã‚¤ãƒ«å       â€¦  æ¨™æº–å…¥åŠ›ã‹ã‚‰èª­è¾¼ã‚“ã§å®Ÿè¡Œ
+      % ãƒ•ã‚¡ã‚¤ãƒ«å              â€¦  ã‚¹ã‚¯ãƒªãƒ—ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã®ï¼‘è¡Œç›®ãŒ #!newt ã®å ´åˆ(*1)
+
+      *1) NewtonScript ã®ã‚³ãƒ¡ãƒ³ãƒˆã¯ /* */ ã¨ // ã®ã¿ã§ã™ãŒã€UNIX ã® #! ã‚’ä½¿ãˆã‚‹ã‚ˆã†
+          ã«ã™ã‚‹ãŸã‚ã«ã€ãƒ•ã‚¡ã‚¤ãƒ«ã®ï¼‘æ–‡å­—ç›®ãŒ # ã®ã¨ãã®ã¿ãã®è¡Œã¯ã‚³ãƒ¡ãƒ³ãƒˆã¨ã—ã¦æ‰±ã‚
+          ã‚Œã‚‹ç‰¹åˆ¥å‡¦ç½®ã‚’ã—ã¦ã„ã¾ã™
+
+  â—‹ä½¿ãˆã‚‹çµ„è¾¼ã¿é–¢æ•°
+
+      -i ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã§çµ„è¾¼ã¿é–¢æ•°ã®ä¸€è¦§ãŒè¡¨ç¤ºã•ã‚Œã¾ã™ã€‚
+
+  % newt -i
+
+        HasVariable(frame, name)
+        HasVar(name)
+        DefGlobalFn(name, fn)
+        DefGlobalVar(name, value)
+        Mod(n1, n2)
+        RemoveSlot(obj, slot)
+        Throw(name, data)
+        Rethrow()
+        CurrentException()
+        PrimClassOf(obj)
+        TotalClone(obj)
+        HasSubclass(sub, super)
+        IsSubclass(sub, super)
+        IsInstance(obj, class)
+        IsArray(obj)
+        IsFrame(obj)
+        IsSymbol(obj)
+        IsString(obj)
+        IsCharacter(obj)
+        IsInteger(obj)
+        IsReal(obj)
+        IsNumber(obj)
+        IsImmediate(obj)
+        IsFunction(obj)
+        IsReadonly(obj)
+        Intern(str)
+        MakeBinary(length, class)
+        SetLength(obj, len)
+        HasSlot(frame, slot)
+        GetSlot(frame, slot)
+        SetSlot(frame, slot, v)
+        GetVariable(frame, slot)
+        SetVariable(frame, slot, v)
+        GetRoot()
+        GetGlobals()
+        GC()
+        Compile(str)
+        GetGlobalFn(symbol)
+        GetGlobalVar(symbol)
+        GlobalFnExists(symbol)
+        GlobalVarExists(symbol)
+        UndefGlobalFn(symbol)
+        UndefGlobalVar(symbol)
+        Chr(integer)
+        Ord(char)
+        StrLen(str)
+        SubStr(str, start, count)
+        StrEqual(a, b)
+        StrExactCompare(a, b)
+        StrCat(str1, str2)                      â€¦  æ–‡å­—ã‚’çµåˆã™ã‚‹ï¼ˆå‰¯ä½œç”¨ã‚ã‚Šï¼‰(*2)
+        SPrintObject(obj)
+        SymbolCompareLex(symbol1, symbol2)
+        P(obj)                                  â€¦  ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’è¡¨ç¾å½¢ã§ãƒ—ãƒªãƒ³ãƒˆã€‚æ—§æ¥ã® Print é–¢æ•°ã«ç›¸å½“
+        Print(obj)                              â€¦  ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒ—ãƒªãƒ³ãƒˆã€‚å‰å¾Œã« " ã¯å‡ºåŠ›ã•ã‚Œã¾ã›ã‚“(*2)
+        ParamStr(baseString, paramStrArray)
+        LoadLib(file)                           â€¦  å¤–éƒ¨ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’ãƒ­ãƒ¼ãƒ‰(*2)
+        Load(file)                              â€¦  ã‚¹ã‚¯ãƒªãƒ—ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã‚’ãƒ­ãƒ¼ãƒ‰ã—ã¦å®Ÿè¡Œ(*2)
+        Require(str)                            â€¦  ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’è¦æ±‚(*2)
+        GetEnv(str)                             â€¦  ç’°å¢ƒå¤‰æ•°ã‚’å–å¾—(*2)
+        FileExists(path)                        â€¦  ãƒ•ã‚¡ã‚¤ãƒ«ã®å­˜åœ¨ç¢ºèª(*2)
+        DirName(path)                           â€¦  ãƒ‘ã‚¹ã‹ã‚‰ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªåã‚’å–å‡ºã™(*2)
+        BaseName(path)                          â€¦  ãƒ‘ã‚¹ã‹ã‚‰ãƒ•ã‚¡ã‚¤ãƒ«åã‚’å–å‡ºã™(*2)
+        JoinPath(dir, fname)                    â€¦  ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªåã¨ãƒ•ã‚¡ã‚¤ãƒ«åã‹ã‚‰ãƒ‘ã‚¹ã‚’ç”Ÿæˆ(*2)
+        ExpandPath(path)                        â€¦  ç›¸å¯¾ãƒ‘ã‚¹ã‚’çµ¶å¯¾ãƒ‘ã‚¹ã«å±•é–‹ã™ã‚‹(*2)
+        Split(str, sep)                         â€¦  æ–‡å­—åˆ—ã‚’åŒºåˆ‡ã‚Šæ–‡å­—ã§åˆ†å‰²ã—ã¦é…åˆ—ã‚’ç”Ÿæˆ(*2)
+        DumpFn(fn)                              â€¦  é–¢æ•°ã‚’ãƒ€ãƒ³ãƒ—è¡¨ç¤º(*3)
+                                                    å¼•æ•°ãŒ nil ã®å ´åˆã¯ç¾åœ¨å®Ÿè¡Œä¸­ã®é–¢æ•°ã‚’ãƒ€ãƒ³ãƒ—è¡¨ç¤º
+        DumpBC(instructions)                    â€¦  ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ï¼ˆãƒã‚¤ãƒŠãƒªï¼‰ã‚’ãƒ€ãƒ³ãƒ—è¡¨ç¤º(*3)
+        DumpStacks()                            â€¦  VM ã‚¹ã‚¿ãƒƒã‚¯ã‚’ãƒ€ãƒ³ãƒ—è¡¨ç¤º(*3)
+        Gets()                                  â€¦  æ¨™æº–å…¥åŠ›ã‹ã‚‰ï¼‘è¡Œåˆ†ã®æ–‡å­—åˆ—ã‚’å–å¾—
+        Getc()                                  â€¦  æ¨™æº–å…¥åŠ›ã‹ã‚‰ï¼‘æ–‡å­—ã‚’å–å¾—
+        Getch()                                 â€¦  ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰ã‹ã‚‰å…¥åŠ›æ–‡å­—ã‚’ï¼‘æ–‡å­—å–å¾—
+
+        And(n1, n2)                             â€¦  (*4)
+        Or(n1, n2)                              â€¦  (*4)
+        ShiftLeft(n1, n2)                       â€¦  (*4)
+        ShiftRight(n1, n2)                      â€¦  (*4)
+        ObjectEqual(obj1, obj2)                 â€¦  (*4)
+        DefMagicPointer(mp, value)              â€¦  (*4)
+        MakeRegex(pattern, opt)                 â€¦  (*4)
+
+        Clone(obj)                              â€¦  (*5)
+        ClassOf(obj)                            â€¦  (*5)
+        Length(obj)                             â€¦  (*5)
+
+      *2) ç‹¬è‡ªæ‹¡å¼µã®é–¢æ•°
+      *3) ãƒ‡ãƒãƒƒã‚°ç”¨ã®é–¢æ•°
+      *4) æ§‹æ–‡ï¼ˆã‚ªãƒšãƒ¬ãƒ¼ã‚¿ç­‰ï¼‰ã‹ã‚‰è‡ªå‹•çš„ã«å±•é–‹ã•ã‚Œã‚‹é–¢æ•°
+      *5) ãƒã‚¤ãƒˆã‚³ãƒ¼ãƒ‰ã«å¤‰æ›ã•ã‚Œã‚‹é–¢æ•°ã€newt -i ã§ã¯è¡¨ç¤ºã•ã‚Œã¾ã›ã‚“
+
+      ä¸Šè¨˜ã®é–¢æ•°ã®ä»–ã«ã¯ã‚ªãƒšãƒ¬ãƒ¼ã‚¿ï¼ˆæ¼”ç®—å­ï¼‰ãŒä½¿ãˆã¾ã™ã€‚
+
+      â€»è¦‹ã¦ã®é€šã‚Šã¾ã è¨€èªã‚’å‹•ä½œã•ã›ã‚‹ãŸã‚ã«æœ€ä½é™å¿…è¦ãªé–¢æ•°ã®ã¿ã§ã€ä½¿ãˆ
+        ã‚‹é–¢æ•°ãŒã»ã¨ã‚“ã©ã‚ã‚Šã¾ã›ã‚“ã€‚NewtonScript ã®è¨€èªãƒãƒ‹ãƒ¥ã‚¢ãƒ«ã®ä¸­ã‹ã‚‰
+        çµ„è¾¼ã¿é–¢æ•°ã¨ã—ã¦å¿…è¦ãªé–¢æ•°ã‚’ãƒªã‚¹ãƒˆã‚¢ãƒƒãƒ—ã™ã‚‹å¿…è¦ãŒã‚ã‚Šã¾ã™
+
+  â—‹å¤–éƒ¨ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã«ã¤ã„ã¦
+
+    ï¼£è¨€èªã§ä½œæˆã—ãŸå¤–éƒ¨ãƒ©ã‚¤ãƒ–ãƒ©ãƒªãŒä½¿ãˆã‚‹ã‚ˆã†ã«ãªã£ã¦ã„ã¾ã™ã€‚
+
+      LoadLib("samplelib.dylib");
+
+      â€»çµ¶å¯¾ãƒ‘ã‚¹ã‚‚ã—ãã¯ç›¸å¯¾ãƒ‘ã‚¹ã§ãƒ•ã‚¡ã‚¤ãƒ«åã‚’æŒ‡å®šã—ã¦ä¸‹ã•ã„
+
+    ã§ã‚µãƒ³ãƒ—ãƒ«ã®å¤–éƒ¨ãƒ©ã‚¤ãƒ–ãƒ©ãƒªãŒãƒ­ãƒ¼ãƒ‰ã•ã‚Œä»¥ä¸‹ã®ï¼’ã¤ã®é–¢æ•°ãŒè¿½åŠ 
+    ã•ã‚Œã¾ã™ã€‚
+
+       GetGlobalFn(name)            â€¦  ã‚°ãƒ­ãƒ¼ãƒãƒ«é–¢æ•°ã®é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’è¿”ã™
+       info(obj)                    â€¦  é–¢æ•°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚‚ã—ãã¯ã‚·ãƒ³ãƒœãƒ«ã§æŒ‡å®šã•ã‚ŒãŸ
+                                        ã‚°ãƒ­ãƒ¼ãƒãƒ«é–¢æ•°ã®èª¬æ˜ã‚’è¡¨ç¤º
+
+  â—‹Require ã«ã‚ˆã‚‹ãƒ©ã‚¤ãƒ–ãƒ©ãƒªè¦æ±‚ã«ã¤ã„ã¦
+
+    Require ã«ã‚ˆã‚Šå¤–éƒ¨ãƒ©ã‚¤ãƒ–ãƒ©ãƒª(æ‹¡å¼µå­ .dylib, .soï¼‰ã¾ãŸã¯
+    ã‚½ãƒ¼ã‚¹ã‚³ãƒ¼ãƒ‰ï¼ˆæ‹¡å¼µå­ .newtï¼‰ã‚’ä¸€å›ã ã‘ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ã“ã¨ãŒã§ãã¾ã™ã€‚
+    ä¸€åº¦ãƒ­ãƒ¼ãƒ‰ã•ã‚ŒãŸãƒ©ã‚¤ãƒ–ãƒ©ãƒªã¯ãƒ­ãƒ¼ãƒ‰ã•ã‚Œã¾ã›ã‚“ã€‚ãƒ©ã‚¤ãƒ–ãƒ©ãƒªæ¤œç´¢ãƒ‘ã‚¹
+    ã«ã‚ˆã‚Šãƒ­ãƒ¼ãƒ‰ã™ã‚‹ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’æ¢ã—ã¾ã™ã€‚
+
+       Require("protoFILE");
+
+
+  â—‹ãƒ©ã‚¤ãƒ–ãƒ©ãƒªæ¤œç´¢ãƒ‘ã‚¹ã«ã¤ã„ã¦
+
+    ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã¯ç’°å¢ƒå¤‰æ•° NEWTLIB ã«è¨­å®šã•ã‚ŒãŸæ¤œç´¢ãƒ‘ã‚¹ã«ã‚ˆã‚Š
+    æ¤œç´¢ã•ã‚Œã¾ã™ã€‚NEWTLIB  ãŒè¨­å®šã•ã‚Œã¦ã„ãªã„å ´åˆã¯ã‚«ãƒ¬ãƒ³ãƒˆãƒ‘ã‚¹
+    ãŠã‚ˆã³å®Ÿè¡Œãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚ã‚‹ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‹ã‚‰æ¤œç´¢ã•ã‚Œã¾ã™ã€‚
+
+
+  â—‹åˆæœŸåŒ–ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã«ã¤ã„ã¦
+
+    egg.newt ãŒãƒ©ã‚¤ãƒ–ãƒ©ãƒªæ¤œç´¢ãƒ‘ã‚¹ã«å­˜åœ¨ã™ã‚‹å ´åˆã€newt ãŒèµ·
+    å‹•ã•ã‚ŒãŸã¨ãã«è‡ªå‹•çš„ã«èª­è¾¼ã¾ã‚Œã¾ã™ã€‚
+
+
+  â—‹ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•°
+
+        _EXEDIR_                                â€¦  å®Ÿè¡Œãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚ã‚‹ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+        _ARGV_                                  â€¦  ã‚³ãƒãƒ³ãƒ‰ãŒèµ·å‹•ã•ã‚ŒãŸã¨ãã®å¼•æ•°ï¼ˆã‚³ãƒãƒ³ãƒ‰åã¯å…¥ã‚‰ãªã„ï¼‰
+        _ENV_                                   â€¦  ç’°å¢ƒå¤‰æ•°ï¼ˆç¾åœ¨ã¯ NEWTLIB ã®ã¿ï¼‰ãŒæ ¼ç´ã•ã‚Œã‚‹ã“ã¨ãŒã‚ã‚‹
+        _VERSION_                               â€¦  ãƒãƒ¼ã‚¸ãƒ§ãƒ³æƒ…å ±
+        _STDOUT_                                â€¦  æ¨™æº–å‡ºåŠ›ï¼ˆé€šå¸¸ã¯ NILã€æ–‡å­—åˆ—ã®å ´åˆãã®æ–‡å­—åˆ—ã«å‡ºåŠ›ãŒè¿½åŠ ã•ã‚Œã‚‹ï¼‰
+        _STDERR_                                â€¦  æ¨™æº–ã‚¨ãƒ©ãƒ¼å‡ºåŠ›ï¼ˆé€šå¸¸ã¯ NILã€æ–‡å­—åˆ—ã®å ´åˆãã®æ–‡å­—åˆ—ã«å‡ºåŠ›ãŒè¿½åŠ ã•ã‚Œã‚‹ï¼‰
+        requires                                â€¦  Require ã•ã‚ŒãŸãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®æƒ…å ±
+
+  â€»å°†æ¥å¤‰æ›´ã•ã‚Œã‚‹ã“ã¨ãŒã‚ã‚‹ã‹ã‚‚ã—ã‚Œã¾ã›ã‚“
