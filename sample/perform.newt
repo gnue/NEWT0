@@ -1,0 +1,23 @@
+#!newt
+
+someFrame := { SomeMethod: func() begin
+    	Print("SomeMethod!");	
+    end,
+    SomeOtherMethod: func(number) begin
+    	Print("SomeOtherMethod(" & number & ")!");
+    end
+};
+
+// test Perform() with no arguments to be passed with the message
+Perform(someFrame, 'SomeMethod, nil);
+
+// test Perform() with an argument passed with the message
+Perform(someFrame, 'SomeOtherMethod, [42]);
+
+// test Perform() with an invalid symbol to send the message to
+try
+	Perform(someFrame, 'NonexistentMethod, nil);
+onexception |evt.ex| do Print("Caught exception |" & CurrentException().name & "|!\n");
+
+
+true;

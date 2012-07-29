@@ -1924,6 +1924,83 @@ newtRef NsMakeRegex(newtRefArg rcvr, newtRefArg pattern, newtRefArg opt)
 #pragma mark -
 #endif
 /*------------------------------------------------------------------------*/
+/** Call a function with an array of parameters
+ * 
+ * @param rcvr		[in] レシーバ
+ * @param func		[in] Function
+ * @param params	[in] Parameters
+ * 
+ * @return			Return value
+ */
+newtRef 	NsApply(newtRefArg rcvr, newtRefArg func, newtRefArg params)
+{
+	/* STUB */
+}
+
+/*------------------------------------------------------------------------*/
+/** Send a message to a method in a frame by name with an array of parameters
+ * 
+ * @param rcvr		[in] レシーバ
+ * @param frame		[in] Frame
+ * @param message	[in] Message
+ * @param params	[in] Parameters
+ * 
+ * @return			Return value
+ */
+newtRef 	NsPerform(newtRefArg rcvr, newtRefArg frame, newtRefArg message, newtRefArg params)
+{
+	newtRef ary = NewtRefIsNIL(params) ? NewtMakeArray(kNewtRefUnbind, 0) : params;
+	return NcSendWithArgArray(frame, message, false, ary);
+}
+
+/*------------------------------------------------------------------------*/
+/** Send a message to a method in a frame by name with an array of parameters, if it is defined
+ * 
+ * @param rcvr		[in] レシーバ
+ * @param frame		[in] Frame
+ * @param message	[in] Message
+ * @param params	[in] Parameters
+ * 
+ * @return			Return value
+ */
+newtRef 	NsPerformIfDefined(newtRefArg rcvr, newtRefArg frame, newtRefArg message, newtRefArg params)
+{
+	/* STUB */
+}
+/*------------------------------------------------------------------------*/
+/** Send a message to a method in a frame by name with an array of parameters (proto inheritance only)
+ * 
+ * @param rcvr		[in] レシーバ
+ * @param frame		[in] Frame
+ * @param message	[in] Message
+ * @param params	[in] Parameters
+ * 
+ * @return			Return value
+ */
+newtRef 	NsProtoPerform(newtRefArg rcvr, newtRefArg frame, newtRefArg message, newtRefArg params)
+{
+	/* STUB */
+}
+
+/*------------------------------------------------------------------------*/
+/** Send a message to a method in a frame by name with an array of parameters, if it is defined (proto inheritance only)
+ * 
+ * @param rcvr		[in] レシーバ
+ * @param frame		[in] Frame
+ * @param message	[in] Message
+ * @param params	[in] Parameters
+ * 
+ * @return			Return value
+ */
+newtRef 	NsProtoPerformIfDefined(newtRefArg rcvr, newtRefArg frame, newtRefArg message, newtRefArg params)
+{
+	/* STUB */
+}
+
+#if 0
+#pragma mark -
+#endif
+/*------------------------------------------------------------------------*/
 /** 標準出力にオブジェクトをプリント
  *
  * @param rcvr		[in] レシーバ
