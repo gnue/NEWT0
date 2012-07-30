@@ -1,0 +1,17 @@
+#!newt
+
+// test Apply with no arguments passed to function
+SomeFunc := func() Print ("SomeFunc!\n");
+Apply(SomeFunc, nil);
+
+// test Apply() with arguments passed to function
+f := func(x,y) Print(x & "*" & y & "=" & x*y & "\n");
+Apply(f,[10,2]);
+
+// test Apply() with invalid function
+notAFunc := 25;
+try
+	Apply(notAFunc, nil);
+onexception |evt.ex| do Print("Caught exception |" & CurrentException().name & "|!\n");
+
+true;

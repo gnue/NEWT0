@@ -3575,7 +3575,7 @@ void NVMInitGlobalFns1(void)
     NewtDefGlobalFunc(NSSYM(UndefGlobalFn),	NsUndefGlobalFn,	1, "UndefGlobalFn(symbol)");
     NewtDefGlobalFunc(NSSYM(UndefGlobalVar),NsUndefGlobalVar,	1, "UndefGlobalVar(symbol)");
 
-    //NewtDefGlobalFunc(NSSYM(Apply),			NsApply,			2, "Apply(func, params)");
+    NewtDefGlobalFunc(NSSYM(Apply),			NsApply,			2, "Apply(func, params)");
     NewtDefGlobalFunc(NSSYM(Perform),		NsPerform,			3, "Perform(frame, message, params)");
     //NewtDefGlobalFunc(NSSYM(PerformIfDefined,NsPerformIfDefined,3, "PerformIfDefined(frame, message, params)");
     //NewtDefGlobalFunc(NSSYM(ProtoPerform,	NsProtoPerform,		3, "ProtoPerform(frame, message, params)");
@@ -4157,9 +4157,9 @@ newtRef NcCallWithArgArray(newtRefArg fn, newtRefArg args)
 	newtRefVar	result;
 	newtErr		err;
 
-	if (! NewtRefIsFrame(args))
+	if (! NewtRefIsArray(args))
 	{
-		return NewtThrow(kNErrNotAFrame, args);
+		return NewtThrow(kNErrNotAnArray, args);
 	}
 
 	// save the VM

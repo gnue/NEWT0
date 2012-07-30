@@ -1934,7 +1934,13 @@ newtRef NsMakeRegex(newtRefArg rcvr, newtRefArg pattern, newtRefArg opt)
  */
 newtRef 	NsApply(newtRefArg rcvr, newtRefArg func, newtRefArg params)
 {
-	/* STUB */
+	if (! NewtRefIsFunction(func))
+	{
+		return NewtThrow(kNErrNotAFunction, func);
+	}
+	
+	newtRef ary = NewtRefIsNIL(params) ? NewtMakeArray(kNewtRefUnbind, 0) : params;
+	return NcCallWithArgArray(func, ary);
 }
 
 /*------------------------------------------------------------------------*/
