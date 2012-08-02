@@ -1971,7 +1971,8 @@ newtRef 	NsPerform(newtRefArg rcvr, newtRefArg frame, newtRefArg message, newtRe
  */
 newtRef 	NsPerformIfDefined(newtRefArg rcvr, newtRefArg frame, newtRefArg message, newtRefArg params)
 {
-	/* STUB */
+	newtRef ary = NewtRefIsNIL(params) ? NewtMakeArray(kNewtRefUnbind, 0) : params;
+	return NcSendWithArgArray(frame, message, true, ary);
 }
 /*------------------------------------------------------------------------*/
 /** Send a message to a method in a frame by name with an array of parameters (proto inheritance only)

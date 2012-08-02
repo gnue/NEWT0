@@ -1,22 +1,42 @@
 #!newt
 
 someFrame := { SomeMethod: func() begin
-    	Print("SomeMethod!");	
+    	Print("SomeMethod!\n");	
     end,
     SomeOtherMethod: func(number) begin
-    	Print("SomeOtherMethod(" & number & ")!");
+    	Print("SomeOtherMethod(" & number & ")!\n");
     end
 };
 
 // test Perform() with no arguments to be passed with the message
+Print("Perform(): ");
 Perform(someFrame, 'SomeMethod, nil);
 
 // test Perform() with an argument passed with the message
+Print("Perform(): ");
 Perform(someFrame, 'SomeOtherMethod, [42]);
 
 // test Perform() with an invalid symbol to send the message to
+Print("Perform(): ");
 try
 	Perform(someFrame, 'NonexistentMethod, nil);
+onexception |evt.ex| do Print("Caught exception |" & CurrentException().name & "|!\n");
+
+
+
+// test PerformIfDefined() with no arguments to be passed with the message
+Print("PerformIfDefined(): ");
+PerformIfDefined(someFrame, 'SomeMethod, nil);
+
+// test PerformIfDefined() with an argument passed with the message
+Print("PerformIfDefined(): ");
+PerformIfDefined(someFrame, 'SomeOtherMethod, [42]);
+
+// test PerformIfDefined() with an invalid symbol to send the message to
+Print("PerformIfDefined(): ");
+try
+	PerformIfDefined(someFrame, 'NonexistentMethod, nil);
+	Print("No exception caught!\n");
 onexception |evt.ex| do Print("Caught exception |" & CurrentException().name & "|!\n");
 
 
