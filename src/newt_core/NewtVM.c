@@ -3578,7 +3578,7 @@ void NVMInitGlobalFns1(void)
     NewtDefGlobalFunc(NSSYM(Apply),			NsApply,			2, "Apply(func, params)");
     NewtDefGlobalFunc(NSSYM(Perform),		NsPerform,			3, "Perform(frame, message, params)");
     NewtDefGlobalFunc(NSSYM(PerformIfDefined),NsPerformIfDefined,3, "PerformIfDefined(frame, message, params)");
-    //NewtDefGlobalFunc(NSSYM(ProtoPerform,	NsProtoPerform,		3, "ProtoPerform(frame, message, params)");
+    NewtDefGlobalFunc(NSSYM(ProtoPerform),	NsProtoPerform,		3, "ProtoPerform(frame, message, params)");
     //NewtDefGlobalFunc(NSSYM(ProtoPerformIfDefined),NsProtoPerformIfDefined,3, "ProtoPerformIfDefined(frame, message, params)");
 
     NewtDefGlobalFunc(NSSYM(Chr),			NsChr,				1, "Chr(integer)");

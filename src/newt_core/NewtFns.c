@@ -1986,7 +1986,8 @@ newtRef 	NsPerformIfDefined(newtRefArg rcvr, newtRefArg frame, newtRefArg messag
  */
 newtRef 	NsProtoPerform(newtRefArg rcvr, newtRefArg frame, newtRefArg message, newtRefArg params)
 {
-	/* STUB */
+	newtRef ary = NewtRefIsNIL(params) ? NewtMakeArray(kNewtRefUnbind, 0) : params;
+	return NcSendProtoWithArgArray(frame, message, false, ary);
 }
 
 /*------------------------------------------------------------------------*/
