@@ -103,4 +103,35 @@ try
 onexception |evt.ex| do Print("Caught exception |" & CurrentException().name & "|!\n");
 
 
+/*
+ * ProtoPerformIfDefined() Tests
+ */
+
+// test ProtoPerformIfDefined() with no arguments to be passed with the message
+Print("ProtoPerformIfDefined(): ");
+ProtoPerformIfDefined(someFrame, 'SomeMethod, nil);
+
+// test ProtoPerformIfDefined() with an argument passed with the message
+Print("ProtoPerformIfDefined(): ");
+ProtoPerformIfDefined(someFrame, 'SomeOtherMethod, [42]);
+
+// test ProtoPerformIfDefined() with an invalid symbol to send the message to
+Print("ProtoPerformIfDefined(): ");
+try
+	ProtoPerformIfDefined(someFrame, 'NonexistentMethod, nil);
+	Print("No exception caught!\n");
+onexception |evt.ex| do Print("Caught exception |" & CurrentException().name & "|!\n");
+
+// test ProtoPerformIfDefined() with no arguments to be passed with message (proto)
+Print("ProtoPerformIfDefined(): ");
+ProtoPerformIfDefined(someFrame, 'SomeProtoMethod, nil);
+
+// test ProtoPerformIfDefined() with no arguments to be passed with message (parent)
+Print("ProtoPerformIfDefined(): ");
+try
+	ProtoPerformIfDefined(someFrame, 'SomeParentMethod, nil);
+	Print("No exception caught!\n");
+onexception |evt.ex| do Print("Caught exception |" & CurrentException().name & "|!\n");
+
+
 true;
