@@ -1,0 +1,137 @@
+#!newt
+
+someProtoFrame := { SomeProtoMethod: func() begin
+		Print("SomeProtoMethod!\n");
+	end
+};
+someParentFrame := { SomeParentMethod: func() begin
+		Print("SomeParentMethod!\n");
+	end
+};
+someFrame := { _proto: someProtoFrame,
+	_parent: someParentFrame,
+	SomeMethod: func() begin
+    	Print("SomeMethod!\n");	
+    end,
+    SomeOtherMethod: func(number) begin
+    	Print("SomeOtherMethod(" & number & ")!\n");
+    end
+};
+
+/*
+ * Perform() Tests
+ */
+
+// test Perform() with no arguments to be passed with the message
+Print("Perform(): ");
+Perform(someFrame, 'SomeMethod, nil);
+
+// test Perform() with an argument passed with the message
+Print("Perform(): ");
+Perform(someFrame, 'SomeOtherMethod, [42]);
+
+// test Perform() with an invalid symbol to send the message to
+Print("Perform(): ");
+try
+	Perform(someFrame, 'NonexistentMethod, nil);
+onexception |evt.ex| do Print("Caught exception |" & CurrentException().name & "|!\n");
+
+// test Perform() with no arguments to be passed with message (proto)
+Print("Perform(): ");
+Perform(someFrame, 'SomeProtoMethod, nil);
+
+// test Perform() with no arguments to be passed with message (parent)
+Print("Perform(): ");
+Perform(someFrame, 'SomeParentMethod, nil);
+
+
+/*
+ * PerformIfDefined() Tests
+ */
+
+// test PerformIfDefined() with no arguments to be passed with the message
+Print("PerformIfDefined(): ");
+PerformIfDefined(someFrame, 'SomeMethod, nil);
+
+// test PerformIfDefined() with an argument passed with the message
+Print("PerformIfDefined(): ");
+PerformIfDefined(someFrame, 'SomeOtherMethod, [42]);
+
+// test PerformIfDefined() with an invalid symbol to send the message to
+Print("PerformIfDefined(): ");
+try
+	PerformIfDefined(someFrame, 'NonexistentMethod, nil);
+	Print("No exception caught!\n");
+onexception |evt.ex| do Print("Caught exception |" & CurrentException().name & "|!\n");
+
+// test PerformIfDefined() with no arguments to be passed with message (proto)
+Print("PerformIfDefined(): ");
+PerformIfDefined(someFrame, 'SomeProtoMethod, nil);
+
+// test PerformIfDefined() with no arguments to be passed with message (parent)
+Print("PerformIfDefined(): ");
+PerformIfDefined(someFrame, 'SomeParentMethod, nil);
+
+
+/*
+ * ProtoPerform() Tests
+ */
+
+// test ProtoPerform() with no arguments to be passed with the message
+Print("ProtoPerform(): ");
+ProtoPerform(someFrame, 'SomeMethod, nil);
+
+// test ProtoPerform() with an argument passed with the message
+Print("ProtoPerform(): ");
+ProtoPerform(someFrame, 'SomeOtherMethod, [42]);
+
+// test ProtoPerform() with an invalid symbol to send the message to
+Print("ProtoPerform(): ");
+try
+	ProtoPerform(someFrame, 'NonexistentMethod, nil);
+	Print("No exception caught!\n");
+onexception |evt.ex| do Print("Caught exception |" & CurrentException().name & "|!\n");
+
+// test ProtoPerform() with no arguments to be passed with message (proto)
+Print("ProtoPerform(): ");
+ProtoPerform(someFrame, 'SomeProtoMethod, nil);
+
+// test ProtoPerform() with no arguments to be passed with message (parent)
+Print("ProtoPerform(): ");
+try
+	ProtoPerform(someFrame, 'SomeParentMethod, nil);
+onexception |evt.ex| do Print("Caught exception |" & CurrentException().name & "|!\n");
+
+
+/*
+ * ProtoPerformIfDefined() Tests
+ */
+
+// test ProtoPerformIfDefined() with no arguments to be passed with the message
+Print("ProtoPerformIfDefined(): ");
+ProtoPerformIfDefined(someFrame, 'SomeMethod, nil);
+
+// test ProtoPerformIfDefined() with an argument passed with the message
+Print("ProtoPerformIfDefined(): ");
+ProtoPerformIfDefined(someFrame, 'SomeOtherMethod, [42]);
+
+// test ProtoPerformIfDefined() with an invalid symbol to send the message to
+Print("ProtoPerformIfDefined(): ");
+try
+	ProtoPerformIfDefined(someFrame, 'NonexistentMethod, nil);
+	Print("No exception caught!\n");
+onexception |evt.ex| do Print("Caught exception |" & CurrentException().name & "|!\n");
+
+// test ProtoPerformIfDefined() with no arguments to be passed with message (proto)
+Print("ProtoPerformIfDefined(): ");
+ProtoPerformIfDefined(someFrame, 'SomeProtoMethod, nil);
+
+// test ProtoPerformIfDefined() with no arguments to be passed with message (parent)
+Print("ProtoPerformIfDefined(): ");
+try
+	ProtoPerformIfDefined(someFrame, 'SomeParentMethod, nil);
+	Print("No exception caught!\n");
+onexception |evt.ex| do Print("Caught exception |" & CurrentException().name & "|!\n");
+
+
+true;
