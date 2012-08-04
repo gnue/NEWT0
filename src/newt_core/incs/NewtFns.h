@@ -142,6 +142,12 @@ newtRef		NcLessOrEqual(newtRefArg r1, newtRefArg r2);			// bytecode
 newtRef		NsCurrentException(newtRefArg rcvr);
 newtRef		NsMakeRegex(newtRefArg rcvr, newtRefArg pattern, newtRefArg opt);
 
+newtRef 	NsApply(newtRefArg rcvr, newtRefArg func, newtRefArg params);
+newtRef 	NsPerform(newtRefArg rcvr, newtRefArg frame, newtRefArg message, newtRefArg params);
+newtRef 	NsPerformIfDefined(newtRefArg rcvr, newtRefArg frame, newtRefArg message, newtRefArg params);
+newtRef 	NsProtoPerform(newtRefArg rcvr, newtRefArg frame, newtRefArg message, newtRefArg params);
+newtRef 	NsProtoPerformIfDefined(newtRefArg rcvr, newtRefArg frame, newtRefArg message, newtRefArg params);
+
 newtRef		NsPrintObject(newtRefArg rcvr, newtRefArg r);
 newtRef		NsPrint(newtRefArg rcvr, newtRefArg r);
 newtRef		NsInfo(newtRefArg rcvr, newtRefArg r);
