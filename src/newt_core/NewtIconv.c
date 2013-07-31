@@ -48,7 +48,7 @@ char * NewtIconv(iconv_t cd, char * src, size_t srclen, size_t* dstlenp)
 			size_t	status;
 
 			iconv(cd, NULL, NULL, NULL, NULL);
-			status = iconv(cd, &inbuf_p, &inbytesleft, &outbuf_p, &outbytesleft);
+			status = iconv(cd, (char **) &inbuf_p, &inbytesleft, &outbuf_p, &outbytesleft);
 
 			if (status == (size_t)-1)
 			{	// 変換に失敗したのでバッファを解放する
