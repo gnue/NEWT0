@@ -120,11 +120,13 @@ case "$target_os" in
     ;;
 esac
 
-if test $target_cpu = "i586" ; then
+case "$target_cpu" in
+  i586|i686)
     NEWT_LDFLAGS="$NEWT_LDFLAGS -m32"
     LIBNEWT_LDSHARED="$LIBNEWT_LDSHARED -m32"
     NEWT_CFLAGS="$NEWT_CFLAGS -m32"
-fi
+    ;;
+esac
 
 case "$target_vendor" in
   *ipod*)
