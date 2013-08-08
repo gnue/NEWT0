@@ -32,7 +32,7 @@ LDSHARED = @LIBNEWT_LDSHARED@
 
 
 CPPFLAGS = -I$(srcdir) -I$(core)/incs
-CFLAGS = $(DEBUG) $(DEFS) -O2 -pipe
+CFLAGS = $(DEBUG) $(DEFS) -O2 -pipe @NEWT_CFLAGS@
 
 
 NEWTLIBNAME	= protoREGEX

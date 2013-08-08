@@ -39,7 +39,7 @@ libdir = ${prefix}/lib
 
 VPATH = $(core)
 STRIP = strip -x
-CFLAGS = $(DEBUG) $(DEFS) -O2 -pipe
+CFLAGS = $(DEBUG) $(DEFS) @NEWT_CFLAGS@ -O2 -pipe
 CPPFLAGS = -I. -I$(srcdir) -I$(core)/incs -I$(srcdir)/parser -I$(yytmp) @CPPFLAGS@
 
 
@@ -132,7 +132,7 @@ $(yytmp):
 newt: $(build) $(objdir) $(yytmp) $(NEWT) $(LDIMPORT)
 
 $(NEWT): $(OBJS)
-	$(CC) $(LDFLAGS) $(LIBS) $(OBJS) $(LIBS) -o $@
+	$(CC) -o $@ $(OBJS) $(LDFLAGS) $(LIBS) $(LIBS)
 
 
 ### LIBNEWT static library
