@@ -37,6 +37,7 @@
 /// Test first 8 bytes for any of the package signatures
 #define PkgIsPackage(data) ((strncmp(data, "package0", 8)==0) || (strncmp(data, "package1", 8)==0))
 
+#define kRelocationFlag 0x04000000
 
 /* types */
 
@@ -45,6 +46,12 @@ typedef struct {
 	uint16_t	offset;			///< offset from the flexible size header block
 	uint16_t	size;			///< size of data block
 } pkg_info_ref_t;
+
+/// relocation data
+typedef struct {
+	uint16_t        size;
+	uint8_t*        data;
+} pkg_relocation_t;
 
 /// package header structure
 typedef struct {
@@ -98,6 +105,7 @@ typedef struct {
 	iconv_t		from_utf16;		///< r  strings in compatible packages are UTF16
 	iconv_t		to_utf16;		///< w  strings in compatible packages are UTF16
 #endif /* HAVE_LIBICONV */
+	pkg_relocation_t relocations;
 } pkg_stream_t;
 
 
@@ -811,6 +819,12 @@ newtRef PkgReadBinaryObject(pkg_stream_t *pkg, uint32_t p_obj)
 			printf("*** PkgReader: PkgReadBinaryObject - dumping byte code\n");
 			NVMDumpBC(stdout, result);
 #		endif
+	} else if (klass==NSSYM0(bits)) {
+		result = NewtMakeBinary(klass, pkg->data + p_obj + 12, size-12, true);
+	} else if (klass==NSSYM0(cbits)) {
+		result = NewtMakeBinary(klass, pkg->data + p_obj + 12, size-12, true);
+	} else if (klass==NSSYM0(nativeModule)) {
+		result = NewtMakeBinary(klass, pkg->data + p_obj + 12, size-12, true);
 	} else {
 #		ifdef DEBUG_PKG
 			// This output is helpful to find more binary classes that may need 
@@ -980,7 +994,7 @@ newtRef PkgReadPart(pkg_stream_t *pkg, int32_t index)
                         };
 
 	pkg->part_header = pkg->part_headers + index;
-	pkg->part_offset = ntohl(pkg->header->directorySize) + ntohl(pkg->part_header->offset);
+	pkg->part_offset = ntohl(pkg->header->directorySize) + pkg->relocations.size + ntohl(pkg->part_header->offset);
 	pkg->part = pkg->data + pkg->part_offset;
 	flags = ntohl(pkg->part_header->flags);
 
@@ -1140,6 +1154,11 @@ newtRef NewtReadPkg(uint8_t * data, size_t size)
 	pkg.size = size;
 	pkg.header = (pkg_header_t*)data;
 	pkg.num_parts = ntohl(pkg.header->numParts);
+	if (ntohl(pkg.header->flags) & kRelocationFlag) {
+		pkg.relocations.size = ntohl(*(uint32_t *) (data + ntohl(pkg.header->directorySize) + sizeof(uint32_t)));
+	} else {
+		pkg.relocations.size = 0;
+	}
 	pkg.part_headers = (pkg_part_t*)(data + sizeof(pkg_header_t));
 	pkg.var_data = data + sizeof(pkg_header_t) + pkg.num_parts*sizeof(pkg_part_t);
 #	ifdef HAVE_LIBICONV

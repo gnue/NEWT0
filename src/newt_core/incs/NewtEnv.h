@@ -139,6 +139,9 @@ typedef struct {
     newtRefVar	__int;				///< int
     newtRefVar	int32;				///< int32
     newtRefVar	pathExpr;			///< pathExpr
+    newtRefVar	bits;			///< bits
+    newtRefVar	cbits;			///< cbits
+    newtRefVar	nativeModule;			///< NTKC native module
 
     // for loop
     newtRefVar	collect;			///< collect
