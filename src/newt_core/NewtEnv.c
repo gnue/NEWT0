@@ -147,6 +147,9 @@ void NewtInitSYM(void)
     INITSYM2(NS_INT, "int");
     INITSYM(int32);
     INITSYM(pathExpr);
+    INITSYM(bits);
+    INITSYM(cbits);
+    INITSYM(nativeModule);
 
     // for loop
     INITSYM(collect);
