@@ -27,25 +27,8 @@ esac
 
 
 # Checks for libraries.
-#AC_CHECK_LIB(iconv, iconv_open)
-
-SAVE_LIBS="$LIBS"
-LIBS="$LIBS -liconv"
-result='no'
-AC_MSG_CHECKING(checking for libiconv)
-AC_TRY_LINK([
-	#include <stdlib.h>
-	#include <iconv.h>
-	], [
-	iconv_t	cd = iconv_open("", "");
-	iconv(cd, NULL, NULL, NULL, NULL);
-	iconv_close(cd);
-	],
-	AC_DEFINE(HAVE_LIBICONV)
-	result='yes',
-	LIBS="$SAVE_LIBS")
-AC_MSG_RESULT($result)
-
+AC_SEARCH_LIBS(iconv_open, iconv)
+test "$ac_cv_search" != "no" && AC_DEFINE(HAVE_LIBICONV)
 
 HAVE_DLOPEN='no'
 AC_MSG_CHECKING(checking for dlopen)
