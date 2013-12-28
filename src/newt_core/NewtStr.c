@@ -353,6 +353,121 @@ newtRef NsSplit(newtRefArg rcvr, newtRefArg r, newtRefArg sep)
     return result;
 }
 
+newtRef NsStrPos(newtRefArg rcvr, newtRefArg haystack, newtRefArg needle, newtRefArg start)
+{
+  if (! NewtRefIsString(haystack))
+    return NewtThrow(kNErrNotAString, haystack);
+
+  char *s = NewtRefToString(haystack);
+
+  if (!NewtRefIsInteger(start)) {
+    return NewtThrow(kNErrNotAnInteger, start);
+  }
+  
+  int offset = NewtRefToInteger(start);
+  if (offset < 0) {
+    offset = -1; //strlen(s) + offset;
+  }
+  
+  if (offset < 0 || offset >= strlen(s)) {
+    return kNewtRefNIL;
+  }
+  
+  const char *match = NULL;
+  
+  if (NewtRefIsString(needle)) {
+    const char *c = NewtRefToString(needle);
+    match = strcasestr(s + offset, c);
+  }
+  else if (NewtRefIsCharacter(needle)) {
+    const char c = NewtRefToCharacter(needle);
+    match = strchr(s + offset, c);
+  }
+  else {
+    return NewtThrow(kNErrNotAString, needle);
+  }
+
+
+  if (match == NULL) {
+    return kNewtRefNIL;
+  }
+        
+  return NewtMakeInt32(match - s);
+}
+
+newtRef NsStrReplace(newtRefArg rcvr, newtRefArg string, newtRefArg substr, newtRefArg replacement, newtRefArg count) {
+  const char *ins;    // the next insert point
+  char *tmp;    // varies
+  int len_rep;  // length of rep
+  int len_with; // length of with
+  int len_front; // distance between rep and end of last rep
+  
+  int occurences;    // number of replacements
+
+  if (! NewtRefIsString(string))
+    return NewtThrow(kNErrNotAString, string);
+  if (! NewtRefIsString(substr))
+    return NewtThrow(kNErrNotAString, substr);
+  if (! NewtRefIsString(replacement))
+    return NewtThrow(kNErrNotAString, replacement);
+  
+  const char *orig = NewtRefToString(string);
+  const char *rep = NewtRefToString(substr);
+  const char *with = NewtRefToString(replacement);
+
+  ins = orig;
+  
+  // count == 0 ? nothing to do
+  // count == nil ? replace all occurences
+  
+  
+  len_with = strlen(with);
+  len_rep = strlen(rep);
+  
+  if (len_rep == 0) {
+    return NewtMakeInteger(0);
+  }
+  
+  for (occurences = 0; (tmp = strstr(ins, rep)); ++occurences) {
+    ins = tmp + len_rep;
+  }
+  
+  if (NewtRefIsInteger(count)) {
+    if (occurences > NewtRefToInteger(count)) {
+      occurences = NewtRefToInteger(count);
+    }
+  }
+  
+  if (occurences == 0) {
+    return NewtMakeInt32(0);
+  }
+  
+  int mallocLen = strlen(orig) + (len_with - len_rep) * occurences + 1;
+  char *result = tmp = calloc(mallocLen, sizeof(char *));
+  
+  if (!tmp) {
+    return NewtThrow(kNErrOutOfObjectMemory, rcvr);
+  }
+
+  int remaining = occurences;
+  while (remaining--) {
+    ins = strstr(orig, rep);
+    len_front = ins - orig;
+    strncpy(tmp, orig, len_front);
+    tmp+=len_front;
+    strncpy(tmp, with, len_with);
+    tmp+=len_with;
+    orig += len_front + len_rep;
+  }
+  strcpy(tmp, orig);
+
+  orig = NewtRefToString(string);
+  NewtSetLength(string, strlen(result));
+  strcpy(NewtRefToData(string), result);
+  free(result);
+  
+  return NewtMakeInt32(occurences);
+}
 
 /*------------------------------------------------------------------------*/
 /** ベース文字列のパラメータを置き換えて新しい文字列を作成する
