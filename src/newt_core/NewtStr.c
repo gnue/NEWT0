@@ -516,31 +516,34 @@ newtRef NsSubStr(newtRefArg rcvr, newtRefArg r, newtRefArg start, newtRefArg cou
 	(void) rcvr;
 	
 	/* check parameters */
-    if (! NewtRefIsString(r))
-        return NewtThrow(kNErrNotAString, r);
-    if (! NewtRefIsInteger(start))
-        return NewtThrow(kNErrNotAnInteger, start);
-    
-    theString = NewtRefToString(r);
-    theLen = strlen(theString);
-    
-    theStart = NewtRefToInteger(start);
-
-    if (!NewtRefIsNIL(count))
+  if (! NewtRefIsString(r))
+    return NewtThrow(kNErrNotAString, r);
+  if (! NewtRefIsInteger(start))
+    return NewtThrow(kNErrNotAnInteger, start);
+  
+  theString = NewtRefToString(r);
+  theLen = strlen(theString);
+  
+  theStart = NewtRefToInteger(start);
+  if (theStart > theLen) {
+    return NewtMakeString("", true);
+  }
+  
+  if (!NewtRefIsNIL(count))
+  {
+    if (!NewtRefIsInteger(count))
     {
-    	if (!NewtRefIsInteger(count))
-    	{
-        	return NewtThrow(kNErrNotAnInteger, count);
-        }
-        theEnd = theStart + NewtRefToInteger(count);
-        if (theEnd > theLen)
-        {
-        	return NewtThrow(kNErrOutOfRange, count);
-        }
+      return NewtThrow(kNErrNotAnInteger, count);
+    }
+    theEnd = theStart + NewtRefToInteger(count);
+    if (theEnd > theLen)
+    {
+      theEnd = theLen;
+    }
 	} else {
 		theEnd = theLen;
 	}
-
+  
 	/* new length */
 	theLen = theEnd - theStart;
 	
