@@ -118,6 +118,7 @@ newtRef		NcStringer(newtRefArg r);								// bytecode
 newtRef		NsStrCat(newtRefArg rcvr, newtRefArg str, newtRefArg v);
 newtRef		NsMakeSymbol(newtRefArg rcvr, newtRefArg r);
 newtRef		NsMakeFrame(newtRefArg rcvr);
+newtRef NsMakeArray(newtRefArg rcvr, newtRefArg size, newtRefArg initialValue);
 newtRef		NsMakeBinary(newtRefArg rcvr, newtRefArg length, newtRefArg klass);
 newtRef		NsMakeBinaryFromHex(newtRefArg rcvr, newtRefArg hex, newtRefArg klass);
 

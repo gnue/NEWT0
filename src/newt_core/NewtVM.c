@@ -3602,6 +3602,7 @@ void NVMInitGlobalFns1(void)
     NewtDefGlobalFunc(NSSYM(SPrintObject),	NsSPrintObject,		1, "SPrintObject(obj)");
     NewtDefGlobalFunc(NSSYM(SymbolCompareLex),	NsSymbolCompareLex,	2, "SymbolCompareLex(symbol1, symbol2)");
   
+  NewtDefGlobalFunc(NSSYM(Array),	NsMakeArray,	2, "Array(size, initialValue)");
   NewtDefGlobalFunc(NSSYM(SetContains),	NsSetContains,	2, "SetContains( array, item )");
   
   

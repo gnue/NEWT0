@@ -1364,6 +1364,20 @@ newtRef NsMakeFrame(newtRefArg rcvr)
 }
 
 
+newtRef NsMakeArray(newtRefArg rcvr, newtRefArg size, newtRefArg initialValue) {
+  if (!NewtRefIsInteger(size)) {
+    return NewtThrow(kNErrNotAnInteger, size);
+  }
+  int length = NewtRefToInteger(size);
+  newtRef result = NewtMakeArray(kNewtRefUnbind, length);
+  int i;
+  for (i = 0; i<length; i++) {
+    NewtSlotsSetSlot(result, i, initialValue);
+  }
+  return result;
+}
+
+
 /*------------------------------------------------------------------------*/
 /** バイナリオブジェクトを作成する
  *
