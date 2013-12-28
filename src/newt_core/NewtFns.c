@@ -1436,7 +1436,7 @@ newtRef NcBAnd(newtRefArg r1, newtRefArg r2)
     if (! NewtRefIsInteger(r2))
         return NewtThrow(kNErrNotAnInteger, r2);
 
-    return (r1 & r2);
+  return NewtMakeInteger((NewtRefToInteger(r1) & NewtRefToInteger(r2)));
 }
 
 
@@ -1457,7 +1457,7 @@ newtRef NcBOr(newtRefArg r1, newtRefArg r2)
     if (! NewtRefIsInteger(r2))
         return NewtThrow(kNErrNotAnInteger, r2);
 
-    return (r1 | r2);
+  return NewtMakeInteger((NewtRefToInteger(r1) | NewtRefToInteger(r2)));
 }
 
 
