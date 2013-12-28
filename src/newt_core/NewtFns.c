@@ -2096,3 +2096,72 @@ newtRef NsExtractByte(newtRefArg rcvr, newtRefArg r, newtRefArg offset)
 
     return NewtGetBinarySlot(r, NewtRefToInteger(offset));
 }
+
+newtRef NsExtractWord(newtRefArg rcvr, newtRefArg r, newtRefArg offset)
+{
+  if (! NewtRefIsBinary(r))
+    return NewtThrow(kNErrNotABinaryObject, r);
+  
+  if (! NewtRefIsInteger(offset))
+    return NewtThrow(kNErrNotAnInteger, offset);
+
+  uint32_t len = NewtBinaryLength(r);
+  uint32_t p = NewtRefToInteger(offset);
+  
+  if (p < len && p + 1 < len)
+  {
+    uint8_t *	data = NewtRefToBinary(r);
+    uint32_t value = (data[p] << 8) | (data[p+1]);
+    return NewtMakeInteger(value);
+  }
+  
+  return kNewtRefUnbind;
+
+}
+
+newtRef NsRef(newtRefArg rcvr, newtRefArg integer)
+{
+  if (! NewtRefIsInteger(integer))
+    return NewtThrow(kNErrNotAnInteger, integer);
+
+  newtRef result = (newtRef)NewtRefToInteger(integer);
+  if (NewtRefIsPointer(result) == false) {
+    //result = NSSYM0(weird_immediate);
+  }
+  return result;
+}
+
+newtRef NsRefOf(newtRefArg rcvr, newtRefArg object)
+{
+  return NewtMakeInteger(object);
+}
+
+newtRef NsNegate(newtRefArg rcvr, newtRefArg integer)
+{
+  if (! NewtRefIsInteger(integer))
+    return NewtThrow(kNErrNotAnInteger, integer);
+  
+  return NewtMakeInt32(- (NewtRefToInteger(integer)));
+}
+
+newtRef NsSetContains(newtRefArg rcvr, newtRefArg array, newtRefArg item) {
+  if (!NewtRefIsArray(array)) {
+    return NewtThrow(kNErrNotAnArray, array);
+  }
+  
+  newtRef *	slots;
+  uint32_t	n;
+  uint32_t	i;
+  
+  slots = NewtRefToSlots(array);
+  n = NewtLength(array);
+  
+  for (i = 0; i < n; i++)
+  {
+    if (slots[i] == item) {
+      return NewtMakeInteger(i);
+    }
+  }
+  
+  return kNewtRefNIL;
+}

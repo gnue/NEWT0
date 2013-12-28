@@ -153,7 +153,12 @@ newtRef		NsCompile(newtRefArg rcvr, newtRefArg r);
 newtRef		NsGetEnv(newtRefArg rcvr, newtRefArg r);
 
 newtRef		NsExtractByte(newtRefArg rcvr, newtRefArg r, newtRefArg offset);
+newtRef		NsExtractWord(newtRefArg rcvr, newtRefArg r, newtRefArg offset);
 
+newtRef NsRef(newtRefArg rcvr, newtRefArg integer);
+newtRef NsRefOf(newtRefArg rcvr, newtRefArg object);
+newtRef NsNegate(newtRefArg rcvr, newtRefArg integer);
+newtRef NsSetContains(newtRefArg rcvr, newtRefArg array, newtRefArg item);
 
 #ifdef __cplusplus
 }
