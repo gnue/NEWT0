@@ -1935,6 +1935,7 @@ newtRef NewtThrow(int32_t err, newtRefArg value)
 
     data = NcMakeFrame();
     NcSetSlot(data, NSSYM0(errorCode), NewtMakeInteger(err));
+  NcSetSlot(data, NSSYM(errorMessage), NewtMakeString(NewtErrorMessage(err), false));
 
 	if (value != kNewtRefUnbind)
 		NcSetSlot(data, NSSYM0(value), value);
@@ -1961,6 +1962,7 @@ newtRef NewtThrowSymbol(int32_t err, newtRefArg symbol)
 
     data = NcMakeFrame();
     NcSetSlot(data, NSSYM0(errorCode), NewtMakeInteger(err));
+  NcSetSlot(data, NSSYM(errorMessage), NewtMakeString(NewtErrorMessage(err), false));
 
 	if (symbol != kNewtRefUnbind)
 		NcSetSlot(data, NSSYM0(symbol), symbol);
@@ -1988,6 +1990,7 @@ newtRef NewtErrOutOfBounds(newtRefArg value, int32_t index)
 
     data = NcMakeFrame();
     NcSetSlot(data, NSSYM0(errorCode), NewtMakeInteger(kNErrOutOfBounds));
+  NcSetSlot(data, NSSYM(errorMessage), NewtMakeString(NewtErrorMessage(kNErrOutOfBounds), false));
 	NcSetSlot(data, NSSYM0(value), value);
 	NcSetSlot(data, NSSYM0(index), NewtMakeInteger(index));
 
@@ -2016,6 +2019,281 @@ void NewtErrMessage(int32_t err)
     }
 }
 
+const char * NewtErrorMessage(int32_t err) {
+  const char *result = NULL;
+  
+  switch (err) {
+    case kNErrObjectPointerOfNonPtr:
+      result = "kNErrObjectPointerOfNonPtr";
+      break;
+    case kNErrBadMagicPointer:
+      result = "kNErrBadMagicPointer";
+      break;
+    case kNErrEmptyPath:
+      result = "kNErrEmptyPath";
+      break;
+    case kNErrBadSegmentInPath:
+      result = "kNErrBadSegmentInPath";
+      break;
+    case kNErrPathFailed:
+      result = "kNErrPathFailed";
+      break;
+    case kNErrOutOfBounds:
+      result = "kNErrOutOfBounds";
+      break;
+    case kNErrObjectsNotDistinct:
+      result = "kNErrObjectsNotDistinct";
+      break;
+    case kNErrLongOutOfRange:
+      result = "kNErrLongOutOfRange";
+      break;
+    case kNErrSettingHeapSizeTwice:
+      result = "kNErrSettingHeapSizeTwice";
+      break;
+    case kNErrGcDuringGc:
+      result = "kNErrGcDuringGc";
+      break;
+    case kNErrBadArgs:
+      result = "kNErrBadArgs";
+      break;
+    case kNErrStringTooBig:
+      result = "kNErrStringTooBig";
+      break;
+    case kNErrTFramesObjectPtrOfNil:
+      result = "kNErrTFramesObjectPtrOfNil";
+      break;
+    case kNErrUnassignedTFramesObjectPtr:
+      result = "kNErrUnassignedTFramesObjectPtr";
+      break;
+    case kNErrObjectReadOnly:
+      result = "kNErrObjectReadOnly";
+      break;
+    case kNErrOutOfObjectMemory:
+      result = "kNErrOutOfObjectMemory";
+      break;
+    case kNErrDerefMagicPointer:
+      result = "kNErrDerefMagicPointer";
+      break;
+    case kNErrNegativeLength:
+      result = "kNErrNegativeLength";
+      break;
+    case kNErrOutOfRange:
+      result = "kNErrOutOfRange";
+      break;
+    case kNErrCouldntResizeLockedObject:
+      result = "kNErrCouldntResizeLockedObject";
+      break;
+    case kNErrBadPackageRef:
+      result = "kNErrBadPackageRef";
+      break;
+    case kNErrBadExceptionName:
+      result = "kNErrBadExceptionName";
+      break;
+    case kNErrNotAFrame:
+      result = "kNErrNotAFrame";
+      break;
+    case kNErrNotAnArray:
+      result = "kNErrNotAnArray";
+      break;
+    case kNErrNotAString:
+      result = "kNErrNotAString";
+      break;
+    case kNErrNotAPointer:
+      result = "kNErrNotAPointer";
+      break;
+    case kNErrNotANumber:
+      result = "kNErrNotANumber";
+      break;
+    case kNErrNotAReal:
+      result = "kNErrNotAReal";
+      break;
+    case kNErrNotAnInteger:
+      result = "kNErrNotAnInteger";
+      break;
+    case kNErrNotACharacter:
+      result = "kNErrNotACharacter";
+      break;
+    case kNErrNotABinaryObject:
+      result = "kNErrNotABinaryObject";
+      break;
+    case kNErrNotAPathExpr:
+      result = "kNErrNotAPathExpr";
+      break;
+    case kNErrNotASymbol:
+      result = "kNErrNotASymbol";
+      break;
+    case kNErrNotAFunction:
+      result = "kNErrNotAFunction";
+      break;
+    case kNErrNotAFrameOrArray:
+      result = "kNErrNotAFrameOrArray";
+      break;
+    case kNErrNotAnArrayOrNil:
+      result = "kNErrNotAnArrayOrNil";
+      break;
+    case kNErrNotAStringOrNil:
+      result = "kNErrNotAStringOrNil";
+      break;
+    case kNErrNotABinaryObjectOrNil:
+      result = "kNErrNotABinaryObjectOrNil";
+      break;
+    case kNErrUnexpectedFrame:
+      result = "kNErrUnexpectedFrame";
+      break;
+    case kNErrUnexpectedBinaryObject:
+      result = "kNErrUnexpectedBinaryObject";
+      break;
+    case kNErrUnexpectedImmediate:
+      result = "kNErrUnexpectedImmediate";
+      break;
+    case kNErrNotAnArrayOrString:
+      result = "kNErrNotAnArrayOrString";
+      break;
+    case kNErrNotAVBO:
+      result = "kNErrNotAVBO";
+      break;
+    case kNErrNotAPackage:
+      result = "kNErrNotAPackage";
+      break;
+    case kNErrNotNil:
+      result = "kNErrNotNil";
+      break;
+    case kNErrNotASymbolOrNil:
+      result = "kNErrNotASymbolOrNil";
+      break;
+    case kNErrNotTrueOrNil:
+      result = "kNErrNotTrueOrNil";
+      break;
+    case kNErrNotAnIntegerOrArray:
+      result = "kNErrNotAnIntegerOrArray";
+      break;
+    case kNErrSyntaxError:
+      result = "kNErrSyntaxError";
+      break;
+    case kNErrAssignToConstant:
+      result = "kNErrAssignToConstant";
+      break;
+    case kNErrCantTest:
+      result = "kNErrCantTest";
+      break;
+    case kNErrGlobalVarNotAllowed:
+      result = "kNErrGlobalVarNotAllowed";
+      break;
+    case kNErrCantHaveSameName:
+      result = "kNErrCantHaveSameName";
+      break;
+    case kNErrCantRedefineConstant:
+      result = "kNErrCantRedefineConstant";
+      break;
+    case kNErrCantHaveSameNameInScope:
+      result = "kNErrCantHaveSameNameInScope";
+      break;
+    case kNErrNonLiteralExpression:
+      result = "kNErrNonLiteralExpression";
+      break;
+    case kNErrEndOfInputString:
+      result = "kNErrEndOfInputString";
+      break;
+    case kNErrOddNumberOfDigits:
+      result = "kNErrOddNumberOfDigits";
+      break;
+    case kNErrNoEscapes:
+      result = "kNErrNoEscapes";
+      break;
+    case kNErrInvalidHexCharacter:
+      result = "kNErrInvalidHexCharacter";
+      break;
+    case kNErrNotTowDigitHex:
+      result = "kNErrNotTowDigitHex";
+      break;
+    case kNErrNotFourDigitHex:
+      result = "kNErrNotFourDigitHex";
+      break;
+    case kNErrIllegalCharacter:
+      result = "kNErrIllegalCharacter";
+      break;
+    case kNErrInvalidHexadecimal:
+      result = "kNErrInvalidHexadecimal";
+      break;
+    case kNErrInvalidReal:
+      result = "kNErrInvalidReal";
+      break;
+    case kNErrInvalidDecimal:
+      result = "kNErrInvalidDecimal";
+      break;
+    case kNErrNotConstant:
+      result = "kNErrNotConstant";
+      break;
+    case kNErrNotDecimalDigit:
+      result = "kNErrNotDecimalDigit";
+      break;
+    case kNErrNotInBreakLoop:
+      result = "kNErrNotInBreakLoop";
+      break;
+    case kNErrTooManyArgs:
+      result = "kNErrTooManyArgs";
+      break;
+    case kNErrWrongNumberOfArgs:
+      result = "kNErrWrongNumberOfArgs";
+      break;
+    case kNErrZeroForLoopIncr:
+      result = "kNErrZeroForLoopIncr";
+      break;
+    case kNErrNoCurrentException:
+      result = "kNErrNoCurrentException";
+      break;
+    case kNErrUndefinedVariable:
+      result = "kNErrUndefinedVariable";
+      break;
+    case kNErrUndefinedGlobalFunction:
+      result = "kNErrUndefinedGlobalFunction";
+      break;
+    case kNErrUndefinedMethod:
+      result = "kNErrUndefinedMethod";
+      break;
+    case kNErrMissingProtoForResend:
+      result = "kNErrMissingProtoForResend";
+      break;
+    case kNErrNilContext:
+      result = "kNErrNilContext";
+      break;
+    case kNErrBadCharForString:
+      result = "kNErrBadCharForString";
+      break;
+    case kNErrInvalidFunc:
+      result = "kNErrInvalidFunc";
+      break;
+    case kNErrInvalidInstruction:
+      result = "kNErrInvalidInstruction";
+      break;
+    case kNErrFileNotFound:
+      result = "kNErrFileNotFound";
+      break;
+    case kNErrFileNotOpen:
+      result = "kNErrFileNotOpen";
+      break;
+    case kNErrDylibNotOpen:
+      result = "kNErrDylibNotOpen";
+      break;
+    case kNErrSystemError:
+      result = "kNErrSystemError";
+      break;
+    case kNErrDiv0:
+      result = "kNErrDiv0";
+      break;
+    case kNErrRegcomp:
+      result = "kNErrRegcomp";
+      break;
+    case kNErrNSOFWrite:
+      result = "kNErrNSOFWrite";
+      break;
+    case kNErrNSOFRead:
+      result = "kNErrNSOFRead";
+      break;
+  }
+  
+  return result;
+}
 
 #if 0
 #pragma mark -
