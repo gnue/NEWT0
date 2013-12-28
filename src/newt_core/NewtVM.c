@@ -2874,9 +2874,20 @@ void is_make_frame(int16_t b)
     newtRefVar	f;
     newtRefVar	v;
     int16_t	i;
+  int16_t mapLength;
 
     map = stk_pop();
-    f = NewtMakeFrame(map, b);
+  mapLength = NewtLength(map) - 1;
+
+  // NewtonScript Bytecode Interpreter Specification:
+  // The B field may contain a number less than the number of slots in the frame, in which
+  // case the remaining slots at the end of the frame are set to nil.
+  
+  f = NewtMakeFrame(map, mapLength);
+  
+  for (i = mapLength - 1; b <= i; i--) {
+    NewtSetFrameSlot(f, i, kNewtRefNIL);
+  }
 
     for (i = b - 1; 0 <= i; i--)
     {
