@@ -841,6 +841,8 @@ int32_t NewtRefToInteger(newtRefArg r)
 
     if (NewtRefIsInt30(r))
         v = NewtRefToInt30(r);
+    else if (NewtRefIsNIL(r))
+      v = NewtMakeInt30(0);
     else
         NewtGetObjData(r, (uint8_t *)&v, sizeof(v));
 
