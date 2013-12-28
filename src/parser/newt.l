@@ -807,5 +807,6 @@ int nps_yycleanup(void)
 {
 	BEGIN INITIAL;
 	YY_FLUSH_BUFFER;
+  memset(nps_env.linebuf, '\0', sizeof(nps_env.linebuf));
 	yyterminate();
 }
