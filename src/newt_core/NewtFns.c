@@ -1723,7 +1723,13 @@ newtRef NcDivide(newtRefArg r1, newtRefArg r2)
         if (int2 == 0)
             return NewtThrow(kNErrDiv0, r2);
 
-        return NewtMakeInteger(int1 / int2);
+        double result = (double)int1 / (double)int2;
+        if (result == (int)result) {
+            return NewtMakeInteger(result);
+        }
+        else {
+            return NewtMakeReal(result);
+        }
     }
 }
 
