@@ -3129,8 +3129,12 @@ void NewtObjRemoveSlot(newtObjRef obj, newtRefArg slot)
     }
     else
     {
-        int32_t	i;
+      if (NewtRefIsInteger(slot) == false) {
+        NewtThrow(kNErrNotAnInteger, slot);
+        return;
+      }
 
+      int32_t	i;
         i = NewtRefToInteger(slot);
         NewtObjRemoveArraySlot(obj, i);
     }
