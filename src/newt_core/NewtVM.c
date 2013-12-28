@@ -2875,8 +2875,20 @@ void is_make_frame(int16_t b)
     newtRefVar	v;
     int16_t	i;
 
+  int16_t mapLength;
+
     map = stk_pop();
-    f = NewtMakeFrame(map, b);
+  mapLength = NewtLength(map) - 1;
+
+  // NewtonScript Bytecode Interpreter Specification:
+  // The B field may contain a number less than the number of slots in the frame, in which
+  // case the remaining slots at the end of the frame are set to nil.
+  
+  f = NewtMakeFrame(map, mapLength);
+  
+  for (i = mapLength - 1; b <= i; i--) {
+    NewtSetFrameSlot(f, i, kNewtRefNIL);
+  }
 
     for (i = b - 1; 0 <= i; i--)
     {
@@ -3505,6 +3517,8 @@ void NVMInitGlobalFns0(void)
 {
     NewtDefGlobalFunc(NSSYM0(hasVariable),	NsHasVariable,		2, "HasVariable(frame, name)");
     NewtDefGlobalFunc(NSSYM0(hasVar),		NsHasVar,			1, "HasVar(name)");
+  NewtDefGlobalFunc(NSSYM(Ref),		NsRef,			1, "Ref(integer)");
+  NewtDefGlobalFunc(NSSYM(RefOf),		NsRefOf,			1, "RefOf(object)");
     NewtDefGlobalFunc(NSSYM0(defGlobalFn),	NsDefGlobalFn,		2, "DefGlobalFn(name, fn)");
     NewtDefGlobalFunc(NSSYM0(defGlobalVar),	NsDefGlobalVar,		2, "DefGlobalVar(name, value)");
 //    NewtDefGlobalFunc(NSSYM0(and),			NsAnd,				2, "And(n1, n2)");
@@ -3512,6 +3526,9 @@ void NVMInitGlobalFns0(void)
     NewtDefGlobalFunc(NSSYM0(mod),			NsMod,				2, "Mod(n1, n2)");
     NewtDefGlobalFunc(NSSYM0(shiftLeft),	NsShiftLeft,		2, "ShiftLeft(n1, n2)");
     NewtDefGlobalFunc(NSSYM0(shiftRight),	NsShiftRight,		2, "ShiftRight(n1, n2)");
+  NewtDefGlobalFunc(NSSYM(negate),	NsNegate,		1, "negate(number)");
+  NewtDefGlobalFunc(NSSYM(<<),	NsShiftLeft,		2, "<<(n1, n2)");
+  NewtDefGlobalFunc(NSSYM(>>),	NsShiftRight,		2, ">>(n1, n2)");
     NewtDefGlobalFunc(NSSYM0(objectEqual),	NsObjectEqual,		2, "ObjectEqual(obj1, obj2)");		// 独自拡張
     NewtDefGlobalFunc(NSSYM0(defMagicPointer),NsDefMagicPointer,2, "DefMagicPointer(mp, value)");	// 独自拡張
 
@@ -3591,6 +3608,9 @@ void NVMInitGlobalFns1(void)
     NewtDefGlobalFunc(NSSYM(EndsWith),		NsEndsWith,			2, "EndsWith(str, sub)");
     NewtDefGlobalFunc(NSSYM(SPrintObject),	NsSPrintObject,		1, "SPrintObject(obj)");
     NewtDefGlobalFunc(NSSYM(SymbolCompareLex),	NsSymbolCompareLex,	2, "SymbolCompareLex(symbol1, symbol2)");
+  
+  NewtDefGlobalFunc(NSSYM(Array),	NsMakeArray,	2, "Array(size, initialValue)");
+  NewtDefGlobalFunc(NSSYM(SetContains),	NsSetContains,	2, "SetContains( array, item )");
 }
 
 
@@ -3634,10 +3654,13 @@ void NVMInitExGlobalFns(void)
     NewtDefGlobalFunc(NSSYM(ExpandPath),NsExpandPath,		1, "ExpandPath(path)");
 
     NewtDefGlobalFunc(NSSYM(Split),		NsSplit,			2, "Split(str, sep)");
+  NewtDefGlobalFunc(NSSYM(StrPos),		NsStrPos,			3, "StrPos(hastack, needle, position)");
+  NewtDefGlobalFunc(NSSYM(StrReplace),		NsStrReplace,			4, "StrReplace(string, substr, replacement, count)");
     NewtDefGlobalFunc(NSSYM(ParamStr),	NsParamStr,			2, "ParamStr(baseString, paramStrArray)");
     NewtDefGlobalFunc(NSSYM(StrCat),	NsStrCat,			2, "StrCat(str1, str2)");
 
     NewtDefGlobalFunc(NSSYM(ExtractByte),NsExtractByte,		2, "ExtractByte(data, offset)");
+  NewtDefGlobalFunc(NSSYM(ExtractWord),NsExtractWord,		2, "ExtractWord(data, offset)");
 
     NewtDefGlobalFunc(NSSYM(Gets),		NsGets,				0, "Gets()");
     NewtDefGlobalFunc(NSSYM(Getc),		NsGetc,				0, "Getc()");

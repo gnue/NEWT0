@@ -228,9 +228,15 @@
 		08FB7793FE84155DC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = F541302B096D1DEB00CFD896 /* Build configuration list for PBXProject "ext" */;
+			compatibilityVersion = "Xcode 2.4";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				en,
+			);
 			mainGroup = 08FB7794FE84155DC02AAC07 /* newt */;
 			projectDirPath = "";
+			projectRoot = "";
 			targets = (
 				DAE3D2970A429BE500FE1B1F /* protoFILE */,
 				DAE3D2C70A429CD900FE1B1F /* protoREGEX */,
@@ -275,21 +281,31 @@
 		DA16689C0A438E15005937AA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = i386;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				PRODUCT_NAME = All;
+				SDKROOT = macosx;
+				SDKROOT_i386 = macosx;
+				SDKROOT_ppc = macosx;
 			};
 			name = Debug;
 		};
 		DA16689D0A438E15005937AA /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = i386;
 				COPY_PHASE_STRIP = YES;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				PRODUCT_NAME = All;
+				SDKROOT = macosx;
+				SDKROOT_i386 = macosx;
+				SDKROOT_ppc = macosx;
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -297,6 +313,8 @@
 		DAE3D2C40A429CC400FE1B1F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
 				COPY_PHASE_STRIP = NO;
 				DEBUGGING_SYMBOLS = "<Multiple values>";
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -306,10 +324,12 @@
 				GCC_GENERATE_DEBUGGING_SYMBOLS = "<Multiple values>";
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
 				GCC_WARN_UNKNOWN_PRAGMAS = NO;
 				LIBRARY_STYLE = BUNDLE;
 				MACH_O_TYPE = mh_dylib;
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					"-undefined",
@@ -319,6 +339,9 @@
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = protoFILE;
+				SDKROOT = macosx;
+				SDKROOT_i386 = macosx;
+				SDKROOT_ppc = macosx;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost";
 				ZERO_LINK = YES;
@@ -328,6 +351,8 @@
 		DAE3D2C50A429CC400FE1B1F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
 				COPY_PHASE_STRIP = YES;
 				DEBUGGING_SYMBOLS = "<Multiple values>";
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -335,10 +360,12 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = "<Multiple values>";
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
 				GCC_WARN_UNKNOWN_PRAGMAS = NO;
 				LIBRARY_STYLE = BUNDLE;
 				MACH_O_TYPE = mh_dylib;
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					"-undefined",
@@ -348,6 +375,9 @@
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = protoFILE;
+				SDKROOT = macosx;
+				SDKROOT_i386 = macosx;
+				SDKROOT_ppc = macosx;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost";
 				ZERO_LINK = NO;
@@ -357,6 +387,8 @@
 		DAE3D2E00A429CD900FE1B1F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
 				COPY_PHASE_STRIP = NO;
 				DEBUGGING_SYMBOLS = "<Multiple values>";
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -366,10 +398,12 @@
 				GCC_GENERATE_DEBUGGING_SYMBOLS = "<Multiple values>";
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
 				GCC_WARN_UNKNOWN_PRAGMAS = NO;
 				LIBRARY_STYLE = BUNDLE;
 				MACH_O_TYPE = mh_dylib;
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					"-undefined",
@@ -379,6 +413,9 @@
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = protoREGEX;
+				SDKROOT = macosx;
+				SDKROOT_i386 = macosx;
+				SDKROOT_ppc = macosx;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost";
 				ZERO_LINK = YES;
@@ -388,6 +425,8 @@
 		DAE3D2E10A429CD900FE1B1F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
 				COPY_PHASE_STRIP = YES;
 				DEBUGGING_SYMBOLS = "<Multiple values>";
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -395,10 +434,12 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = "<Multiple values>";
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
 				GCC_WARN_UNKNOWN_PRAGMAS = NO;
 				LIBRARY_STYLE = BUNDLE;
 				MACH_O_TYPE = mh_dylib;
+				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					"-undefined",
@@ -408,6 +449,9 @@
 				OTHER_REZFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = protoREGEX;
+				SDKROOT = macosx;
+				SDKROOT_i386 = macosx;
+				SDKROOT_ppc = macosx;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost";
 				ZERO_LINK = NO;

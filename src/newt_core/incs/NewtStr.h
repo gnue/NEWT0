@@ -46,7 +46,9 @@ newtRef		NsEndsWith(newtRefArg rcvr, newtRefArg str, newtRefArg sub);
 
 newtRef		NsSPrintObject(newtRefArg rcvr, newtRefArg r);
 newtRef		NsSplit(newtRefArg rcvr, newtRefArg r, newtRefArg sep);
+newtRef   NsStrPos(newtRefArg rcvr, newtRefArg haystack, newtRefArg needle, newtRefArg start);
 newtRef		NsParamStr(newtRefArg rcvr, newtRefArg baseString, newtRefArg paramStrArray);
+newtRef NsStrReplace(newtRefArg rcvr, newtRefArg string, newtRefArg substr, newtRefArg replacement, newtRefArg count);
 
 
 #ifdef __cplusplus

@@ -1364,6 +1364,20 @@ newtRef NsMakeFrame(newtRefArg rcvr)
 }
 
 
+newtRef NsMakeArray(newtRefArg rcvr, newtRefArg size, newtRefArg initialValue) {
+  if (!NewtRefIsInteger(size)) {
+    return NewtThrow(kNErrNotAnInteger, size);
+  }
+  int length = NewtRefToInteger(size);
+  newtRef result = NewtMakeArray(kNewtRefUnbind, length);
+  int i;
+  for (i = 0; i<length; i++) {
+    NewtSlotsSetSlot(result, i, initialValue);
+  }
+  return result;
+}
+
+
 /*------------------------------------------------------------------------*/
 /** バイナリオブジェクトを作成する
  *
@@ -1422,7 +1436,7 @@ newtRef NcBAnd(newtRefArg r1, newtRefArg r2)
     if (! NewtRefIsInteger(r2))
         return NewtThrow(kNErrNotAnInteger, r2);
 
-    return (r1 & r2);
+  return NewtMakeInteger((NewtRefToInteger(r1) & NewtRefToInteger(r2)));
 }
 
 
@@ -1443,7 +1457,7 @@ newtRef NcBOr(newtRefArg r1, newtRefArg r2)
     if (! NewtRefIsInteger(r2))
         return NewtThrow(kNErrNotAnInteger, r2);
 
-    return (r1 | r2);
+  return NewtMakeInteger((NewtRefToInteger(r1) | NewtRefToInteger(r2)));
 }
 
 
@@ -1709,7 +1723,13 @@ newtRef NcDivide(newtRefArg r1, newtRefArg r2)
         if (int2 == 0)
             return NewtThrow(kNErrDiv0, r2);
 
-        return NewtMakeInteger(int1 / int2);
+        double result = (double)int1 / (double)int2;
+        if (result == (int)result) {
+            return NewtMakeInteger(result);
+        }
+        else {
+            return NewtMakeReal(result);
+        }
     }
 }
 
@@ -2181,4 +2201,73 @@ newtRef NsExtractByte(newtRefArg rcvr, newtRefArg r, newtRefArg offset)
         return NewtThrow(kNErrNotAnInteger, offset);
 
     return NewtGetBinarySlot(r, NewtRefToInteger(offset));
+}
+
+newtRef NsExtractWord(newtRefArg rcvr, newtRefArg r, newtRefArg offset)
+{
+  if (! NewtRefIsBinary(r))
+    return NewtThrow(kNErrNotABinaryObject, r);
+  
+  if (! NewtRefIsInteger(offset))
+    return NewtThrow(kNErrNotAnInteger, offset);
+
+  uint32_t len = NewtBinaryLength(r);
+  uint32_t p = NewtRefToInteger(offset);
+  
+  if (p < len && p + 1 < len)
+  {
+    uint8_t *	data = NewtRefToBinary(r);
+    uint32_t value = (data[p] << 8) | (data[p+1]);
+    return NewtMakeInteger(value);
+  }
+  
+  return kNewtRefUnbind;
+
+}
+
+newtRef NsRef(newtRefArg rcvr, newtRefArg integer)
+{
+  if (! NewtRefIsInteger(integer))
+    return NewtThrow(kNErrNotAnInteger, integer);
+
+  newtRef result = (newtRef)NewtRefToInteger(integer);
+  if (NewtRefIsPointer(result) == false) {
+    //result = NSSYM0(weird_immediate);
+  }
+  return result;
+}
+
+newtRef NsRefOf(newtRefArg rcvr, newtRefArg object)
+{
+  return NewtMakeInteger(object);
+}
+
+newtRef NsNegate(newtRefArg rcvr, newtRefArg integer)
+{
+  if (! NewtRefIsInteger(integer))
+    return NewtThrow(kNErrNotAnInteger, integer);
+  
+  return NewtMakeInt32(- (NewtRefToInteger(integer)));
+}
+
+newtRef NsSetContains(newtRefArg rcvr, newtRefArg array, newtRefArg item) {
+  if (!NewtRefIsArray(array)) {
+    return NewtThrow(kNErrNotAnArray, array);
+  }
+  
+  newtRef *	slots;
+  uint32_t	n;
+  uint32_t	i;
+  
+  slots = NewtRefToSlots(array);
+  n = NewtLength(array);
+  
+  for (i = 0; i < n; i++)
+  {
+    if (slots[i] == item) {
+      return NewtMakeInteger(i);
+    }
+  }
+  
+  return kNewtRefNIL;
 }

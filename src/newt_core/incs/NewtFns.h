@@ -118,6 +118,7 @@ newtRef		NcStringer(newtRefArg r);								// bytecode
 newtRef		NsStrCat(newtRefArg rcvr, newtRefArg str, newtRefArg v);
 newtRef		NsMakeSymbol(newtRefArg rcvr, newtRefArg r);
 newtRef		NsMakeFrame(newtRefArg rcvr);
+newtRef NsMakeArray(newtRefArg rcvr, newtRefArg size, newtRefArg initialValue);
 newtRef		NsMakeBinary(newtRefArg rcvr, newtRefArg length, newtRefArg klass);
 newtRef		NsMakeBinaryFromHex(newtRefArg rcvr, newtRefArg hex, newtRefArg klass);
 
@@ -159,7 +160,12 @@ newtRef		NsCompile(newtRefArg rcvr, newtRefArg r);
 newtRef		NsGetEnv(newtRefArg rcvr, newtRefArg r);
 
 newtRef		NsExtractByte(newtRefArg rcvr, newtRefArg r, newtRefArg offset);
+newtRef		NsExtractWord(newtRefArg rcvr, newtRefArg r, newtRefArg offset);
 
+newtRef NsRef(newtRefArg rcvr, newtRefArg integer);
+newtRef NsRefOf(newtRefArg rcvr, newtRefArg object);
+newtRef NsNegate(newtRefArg rcvr, newtRefArg integer);
+newtRef NsSetContains(newtRefArg rcvr, newtRefArg array, newtRefArg item);
 
 #ifdef __cplusplus
 }

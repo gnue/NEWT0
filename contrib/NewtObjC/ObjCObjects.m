@@ -43,7 +43,7 @@
 #include <objc/objc.h>
 #include <objc/objc-class.h>
 #include <objc/objc-runtime.h>
-#include <Cocoa/Cocoa.h>
+#include <Foundation/Foundation.h>
 #include "objc-runtime-x/objc-runtime-x.h"
 
 // NEWT/0
@@ -418,8 +418,10 @@ GenericMethod(newtRef inRcvr, newtRef inArgs)
 								theMethod->method_imp,
 								sizeOfArguments,
 								arguments);
-			theResultObj = RangeToRef(theRange);
-		} else if ((strncmp(theType, "{_NSRect}", 9) == 0)
+			theResultObj = NSRangeToRef(theRange);
+		} 
+#if !TARGET_OS_IPHONE
+    else if ((strncmp(theType, "{_NSRect}", 9) == 0)
 			|| (strncmp(theType, "{_NSRect=", 9) == 0)) {
 			NSRect theRect;
 			objc_methodCallv_stret(
@@ -429,7 +431,7 @@ GenericMethod(newtRef inRcvr, newtRef inArgs)
 								theMethod->method_imp,
 								sizeOfArguments,
 								arguments);
-			theResultObj = RectToRef(theRect);
+			theResultObj = NSRectToRef(theRect);
 		} else if ((strncmp(theType, "{_NSPoint}", 10) == 0)
 			|| (strncmp(theType, "{_NSPoint=", 10) == 0)) {
 			NSPoint thePoint;
@@ -440,7 +442,7 @@ GenericMethod(newtRef inRcvr, newtRef inArgs)
 								theMethod->method_imp,
 								sizeOfArguments,
 								arguments);
-			theResultObj = PointToRef(thePoint);
+			theResultObj = NSPointToRef(thePoint);
 		} else if ((strncmp(theType, "{_NSSize}", 9) == 0)
 			|| (strncmp(theType, "{_NSSize=", 9) == 0)) {
 			NSSize theSize;
@@ -451,8 +453,44 @@ GenericMethod(newtRef inRcvr, newtRef inArgs)
 								theMethod->method_imp,
 								sizeOfArguments,
 								arguments);
-			theResultObj = SizeToRef(theSize);
-		} else {
+			theResultObj = NSSizeToRef(theSize);
+		} 
+#endif
+    else if ((strncmp(theType, "{_CGRect}", 9) == 0)
+             || (strncmp(theType, "{_CGRect=", 9) == 0)) {
+			CGRect theRect;
+			objc_methodCallv_stret(
+                             &theRect,
+                             objcSelf,
+                             theMethod->method_name,
+                             theMethod->method_imp,
+                             sizeOfArguments,
+                             arguments);
+			theResultObj = CGRectToRef(theRect);
+		} else if ((strncmp(theType, "{_CGPoint}", 10) == 0)
+               || (strncmp(theType, "{_CGPoint=", 10) == 0)) {
+			CGPoint thePoint;
+			objc_methodCallv_stret(
+                             &thePoint,
+                             objcSelf,
+                             theMethod->method_name,
+                             theMethod->method_imp,
+                             sizeOfArguments,
+                             arguments);
+			theResultObj = CGPointToRef(thePoint);
+		} else if ((strncmp(theType, "{_CGSize}", 9) == 0)
+               || (strncmp(theType, "{_CGSize=", 9) == 0)) {
+			CGSize theSize;
+			objc_methodCallv_stret(
+                             &theSize,
+                             objcSelf,
+                             theMethod->method_name,
+                             theMethod->method_imp,
+                             sizeOfArguments,
+                             arguments);
+			theResultObj = CGSizeToRef(theSize);
+		} 
+    else {
 			printf("Unhandled structure %s\n", theType);
 			theResultObj = kNewtRefNIL;
 		}
