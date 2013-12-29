@@ -1,0 +1,7 @@
+//
+// Prefix header for all source files of the 'iNewt' target in the 'iNewt' project
+//
+
+#ifdef __OBJC__
+  #import <Foundation/Foundation.h>
+#endif

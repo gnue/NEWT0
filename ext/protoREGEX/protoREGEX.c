@@ -20,7 +20,7 @@
 #include "NewtVM.h"
 
 
-bool MyRefIsPreg(newtRefArg r)
+bool protoREGEX_refIsPreg(newtRefArg r)
 {
     if (! NewtRefIsBinary(r))
 	{
@@ -37,7 +37,7 @@ bool MyRefIsPreg(newtRefArg r)
 	return true;
 }
 
-newtRef MyRegcomp(newtRefArg pattern, newtRefArg opt)
+newtRef protoREGEX_regcomp(newtRefArg pattern, newtRefArg opt)
 {
 	regex_t	preg;
 	int		cflags = REG_EXTENDED;
@@ -86,7 +86,7 @@ newtRef MyRegcomp(newtRefArg pattern, newtRefArg opt)
 }
 
 
-newtRef MyRegexec(newtRefArg preg, newtRefArg str)
+newtRef protoREGEX_regexec(newtRefArg preg, newtRefArg str)
 {
 	newtRefVar	substr;
 	newtRefVar	r;
@@ -100,7 +100,7 @@ newtRef MyRegexec(newtRefArg preg, newtRefArg str)
     if (NewtRefIsNIL(str))
         return kNewtRefNIL;
 
-    if (! MyRefIsPreg(preg))
+    if (! protoREGEX_refIsPreg(preg))
         return kNewtRefUnbind;
 
     if (! NewtRefIsString(str))
@@ -129,9 +129,9 @@ newtRef MyRegexec(newtRefArg preg, newtRefArg str)
 }
 
 
-newtRef MyRegfree(newtRefArg preg)
+newtRef protoREGEX_regfree(newtRefArg preg)
 {
-	if (! MyRefIsPreg(preg))
+	if (! protoREGEX_refIsPreg(preg))
 		return kNewtRefUnbind;
 
     regfree((regex_t*)NewtRefToBinary(preg));
@@ -142,20 +142,20 @@ newtRef MyRegfree(newtRefArg preg)
 
 #pragma mark -
 
-newtRef MyCompile(newtRefArg rcvr)
+newtRef protoREGEX_compile(newtRefArg rcvr)
 {
 	newtRefVar	preg;
 
 	if (NewtRefIsNIL(rcvr))
 		return kNewtRefUnbind;
 
-	preg = MyRegcomp(NcGetSlot(rcvr, NSSYM(pattern)), NcGetSlot(rcvr, NSSYM(option)));
+	preg = protoREGEX_regcomp(NcGetSlot(rcvr, NSSYM(pattern)), NcGetSlot(rcvr, NSSYM(option)));
 
 	return NcSetSlot(rcvr, NSSYM(_preg), preg);
 }
 
 
-newtRef MyMatch(newtRefArg rcvr, newtRefArg str)
+newtRef protoREGEX_match(newtRefArg rcvr, newtRefArg str)
 {
 	newtRefVar  preg;
 	newtRefVar  r;
@@ -168,14 +168,14 @@ newtRef MyMatch(newtRefArg rcvr, newtRefArg str)
 
 	if (NewtRefIsNIL(preg))
 	{
-		MyCompile(rcvr);
+		protoREGEX_compile(rcvr);
 		preg = NcGetSlot(rcvr, NSSYM(_preg));
 
 		if (NewtRefIsNIL(preg))
 			return kNewtRefNIL;
 	}
 
-	r = MyRegexec(preg, str);
+	r = protoREGEX_regexec(preg, str);
 
 	NcSetSlot(rcvr, NSSYM(_matchs), r);
 
@@ -183,7 +183,7 @@ newtRef MyMatch(newtRefArg rcvr, newtRefArg str)
 }
 
 
-newtRef MyCleanup(newtRefArg rcvr)
+newtRef protoREGEX_cleanup(newtRefArg rcvr)
 {
 	newtRefVar  preg;
 
@@ -195,7 +195,7 @@ newtRef MyCleanup(newtRefArg rcvr)
 
 	if (NewtRefIsNotNIL(preg))
 	{
-		MyRegfree(preg);
+		protoREGEX_regfree(preg);
 		NcSetSlot(rcvr, NSSYM(_preg), kNewtRefNIL);
 	}
 
@@ -203,6 +203,28 @@ newtRef MyCleanup(newtRefArg rcvr)
 }
 
 
+void protoREGEX_install(void) 
+{
+	newtRefVar  r;
+  
+	r = NcMakeFrame();
+  
+	NcSetSlot(r, NSSYM(Class),		NSSYM(Regex));
+  
+  //	NcSetSlot(r, NSSYM(_gcScript),	NewtMakeNativeFunc(MyCleanup,	0, "_gcScript()"));
+	NcSetSlot(r, NSSYM(Compile),	NewtMakeNativeFunc(protoREGEX_compile,	0, "Compile()"));
+	NcSetSlot(r, NSSYM(Match),		NewtMakeNativeFunc(protoREGEX_match,		1, "Match(str)"));
+	NcSetSlot(r, NSSYM(Cleanup),	NewtMakeNativeFunc(protoREGEX_cleanup,	0, "Cleanup()"));
+  
+	NcSetSlot(r, NSSYM(pattern),	kNewtRefNIL);
+	NcSetSlot(r, NSSYM(option),		kNewtRefNIL);
+	NcSetSlot(r, NSSYM(_preg),		kNewtRefNIL);
+	NcSetSlot(r, NSSYM(_matchs),	kNewtRefNIL);
+  
+	NcDefMagicPointer(NSSYM(protoREGEX), r);
+}
+
+#if !TARGET_OS_IPHONE
 /*------------------------------------------------------------------------*/
 /** 拡張ライブラリのインストール
  *
@@ -211,21 +233,6 @@ newtRef MyCleanup(newtRefArg rcvr)
 
 void newt_install(void)
 {
-	newtRefVar  r;
-
-	r = NcMakeFrame();
-
-	NcSetSlot(r, NSSYM(Class),		NSSYM(Regex));
-
-//	NcSetSlot(r, NSSYM(_gcScript),	NewtMakeNativeFunc(MyCleanup,	0, "_gcScript()"));
-	NcSetSlot(r, NSSYM(Compile),	NewtMakeNativeFunc(MyCompile,	0, "Compile()"));
-	NcSetSlot(r, NSSYM(Match),		NewtMakeNativeFunc(MyMatch,		1, "Match(str)"));
-	NcSetSlot(r, NSSYM(Cleanup),	NewtMakeNativeFunc(MyCleanup,	0, "Cleanup()"));
-
-	NcSetSlot(r, NSSYM(pattern),	kNewtRefNIL);
-	NcSetSlot(r, NSSYM(option),		kNewtRefNIL);
-	NcSetSlot(r, NSSYM(_preg),		kNewtRefNIL);
-	NcSetSlot(r, NSSYM(_matchs),	kNewtRefNIL);
-
-	NcDefMagicPointer(NSSYM(protoREGEX), r);
+  protoREGEX_install();
 }
+#endif

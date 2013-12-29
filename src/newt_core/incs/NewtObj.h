@@ -189,6 +189,7 @@ newtRef		NewtThrow(int32_t err, newtRefArg value);
 newtRef		NewtThrowSymbol(int32_t err, newtRefArg symbol); 
 newtRef		NewtErrOutOfBounds(newtRefArg value, int32_t index);
 void		NewtErrMessage(int32_t err);
+const char * NewtErrorMessage(int32_t err);
 
 int			NewtSymbolCompareLex(newtRefArg r1, newtRefArg r2);
 int16_t		NewtObjectCompare(newtRefArg r1, newtRefArg r2);

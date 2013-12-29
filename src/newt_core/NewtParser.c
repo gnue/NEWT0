@@ -149,7 +149,7 @@ void NPSInit(newtPool pool)
 	nps_env.lineno = 1;
 	nps_env.tokenpos = 0;
 	nps_env.first_time = true;
-	nps_env.linebuf[sizeof(nps_env.linebuf) - 1] = '\0';
+  memset(nps_env.linebuf, 0x00, sizeof(nps_env.linebuf) - 1);
 
     NewtStackSetup(&nps_stree, NEWT_POOL, sizeof(nps_syntax_node_t), NEWT_NUM_STREESTACK);
 }

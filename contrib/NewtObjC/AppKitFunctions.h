@@ -37,7 +37,11 @@
 #include "NewtType.h"
 
 // Prototypes
+#if !TARGET_OS_IPHONE
 newtRef NewtNSApplicationMain(newtRefArg, newtRefArg);
+#else
+newtRef NewtNSApplicationMain(newtRefArg, newtRefArg);
+#endif
 
 #endif
 		// _APPKITFUNCTIONS_H

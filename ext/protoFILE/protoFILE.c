@@ -34,7 +34,7 @@
  * @return			ファイル参照
  */
 
-newtRef MyFopen(newtRefArg rcvr, newtRefArg path, newtRefArg mode)
+newtRef protoFILE_fopen(newtRefArg rcvr, newtRefArg path, newtRefArg mode)
 {
 	FILE *  stream;
 
@@ -62,7 +62,7 @@ newtRef MyFopen(newtRefArg rcvr, newtRefArg path, newtRefArg mode)
  * @return			エラーコード
  */
 
-newtRef MyFclose(newtRefArg rcvr, newtRefArg stream)
+newtRef protoFILE_fclose(newtRefArg rcvr, newtRefArg stream)
 {
 	int		result;
 
@@ -75,7 +75,7 @@ newtRef MyFclose(newtRefArg rcvr, newtRefArg stream)
 }
 
 
-newtRef MyFeof(newtRefArg stream)
+newtRef protoFILE_feof(newtRefArg stream)
 {
     if (! NewtRefIsInteger(stream))
         return NewtThrow(kNErrNotAnInteger, stream);
@@ -87,7 +87,7 @@ newtRef MyFeof(newtRefArg stream)
 }
 
 
-newtRef MyFseek(newtRefArg stream, newtRefArg offset, newtRefArg whence)
+newtRef protoFILE_fseek(newtRefArg stream, newtRefArg offset, newtRefArg whence)
 {
 	int		result;
 	int		wh;
@@ -116,7 +116,7 @@ newtRef MyFseek(newtRefArg stream, newtRefArg offset, newtRefArg whence)
 }
 
 
-newtRef MyFtell(newtRefArg stream)
+newtRef protoFILE_ftell(newtRefArg stream)
 {
 	long  result;
 
@@ -129,7 +129,7 @@ newtRef MyFtell(newtRefArg stream)
 }
 
 
-newtRef MyFrewind(newtRefArg stream)
+newtRef protoFILE_frewind(newtRefArg stream)
 {
     if (! NewtRefIsInteger(stream))
         return NewtThrow(kNErrNotAnInteger, stream);
@@ -140,7 +140,7 @@ newtRef MyFrewind(newtRefArg stream)
 }
 
 
-newtRef MyFread(newtRefArg rcvr, newtRefArg stream, newtRefArg len)
+newtRef protoFILE_fread(newtRefArg rcvr, newtRefArg stream, newtRefArg len)
 {
 	newtRefVar  r;
 	FILE *  f;
@@ -175,7 +175,7 @@ newtRef MyFread(newtRefArg rcvr, newtRefArg stream, newtRefArg len)
 
 
 /*
-size_t MyFwriteObj(FILE * f, newtRefArg r)
+size_t protoFILE_fwriteObj(FILE * f, newtRefArg r)
 {
 	size_t  result = 0;
 
@@ -248,21 +248,21 @@ size_t MyFwriteObj(FILE * f, newtRefArg r)
 	return result;
 }
 
-newtRef MyFwrite(newtRefArg rcvr, newtRefArg stream, newtRefArg r)
+newtRef protoFILE_fwrite(newtRefArg rcvr, newtRefArg stream, newtRefArg r)
 {
 	size_t  result;
 
     if (! NewtRefIsInteger(stream))
         return NewtThrow(kNErrNotAnInteger, stream);
 
-	result = MyFwriteObj(NewtRefToFILE(stream), r);
+	result = protoFILE_fwriteObj(NewtRefToFILE(stream), r);
 
 	return NewtMakeInteger(result);
 }
 
 */
 
-newtRef MyFprint(newtRefArg stream, newtRefArg r)
+newtRef protoFILE_fprint(newtRefArg stream, newtRefArg r)
 {
     if (! NewtRefIsInteger(stream))
         return NewtThrow(kNErrNotAnInteger, stream);
@@ -274,21 +274,21 @@ newtRef MyFprint(newtRefArg stream, newtRefArg r)
 
 
 #pragma mark -
-newtRef MyOpen(newtRefArg rcvr, newtRefArg path, newtRefArg mode)
+newtRef protoFILE_open(newtRefArg rcvr, newtRefArg path, newtRefArg mode)
 {
 	newtRefVar  stream;
 
 	if (NewtRefIsNIL(rcvr))
 		return kNewtRefUnbind;
 
-	stream = MyFopen(rcvr, path, mode);
+	stream = protoFILE_fopen(rcvr, path, mode);
 	NcSetSlot(rcvr, NSSYM(_stream), stream);
 
 	return rcvr;
 }
 
 
-newtRef MyClose(newtRefArg rcvr)
+newtRef protoFILE_close(newtRefArg rcvr)
 {
 	newtRefVar  result;
 	newtRefVar  stream;
@@ -301,7 +301,7 @@ newtRef MyClose(newtRefArg rcvr)
 	if (NewtRefIsNIL(stream))
 		return kNewtRefUnbind;
 
-	result = MyFclose(rcvr, stream);
+	result = protoFILE_fclose(rcvr, stream);
 	NcSetSlot(rcvr, NSSYM(_stream), kNewtRefNIL);
 	NcSetSlot(rcvr, NSSYM(_lineno), kNewtRefNIL);
 
@@ -309,61 +309,61 @@ newtRef MyClose(newtRefArg rcvr)
 }
 
 
-newtRef MyEof(newtRefArg rcvr)
+newtRef protoFILE_eof(newtRefArg rcvr)
 {
 	if (NewtRefIsNIL(rcvr))
 		return kNewtRefUnbind;
 
-	return MyFeof(NcGetSlot(rcvr, NSSYM(_stream)));
+	return protoFILE_feof(NcGetSlot(rcvr, NSSYM(_stream)));
 }
 
 
-newtRef MySeek(newtRefArg rcvr, newtRefArg offset, newtRefArg whence)
+newtRef protoFILE_seek(newtRefArg rcvr, newtRefArg offset, newtRefArg whence)
 {
 	if (NewtRefIsNIL(rcvr))
 		return kNewtRefUnbind;
 
-	return MyFseek(NcGetSlot(rcvr, NSSYM(_stream)), offset, whence);
+	return protoFILE_fseek(NcGetSlot(rcvr, NSSYM(_stream)), offset, whence);
 }
 
 
-newtRef MyTell(newtRefArg rcvr)
+newtRef protoFILE_tell(newtRefArg rcvr)
 {
 	if (NewtRefIsNIL(rcvr))
 		return kNewtRefUnbind;
 
-	return MyFtell(NcGetSlot(rcvr, NSSYM(_stream)));
+	return protoFILE_ftell(NcGetSlot(rcvr, NSSYM(_stream)));
 }
 
 
-newtRef MyRewind(newtRefArg rcvr)
+newtRef protoFILE_rewind(newtRefArg rcvr)
 {
 	if (NewtRefIsNIL(rcvr))
 		return kNewtRefUnbind;
 
-	return MyFrewind(NcGetSlot(rcvr, NSSYM(_stream)));
+	return protoFILE_frewind(NcGetSlot(rcvr, NSSYM(_stream)));
 }
 
 
-newtRef MyRead(newtRefArg rcvr, newtRefArg len)
+newtRef protoFILE_read(newtRefArg rcvr, newtRefArg len)
 {
 	if (NewtRefIsNIL(rcvr))
 		return kNewtRefUnbind;
 
-	return MyFread(rcvr, NcGetSlot(rcvr, NSSYM(_stream)), len);
+	return protoFILE_fread(rcvr, NcGetSlot(rcvr, NSSYM(_stream)), len);
 }
 
 
-newtRef MyPrint(newtRefArg rcvr, newtRefArg r)
+newtRef protoFILE_print(newtRefArg rcvr, newtRefArg r)
 {
 	if (NewtRefIsNIL(rcvr))
 		return kNewtRefUnbind;
 
-	return MyFprint(NcGetSlot(rcvr, NSSYM(_stream)), r);
+	return protoFILE_fprint(NcGetSlot(rcvr, NSSYM(_stream)), r);
 }
 
 
-newtRef MyGets(newtRefArg rcvr)
+newtRef protoFILE_gets(newtRefArg rcvr)
 {
 	newtRefVar  stream;
 	newtRefVar  r;
@@ -394,7 +394,7 @@ newtRef MyGets(newtRefArg rcvr)
 	return r;
 }
 
-newtRef MyGetc(newtRefArg rcvr)
+newtRef protoFILE_getc(newtRefArg rcvr)
 {
 	newtRefVar stream;
 	FILE* theFile;
@@ -409,7 +409,7 @@ newtRef MyGetc(newtRefArg rcvr)
 	return NewtMakeInteger(theResult);
 }
 
-newtRef MyPutc(newtRefArg rcvr, newtRefArg byte)
+newtRef protoFILE_putc(newtRefArg rcvr, newtRefArg byte)
 {
 	newtRefVar stream;
 	FILE* theFile;
@@ -426,7 +426,7 @@ newtRef MyPutc(newtRefArg rcvr, newtRefArg byte)
 	return NewtMakeInteger(theResult);
 }
 
-newtRef MyWrite(newtRefArg rcvr, newtRefArg binary)
+newtRef protoFILE_write(newtRefArg rcvr, newtRefArg binary)
 {
 	newtRefVar stream;
 	FILE* theFile;
@@ -446,43 +446,49 @@ newtRef MyWrite(newtRefArg rcvr, newtRefArg binary)
 	return NewtMakeInteger(theResult);
 }
 
+void protoFILE_install(void)
+{
+	newtRefVar  r;
+  
+  /*
+   NewtDefGlobalFunc(NSSYM(fopen),		protoFILE_fopen,	2, "fopen(path, mode)");
+   NewtDefGlobalFunc(NSSYM(fclose),	protoFILE_fclose,   1, "fclose(stream)");
+   NewtDefGlobalFunc(NSSYM(fread),		protoFILE_fread,	1, "fread(stream, len)");
+   NewtDefGlobalFunc(NSSYM(fwriteObj),	protoFILE_fwrite,	2, "fwriteObj(stream, obj)");
+   */
+  
+	r = NcMakeFrame();
+  
+	NcSetSlot(r, NSSYM(Class),		NSSYM(File));
+  
+  //	NcSetSlot(r, NSSYM(_gcScript),	NewtMakeNativeFunc(protoFILE_close,		0, "_gcScript()"));
+	NcSetSlot(r, NSSYM(Open),		NewtMakeNativeFunc(protoFILE_open,		2, "Open(path, mode)"));
+	NcSetSlot(r, NSSYM(Close),		NewtMakeNativeFunc(protoFILE_close,		0, "Close()"));
+	NcSetSlot(r, NSSYM(Eof),		NewtMakeNativeFunc(protoFILE_eof,		0, "Eof()"));
+	NcSetSlot(r, NSSYM(Seek),		NewtMakeNativeFunc(protoFILE_seek,		2, "Seek(offset, whence)"));
+	NcSetSlot(r, NSSYM(Tell),		NewtMakeNativeFunc(protoFILE_tell,		0, "Tell()"));
+	NcSetSlot(r, NSSYM(Rewind),		NewtMakeNativeFunc(protoFILE_rewind,	0, "Rewind()"));
+	NcSetSlot(r, NSSYM(Read),		NewtMakeNativeFunc(protoFILE_read,		1, "Read(len)"));
+	NcSetSlot(r, NSSYM(Print),		NewtMakeNativeFunc(protoFILE_print,		1, "Print(str)"));
+	NcSetSlot(r, NSSYM(Gets),		NewtMakeNativeFunc(protoFILE_gets,		0, "Gets()"));
+	NcSetSlot(r, NSSYM(Getc),		NewtMakeNativeFunc(protoFILE_getc,		0, "Getc()"));
+	NcSetSlot(r, NSSYM(Putc),		NewtMakeNativeFunc(protoFILE_putc,		1, "Putc(byte)"));
+	NcSetSlot(r, NSSYM(Write),		NewtMakeNativeFunc(protoFILE_write,		1, "Write(binary)"));
+  
+	NcSetSlot(r, NSSYM(_stream),	kNewtRefNIL);
+	NcSetSlot(r, NSSYM(_lineno),	kNewtRefNIL);
+  
+	NcDefMagicPointer(NSSYM(protoFILE), r);
+}
+
 /*------------------------------------------------------------------------*/
 /** 拡張ライブラリのインストール
  *
  * @return			なし
  */
-
+#if !TARGET_OS_IPHONE
 void newt_install(void)
 {
-	newtRefVar  r;
-
-/*
-    NewtDefGlobalFunc(NSSYM(fopen),		MyFopen,	2, "fopen(path, mode)");
-    NewtDefGlobalFunc(NSSYM(fclose),	MyFclose,   1, "fclose(stream)");
-    NewtDefGlobalFunc(NSSYM(fread),		MyFread,	1, "fread(stream, len)");
-    NewtDefGlobalFunc(NSSYM(fwriteObj),	MyFwrite,	2, "fwriteObj(stream, obj)");
-*/
-
-	r = NcMakeFrame();
-
-	NcSetSlot(r, NSSYM(Class),		NSSYM(File));
-
-//	NcSetSlot(r, NSSYM(_gcScript),	NewtMakeNativeFunc(MyClose,		0, "_gcScript()"));
-	NcSetSlot(r, NSSYM(Open),		NewtMakeNativeFunc(MyOpen,		2, "Open(path, mode)"));
-	NcSetSlot(r, NSSYM(Close),		NewtMakeNativeFunc(MyClose,		0, "Close()"));
-	NcSetSlot(r, NSSYM(Eof),		NewtMakeNativeFunc(MyEof,		0, "Eof()"));
-	NcSetSlot(r, NSSYM(Seek),		NewtMakeNativeFunc(MySeek,		2, "Seek(offset, whence)"));
-	NcSetSlot(r, NSSYM(Tell),		NewtMakeNativeFunc(MyTell,		0, "Tell()"));
-	NcSetSlot(r, NSSYM(Rewind),		NewtMakeNativeFunc(MyRewind,	0, "Rewind()"));
-	NcSetSlot(r, NSSYM(Read),		NewtMakeNativeFunc(MyRead,		1, "Read(len)"));
-	NcSetSlot(r, NSSYM(Print),		NewtMakeNativeFunc(MyPrint,		1, "Print(str)"));
-	NcSetSlot(r, NSSYM(Gets),		NewtMakeNativeFunc(MyGets,		0, "Gets()"));
-	NcSetSlot(r, NSSYM(Getc),		NewtMakeNativeFunc(MyGetc,		0, "Getc()"));
-	NcSetSlot(r, NSSYM(Putc),		NewtMakeNativeFunc(MyPutc,		1, "Putc(byte)"));
-	NcSetSlot(r, NSSYM(Write),		NewtMakeNativeFunc(MyWrite,		1, "Write(binary)"));
-
-	NcSetSlot(r, NSSYM(_stream),	kNewtRefNIL);
-	NcSetSlot(r, NSSYM(_lineno),	kNewtRefNIL);
-
-	NcDefMagicPointer(NSSYM(protoFILE), r);
+  protoFILE_install();
 }
+#endif

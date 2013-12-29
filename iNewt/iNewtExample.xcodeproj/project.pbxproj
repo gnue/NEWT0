@@ -1,0 +1,379 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		F1ABAEF5151F8E500054D84B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1ABAEF4151F8E500054D84B /* UIKit.framework */; };
+		F1ABAEF7151F8E500054D84B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1ABAEF6151F8E500054D84B /* Foundation.framework */; };
+		F1ABAEF9151F8E500054D84B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1ABAEF8151F8E500054D84B /* CoreGraphics.framework */; };
+		F1ABAEFF151F8E500054D84B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F1ABAEFD151F8E500054D84B /* InfoPlist.strings */; };
+		F1ABAF01151F8E500054D84B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F1ABAF00151F8E500054D84B /* main.m */; };
+		F1ABAF05151F8E500054D84B /* NWAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F1ABAF04151F8E500054D84B /* NWAppDelegate.m */; };
+		F1ABAF08151F8E500054D84B /* NWViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F1ABAF07151F8E500054D84B /* NWViewController.m */; };
+		F1ABAF0B151F8E500054D84B /* NWViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = F1ABAF09151F8E500054D84B /* NWViewController_iPhone.xib */; };
+		F1ABAF0E151F8E500054D84B /* NWViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = F1ABAF0C151F8E500054D84B /* NWViewController_iPad.xib */; };
+		F1ABAF79151F91DF0054D84B /* libiNewt.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F1ABAF78151F91D70054D84B /* libiNewt.a */; };
+		F1ABAF7C151F937C0054D84B /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F1ABAF7B151F937C0054D84B /* libiconv.dylib */; };
+		F1ABAFBE151FB2650054D84B /* basicFns.newt in Resources */ = {isa = PBXBuildFile; fileRef = F1ABAFB5151FB2650054D84B /* basicFns.newt */; };
+		F1ABAFC0151FB2650054D84B /* easter.newt in Resources */ = {isa = PBXBuildFile; fileRef = F1ABAFB7151FB2650054D84B /* easter.newt */; };
+		F1ABAFC2151FB2650054D84B /* exception.newt in Resources */ = {isa = PBXBuildFile; fileRef = F1ABAFB9151FB2650054D84B /* exception.newt */; };
+		F1ABAFC3151FB2650054D84B /* fib.newt in Resources */ = {isa = PBXBuildFile; fileRef = F1ABAFBA151FB2650054D84B /* fib.newt */; };
+		F1ABAFC4151FB2650054D84B /* inherit.newt in Resources */ = {isa = PBXBuildFile; fileRef = F1ABAFBB151FB2650054D84B /* inherit.newt */; };
+		F1ABAFC6151FB2650054D84B /* regex.newt in Resources */ = {isa = PBXBuildFile; fileRef = F1ABAFBD151FB2650054D84B /* regex.newt */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		F1ABAF77151F91D70054D84B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F1ABAF70151F91D70054D84B /* iNewt.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F1ABADCB151F723C0054D84B;
+			remoteInfo = iNewt;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		F1ABAEF0151F8E500054D84B /* iNewtExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iNewtExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F1ABAEF4151F8E500054D84B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		F1ABAEF6151F8E500054D84B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		F1ABAEF8151F8E500054D84B /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		F1ABAEFC151F8E500054D84B /* iNewtExample-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "iNewtExample-Info.plist"; sourceTree = "<group>"; };
+		F1ABAEFE151F8E500054D84B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		F1ABAF00151F8E500054D84B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		F1ABAF02151F8E500054D84B /* iNewtExample-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iNewtExample-Prefix.pch"; sourceTree = "<group>"; };
+		F1ABAF03151F8E500054D84B /* NWAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NWAppDelegate.h; sourceTree = "<group>"; };
+		F1ABAF04151F8E500054D84B /* NWAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NWAppDelegate.m; sourceTree = "<group>"; };
+		F1ABAF06151F8E500054D84B /* NWViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NWViewController.h; sourceTree = "<group>"; };
+		F1ABAF07151F8E500054D84B /* NWViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NWViewController.m; sourceTree = "<group>"; };
+		F1ABAF0A151F8E500054D84B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/NWViewController_iPhone.xib; sourceTree = "<group>"; };
+		F1ABAF0D151F8E500054D84B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/NWViewController_iPad.xib; sourceTree = "<group>"; };
+		F1ABAF70151F91D70054D84B /* iNewt.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = iNewt.xcodeproj; sourceTree = "<group>"; };
+		F1ABAF7B151F937C0054D84B /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
+		F1ABAFB5151FB2650054D84B /* basicFns.newt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = basicFns.newt; path = ../../sample/basicFns.newt; sourceTree = "<group>"; };
+		F1ABAFB7151FB2650054D84B /* easter.newt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = easter.newt; path = ../../sample/easter.newt; sourceTree = "<group>"; };
+		F1ABAFB9151FB2650054D84B /* exception.newt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = exception.newt; path = ../../sample/exception.newt; sourceTree = "<group>"; };
+		F1ABAFBA151FB2650054D84B /* fib.newt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = fib.newt; path = ../../sample/fib.newt; sourceTree = "<group>"; };
+		F1ABAFBB151FB2650054D84B /* inherit.newt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = inherit.newt; path = ../../sample/inherit.newt; sourceTree = "<group>"; };
+		F1ABAFBD151FB2650054D84B /* regex.newt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = regex.newt; path = ../../sample/regex.newt; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F1ABAEED151F8E4F0054D84B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F1ABAEF5151F8E500054D84B /* UIKit.framework in Frameworks */,
+				F1ABAEF7151F8E500054D84B /* Foundation.framework in Frameworks */,
+				F1ABAEF9151F8E500054D84B /* CoreGraphics.framework in Frameworks */,
+				F1ABAF7C151F937C0054D84B /* libiconv.dylib in Frameworks */,
+				F1ABAF79151F91DF0054D84B /* libiNewt.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		F1ABAEE5151F8E4F0054D84B = {
+			isa = PBXGroup;
+			children = (
+				F1ABAF70151F91D70054D84B /* iNewt.xcodeproj */,
+				F1ABAEFA151F8E500054D84B /* iNewtExample */,
+				F1ABAEF3151F8E500054D84B /* Frameworks */,
+				F1ABAEF1151F8E500054D84B /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		F1ABAEF1151F8E500054D84B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F1ABAEF0151F8E500054D84B /* iNewtExample.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F1ABAEF3151F8E500054D84B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F1ABAF7B151F937C0054D84B /* libiconv.dylib */,
+				F1ABAEF4151F8E500054D84B /* UIKit.framework */,
+				F1ABAEF6151F8E500054D84B /* Foundation.framework */,
+				F1ABAEF8151F8E500054D84B /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F1ABAEFA151F8E500054D84B /* iNewtExample */ = {
+			isa = PBXGroup;
+			children = (
+				F1ABAF03151F8E500054D84B /* NWAppDelegate.h */,
+				F1ABAF04151F8E500054D84B /* NWAppDelegate.m */,
+				F1ABAF06151F8E500054D84B /* NWViewController.h */,
+				F1ABAF07151F8E500054D84B /* NWViewController.m */,
+				F1ABAF09151F8E500054D84B /* NWViewController_iPhone.xib */,
+				F1ABAF0C151F8E500054D84B /* NWViewController_iPad.xib */,
+				F1ABAF55151F91060054D84B /* Newt Scripts */,
+				F1ABAEFB151F8E500054D84B /* Supporting Files */,
+			);
+			path = iNewtExample;
+			sourceTree = "<group>";
+		};
+		F1ABAEFB151F8E500054D84B /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				F1ABAEFC151F8E500054D84B /* iNewtExample-Info.plist */,
+				F1ABAEFD151F8E500054D84B /* InfoPlist.strings */,
+				F1ABAF00151F8E500054D84B /* main.m */,
+				F1ABAF02151F8E500054D84B /* iNewtExample-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		F1ABAF55151F91060054D84B /* Newt Scripts */ = {
+			isa = PBXGroup;
+			children = (
+				F1ABAFB5151FB2650054D84B /* basicFns.newt */,
+				F1ABAFB7151FB2650054D84B /* easter.newt */,
+				F1ABAFB9151FB2650054D84B /* exception.newt */,
+				F1ABAFBA151FB2650054D84B /* fib.newt */,
+				F1ABAFBB151FB2650054D84B /* inherit.newt */,
+				F1ABAFBD151FB2650054D84B /* regex.newt */,
+			);
+			name = "Newt Scripts";
+			sourceTree = "<group>";
+		};
+		F1ABAF71151F91D70054D84B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F1ABAF78151F91D70054D84B /* libiNewt.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		F1ABAEEF151F8E4F0054D84B /* iNewtExample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F1ABAF11151F8E500054D84B /* Build configuration list for PBXNativeTarget "iNewtExample" */;
+			buildPhases = (
+				F1ABAEEC151F8E4F0054D84B /* Sources */,
+				F1ABAEED151F8E4F0054D84B /* Frameworks */,
+				F1ABAEEE151F8E4F0054D84B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = iNewtExample;
+			productName = iNewtExample;
+			productReference = F1ABAEF0151F8E500054D84B /* iNewtExample.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F1ABAEE7151F8E4F0054D84B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = NW;
+				LastUpgradeCheck = 0430;
+			};
+			buildConfigurationList = F1ABAEEA151F8E4F0054D84B /* Build configuration list for PBXProject "iNewtExample" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = F1ABAEE5151F8E4F0054D84B;
+			productRefGroup = F1ABAEF1151F8E500054D84B /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = F1ABAF71151F91D70054D84B /* Products */;
+					ProjectRef = F1ABAF70151F91D70054D84B /* iNewt.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				F1ABAEEF151F8E4F0054D84B /* iNewtExample */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		F1ABAF78151F91D70054D84B /* libiNewt.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libiNewt.a;
+			remoteRef = F1ABAF77151F91D70054D84B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		F1ABAEEE151F8E4F0054D84B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F1ABAEFF151F8E500054D84B /* InfoPlist.strings in Resources */,
+				F1ABAF0B151F8E500054D84B /* NWViewController_iPhone.xib in Resources */,
+				F1ABAF0E151F8E500054D84B /* NWViewController_iPad.xib in Resources */,
+				F1ABAFBE151FB2650054D84B /* basicFns.newt in Resources */,
+				F1ABAFC0151FB2650054D84B /* easter.newt in Resources */,
+				F1ABAFC2151FB2650054D84B /* exception.newt in Resources */,
+				F1ABAFC3151FB2650054D84B /* fib.newt in Resources */,
+				F1ABAFC4151FB2650054D84B /* inherit.newt in Resources */,
+				F1ABAFC6151FB2650054D84B /* regex.newt in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F1ABAEEC151F8E4F0054D84B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F1ABAF01151F8E500054D84B /* main.m in Sources */,
+				F1ABAF05151F8E500054D84B /* NWAppDelegate.m in Sources */,
+				F1ABAF08151F8E500054D84B /* NWViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		F1ABAEFD151F8E500054D84B /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F1ABAEFE151F8E500054D84B /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		F1ABAF09151F8E500054D84B /* NWViewController_iPhone.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F1ABAF0A151F8E500054D84B /* en */,
+			);
+			name = NWViewController_iPhone.xib;
+			sourceTree = "<group>";
+		};
+		F1ABAF0C151F8E500054D84B /* NWViewController_iPad.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F1ABAF0D151F8E500054D84B /* en */,
+			);
+			name = NWViewController_iPad.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		F1ABAF0F151F8E500054D84B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		F1ABAF10151F8E500054D84B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		F1ABAF12151F8E500054D84B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "iNewtExample/iNewtExample-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					../src/newt_core/incs/,
+					../src/newt_core/incs/darwin,
+					iNewt,
+				);
+				INFOPLIST_FILE = "iNewtExample/iNewtExample-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		F1ABAF13151F8E500054D84B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "iNewtExample/iNewtExample-Prefix.pch";
+				HEADER_SEARCH_PATHS = (
+					../src/newt_core/incs/,
+					../src/newt_core/incs/darwin,
+					iNewt,
+				);
+				INFOPLIST_FILE = "iNewtExample/iNewtExample-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		F1ABAEEA151F8E4F0054D84B /* Build configuration list for PBXProject "iNewtExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F1ABAF0F151F8E500054D84B /* Debug */,
+				F1ABAF10151F8E500054D84B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F1ABAF11151F8E500054D84B /* Build configuration list for PBXNativeTarget "iNewtExample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F1ABAF12151F8E500054D84B /* Debug */,
+				F1ABAF13151F8E500054D84B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F1ABAEE7151F8E4F0054D84B /* Project object */;
+}

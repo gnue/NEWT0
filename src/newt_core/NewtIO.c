@@ -315,7 +315,7 @@ newtRef NewtFgets(FILE * stream)
 
 	maxsize = sizeof(buff) - 1;
 
-	while (str = fgets(buff, sizeof(buff), stream))
+	while ((str = fgets(buff, sizeof(buff), stream)) != NULL)
 	{
 		len = strlen(str);
 
