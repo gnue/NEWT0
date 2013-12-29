@@ -5,10 +5,10 @@ begin
 	local g, c, x, z, d, e, n;
 
 	g := (y mod 19) + 1;
-	c := (y / 100) + 1;
-	x := (3 * c / 4) - 12;
-	z := ((8 * c + 5) / 25) - 5;
-	d := (5 * y / 4) - x - 10;
+	c := (y div 100) + 1;
+	x := (3 * c div 4) - 12;
+	z := ((8 * c + 5) div 25) - 5;
+	d := (5 * y div 4) - x - 10;
 	e := (11 * g + 20 + z - x) mod 30;
 	
 	if (e = 25 and g > 11) or (e = 24) then e := e + 1;
