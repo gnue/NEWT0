@@ -7,4 +7,7 @@ Require("protoREGEX");
 re := /([a-zA-Z]+)([0-9]*)/;
 matchs := re:match("foo123");
 
-print(matchs[2] & ";" & matchs[1] & "\n");
+result := matchs[2] & ";" & matchs[1];
+print(result & "\n");
+
+result;
