@@ -1858,6 +1858,7 @@ void NBCGenAsign(nps_syntax_node_t * stree,
                 NBCGenBC_op(stree, node->op2);
                 NBCGenBC_op(stree, expr);
                 NBCGenCode(kNBCSetPath, 1);
+                NVCGenNoResult(ret);
                 break;
 
             case kNPSAref:
@@ -1865,6 +1866,7 @@ void NBCGenAsign(nps_syntax_node_t * stree,
                 NBCGenBC_op(stree, node->op2);
                 NBCGenBC_op(stree, expr);
                 NBCGenFreq(kNBCSetAref);
+                NVCGenNoResult(ret);
                 break;
 
             default:
