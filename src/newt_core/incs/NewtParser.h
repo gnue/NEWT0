@@ -127,7 +127,7 @@ enum {
 	kNPSIndefinite,
     kNPSMessage,
     kNPSLvalue,
-    kNPSAsign,
+    kNPSAssign,
     kNPSExists,
     kNPSMethodExists,
     kNPSTry,
