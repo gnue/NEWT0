@@ -161,6 +161,7 @@ bool		NewtRefIsRegex(newtRefArg r);
 void *		NewtRefToAddress(newtRefArg r);
 
 newtRef		NewtMakeBinary(newtRefArg klass, uint8_t * data, uint32_t size, bool literal);
+newtRef		NewtMakeBinaryFromHex(newtRefArg klass, const char *hex, bool literal);
 newtRef		NewtMakeSymbol(const char *s);
 newtRef		NewtMakeString(const char *s, bool literal);
 newtRef		NewtMakeString2(const char *s, uint32_t len, bool literal);
