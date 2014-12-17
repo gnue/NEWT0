@@ -25,16 +25,16 @@
 /*
 #define kNPSSyntaxNodeMask			0x80000003											///< オブジェクト参照のマスク（構文木ノード用）
 
-#define NPSRefIsSyntaxNode(r)		((r & kNPSSyntaxNodeMask) == kNPSSyntaxNodeMask)	///< オブジェクト参照が構文木ノードか？
-#define NPSRefToSyntaxNode(r)		(((uint32_t)r & 0x7fffffff) >> 2)					///< オブジェクト参照を構文木ノードに変換
-#define NPSMakeSyntaxNode(v)		((v << 2) | kNPSSyntaxNodeMask)						///< 構文木ノードのオブジェクト参照を作成
+#define NPSRefIsSyntaxNode(r)		(((r) & kNPSSyntaxNodeMask) == kNPSSyntaxNodeMask)	///< オブジェクト参照が構文木ノードか？
+#define NPSRefToSyntaxNode(r)		(((uint32_t)(r) & 0x7fffffff) >> 2)					///< オブジェクト参照を構文木ノードに変換
+#define NPSMakeSyntaxNode(v)		(((v) << 2) | kNPSSyntaxNodeMask)					///< 構文木ノードのオブジェクト参照を作成
 */
 
-#define kNPSSyntaxNodeMask			0x0000000e									///< オブジェクト参照のマスク（構文木ノード用）
+#define kNPSSyntaxNodeMask			0x0000000e										///< オブジェクト参照のマスク（構文木ノード用）
 
-#define NPSRefIsSyntaxNode(r)		((r & 0x0000000f) == kNPSSyntaxNodeMask)	///< オブジェクト参照が構文木ノードか？
-#define NPSRefToSyntaxNode(r)		((uint32_t)r >> 4)							///< オブジェクト参照を構文木ノードに変換
-#define NPSMakeSyntaxNode(v)		((v << 4) | kNPSSyntaxNodeMask)				///< 構文木ノードのオブジェクト参照を作成
+#define NPSRefIsSyntaxNode(r)		(((r) & 0x0000000f) == kNPSSyntaxNodeMask)		///< オブジェクト参照が構文木ノードか？
+#define NPSRefToSyntaxNode(r)		((uint32_t)(r) >> 4)							///< オブジェクト参照を構文木ノードに変換
+#define NPSMakeSyntaxNode(v)		(((v) << 4) | kNPSSyntaxNodeMask)				///< 構文木ノードのオブジェクト参照を作成
 
 
 /* 定数 */
