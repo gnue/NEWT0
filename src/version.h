@@ -16,9 +16,17 @@
 /* マクロ定義 */
 #define NEWT_NAME		"newt"									///< コマンド名
 #define NEWT_PROTO		"/0"									///< プロト
-#define NEWT_VERSION	"0.1.3"									///< バージョン
-#define NEWT_COPYRIGHT	"Copyright (C) 2003-2007 Makoto Nukui"  ///< コピーライト
-#define NEWT_BUILD		"2007-05-18-1"							///< ビルド番号
+
+#ifndef NEWT_VERSION
+#define NEWT_VERSION	"v0.1.4"								///< バージョン
+#endif
+
+#ifndef NEWT_BUILD
+#define NEWT_BUILD		"----"									///< ビルド番号
+#endif
+
+
+#define NEWT_COPYRIGHT	"Copyright (C) 2003-2014 Makoto Nukui"  ///< コピーライト
 #define NEWT_PARAMS		"[switches] [--] [programfile]"			///< 引数
 
 /// 使用方法
@@ -33,7 +41,7 @@
 						"  -h              print this help message\n"	\
 						"  --newton,--nos2 Newton OS 2.0 compatible	\n"	\
 						"  --copyright     print copyright\n"			\
-						"  --version       print version number\n"	\
+						"  --version       print version number\n"		\
 						"  --staff         list of developers\n"
 
 /// スタッフロール
@@ -42,7 +50,7 @@
                         "\n"											\
                         "Contribute\n"									\
                         "  Paul Guyot\n"								\
-                        "  Matthias Melcher\n"									\
+                        "  Matthias Melcher\n"							\
                         "\n"											\
                         "Special Thanks\n"								\
                         "  sumim\n"										\
