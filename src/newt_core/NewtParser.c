@@ -346,7 +346,7 @@ void NPSPrintSyntaxCode(FILE * f, uint32_t code)
             s = "lvalue";
             break;
 
-        case kNPSAsign:
+        case kNPSAssign:
             s = ":=";
             break;
 

@@ -155,7 +155,7 @@ static void				NBCGenWhile(nps_syntax_node_t * stree, nps_node_t cond, nps_node_
 static void				NBCGenRepeat(nps_syntax_node_t * stree, nps_node_t expr, nps_node_t cond);
 static void				NBCGenBreak(nps_syntax_node_t * stree, nps_node_t expr);
 static void				NBCGenStringer(nps_syntax_node_t * stree, nps_node_t op1, nps_node_t op2, char * dlmt);
-static void				NBCGenAsign(nps_syntax_node_t * stree, nps_node_t lvalue, nps_node_t expr, bool ret);
+static void				NBCGenAssign(nps_syntax_node_t * stree, nps_node_t lvalue, nps_node_t expr, bool ret);
 static void				NBCGenExists(nps_syntax_node_t * stree, nps_node_t r);
 static void				NBCGenReceiver(nps_syntax_node_t * stree, nps_node_t r);
 static void				NBCGenMethodExists(nps_syntax_node_t * stree, nps_node_t receiver, nps_node_t name);
@@ -1005,7 +1005,7 @@ void NBCGenConstant(nps_syntax_node_t * stree, nps_node_t r)
                 NBCGenConstant(stree, node->op2);
                 break;
 
-            case kNPSAsign:
+            case kNPSAssign:
                 // node->op2 がオブジェクトでない場合の処理を行うこと
                 NcSetSlot(CONSTANT, node->op1, node->op2);
                 break;
@@ -1042,7 +1042,7 @@ void NBCGenGlobalVar(nps_syntax_node_t * stree, nps_node_t r)
                 NBCGenGlobalVar(stree, node->op2);
                 break;
 
-            case kNPSAsign:
+            case kNPSAssign:
                 NBCGenPUSH(node->op1);
                 NBCGenBC_op(stree, node->op2);
 
@@ -1093,7 +1093,7 @@ void NBCGenLocalVar(nps_syntax_node_t * stree, nps_node_t type, nps_node_t r)
                 NBCGenLocalVar(stree, type, node->op2);
                 break;
 
-            case kNPSAsign:
+            case kNPSAssign:
                 NBCGenBC_op(stree, node->op2);
                 NBCDefLocal(type, node->op1, true);
                 break;
@@ -1809,7 +1809,7 @@ void NBCGenStringer(nps_syntax_node_t * stree, nps_node_t op1, nps_node_t op2,
  * @return			なし
  */
 
-void NBCGenAsign(nps_syntax_node_t * stree,
+void NBCGenAssign(nps_syntax_node_t * stree,
         nps_node_t lvalue, nps_node_t expr, bool ret)
 {
     if (NewtRefIsSymbol(lvalue))
@@ -1858,6 +1858,7 @@ void NBCGenAsign(nps_syntax_node_t * stree,
                 NBCGenBC_op(stree, node->op2);
                 NBCGenBC_op(stree, expr);
                 NBCGenCode(kNBCSetPath, 1);
+                NVCGenNoResult(ret);
                 break;
 
             case kNPSAref:
@@ -1865,6 +1866,7 @@ void NBCGenAsign(nps_syntax_node_t * stree,
                 NBCGenBC_op(stree, node->op2);
                 NBCGenBC_op(stree, expr);
                 NBCGenFreq(kNBCSetAref);
+                NVCGenNoResult(ret);
                 break;
 
             default:
@@ -2263,8 +2265,8 @@ void NBCGenSyntaxCode(nps_syntax_node_t * stree, nps_syntax_node_t * node, bool 
             NVCGenNoResult(ret);
             break;
 
-        case kNPSAsign:
-            NBCGenAsign(stree, node->op1, node->op2, ret);
+        case kNPSAssign:
+            NBCGenAssign(stree, node->op1, node->op2, ret);
             break;
 
         case kNPSExists:

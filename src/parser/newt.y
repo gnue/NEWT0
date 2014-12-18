@@ -182,10 +182,10 @@ expr
 		| literal						{ $$ = $1; }
 		| constructor
 		| lvalue						{ $$ = NPSGenNode1(kNPSLvalue, $1); }
-		| lvalue kASNOP expr			{ $$ = NPSGenNode2(kNPSAsign, $1, $3); }
+		| lvalue kASNOP expr			{ $$ = NPSGenNode2(kNPSAssign, $1, $3); }
 		| kMAGICPOINTER kASNOP expr		{	// マジックポインタの定義（独自拡張）
 											ERR_NOS2C("Assign Magic Pointer");	// NOS2 非互換
-											$$ = NPSGenNode2(kNPSAsign, $1, $3);
+											$$ = NPSGenNode2(kNPSAssign, $1, $3);
 										}
 		| exists_expr
 		| function_call
@@ -522,7 +522,7 @@ l_init_clause_list
 
 init_clause
 		: kSYMBOL					{ $$ = $1; }
-		| kSYMBOL kASNOP expr		{ $$ = NPSGenNode2(kNPSAsign, $1, $3); }
+		| kSYMBOL kASNOP expr		{ $$ = NPSGenNode2(kNPSAssign, $1, $3); }
 		;
 
 c_init_clause_list
@@ -532,7 +532,7 @@ c_init_clause_list
 		;
 
 c_init_clause
-		: kSYMBOL kASNOP expr		{ $$ = NPSGenNode2(kNPSAsign, $1, $3); }
+		: kSYMBOL kASNOP expr		{ $$ = NPSGenNode2(kNPSAssign, $1, $3); }
 		;
 
 global_declaration
