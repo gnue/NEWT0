@@ -156,6 +156,8 @@ newtRef		NsDumpFn(newtRefArg rcvr, newtRefArg r);
 newtRef		NsDumpBC(newtRefArg rcvr, newtRefArg r);
 newtRef		NsDumpStacks(newtRefArg rcvr);
 
+newtRef		NsExit(newtRefArg rcvr, newtRefArg r);
+
 newtRef		NsCompile(newtRefArg rcvr, newtRefArg r);
 newtRef		NsGetEnv(newtRefArg rcvr, newtRefArg r);
 

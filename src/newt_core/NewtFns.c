@@ -2064,6 +2064,22 @@ newtRef NsPrint(newtRefArg rcvr, newtRefArg r)
     return kNewtRefNIL;
 }
 
+/*------------------------------------------------------------------------*/
+/** Invoke exit(3)
+ *
+ * @param rcvr		[in] レシーバ
+ * @param r			[in] status code
+ *
+ * @return			does not return
+ */
+
+newtRef NsExit(newtRefArg rcvr, newtRefArg r)
+{
+    intptr_t status = NewtRefToInteger(r);
+    exit((int) status);
+    return kNewtRefNIL;
+}
+
 
 /*------------------------------------------------------------------------*/
 /** 標準出力に関数オブジェクトをダンプ出力
