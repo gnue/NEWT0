@@ -27,7 +27,7 @@
  * @note			変換された文字列は呼出し元で free する必要あり
  */
 
-char * NewtIconv(iconv_t cd, char * src, size_t srclen, size_t* dstlenp)
+char * NewtIconv(iconv_t cd, const char * src, size_t srclen, size_t* dstlenp)
 {
 	char *	dst = NULL;
 	size_t	dstlen = 0;

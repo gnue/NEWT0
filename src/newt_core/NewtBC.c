@@ -1247,7 +1247,6 @@ void NBCGenTry(nps_syntax_node_t * stree, nps_node_t expr,
     NBCGenBC_op(stree, expr);
     NBCGenCode(kNBCPopHandlers, 0);
 
-    branch_cx = CX;
     branch_cx = NBCGenBranch(kNBCBranch);
 
     // onexception
@@ -1985,10 +1984,9 @@ void NBCGenMethodExists(nps_syntax_node_t * stree,
 
 void NBCGenFn(nps_syntax_node_t * stree, nps_node_t args, nps_node_t expr)
 {
-    nbc_env_t * env;
     newtRefVar	fn;
 
-    env = NBCMakeFnEnv(stree, args);
+    (void) NBCMakeFnEnv(stree, args);
     NBCGenBC_op(stree, expr);
     fn = NBCFnDone(&newt_bc_env);
     NBCGenPUSH(fn);
