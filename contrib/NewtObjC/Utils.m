@@ -488,7 +488,7 @@ CastToNS(id* inObjCValuePtr, const char* inType)
 	
 				// Get the class
 				result =
-					GetClassFromName(theClass->name);
+					GetClassFromName(class_getName(theClass));
 			}
 		}
 		break;
@@ -615,7 +615,7 @@ CastIdToNS(id inObjCObject)
 		} else {
 			// Get the class
 			newtRefVar theClass =
-				GetClassFromName(inObjCObject->isa->name);
+            GetClassFromName(class_getName(object_getClass(inObjCObject)));
 			if (NewtRefIsNIL(theClass))
 			{
 				return theClass;
@@ -672,14 +672,7 @@ CastParamsToNS(va_list inArgList, Method inMethod)
 	int indexArgs;
 	for (indexArgs = 0; indexArgs < nbArgs; indexArgs++)
 	{
-		const char* theType;
-		int theOffset;
-		(void) method_getArgumentInfo(
-							inMethod,
-							indexArgs + 2,
-							&theType,
-							&theOffset );
-
+        char* theType = method_copyArgumentType(inMethod, indexArgs + 2);
 		newtRefVar theParam = kNewtRefNIL;
 
 		while (theType[0] == 'r')
@@ -705,7 +698,7 @@ CastParamsToNS(va_list inArgList, Method inMethod)
 		
 					// Get the class
 					theParam =
-						GetClassFromName(theClass->name);
+						GetClassFromName(class_getName(theClass));
 				}
 			}
 			break;
@@ -806,6 +799,7 @@ CastParamsToNS(va_list inArgList, Method inMethod)
 			theArguments,
 			indexArgs,
 			theParam);
+        free(theType);
 	}
 	
 	return theArguments;
@@ -814,37 +808,21 @@ CastParamsToNS(va_list inArgList, Method inMethod)
 /**
  * Cast a NewtonScript object to an Object C value.
  */
-void
-CastParamToObjC(
-	void* marg_list,
-	int inOffset,
-	const char* inType,
-	void** outTempStorage,
-	newtRefArg inObject,
-	int inConst)
-{
-	switch (inType[0])
-	{
-		case 'r':	// const
-			CastParamToObjC(marg_list, inOffset, &inType[1], outTempStorage, inObject, true);
-			break;
-
+void CastParamToObjC(Method method, NSInvocation* invocation, int argIndex, newtRefArg inObject) {
+    char* (theType) = method_copyArgumentType(method, argIndex);
+    char* theTypeCrsr = theType;
+    if (theType[0] == 'r') theTypeCrsr = theType + 1;
+	switch (theTypeCrsr[0]) {
 		case '@':
-			if (NewtRefIsString(inObject))
-			{
+			if (NewtRefIsString(inObject)) {
 				// bridge strings.
-				marg_setValue(
-					marg_list,
-					inOffset,
-					id,
-					[NSString stringWithCString: NewtRefToString(inObject)]);
+                NSString* str = [NSString stringWithCString: NewtRefToString(inObject) encoding: NSUTF8StringEncoding];
+                [invocation setArgument:&str atIndex:argIndex];
 			} else if (NewtRefIsFrame(inObject)) {
 				newtRefVar theBinary = NcGetSlot(inObject, NSSYM(_self));
-				if (NewtRefIsBinary(theBinary))
-				{
-					marg_setValue(
-						marg_list, inOffset,
-						id, BinaryToPointer(theBinary));
+				if (NewtRefIsBinary(theBinary)) {
+                    void* ptr = BinaryToPointer(theBinary);
+                    [invocation setArgument:&ptr atIndex:argIndex];
 				} else {
 					(void) NewtThrow(kNErrNotABinaryObject, theBinary);
 				}
@@ -854,21 +832,18 @@ CastParamToObjC(
 					ObjCNSNameTranslation(NewtSymbolGetName(inObject));
 				SEL theSEL = sel_registerName(theObjCName);
 				free(theObjCName);
-				marg_setValue(marg_list, inOffset, SEL, theSEL);
+                [invocation setArgument:&theSEL atIndex:argIndex];
 			} else {
 				(void) NewtThrow(kNErrNotAFrame, inObject);
 			}
 			break;
 
 		case '#':
-			if (NewtRefIsFrame(inObject))
-			{
+			if (NewtRefIsFrame(inObject)) {
 				newtRefVar theSelfSlot = NcGetSlot(inObject, NSSYM(_self));
-				if (NewtRefIsBinary(theSelfSlot))
-				{
-					marg_setValue(
-						marg_list, inOffset,
-						id, BinaryToPointer(theSelfSlot));
+				if (NewtRefIsBinary(theSelfSlot)) {
+                    void* ptr = BinaryToPointer(theSelfSlot);
+                    [invocation setArgument:&ptr atIndex:argIndex];
 				} else {
 					(void) NewtThrow(kNErrNotABinaryObject, theSelfSlot);
 				}
@@ -879,57 +854,71 @@ CastParamToObjC(
 		
 		case ':':
 			// selector
-			if (NewtRefIsSymbol(inObject))
-			{
+			if (NewtRefIsSymbol(inObject)) {
 				char* theObjCName =
 					ObjCNSNameTranslation(NewtSymbolGetName(inObject));
 				SEL theSEL = sel_registerName(theObjCName);
-				free(theObjCName);
-				marg_setValue(marg_list, inOffset, SEL, theSEL);
+                free(theObjCName);
+                [invocation setArgument:&theSEL atIndex:argIndex];
 			} else {
 				(void) NewtThrow(kNErrNotASymbol, inObject);
 			}
 		break;
 
 		case 'c':
-		case 'C':
+        case 'C':
+        {
 			// char
-			marg_setValue(marg_list, inOffset, char, (char) RefToCharConverting(inObject));
-			break;
+            char c = RefToCharConverting(inObject);
+            [invocation setArgument:&c atIndex:argIndex];
+        }
+        break;
 
 		case 's':
 		case 'S':
+        {
 			// short
-			marg_setValue(marg_list, inOffset, short, (short) RefToIntConverting(inObject));
-			break;
+            short s = (short) RefToIntConverting(inObject);
+            [invocation setArgument:&s atIndex:argIndex];
+        }
+        break;
 
 		case 'i':
 		case 'I':
+        {
 			// int
-			marg_setValue(marg_list, inOffset, int, (int) RefToIntConverting(inObject));
-			break;
+            int i = (int) RefToIntConverting(inObject);
+            [invocation setArgument:&i atIndex:argIndex];
+        }
+        break;
 
 		case 'l':
 		case 'L':
+        {
 			// long
-			marg_setValue(marg_list, inOffset, long, (long) RefToIntConverting(inObject));
-			break;
+            long l = (long) RefToIntConverting(inObject);
+            [invocation setArgument:&l atIndex:argIndex];
+        }
+        break;
 
 		case 'f':
-#if !defined(__ppc__) && !defined(ppc)
-			// float
-			marg_setValue(marg_list, inOffset, float, (float) RefToDoubleConverting(inObject));
-			break;
-#endif
+        {
+            float f = (float) RefToDoubleConverting(inObject);
+            [invocation setArgument:&f atIndex:argIndex];
+        }
+        break;
 
 		case 'd':
+        {
 			// double
-			marg_setValue(marg_list, inOffset, double, (double) RefToDoubleConverting(inObject));
-			break;
+            double d = (double) RefToDoubleConverting(inObject);
+            [invocation setArgument:&d atIndex:argIndex];
+        }
+        break;
 
 		case 'b':
 			// BFLD
-			printf( "unhandled type: %s (BFLD)\n", inType );
+			printf( "unhandled type: %s (BFLD)\n", theTypeCrsr );
 			break;
 
 		case 'v':
@@ -938,12 +927,12 @@ CastParamToObjC(
 
 		case '?':
 			// UNDEF
-			printf( "unhandled type: %s (UNDEF)\n", inType );
+			printf( "unhandled type: %s (UNDEF)\n", theTypeCrsr );
 			break;
 
 		case '^':	// pointer
 			// POINTER
-			printf( "unhandled type: %s (POINTER)\n", inType );
+			printf( "unhandled type: %s (POINTER)\n", theTypeCrsr );
 			break;
 
 		case '*':	// char*
@@ -951,60 +940,58 @@ CastParamToObjC(
 			{
 				// We don't need to convert yet.
 				char* theString = NewtRefToString(inObject);
-				marg_setValue(marg_list, inOffset, const char*, (const char*) theString);
+                [invocation setArgument:&theString atIndex:argIndex];
 			} else {
 				(void) NewtThrow(kNErrNotAString, inObject);
 			}
 			break;
 
 		case '{':	// structure.
-			if ((strncmp(inType, "{_NSRange}", 10) == 0)
-				|| (strncmp(inType, "{_NSRange=", 10) == 0))
-			{
+			if ((strncmp(theTypeCrsr, "{_NSRange}", 10) == 0)
+				|| (strncmp(theTypeCrsr, "{_NSRange=", 10) == 0)) {
 				NSRange theRange;
 				RefToRange(inObject, &theRange);
-				marg_setValue(marg_list, inOffset, NSRange, theRange);
-#if !TARGET_OS_IPHONE
-			} else if ((strncmp(inType, "{_NSRect}", 9) == 0)
-				|| (strncmp(inType, "{_NSRect=", 9) == 0)) {
+                [invocation setArgument:&theRange atIndex:argIndex];
+			} else if ((strncmp(theTypeCrsr, "{_NSRect}", 9) == 0)
+				|| (strncmp(theTypeCrsr, "{_NSRect=", 9) == 0)) {
 				NSRect theRect;
 				RefToNSRect(inObject, &theRect);
-				marg_setValue(marg_list, inOffset, NSRect, theRect);
-			} else if ((strncmp(inType, "{_NSPoint}", 10) == 0)
-				|| (strncmp(inType, "{_NSPoint=", 10) == 0)) {
+                [invocation setArgument:&theRect atIndex:argIndex];
+			} else if ((strncmp(theTypeCrsr, "{_NSPoint}", 10) == 0)
+				|| (strncmp(theTypeCrsr, "{_NSPoint=", 10) == 0)) {
 				NSPoint thePoint;
 				RefToNSPoint(inObject, &thePoint);
-				marg_setValue(marg_list, inOffset, NSPoint, thePoint);
-			} else if ((strncmp(inType, "{_NSSize}", 9) == 0)
-				|| (strncmp(inType, "{_NSSize=", 9) == 0)) {
+                [invocation setArgument:&thePoint atIndex:argIndex];
+			} else if ((strncmp(theTypeCrsr, "{_NSSize}", 9) == 0)
+				|| (strncmp(theTypeCrsr, "{_NSSize=", 9) == 0)) {
 				NSSize theSize;
 				RefToNSSize(inObject, &theSize);
-				marg_setValue(marg_list, inOffset, NSSize, theSize);
-#endif
-      } else if ((strncmp(inType, "{_CGRect}", 9) == 0)
-                 || (strncmp(inType, "{_CGRect=", 9) == 0)) {
+                [invocation setArgument:&theSize atIndex:argIndex];
+            } else if ((strncmp(theTypeCrsr, "{_CGRect}", 9) == 0)
+                 || (strncmp(theTypeCrsr, "{_CGRect=", 9) == 0)) {
 				CGRect theRect;
 				RefToCGRect(inObject, &theRect);
-				marg_setValue(marg_list, inOffset, CGRect, theRect);
-			} else if ((strncmp(inType, "{_CGPoint}", 10) == 0)
-                 || (strncmp(inType, "{_CGPoint=", 10) == 0)) {
+                [invocation setArgument:&theRect atIndex:argIndex];
+			} else if ((strncmp(theTypeCrsr, "{_CGPoint}", 10) == 0)
+                 || (strncmp(theTypeCrsr, "{_CGPoint=", 10) == 0)) {
 				CGPoint thePoint;
 				RefToCGPoint(inObject, &thePoint);
-				marg_setValue(marg_list, inOffset, CGPoint, thePoint);
-			} else if ((strncmp(inType, "{_CGSize}", 9) == 0)
-                 || (strncmp(inType, "{_CGSize=", 9) == 0)) {
+                [invocation setArgument:&thePoint atIndex:argIndex];
+			} else if ((strncmp(theTypeCrsr, "{_CGSize}", 9) == 0)
+                 || (strncmp(theTypeCrsr, "{_CGSize=", 9) == 0)) {
 				CGSize theSize;
 				RefToCGSize(inObject, &theSize);
-				marg_setValue(marg_list, inOffset, CGSize, theSize);
+                [invocation setArgument:&theSize atIndex:argIndex];
 			} else {
-				printf( "unhandled type: %s (structure)\n", inType );
+				printf( "unhandled type: %s (structure)\n", theTypeCrsr );
 			}
 			break;
 
 		default:
-			printf( "unhandled type: %s (default)\n", inType );
+			printf( "unhandled type: %s (default)\n", theTypeCrsr );
 			break;
 	}
+    free(theType);
 }
 
 /**
@@ -1025,7 +1012,7 @@ CastResultToObjC(
 			if (NewtRefIsString(inObject))
 			{
 				// bridge strings.
-				return [NSString stringWithCString: NewtRefToString(inObject)];
+                return [NSString stringWithCString: NewtRefToString(inObject) encoding:NSUTF8StringEncoding];
 			} else if (NewtRefIsFrame(inObject)) {
 				newtRefVar theBinary = NcGetSlot(inObject, NSSYM(_self));
 				if (NewtRefIsBinary(theBinary))
@@ -1040,7 +1027,7 @@ CastResultToObjC(
 					ObjCNSNameTranslation(NewtSymbolGetName(inObject));
 				SEL theSEL = sel_registerName(theObjCName);
 				free(theObjCName);
-				return (id) theSEL;
+				return (id) sel_getName(theSEL);
 			} else {
 				(void) NewtThrow(kNErrNotAFrame, inObject);
 			}
@@ -1069,7 +1056,7 @@ CastResultToObjC(
 					ObjCNSNameTranslation(NewtSymbolGetName(inObject));
 				SEL theSEL = sel_registerName(theObjCName);
 				free(theObjCName);
-				return (id) theSEL;
+				return (id) sel_getName(theSEL);
 			} else {
 				(void) NewtThrow(kNErrNotASymbol, inObject);
 			}
