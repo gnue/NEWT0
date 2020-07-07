@@ -60,6 +60,7 @@ enum {
 
     //　バイナリオブジェクト
     kNewtInt32,						///< 32bit整数
+    kNewtInt64,                     ///< 64bit整数
     kNewtReal,						///< 浮動小数点
     kNewtSymbol,					///< シンボル
     kNewtString						///< 文字列
@@ -125,7 +126,7 @@ enum {
 /* 型宣言 */
 
 // Ref(Integer, Pointer, Charcter, Spatial, Magic pointer)
-typedef uint32_t		newtRef;		///< オブジェクト参照
+typedef uintptr_t		newtRef;		///< オブジェクト参照
 typedef newtRef			newtRefVar;		///< オブジェクト参照変数
 typedef const newtRef	newtRefArg;		///< オブジェクト参照引数
 
@@ -135,7 +136,7 @@ typedef struct newtObj *	newtObjRef;
 
 /// オブジェクトヘッダ
 typedef struct {
-    uint32_t	h;		///< 管理情報
+    size_t	    h;		///< 管理情報
     newtObjRef	nextp;	///< 次のオブジェクトへのポインタ
 } newtObjHeader;
 
@@ -163,7 +164,7 @@ typedef newtSymData *	newtSymDataRef;
 
 
 /// エラーコード
-typedef int32_t		newtErr;
+typedef intptr_t		newtErr;
 
 
 #endif /* NEWTTYPE_H */

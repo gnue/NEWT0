@@ -49,8 +49,8 @@ newtRef protoREGEX_regcomp(newtRefArg pattern, newtRefArg opt)
     if (NewtRefIsString(opt))
 	{
 		char *		optstr;
-		uint32_t	len;
-		uint32_t	i;
+		size_t	    len;
+		size_t	    i;
 
 		optstr = NewtRefToString(opt);
 		len = NewtLength(opt);

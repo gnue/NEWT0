@@ -25,32 +25,32 @@
 /* 関数プロトタイプ */
 static newtRef		NewtMakeSymbol0(const char *s);
 static bool			NewtBSearchSymTable(newtRefArg r, const char * name, uint32_t hash, int32_t st, int32_t * indexP);
-static newtObjRef   NewtObjMemAlloc(newtPool pool, uint32_t n, bool literal);
-static newtObjRef   NewtObjRealloc(newtPool pool, newtObjRef obj, uint32_t n);
-static void			NewtGetObjData(newtRefArg r, uint8_t * data, uint32_t len);
-static newtObjRef   NewtObjBinarySetLength(newtObjRef obj, uint32_t n);
-static uint32_t		NewtObjSymbolLength(newtObjRef obj);
-static uint32_t		NewtObjStringLength(newtObjRef obj);
-static newtObjRef   NewtObjStringSetLength(newtObjRef obj, uint32_t n);
-static void			NewtMakeInitSlots(newtRefArg r, uint32_t st, uint32_t n, uint32_t step, const newtRefVar v[]);
-static newtObjRef   NewtObjSlotsSetLength(newtObjRef obj, uint32_t n, newtRefArg v);
-static int			NewtInt32Compare(newtRefArg r1, newtRefArg r2);
+static newtObjRef   NewtObjMemAlloc(newtPool pool, size_t n, bool literal);
+static newtObjRef   NewtObjRealloc(newtPool pool, newtObjRef obj, size_t n);
+static void			NewtGetObjData(newtRefArg r, uint8_t * data, size_t len);
+static newtObjRef   NewtObjBinarySetLength(newtObjRef obj, size_t n);
+static size_t		NewtObjSymbolLength(newtObjRef obj);
+static size_t		NewtObjStringLength(newtObjRef obj);
+static newtObjRef   NewtObjStringSetLength(newtObjRef obj, size_t n);
+static void			NewtMakeInitSlots(newtRefArg r, uint32_t st, size_t n, uint32_t step, const newtRefVar v[]);
+static newtObjRef   NewtObjSlotsSetLength(newtObjRef obj, size_t n, newtRefArg v);
+static int			NewtIntCompare(newtRefArg r1, newtRefArg r2);
 static int			NewtRealCompare(newtRefArg r1, newtRefArg r2);
 static int			NewtStringCompare(newtRefArg r1, newtRefArg r2);
 static int			NewtBinaryCompare(newtRefArg r1, newtRefArg r2);
 static uint16_t		NewtArgsType(newtRefArg r1, newtRefArg r2);
 
-static newtRef		NewtMakeThrowSymbol(int32_t err);
+static newtRef		NewtMakeThrowSymbol(intptr_t err);
 
 static bool			NewtObjHasProto(newtObjRef obj);
 static bool			NewtMapIsSorted(newtRefArg r);
-static void			NewtObjRemoveArraySlot(newtObjRef obj, int32_t n);
-static void			NewtDeeplyCopyMap(newtRef * dst, int32_t * pos, newtRefArg src);
-static newtRef		NewtDeeplyCloneMap(newtRefArg map, int32_t len);
+static void			NewtObjRemoveArraySlot(newtObjRef obj, size_t n);
+static void			NewtDeeplyCopyMap(newtRef * dst, size_t * pos, newtRefArg src);
+static newtRef		NewtDeeplyCloneMap(newtRefArg map, size_t len);
 static void			NewtObjRemoveFrameSlot(newtObjRef obj, newtRefArg slot);
-static bool			NewtStrNBeginsWith(char * str, uint32_t len, char * sub, uint32_t sublen);
-static bool			NewtStrIsSubclass(char * sub, uint32_t sublen, char * supr, uint32_t suprlen);
-static bool			NewtStrHasSubclass(char * sub, uint32_t sublen, char * supr, uint32_t suprlen);
+static bool			NewtStrNBeginsWith(char * str, size_t len, char * sub, size_t sublen);
+static bool			NewtStrIsSubclass(char * sub, size_t sublen, char * supr, size_t suprlen);
+static bool			NewtStrHasSubclass(char * sub, size_t sublen, char * supr, size_t suprlen);
 
 
 #if 0
@@ -96,15 +96,15 @@ uint32_t NewtSymbolHashFunction(const char * name)
 newtRef NewtMakeSymbol0(const char *s)
 {
     newtObjRef	obj;
-    uint32_t	size;
+    size_t		size;
 
-    size = sizeof(uint32_t) + strlen(s) + 1;
+    size = sizeof(((newtSymData*)0)->hash) + strlen(s) + 1;
     obj = NewtObjAlloc(kNewtSymbolClass, size, 0, true);
 
     if (obj != NULL)
     {
         newtSymDataRef	objData;
-        uint32_t	setlen;
+        size_t			setlen;
 
         objData = NewtObjToSymbol(obj);
 
@@ -141,7 +141,7 @@ bool NewtBSearchSymTable(newtRefArg r, const char * name, uint32_t hash,
 {
     newtSymDataRef	sym;
     newtRef *	slots;
-    int32_t	len;
+    size_t	len;
     int32_t	ed;
     int32_t	md = st;
     int16_t	comp;
@@ -152,7 +152,7 @@ bool NewtBSearchSymTable(newtRefArg r, const char * name, uint32_t hash,
         hash = NewtSymbolHashFunction(name);
 
     len = NewtArrayLength(r);
-    ed = len - 1;
+    ed = (int32_t) len - 1;
 
     while (st <= ed)
     {
@@ -183,7 +183,7 @@ bool NewtBSearchSymTable(newtRefArg r, const char * name, uint32_t hash,
     }
 
     if (len < st)
-        *indexP = len;
+        *indexP = (int32_t) len;
     else
         *indexP = st;
 
@@ -348,6 +348,8 @@ uint16_t NewtGetObjectType(newtObjRef obj, bool detail)
                     type = kNewtString;
                 else if (NewtRefEqual(obj->as.klass, NSSYM0(int32)))
                     type = kNewtInt32;
+                else if (NewtRefEqual(obj->as.klass, NSSYM0(int64)))
+                    type = kNewtInt64;
                 else if (NewtRefEqual(obj->as.klass, NSSYM0(real)))
                     type = kNewtReal;
 				else if (NewtIsSubclass(obj->as.klass, NSSYM0(string)))
@@ -379,7 +381,7 @@ uint16_t NewtGetObjectType(newtObjRef obj, bool detail)
  * @return			実データサイズ
  */
 
-uint32_t NewtObjCalcDataSize(uint32_t n)
+size_t NewtObjCalcDataSize(size_t n)
 {
     if (n < 4)
         return 4;
@@ -398,10 +400,10 @@ uint32_t NewtObjCalcDataSize(uint32_t n)
  * @return			オブジェクトデータ
  */
 
-newtObjRef NewtObjMemAlloc(newtPool pool, uint32_t n, bool literal)
+newtObjRef NewtObjMemAlloc(newtPool pool, size_t n, bool literal)
 {
     newtObjRef	obj;
-    uint32_t	newSize;
+    size_t		newSize;
 
     if (literal)
     {
@@ -429,7 +431,7 @@ newtObjRef NewtObjMemAlloc(newtPool pool, uint32_t n, bool literal)
  * @return			オブジェクト
  */
 
-newtObjRef NewtObjAlloc(newtRefArg r, uint32_t n, uint16_t type, bool literal)
+newtObjRef NewtObjAlloc(newtRefArg r, size_t n, uint16_t type, bool literal)
 {
     newtObjRef	obj;
 
@@ -460,13 +462,13 @@ newtObjRef NewtObjAlloc(newtRefArg r, uint32_t n, uint16_t type, bool literal)
  * @return			オブジェクトデータ
  */
 
-newtObjRef NewtObjRealloc(newtPool pool, newtObjRef obj, uint32_t n)
+newtObjRef NewtObjRealloc(newtPool pool, newtObjRef obj, size_t n)
 {
     uint8_t **	datap;
     uint8_t *	data;
-    int32_t	oldSize;
-    int32_t	newSize;
-    int32_t	addSize;
+    size_t	oldSize;
+    size_t	newSize;
+    size_t	addSize;
 
     oldSize = NewtObjCalcDataSize(NewtObjSize(obj));
     newSize = NewtObjCalcDataSize(n);
@@ -499,7 +501,7 @@ newtObjRef NewtObjRealloc(newtPool pool, newtObjRef obj, uint32_t n)
  * @return			オブジェクトデータ
  */
 
-newtObjRef NewtObjResize(newtObjRef obj, uint32_t n)
+newtObjRef NewtObjResize(newtObjRef obj, size_t n)
 {
     if (NewtObjIsReadonly(obj))
     {
@@ -549,7 +551,7 @@ newtRef NewtObjClone(newtRefArg r)
     if (obj != NULL)
     {
         newtObjRef	newObj = NULL;
-        uint32_t	size;
+        size_t		size;
         uint16_t	type;
 
         size = NewtObjSize(obj);
@@ -616,7 +618,7 @@ newtRef NewtPackLiteral(newtRefArg r)
     if (obj != NULL)
     {
         newtObjRef	newObj = NULL;
-        uint32_t	size;
+        size_t	size;
         uint16_t	type;
 
         size = NewtObjSize(obj);
@@ -644,8 +646,8 @@ newtRef NewtPackLiteral(newtRefArg r)
             if (NewtObjIsSlotted(newObj))
             {
                 newtRef *	slots;
-                uint32_t	len;
-                uint32_t	i;
+                size_t		len;
+                size_t		i;
 
                 len = NewtObjSlotsLength(newObj);
                 slots = NewtObjToSlots(newObj);
@@ -682,7 +684,7 @@ newtRef NewtPackLiteral(newtRefArg r)
  * @return			なし
  */
 
-void NewtGetObjData(newtRefArg r, uint8_t * data, uint32_t len)
+void NewtGetObjData(newtRefArg r, uint8_t * data, size_t len)
 {
     newtObjRef	obj;
     uint8_t *	objData;
@@ -823,7 +825,7 @@ bool NewtRefIsString(newtRefArg r)
 
 bool NewtRefIsInteger(newtRefArg r)
 {
-	return (NewtRefIsInt30(r) || NewtRefIsInt32(r));
+	return (NewtRefIsInt30(r) || NewtRefIsInt32(r) || NewtRefIsInt64(r));
 }
 
 
@@ -835,16 +837,37 @@ bool NewtRefIsInteger(newtRefArg r)
  * @return			整数
  */
 
-int32_t NewtRefToInteger(newtRefArg r)
+intptr_t NewtRefToInteger(newtRefArg r)
 {
-    int32_t	v = 0;
+    intptr_t v = 0;
 
     if (NewtRefIsInt30(r))
         v = NewtRefToInt30(r);
     else if (NewtRefIsNIL(r))
       v = NewtMakeInt30(0);
-    else
-        NewtGetObjData(r, (uint8_t *)&v, sizeof(v));
+    else if (NewtRefIsInt32(r)) {
+        newtObjRef    obj;
+        uint8_t *    objData;
+        obj = NewtRefToPointer(r);
+        objData = NewtObjToBinary(obj);
+        v = (((uintptr_t) objData[0]) << 24)
+            | (((uintptr_t) objData[1]) << 16)
+            | (((uintptr_t) objData[2]) << 8)
+            | ((uintptr_t) objData[3]);
+    } else if (NewtRefIsInt64(r)) {
+        newtObjRef    obj;
+        uint8_t *    objData;
+        obj = NewtRefToPointer(r);
+        objData = NewtObjToBinary(obj);
+        v = (((uintptr_t) objData[0]) << 56)
+            | (((uintptr_t) objData[1]) << 48)
+            | (((uintptr_t) objData[2]) << 40)
+            | (((uintptr_t) objData[3]) << 32)
+            | (((uintptr_t) objData[4]) << 24)
+            | (((uintptr_t) objData[5]) << 16)
+            | (((uintptr_t) objData[6]) << 8)
+            | ((uintptr_t) objData[7]);
+    }
 
     return v;
 }
@@ -864,6 +887,19 @@ bool NewtRefIsInt32(newtRefArg r)
     return (kNewtInt32 == NewtGetRefType(r, true));
 }
 
+/*------------------------------------------------------------------------*/
+/** オブジェクトが64bit整数かチェックする
+ *
+ * @param r            [in] オブジェクト
+ *
+ * @retval            true    64bit整数
+ * @retval            false   64bit整数でない
+ */
+
+bool NewtRefIsInt64(newtRefArg r)
+{
+    return (kNewtInt64 == NewtGetRefType(r, true));
+}
 
 /*------------------------------------------------------------------------*/
 /** オブジェクトが浮動小数点かチェックする
@@ -1156,7 +1192,7 @@ bool NewtRefIsRegex(newtRefArg r)
 void * NewtRefToAddress(newtRefArg r)
 {
 	if (NewtRefIsInteger(r))
-		return (void *)(((uint32_t)NewtRefToInteger(r)) << NOBJ_ADDR_SHIFT);
+		return (void *)(((uintptr_t)NewtRefToInteger(r)) << NOBJ_ADDR_SHIFT);
 	else
 		return NULL;
 }
@@ -1176,7 +1212,7 @@ void * NewtRefToAddress(newtRefArg r)
  * @return			バイナリオブジェクト
  */
 
-newtRef NewtMakeBinary(newtRefArg klass, uint8_t * data, uint32_t size, bool literal)
+newtRef NewtMakeBinary(newtRefArg klass, uint8_t * data, size_t size, bool literal)
 {
     newtObjRef	obj;
 
@@ -1190,7 +1226,7 @@ newtRef NewtMakeBinary(newtRefArg klass, uint8_t * data, uint32_t size, bool lit
 
         if (data != NULL && 0 < size)
         {
-            uint32_t	setlen;
+            size_t	setlen;
 
             setlen = NewtObjSize(obj) - size;
 
@@ -1223,7 +1259,7 @@ newtRef NewtMakeBinary(newtRefArg klass, uint8_t * data, uint32_t size, bool lit
 
 newtRef NewtMakeBinaryFromHex(newtRefArg klass, const char *hex, bool literal)
 {
-    uint32_t size = strlen(hex)/2;
+    size_t size = strlen(hex)/2;
     newtRef obj = NewtMakeBinary(klass, 0, size, literal);
     if (obj) {
         uint32_t i;
@@ -1251,7 +1287,7 @@ newtRef NewtMakeBinaryFromHex(newtRefArg klass, const char *hex, bool literal)
  * @return			サイズの変更されたオブジェクトデータ
  */
 
-newtObjRef NewtObjBinarySetLength(newtObjRef obj, uint32_t n)
+newtObjRef NewtObjBinarySetLength(newtObjRef obj, size_t n)
 {
     return NewtObjResize(obj, n);
 }
@@ -1266,7 +1302,7 @@ newtObjRef NewtObjBinarySetLength(newtObjRef obj, uint32_t n)
  * @return			オブジェクト
  */
 
-newtRef NewtBinarySetLength(newtRefArg r, uint32_t n)
+newtRef NewtBinarySetLength(newtRefArg r, size_t n)
 {
     newtObjRef	obj;
 
@@ -1301,7 +1337,7 @@ newtRef NewtMakeSymbol(const char *s)
  * @return			長さ
  */
 
-uint32_t NewtObjSymbolLength(newtObjRef obj)
+size_t NewtObjSymbolLength(newtObjRef obj)
 {
     newtSymDataRef	sym;
 
@@ -1335,7 +1371,7 @@ newtRef NewtMakeString(const char *s, bool literal)
  * @return			文字列オブジェクト
  */
 
-newtRef NewtMakeString2(const char *s, uint32_t len, bool literal)
+newtRef NewtMakeString2(const char *s, size_t len, bool literal)
 {
 	newtRefVar  r;
 
@@ -1370,7 +1406,7 @@ newtRef NewtMakeString2(const char *s, uint32_t len, bool literal)
  * @return			長さ
  */
 
-uint32_t NewtObjStringLength(newtObjRef obj)
+size_t NewtObjStringLength(newtObjRef obj)
 {
     char *	s;
 
@@ -1388,7 +1424,7 @@ uint32_t NewtObjStringLength(newtObjRef obj)
  * @return			長さが変更されたオブジェクトデータ
  */
 
-newtObjRef NewtObjStringSetLength(newtObjRef obj, uint32_t n)
+newtObjRef NewtObjStringSetLength(newtObjRef obj, size_t n)
 {
     return NewtObjBinarySetLength(obj, n + 1);
 }
@@ -1403,7 +1439,7 @@ newtObjRef NewtObjStringSetLength(newtObjRef obj, uint32_t n)
  * @return			オブジェクト
  */
 
-newtRef NewtStringSetLength(newtRefArg r, uint32_t n)
+newtRef NewtStringSetLength(newtRefArg r, size_t n)
 {
     newtObjRef	obj;
 
@@ -1422,15 +1458,15 @@ newtRef NewtStringSetLength(newtRefArg r, uint32_t n)
  * @return			整数オブジェクト
  */
 
-newtRef NewtMakeInteger(int32_t v)
+newtRef NewtMakeInteger(int64_t v)
 {
 	if (-536870912 <= v && v <= 536870911)
 	{   // 30bit 以内の場合
 		return NewtMakeInt30(v);
-	}
-	else
-	{
-		return NewtMakeInt32(v);
+	} else if (-2147483648 <= v && v <= 2147483647) {
+		return NewtMakeInt32((int32_t) v);
+	} else {
+		return NewtMakeInt64(v);
 	}
 }
 
@@ -1445,7 +1481,26 @@ newtRef NewtMakeInteger(int32_t v)
 
 newtRef NewtMakeInt32(int32_t v)
 {
-    return NewtMakeBinary(NSSYM0(int32), (uint8_t *)&v, sizeof(v), true); 
+    uint8_t bytes[4];
+    bytes[0] = (uint8_t) ((uint32_t) v >> 24);
+    bytes[1] = (uint8_t) (((uint32_t) v >> 16) & 0xFF);
+    bytes[2] = (uint8_t) (((uint32_t) v >> 8) & 0xFF);
+    bytes[3] = (uint8_t) ((uint32_t) v & 0xFF);
+    return NewtMakeBinary(NSSYM0(int32), bytes, sizeof(bytes), true);
+}
+
+newtRef NewtMakeInt64(int64_t v)
+{
+    uint8_t bytes[8];
+    bytes[0] = (uint8_t) ((uint64_t) v >> 56);
+    bytes[1] = (uint8_t) (((uint64_t) v >> 48) & 0xFF);
+    bytes[2] = (uint8_t) (((uint64_t) v >> 40) & 0xFF);
+    bytes[3] = (uint8_t) (((uint64_t) v >> 32) & 0xFF);
+    bytes[4] = (uint8_t) (((uint64_t) v >> 24) & 0xFF);
+    bytes[5] = (uint8_t) (((uint64_t) v >> 16) & 0xFF);
+    bytes[6] = (uint8_t) (((uint64_t) v >> 8) & 0xFF);
+    bytes[7] = (uint8_t) ((uint64_t) v & 0xFF);
+    return NewtMakeBinary(NSSYM0(int64), bytes, sizeof(bytes), true);
 }
 
 
@@ -1472,17 +1527,17 @@ newtRef NewtMakeReal(double v)
  * @return			配列オブジェクト
  */
 
-newtRef NewtMakeArray(newtRefArg klass, uint32_t n)
+newtRef NewtMakeArray(newtRefArg klass, size_t n)
 {
     return NewtMakeSlotsObj(klass, n, 0);
 }
 
-void NewtMakeInitSlots(newtRefArg r, uint32_t st, uint32_t n, uint32_t step, const newtRefVar v[])
+void NewtMakeInitSlots(newtRefArg r, uint32_t st, size_t n, uint32_t step, const newtRefVar v[])
 {
     if (v != NULL)
     {
         newtRef *	slots;
-        uint32_t	i;
+        size_t		i;
     
         slots = NewtRefToSlots(r);
     
@@ -1505,7 +1560,7 @@ void NewtMakeInitSlots(newtRefArg r, uint32_t st, uint32_t n, uint32_t step, con
  * @return			配列オブジェクト
  */
 
-newtRef NewtMakeArray2(newtRefArg klass, uint32_t n, const newtRefVar v[])
+newtRef NewtMakeArray2(newtRefArg klass, size_t n, const newtRefVar v[])
 {
     newtRefVar	r;
 
@@ -1528,10 +1583,10 @@ newtRef NewtMakeArray2(newtRefArg klass, uint32_t n, const newtRefVar v[])
  * @return			マップオブジェクト
  */
 
-newtRef NewtMakeMap(newtRefArg superMap, uint32_t n, newtRefVar v[])
+newtRef NewtMakeMap(newtRefArg superMap, size_t n, newtRefVar v[])
 {
     newtRefVar	r;
-    int32_t	flags = 0;
+    intptr_t	flags = 0;
 
     r = NewtMakeSlotsObj(NewtMakeInteger(flags), n + 1, 0);
     NewtSetArraySlot(r, 0, superMap);
@@ -1579,7 +1634,7 @@ newtRef NewtMakeMap(newtRefArg superMap, uint32_t n, newtRefVar v[])
 
 void NewtSetMapFlags(newtRefArg map, int32_t bit)
 {
-    int32_t	flags;
+    intptr_t	flags;
 
     flags = NewtRefToInteger(NcClassOf(map));
     flags |= bit;
@@ -1598,7 +1653,7 @@ void NewtSetMapFlags(newtRefArg map, int32_t bit)
 
 void NewtClearMapFlags(newtRefArg map, int32_t bit)
 {
-    int32_t	flags;
+    intptr_t	flags;
 
     flags = NewtRefToInteger(NcClassOf(map));
     flags &= ~ bit;
@@ -1614,9 +1669,9 @@ void NewtClearMapFlags(newtRefArg map, int32_t bit)
  * @return			長さ
  */
 
-uint32_t NewtMapLength(newtRefArg map)
+size_t NewtMapLength(newtRefArg map)
 {
-    uint32_t	len = 0;
+    size_t	len = 0;
     newtRefVar	r;
 
     r = (newtRef)map;
@@ -1640,7 +1695,7 @@ uint32_t NewtMapLength(newtRefArg map)
  * @return			フレームオブジェクト
  */
 
-newtRef NewtMakeFrame(newtRefArg map, uint32_t n)
+newtRef NewtMakeFrame(newtRefArg map, size_t n)
 {
     newtRefVar	m;
 
@@ -1662,7 +1717,7 @@ newtRef NewtMakeFrame(newtRefArg map, uint32_t n)
  * @return			フレームオブジェクト
  */
 
-newtRef NewtMakeFrame2(uint32_t n, newtRefVar v[])
+newtRef NewtMakeFrame2(size_t n, newtRefVar v[])
 {
     newtRefVar	m;
     newtRefVar	r;
@@ -1687,10 +1742,10 @@ newtRef NewtMakeFrame2(uint32_t n, newtRefVar v[])
  * @return			オブジェクト
  */
 
-newtRef NewtMakeSlotsObj(newtRefArg r, uint32_t n, uint16_t type)
+newtRef NewtMakeSlotsObj(newtRefArg r, size_t n, uint16_t type)
 {
     newtObjRef	obj;
-    uint32_t	size;
+    size_t		size;
 
     size = sizeof(newtRef) * n;
     obj = NewtObjAlloc(r, size, kNewtObjSlotted | type, false);
@@ -1722,7 +1777,7 @@ newtRef NewtMakeSlotsObj(newtRefArg r, uint32_t n, uint16_t type)
  * @return			長さ
  */
 
-uint32_t NewtObjSlotsLength(newtObjRef obj)
+size_t NewtObjSlotsLength(newtObjRef obj)
 {
     return NewtObjSize(obj) / sizeof(newtRef);
 }
@@ -1738,10 +1793,10 @@ uint32_t NewtObjSlotsLength(newtObjRef obj)
  * @return			長さの変更されたオブジェクトデータ
  */
 
-newtObjRef NewtObjSlotsSetLength(newtObjRef obj, uint32_t n, newtRefArg v)
+newtObjRef NewtObjSlotsSetLength(newtObjRef obj, size_t n, newtRefArg v)
 {
-    uint32_t	size;
-    uint32_t	len;
+    size_t	size;
+    size_t	len;
 
     len = NewtObjSlotsLength(obj);
     size = sizeof(newtRef) * n;
@@ -1750,7 +1805,7 @@ newtObjRef NewtObjSlotsSetLength(newtObjRef obj, uint32_t n, newtRefArg v)
     if (obj != NULL)
     {
         newtRef *	slots;
-        uint32_t	i;
+        size_t		i;
 
         slots = NewtObjToSlots(obj);
 
@@ -1775,7 +1830,7 @@ newtObjRef NewtObjSlotsSetLength(newtObjRef obj, uint32_t n, newtRefArg v)
 
 newtRef NewtObjAddArraySlot(newtObjRef obj, newtRefArg v)
 {
-    uint32_t	len;
+    size_t	len;
 
     len = NewtObjSlotsLength(obj);
     NewtObjSlotsSetLength(obj, len + 1, v);
@@ -1794,7 +1849,7 @@ newtRef NewtObjAddArraySlot(newtObjRef obj, newtRefArg v)
  * @return			長さの変更されたオブジェクト
  */
 
-newtRef NewtSlotsSetLength(newtRefArg r, uint32_t n, newtRefArg v)
+newtRef NewtSlotsSetLength(newtRefArg r, size_t n, newtRefArg v)
 {
     newtObjRef	obj;
 
@@ -1814,7 +1869,7 @@ newtRef NewtSlotsSetLength(newtRefArg r, uint32_t n, newtRefArg v)
  * @return			長さの変更されたオブジェクト
  */
 
-newtRef NewtSetLength(newtRefArg r, uint32_t n)
+newtRef NewtSetLength(newtRefArg r, size_t n)
 {
     uint16_t	type;
 
@@ -1850,7 +1905,7 @@ newtRef NewtSetLength(newtRefArg r, uint32_t n)
 
 newtRef NewtMakeAddress(void * addr)
 {
-	return NewtMakeInteger(((uint32_t)addr) >> NOBJ_ADDR_SHIFT);
+	return NewtMakeInteger(((uintptr_t)addr) >> NOBJ_ADDR_SHIFT);
 }
 
 
@@ -1865,7 +1920,7 @@ newtRef NewtMakeAddress(void * addr)
  * @return			kNewtRefUnbind
  */
 
-newtRef NewtThrow0(int32_t err)
+newtRef NewtThrow0(intptr_t err)
 {
 	return NewtThrow(err, kNewtRefUnbind);
 }
@@ -1879,7 +1934,7 @@ newtRef NewtThrow0(int32_t err)
  * @return			例外シンボル
  */
 
-newtRef NewtMakeThrowSymbol(int32_t err)
+newtRef NewtMakeThrowSymbol(intptr_t err)
 {
 	newtRefVar  symstr;
 	int32_t		errbase;
@@ -1928,7 +1983,7 @@ newtRef NewtMakeThrowSymbol(int32_t err)
  * @return			kNewtRefUnbind
  */
 
-newtRef NewtThrow(int32_t err, newtRefArg value)
+newtRef NewtThrow(intptr_t err, newtRefArg value)
 {
     newtRefVar	sym;
     newtRefVar	data;
@@ -1955,7 +2010,7 @@ newtRef NewtThrow(int32_t err, newtRefArg value)
  * @return			kNewtRefUnbind
  */
 
-newtRef NewtThrowSymbol(int32_t err, newtRefArg symbol)
+newtRef NewtThrowSymbol(intptr_t err, newtRefArg symbol)
 {
     newtRefVar	sym;
     newtRefVar	data;
@@ -1982,7 +2037,7 @@ newtRef NewtThrowSymbol(int32_t err, newtRefArg symbol)
  * @return			kNewtRefUnbind
  */
 
-newtRef NewtErrOutOfBounds(newtRefArg value, int32_t index)
+newtRef NewtErrOutOfBounds(newtRefArg value, size_t index)
 {
 	newtRefVar  symstr;
     newtRefVar	data;
@@ -2008,7 +2063,7 @@ newtRef NewtErrOutOfBounds(newtRefArg value, int32_t index)
  * @return			なし
  */
 
-void NewtErrMessage(int32_t err)
+void NewtErrMessage(intptr_t err)
 {
     switch (err)
     {
@@ -2021,7 +2076,7 @@ void NewtErrMessage(int32_t err)
     }
 }
 
-const char * NewtErrorMessage(int32_t err) {
+const char * NewtErrorMessage(intptr_t err) {
   const char *result = NULL;
   
   switch (err) {
@@ -2301,20 +2356,20 @@ const char * NewtErrorMessage(int32_t err) {
 #pragma mark -
 #endif
 /*------------------------------------------------------------------------*/
-/** 32bit整数の比較
+/** 32bit/64bit整数の比較
  *
- * @param r1		[in] 32bit整数１
- * @param r2		[in] 32bit整数２
+ * @param r1		[in] 32bit/64bit整数１
+ * @param r2		[in] 32bit/64bit整数２
  *
  * @retval			-1		r1 < r2
  * @retval			0		r1 = r2
  * @retval			1		r1 > r2
  */
 
-int NewtInt32Compare(newtRefArg r1, newtRefArg r2)
+int NewtIntCompare(newtRefArg r1, newtRefArg r2)
 {
-    int32_t	i1;
-    int32_t	i2;
+    intptr_t	i1;
+    intptr_t	i2;
 
     i1 = NewtRefToInteger(r1);
     i2 = NewtRefToInteger(r2);
@@ -2418,9 +2473,9 @@ int NewtStringCompare(newtRefArg r1, newtRefArg r2)
 
 int NewtBinaryCompare(newtRefArg r1, newtRefArg r2)
 {
-    int32_t	len1;
-    int32_t	len2;
-    int32_t	len;
+    size_t	len1;
+    size_t	len2;
+    size_t	len;
     uint8_t *	d1;
     uint8_t *	d2;
     int		r;
@@ -2428,8 +2483,12 @@ int NewtBinaryCompare(newtRefArg r1, newtRefArg r2)
     len1 = NewtBinaryLength(r1);
     len2 = NewtBinaryLength(r2);
 
-    if (len1 == 0 || len2 == 0)
-        return (len1 - len2);
+    if (len1 == 0 && len2 == 0)
+        return 0;
+    if (len1 == 0)
+        return -1;
+    if (len2 == 0)
+        return 1;
 
     d1 = NewtRefToBinary(r1);
     d2 = NewtRefToBinary(r2);
@@ -2478,14 +2537,18 @@ uint16_t NewtArgsType(newtRefArg r1, newtRefArg r2)
 		return type1;
 
 	if (type1 == kNewtInt30)
-		type1 = kNewtInt32;
+		type1 = kNewtInt64;
+	if (type1 == kNewtInt32)
+		type1 = kNewtInt64;
 
 	if (type2 == kNewtInt30)
-		type2 = kNewtInt32;
+		type2 = kNewtInt64;
+	if (type2 == kNewtInt32)
+		type2 = kNewtInt64;
 
-    if (type1 == kNewtInt32 && type2 == kNewtReal)
+    if (type1 == kNewtInt64 && type2 == kNewtReal)
         type1 = kNewtReal;
-    else if (type1 == kNewtReal && type2 == kNewtInt32)
+    else if (type1 == kNewtReal && type2 == kNewtInt64)
         type2 = kNewtReal;
 
     if (type1 == type2)
@@ -2531,7 +2594,8 @@ int16_t NewtObjectCompare(newtRefArg r1, newtRefArg r2)
             break;
 
         case kNewtInt32:
-            r = NewtInt32Compare(r1, r2);
+        case kNewtInt64:
+            r = NewtIntCompare(r1, r2);
             break;
 
         case kNewtReal:
@@ -2577,7 +2641,8 @@ bool NewtRefEqual(newtRefArg r1, newtRefArg r2)
     switch (NewtArgsType(r1, r2))
     {
         case kNewtInt32:
-            r = NewtInt32Compare(r1, r2);
+        case kNewtInt64:
+            r = NewtIntCompare(r1, r2);
             break;
 
         case kNewtReal:
@@ -2659,9 +2724,9 @@ bool NewtSymbolEqual(newtRefArg r1, newtRefArg r2)
  * @return			長さ
  */
 
-uint32_t NewtLength(newtRefArg r)
+size_t NewtLength(newtRefArg r)
 {
-    uint32_t	len = 0;
+    size_t	len = 0;
 
     switch (NewtGetRefType(r, true))
     {
@@ -2694,9 +2759,9 @@ uint32_t NewtLength(newtRefArg r)
  * @note			フレームの場合はプロト継承で長さを計算する
  */
 
-uint32_t NewtDeeplyLength(newtRefArg r)
+size_t NewtDeeplyLength(newtRefArg r)
 {
-    uint32_t	len = 0;
+    size_t	len = 0;
 
     switch (NewtGetRefType(r, true))
     {
@@ -2721,9 +2786,9 @@ uint32_t NewtDeeplyLength(newtRefArg r)
  * @return			オブジェクトの長さ
  */
 
-uint32_t NewtBinaryLength(newtRefArg r)
+size_t NewtBinaryLength(newtRefArg r)
 {
-    uint32_t	len = 0;
+    size_t	len = 0;
 
 //    if (NewtIsBinary(r))
     {
@@ -2745,7 +2810,7 @@ uint32_t NewtBinaryLength(newtRefArg r)
  * @return			オブジェクトの長さ
  */
 
-uint32_t NewtSymbolLength(newtRefArg r)
+size_t NewtSymbolLength(newtRefArg r)
 {
     newtObjRef	obj;
 
@@ -2762,7 +2827,7 @@ uint32_t NewtSymbolLength(newtRefArg r)
  * @return			オブジェクトの長さ
  */
 
-uint32_t NewtStringLength(newtRefArg r)
+size_t NewtStringLength(newtRefArg r)
 {
     newtObjRef	obj;
 
@@ -2779,7 +2844,7 @@ uint32_t NewtStringLength(newtRefArg r)
  * @return			オブジェクトの長さ
  */
 
-uint32_t NewtSlotsLength(newtRefArg r)
+size_t NewtSlotsLength(newtRefArg r)
 {
     newtObjRef	obj;
 
@@ -2796,11 +2861,11 @@ uint32_t NewtSlotsLength(newtRefArg r)
  * @return			オブジェクトの長さ
  */
 
-uint32_t NewtDeeplyFrameLength(newtRefArg r)
+size_t NewtDeeplyFrameLength(newtRefArg r)
 {
     newtRefVar	f;
-    uint32_t	total = 0;
-    uint32_t	len;
+    size_t		total = 0;
+    size_t		len;
 
     f = r;
 
@@ -2834,7 +2899,7 @@ uint32_t NewtDeeplyFrameLength(newtRefArg r)
 
 bool NewtObjHasProto(newtObjRef obj)
 {
-    int32_t	flags;
+    intptr_t	flags;
 
     if (NewtRefIsNIL(obj->as.map))
         return false;
@@ -2856,7 +2921,7 @@ bool NewtObjHasProto(newtObjRef obj)
 
 newtRef NewtObjGetSlot(newtObjRef obj, newtRefArg slot)
 {
-    uint32_t	i;
+    size_t	i;
 
 	if (! NewtObjIsFrame(obj))
 		return kNewtRefUnbind;
@@ -2888,7 +2953,7 @@ newtRef NewtObjGetSlot(newtObjRef obj, newtRefArg slot)
 bool NewtMapIsSorted(newtRefArg r)
 {
     newtRefVar	klass;
-    uint32_t	flags;
+    intptr_t	flags;
 
     klass = NcClassOf(r);
     if (! NewtRefIsInteger(klass)) return false;
@@ -2911,7 +2976,7 @@ bool NewtMapIsSorted(newtRefArg r)
 
 newtRef NewtObjSetSlot(newtObjRef obj, newtRefArg slot, newtRefArg v)
 {
-    uint32_t	i;
+    size_t	i;
 
 /*
     if (NewtObjIsReadonly(obj))
@@ -2927,7 +2992,7 @@ newtRef NewtObjSetSlot(newtObjRef obj, newtRefArg slot, newtRefArg v)
     }
     else
     {
-        uint32_t	len;
+        size_t	len;
 
         if (NewtRefIsLiteral(obj->as.map))
         {
@@ -2983,11 +3048,11 @@ newtRef NewtObjSetSlot(newtObjRef obj, newtRefArg slot, newtRefArg v)
  * @return			なし
  */
 
-void NewtObjRemoveArraySlot(newtObjRef obj, int32_t n)
+void NewtObjRemoveArraySlot(newtObjRef obj, size_t n)
 {
     newtRef *	slots;
-    uint32_t	len;
-    uint32_t	i;
+    size_t		len;
+    size_t		i;
 
     if (NewtObjIsReadonly(obj))
     {
@@ -3017,13 +3082,13 @@ void NewtObjRemoveArraySlot(newtObjRef obj, int32_t n)
  * @return			なし
  */
 
-void NewtDeeplyCopyMap(newtRef * dst, int32_t * pos, newtRefArg src)
+void NewtDeeplyCopyMap(newtRef * dst, size_t * pos, newtRefArg src)
 {
     newtRefVar	superMap;
     newtRef *	slots;
-    int32_t	len;
-    int32_t	p;
-    int32_t	i;
+    size_t	len;
+    size_t	p;
+    size_t	i;
 
     superMap = NewtGetArraySlot(src, 0);
     len = NewtLength(src);
@@ -3052,11 +3117,11 @@ void NewtDeeplyCopyMap(newtRef * dst, int32_t * pos, newtRefArg src)
  * @return			クローン複製されたオブジェクト
  */
 
-newtRef NewtDeeplyCloneMap(newtRefArg map, int32_t len)
+newtRef NewtDeeplyCloneMap(newtRefArg map, size_t len)
 {
     newtRefVar	newMap;
-    int32_t	flags;
-    int32_t	i = 1;
+    intptr_t	flags;
+    size_t		i = 1;
 
     flags = NewtRefToInteger(NcClassOf(map));
     newMap = NewtMakeMap(kNewtRefNIL, len, NULL);
@@ -3079,7 +3144,7 @@ newtRef NewtDeeplyCloneMap(newtRefArg map, int32_t len)
 
 void NewtObjRemoveFrameSlot(newtObjRef obj, newtRefArg slot)
 {
-    uint32_t	i;
+    size_t	i;
 
     if (NewtObjIsReadonly(obj))
     {
@@ -3089,7 +3154,7 @@ void NewtObjRemoveFrameSlot(newtObjRef obj, newtRefArg slot)
 
     if (NewtFindMapIndex(obj->as.map, slot, &i))
     {
-        int32_t	mapIndex;
+        size_t	mapIndex;
 
         mapIndex = NewtFindArrayIndex(obj->as.map, slot, 1);
 
@@ -3134,7 +3199,7 @@ void NewtObjRemoveSlot(newtObjRef obj, newtRefArg slot)
         return;
       }
 
-      int32_t	i;
+      size_t	i;
         i = NewtRefToInteger(slot);
         NewtObjRemoveArraySlot(obj, i);
     }
@@ -3154,12 +3219,12 @@ void NewtObjRemoveSlot(newtObjRef obj, newtRefArg slot)
  * @return			スロットシンボル
  */
 
-newtRef NewtGetMapIndex(newtRefArg r, uint32_t index, uint32_t * indexP)
+newtRef NewtGetMapIndex(newtRefArg r, size_t index, size_t * indexP)
 {
     newtRefVar	superMap;
     newtRefVar	v;
-    int32_t	len;
-    int32_t	n;
+    size_t	len;
+    size_t	n;
 
     superMap = NewtGetArraySlot(r, 0);
 
@@ -3201,9 +3266,9 @@ newtRef NewtGetMapIndex(newtRefArg r, uint32_t index, uint32_t * indexP)
  * @retval			-1		失敗
  */
 
-int32_t NewtFindArrayIndex(newtRefArg r, newtRefArg v, uint16_t st)
+ssize_t NewtFindArrayIndex(newtRefArg r, newtRefArg v, uint16_t st)
 {
-    uint32_t	len;
+    size_t	len;
 
     len = NewtArrayLength(r);
 
@@ -3227,7 +3292,7 @@ int32_t NewtFindArrayIndex(newtRefArg r, newtRefArg v, uint16_t st)
         }
         else
         {
-            uint32_t	i;
+            size_t	i;
 
             for (i = st; i < len; i++)
             {
@@ -3253,10 +3318,10 @@ int32_t NewtFindArrayIndex(newtRefArg r, newtRefArg v, uint16_t st)
  * @retval			false	失敗
  */
 
-bool NewtFindMapIndex(newtRefArg r, newtRefArg v, uint32_t * indexP)
+bool NewtFindMapIndex(newtRefArg r, newtRefArg v, size_t * indexP)
 {
     newtRefVar	superMap;
-    int32_t	i;
+    ssize_t	i;
 
     superMap = NewtGetArraySlot(r, 0);
 
@@ -3318,10 +3383,10 @@ newtRef NewtFrameMap(newtRefArg r)
  * @retval			-1				みつからなかった場合
  */
 
-int32_t NewtFindSlotIndex(newtRefArg frame, newtRefArg slot)
+ssize_t NewtFindSlotIndex(newtRefArg frame, newtRefArg slot)
 {
     newtRefVar	map;
-    uint32_t	i;
+    size_t		i;
 
     map = NewtFrameMap(frame);
 
@@ -3366,7 +3431,7 @@ bool NewtHasProto(newtRefArg frame)
 bool NewtHasSlot(newtRefArg frame, newtRefArg slot)
 {
     newtRefVar	map;
-    uint32_t	i;
+    size_t		i;
 
     map = NewtFrameMap(frame);
 
@@ -3433,8 +3498,8 @@ newtRef NewtGetPath(newtRefArg r, newtRefArg p, newtRefVar * slotP)
 //    if (NewtRefEqual(NcClassOf(p), NSSYM0(pathExpr)))
     {
         newtRefVar	path;
-        int32_t	len;
-        int32_t	i;
+        size_t	len;
+        size_t	i;
 
         len = NewtArrayLength(p);
 
@@ -3474,9 +3539,9 @@ newtRef NewtGetPath(newtRefArg r, newtRefArg p, newtRefVar * slotP)
  * @return			値オブジェクト
  */
 
-newtRef NewtGetBinarySlot(newtRefArg r, uint32_t p)
+newtRef NewtGetBinarySlot(newtRefArg r, size_t p)
 {
-    uint32_t	len;
+    size_t	len;
 
     len = NewtBinaryLength(r);
 
@@ -3502,9 +3567,9 @@ newtRef NewtGetBinarySlot(newtRefArg r, uint32_t p)
  * @return			値オブジェクト
  */
 
-newtRef NewtSetBinarySlot(newtRefArg r, uint32_t p, newtRefArg v)
+newtRef NewtSetBinarySlot(newtRefArg r, size_t p, newtRefArg v)
 {
-    uint32_t	len;
+    size_t	len;
 
     if (NewtRefIsReadonly(r))
         return NewtThrow(kNErrObjectReadOnly, r);
@@ -3514,7 +3579,7 @@ newtRef NewtSetBinarySlot(newtRefArg r, uint32_t p, newtRefArg v)
     if (p < len)
     {
         uint8_t *	data;
-        int32_t	n;
+        size_t	n;
 
         if (! NewtRefIsInteger(v))
             return NewtThrow(kNErrNotAnInteger, v);
@@ -3541,9 +3606,9 @@ newtRef NewtSetBinarySlot(newtRefArg r, uint32_t p, newtRefArg v)
  * @return			文字オブジェクト
  */
 
-newtRef NewtGetStringSlot(newtRefArg r, uint32_t p)
+newtRef NewtGetStringSlot(newtRefArg r, size_t p)
 {
-    uint32_t	len;
+    size_t	len;
 
     len = NewtStringLength(r);
 
@@ -3569,10 +3634,10 @@ newtRef NewtGetStringSlot(newtRefArg r, uint32_t p)
  * @return			文字オブジェクト
  */
 
-newtRef NewtSetStringSlot(newtRefArg r, uint32_t p, newtRefArg v)
+newtRef NewtSetStringSlot(newtRefArg r, size_t p, newtRefArg v)
 {
-    uint32_t	slen;
-    uint32_t	len;
+    size_t	slen;
+    size_t	len;
 
     if (NewtRefIsReadonly(r))
         return NewtThrow(kNErrObjectReadOnly, r);
@@ -3615,9 +3680,9 @@ newtRef NewtSetStringSlot(newtRefArg r, uint32_t p, newtRefArg v)
  * @return			値オブジェクト
  */
 
-newtRef NewtSlotsGetSlot(newtRefArg r, uint32_t p)
+newtRef NewtSlotsGetSlot(newtRefArg r, size_t p)
 {
-    uint32_t	len;
+    size_t	len;
 
     len = NewtSlotsLength(r);
 
@@ -3643,9 +3708,9 @@ newtRef NewtSlotsGetSlot(newtRefArg r, uint32_t p)
  * @return			値オブジェクト
  */
 
-newtRef NewtSlotsSetSlot(newtRefArg r, uint32_t p, newtRefArg v)
+newtRef NewtSlotsSetSlot(newtRefArg r, size_t p, newtRefArg v)
 {
-    uint32_t	len;
+    size_t	len;
 
     len = NewtSlotsLength(r);
 
@@ -3676,11 +3741,11 @@ newtRef NewtSlotsSetSlot(newtRefArg r, uint32_t p, newtRefArg v)
  * @return			値オブジェクト
  */
 
-newtRef NewtSlotsInsertSlot(newtRefArg r, uint32_t p, newtRefArg v)
+newtRef NewtSlotsInsertSlot(newtRefArg r, size_t p, newtRefArg v)
 {
     newtRef *	slots;
     newtObjRef	obj;
-    uint32_t	len;
+    size_t		len;
 
     obj = NewtRefToPointer(r);
     len = NewtObjSlotsLength(obj);
@@ -3709,7 +3774,7 @@ newtRef NewtSlotsInsertSlot(newtRefArg r, uint32_t p, newtRefArg v)
  * @return			値オブジェクト
  */
 
-newtRef NewtGetArraySlot(newtRefArg r, uint32_t p)
+newtRef NewtGetArraySlot(newtRefArg r, size_t p)
 {
     return NewtSlotsGetSlot(r, p);
 }
@@ -3725,7 +3790,7 @@ newtRef NewtGetArraySlot(newtRefArg r, uint32_t p)
  * @return			値オブジェクト
  */
 
-newtRef NewtSetArraySlot(newtRefArg r, uint32_t p, newtRefArg v)
+newtRef NewtSetArraySlot(newtRefArg r, size_t p, newtRefArg v)
 {
     return NewtSlotsSetSlot(r, p, v);
 }
@@ -3741,7 +3806,7 @@ newtRef NewtSetArraySlot(newtRefArg r, uint32_t p, newtRefArg v)
  * @return			値オブジェクト
  */
 
-newtRef NewtInsertArraySlot(newtRefArg r, uint32_t p, newtRefArg v)
+newtRef NewtInsertArraySlot(newtRefArg r, size_t p, newtRefArg v)
 {
     return NewtSlotsInsertSlot(r, p, v);
 }
@@ -3756,7 +3821,7 @@ newtRef NewtInsertArraySlot(newtRefArg r, uint32_t p, newtRefArg v)
  * @return			値オブジェクト
  */
 
-newtRef NewtGetFrameSlot(newtRefArg r, uint32_t p)
+newtRef NewtGetFrameSlot(newtRefArg r, size_t p)
 {
     return NewtSlotsGetSlot(r, p);
 }
@@ -3772,7 +3837,7 @@ newtRef NewtGetFrameSlot(newtRefArg r, uint32_t p)
  * @return			値オブジェクト
  */
 
-newtRef NewtSetFrameSlot(newtRefArg r, uint32_t p, newtRefArg v)
+newtRef NewtSetFrameSlot(newtRefArg r, size_t p, newtRefArg v)
 {
     return NewtSlotsSetSlot(r, p, v);
 }
@@ -3788,9 +3853,9 @@ newtRef NewtSetFrameSlot(newtRefArg r, uint32_t p, newtRefArg v)
  * @return the key of the slot or unbind if there isn't that many slots.
  */
 
-newtRef NewtGetFrameKey(newtRefArg inFrame, uint32_t inIndex)
+newtRef NewtGetFrameKey(newtRefArg inFrame, size_t inIndex)
 {
-	uint32_t start = 0;
+	size_t start = 0;
 	return NewtGetMapIndex(NewtFrameMap(inFrame), inIndex, &start);
 }
 
@@ -3804,7 +3869,7 @@ newtRef NewtGetFrameKey(newtRefArg inFrame, uint32_t inIndex)
  * @return			値オブジェクト
  */
 
-newtRef NewtARef(newtRefArg r, uint32_t p)
+newtRef NewtARef(newtRefArg r, size_t p)
 {
     newtRefVar	v = kNewtRefNIL;
 
@@ -3837,7 +3902,7 @@ newtRef NewtARef(newtRefArg r, uint32_t p)
  * @return			値オブジェクト
  */
 
-newtRef NewtSetARef(newtRefArg r, uint32_t p, newtRefArg v)
+newtRef NewtSetARef(newtRefArg r, size_t p, newtRefArg v)
 {
     newtRefVar	result = kNewtRefUnbind;
 
@@ -4044,7 +4109,7 @@ void * NewtRefToNativeFn(newtRefArg r)
  * @return				関数オブジェクト
  */
 
-newtRef NewtMakeNativeFn0(void * funcPtr, uint32_t numArgs, bool indefinite, char * doc)
+newtRef NewtMakeNativeFn0(void * funcPtr, size_t numArgs, bool indefinite, char * doc)
 {
     newtRefVar	fnv[] = {
                             NS_CLASS,			NSSYM0(_function.native0),
@@ -4080,7 +4145,7 @@ newtRef NewtMakeNativeFn0(void * funcPtr, uint32_t numArgs, bool indefinite, cha
  * @return				関数オブジェクト
  */
 
-newtRef NewtDefGlobalFn0(newtRefArg sym, void * funcPtr, uint32_t numArgs, bool indefinite, char * doc)
+newtRef NewtDefGlobalFn0(newtRefArg sym, void * funcPtr, size_t numArgs, bool indefinite, char * doc)
 {
     newtRefVar	fn;
 
@@ -4100,7 +4165,7 @@ newtRef NewtDefGlobalFn0(newtRefArg sym, void * funcPtr, uint32_t numArgs, bool 
  * @return				関数オブジェクト
  */
 
-newtRef NewtMakeNativeFunc0(void * funcPtr, uint32_t numArgs, bool indefinite, char * doc)
+newtRef NewtMakeNativeFunc0(void * funcPtr, size_t numArgs, bool indefinite, char * doc)
 {
     newtRefVar	fnv[] = {
                             NS_CLASS,			NSSYM0(_function.native),
@@ -4136,7 +4201,7 @@ newtRef NewtMakeNativeFunc0(void * funcPtr, uint32_t numArgs, bool indefinite, c
  * @return				関数オブジェクト
  */
 
-newtRef NewtDefGlobalFunc0(newtRefArg sym, void * funcPtr, uint32_t numArgs, bool indefinite, char * doc)
+newtRef NewtDefGlobalFunc0(newtRefArg sym, void * funcPtr, size_t numArgs, bool indefinite, char * doc)
 {
     newtRefVar	fn;
 
@@ -4160,7 +4225,7 @@ newtRef NewtDefGlobalFunc0(newtRefArg sym, void * funcPtr, uint32_t numArgs, boo
  * @retval			false	前半部が部分文字列と一致しない
  */
 
-bool NewtStrNBeginsWith(char * str, uint32_t len, char * sub, uint32_t sublen)
+bool NewtStrNBeginsWith(char * str, size_t len, char * sub, size_t sublen)
 {
 	if (len < sublen)
 		return false;
@@ -4181,7 +4246,7 @@ bool NewtStrNBeginsWith(char * str, uint32_t len, char * sub, uint32_t sublen)
  * @retval			false	サブクラスでない
  */
 
-bool NewtStrIsSubclass(char * sub, uint32_t sublen, char * supr, uint32_t suprlen)
+bool NewtStrIsSubclass(char * sub, size_t sublen, char * supr, size_t suprlen)
 {
     if (sublen == suprlen)
         return (strncasecmp(sub, supr, suprlen) == 0);
@@ -4208,7 +4273,7 @@ bool NewtStrIsSubclass(char * sub, uint32_t sublen, char * supr, uint32_t suprle
  * @retval			false	サブクラスを含まない
  */
 
-bool NewtStrHasSubclass(char * sub, uint32_t sublen, char * supr, uint32_t suprlen)
+bool NewtStrHasSubclass(char * sub, size_t sublen, char * supr, size_t suprlen)
 {
     char *	last;
     char *	w;
@@ -4331,7 +4396,7 @@ newtRef NewtStrCat(newtRefArg r, char * s)
  * @return			文字列オブジェクト
  */
 
-newtRef NewtStrCat2(newtRefArg r, char * s, uint32_t slen)
+newtRef NewtStrCat2(newtRefArg r, char * s, size_t slen)
 {
     newtObjRef	obj;
 
@@ -4339,8 +4404,8 @@ newtRef NewtStrCat2(newtRefArg r, char * s, uint32_t slen)
 
     if (obj != NULL)
     {
-        uint32_t	tgtlen;
-        uint32_t	dstlen;
+        size_t		tgtlen;
+        size_t		dstlen;
 
 		tgtlen = NewtObjStringLength(obj);
 		dstlen = tgtlen + slen;

@@ -254,7 +254,7 @@ void NBCGenCodeEnv(nbc_env_t * env, uint8_t a, int16_t b)
 void NBCGenCodeEnvL(nbc_env_t * env, uint8_t a, newtRefArg r)
 {
     newtRefVar	obj;
-    int16_t	b = 0;
+    ssize_t	b = 0;
 
     obj = NewtPackLiteral(r);
 
@@ -308,7 +308,7 @@ void NBCGenPUSH(newtRefArg r)
     {
         case kNewtInt30:
             {
-                int32_t	n;
+                intptr_t n;
 
                 n = NewtRefToInteger(r);
 
@@ -367,7 +367,7 @@ void NBCGenGetVar(nps_syntax_node_t * stree, newtRefArg r)
     }
     else
     {
-        int16_t	b;
+        ssize_t	b;
 
         // ローカル変数を検索
         b = NewtFindSlotIndex(ARGFRAME, r);
@@ -572,7 +572,7 @@ void NBCDefLocal(newtRefArg type, newtRefArg r, bool init)
 
     if (init)
     {
-        int16_t	b;
+        ssize_t	b;
     
         // ローカル変数を検索
         b = NewtFindSlotIndex(ARGFRAME, r);
@@ -1501,7 +1501,7 @@ void NBCGenFor(nps_syntax_node_t * stree, nps_node_t r, nps_node_t expr)
 
     // 変数に by を増分
     {
-        int16_t	b;
+        ssize_t	b;
 
         b = NewtFindSlotIndex(ARGFRAME, index);
 
@@ -2174,7 +2174,7 @@ void NBCGenMakeArray(nps_syntax_node_t * stree, nps_node_t klass, nps_node_t r)
 void NBCGenMakeFrame(nps_syntax_node_t * stree, nps_node_t r)
 {
     newtRefVar	map;
-    uint32_t	n;
+    size_t  	n;
 
     map = NBCGenMakeFrameSlots(stree, r);
     n = NewtMapLength(map);

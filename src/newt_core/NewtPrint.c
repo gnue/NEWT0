@@ -12,6 +12,7 @@
 
 /* ヘッダファイル */
 #include <ctype.h>
+#include <inttypes.h>
 
 #include "NewtPrint.h"
 #include "NewtCore.h"
@@ -27,12 +28,12 @@ static int32_t		NewtGetPrintDepth(void);
 static int32_t		NewtGetPrintIndent(void);
 static int32_t		NewtGetPrintBinaries(void);
 
-static bool			NewtSymbolIsPrint(char * str, int len);
-static bool			NewtStrIsPrint(char * str, int len);
+static bool			NewtSymbolIsPrint(char * str, size_t len);
+static bool			NewtStrIsPrint(char * str, size_t len);
 static char *		NewtCharToEscape(int c);
 
 static void			NIOPrintIndent(newtStream_t * f, int32_t level);
-static void			NIOPrintEscapeStr(newtStream_t * f, char * str, int len, char bar);
+static void			NIOPrintEscapeStr(newtStream_t * f, char * str, size_t len, char bar);
 static void			NIOPrintRef(newtStream_t * f, newtRefArg r);
 static void			NIOPrintSpecial(newtStream_t * f, newtRefArg r);
 static void			NIOPrintInteger(newtStream_t * f, newtRefArg r);
@@ -77,7 +78,7 @@ int32_t NewtGetPrintLength(void)
 	n = NcGetGlobalVar(NSSYM0(printLength));
 
 	if (NewtRefIsInteger(n))
-		printLength = NewtRefToInteger(n);
+		printLength = (int32_t) NewtRefToInteger(n);
 
 	if (printLength < 0)
 		printLength = 0x7fffffff;
@@ -100,7 +101,7 @@ int32_t NewtGetPrintDepth(void)
     n = NcGetGlobalVar(NSSYM0(printDepth));
 
     if (NewtRefIsInteger(n))
-        depth = NewtRefToInteger(n);
+        depth = (int32_t) NewtRefToInteger(n);
 
 	return depth;
 }
@@ -120,7 +121,7 @@ int32_t NewtGetPrintIndent(void)
     n = NcGetGlobalVar(NSSYM0(printIndent));
 
     if (NewtRefIsInteger(n))
-        indent = NewtRefToInteger(n);
+        indent = (int32_t) NewtRefToInteger(n);
 
 	return indent;
 }
@@ -140,7 +141,7 @@ int32_t NewtGetPrintBinaries(void)
     n = NcGetGlobalVar(NSSYM0(printBinaries));
 
     if (NewtRefIsInteger(n))
-        pb = NewtRefToInteger(n);
+        pb = (int32_t) NewtRefToInteger(n);
 
 	return pb;
 }
@@ -159,10 +160,10 @@ int32_t NewtGetPrintBinaries(void)
  * @retval			false	表示不可
  */
 
-bool NewtSymbolIsPrint(char * str, int len)
+bool NewtSymbolIsPrint(char * str, size_t len)
 {
 	int c;
-	int i;
+	size_t i;
 
 	if (len == 0)
 		return false;
@@ -198,7 +199,7 @@ bool NewtSymbolIsPrint(char * str, int len)
  * @retval			false	表示不可
  */
 
-bool NewtStrIsPrint(char * str, int len)
+bool NewtStrIsPrint(char * str, size_t len)
 {
 	int		i;
 
@@ -308,7 +309,7 @@ void NIOPrintIndent(newtStream_t * f, int32_t depth)
  * @note			newtStream_t を使用
  */
 
-void NIOPrintEscapeStr(newtStream_t * f, char * str, int len, char bar)
+void NIOPrintEscapeStr(newtStream_t * f, char * str, size_t len, char bar)
 {
 	bool	unicode = false;
 	char *	s;
@@ -411,10 +412,10 @@ void NIOPrintSpecial(newtStream_t * f, newtRefArg r)
 
 void NIOPrintInteger(newtStream_t * f, newtRefArg r)
 {
-    int	n;
+    intptr_t	n;
 
     n = NewtRefToInteger(r);
-    NIOFprintf(f, "%d", n);
+    NIOFprintf(f, "%" PRIdPTR, n);
 }
 
 
@@ -534,10 +535,8 @@ void NIOPrintObjMagicPointer(newtStream_t * f, newtRefArg r)
 void NIOPrintObjBinary(newtStream_t * f, newtRefArg r)
 {
     newtRefVar	klass;
-    int	ptr;
-    int	len;
+    size_t	len;
 
-    ptr = r;
     len = NewtBinaryLength(r);
     klass = NcClassOf(r);
     if (newt_env._printBinaries)
@@ -580,7 +579,7 @@ void NIOPrintObjBinary(newtStream_t * f, newtRefArg r)
 void NIOPrintObjSymbol(newtStream_t * f, newtRefArg r)
 {
     newtSymDataRef	sym;
-	int		len;
+	size_t		len;
 
     sym = NewtRefToSymbol(r);
 	len = NewtSymbolLength(r);
@@ -612,7 +611,7 @@ void NIOPrintObjSymbol(newtStream_t * f, newtRefArg r)
 void NIOPrintObjString(newtStream_t * f, newtRefArg r)
 {
     char *	s;
-	int		len;
+	size_t	len;
 
     s = NewtRefToString(r);
 	len = NewtStringLength(r);
@@ -651,8 +650,8 @@ void NIOPrintObjArray(newtStream_t * f, newtRefArg r, int32_t depth, bool litera
     newtObjRef	obj;
     newtRef *	slots;
     newtRefVar	klass;
-    uint32_t	len;
-    uint32_t	i;
+    size_t		len;
+    size_t		i;
 
     obj = NewtRefToPointer(r);
     len = NewtObjSlotsLength(obj);
@@ -729,7 +728,7 @@ void NIOPrintObjArray(newtStream_t * f, newtRefArg r, int32_t depth, bool litera
 void NIOPrintFnFrame(newtStream_t * f, newtRefArg r)
 {
 	newtRefVar	indefinite;
-    int32_t		numArgs;
+    size_t		numArgs;
 	char *		indefiniteStr = "";
 
     numArgs = NewtRefToInteger(NcGetSlot(r, NSSYM0(numArgs)));
@@ -789,9 +788,9 @@ void NIOPrintObjFrame(newtStream_t * f, newtRefArg r, int32_t depth, bool litera
     newtObjRef	obj;
     newtRef *	slots;
     newtRefVar	slot;
-    uint32_t	index;
-    uint32_t	len;
-    uint32_t	i;
+    size_t	    index;
+    size_t	    len;
+    size_t	    i;
 
     if (!newt_env._printBinaries)
     {
@@ -911,6 +910,7 @@ void NIOPrintObj2(newtStream_t * f, newtRefArg r, int32_t depth, bool literal)
 
         case kNewtInt30:
         case kNewtInt32:
+        case kNewtInt64:
             NIOPrintInteger(f, r);
             break;
 
@@ -1106,8 +1106,8 @@ void NIOPrintString(newtStream_t * f, newtRefArg r)
 void NIOPrintArray(newtStream_t * f, newtRefArg r)
 {
 	newtRef *	slots;
-	uint32_t	len;
-	uint32_t	i;
+	size_t		len;
+	size_t		i;
 
 	slots = NewtRefToSlots(r);
 	len = NewtLength(r);
@@ -1145,6 +1145,7 @@ void NIOPrint(newtStream_t * f, newtRefArg r)
 
         case kNewtInt30:
         case kNewtInt32:
+        case kNewtInt64:
             NIOPrintInteger(f, r);
             break;
 
@@ -1279,8 +1280,8 @@ void NewtInfoGlobalFns(void)
 	newtStream_t	stream;
     newtRef *	slots;
     newtRefVar	fns;
-    uint32_t	len;
-    uint32_t	i;
+    size_t		len;
+    size_t		i;
 
 	NIOSetFile(&stream, stdout);
 

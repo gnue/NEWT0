@@ -12,6 +12,7 @@
 
 /* ヘッダファイル */
 #include <string.h>
+#include <inttypes.h>
 
 #include "NewtErrs.h"
 #include "NewtFns.h"
@@ -266,8 +267,8 @@ newtRef NsTotalClone(newtRefArg rcvr, newtRefArg r)
 	if (NewtRefIsFrameOrArray(result))
 	{
         newtRef *	slots;
-        uint32_t	n;
-        uint32_t	i;
+        size_t		n;
+        size_t		i;
     
         slots = NewtRefToSlots(result);
 		n = NewtLength(result);
@@ -331,7 +332,7 @@ newtRef NsDeeplyLength(newtRefArg rcvr, newtRefArg r)
 
 newtRef NsSetLength(newtRefArg rcvr, newtRefArg r, newtRefArg len)
 {
-	int32_t	n;
+	intptr_t	n;
 
 	if (NewtRefIsReadonly(r))
 		return NewtThrow(kNErrObjectReadOnly, r);
@@ -673,6 +674,7 @@ newtRef NewtRefTypeToClass(uint16_t type)
 	{
 		case kNewtInt30:
 		case kNewtInt32:
+		case kNewtInt64:
 			klass = NS_INT;
 			break;
 
@@ -1239,8 +1241,8 @@ newtRef NcStringer(newtRefArg r)
 {
     newtRef *	slots;
     newtRefVar	str;
-    uint32_t	len;
-    uint32_t	i;
+    size_t		len;
+    size_t		i;
 
     if (! NewtRefIsArray(r))
         return NewtThrow(kNErrNotAnArray, r);
@@ -1278,11 +1280,12 @@ newtRef NsStrCat(newtRefArg rcvr, newtRefArg str, newtRefArg v)
     {
         case kNewtInt30:
         case kNewtInt32:
+        case kNewtInt64:
             {
-                int	n;
+                intptr_t	n;
 
-                n = (int)NewtRefToInteger(v);
-                sprintf(wk, "%d", n);
+                n = NewtRefToInteger(v);
+                sprintf(wk, "%" PRIdPTR, n);
                 s = wk;
             }
             break;
@@ -1368,9 +1371,9 @@ newtRef NsMakeArray(newtRefArg rcvr, newtRefArg size, newtRefArg initialValue) {
   if (!NewtRefIsInteger(size)) {
     return NewtThrow(kNErrNotAnInteger, size);
   }
-  int length = NewtRefToInteger(size);
+  intptr_t length = NewtRefToInteger(size);
   newtRef result = NewtMakeArray(kNewtRefUnbind, length);
-  int i;
+  intptr_t i;
   for (i = 0; i<length; i++) {
     NewtSlotsSetSlot(result, i, initialValue);
   }
@@ -1594,8 +1597,8 @@ newtRef NcAdd(newtRefArg r1, newtRefArg r2)
     }
     else
     {
-        int32_t	int1;
-        int32_t	int2;
+        intptr_t	int1;
+        intptr_t	int2;
 
         int1 = NewtRefToInteger(r1);
         int2 = NewtRefToInteger(r2);
@@ -1633,8 +1636,8 @@ newtRef NcSubtract(newtRefArg r1, newtRefArg r2)
     }
     else
     {
-        int32_t	int1;
-        int32_t	int2;
+        intptr_t	int1;
+        intptr_t	int2;
 
         int1 = NewtRefToInteger(r1);
         int2 = NewtRefToInteger(r2);
@@ -1672,8 +1675,8 @@ newtRef NcMultiply(newtRefArg r1, newtRefArg r2)
     }
     else
     {
-        int32_t	int1;
-        int32_t	int2;
+        intptr_t	int1;
+        intptr_t	int2;
 
         int1 = NewtRefToInteger(r1);
         int2 = NewtRefToInteger(r2);
@@ -1714,8 +1717,8 @@ newtRef NcDivide(newtRefArg r1, newtRefArg r2)
     }
     else
     {
-        int32_t	int1;
-        int32_t	int2;
+        intptr_t	int1;
+        intptr_t	int2;
 
         int1 = NewtRefToInteger(r1);
         int2 = NewtRefToInteger(r2);
@@ -2211,8 +2214,8 @@ newtRef NsExtractWord(newtRefArg rcvr, newtRefArg r, newtRefArg offset)
   if (! NewtRefIsInteger(offset))
     return NewtThrow(kNErrNotAnInteger, offset);
 
-  uint32_t len = NewtBinaryLength(r);
-  uint32_t p = NewtRefToInteger(offset);
+  size_t len = NewtBinaryLength(r);
+  size_t p = NewtRefToInteger(offset);
   
   if (p < len && p + 1 < len)
   {
@@ -2247,7 +2250,7 @@ newtRef NsNegate(newtRefArg rcvr, newtRefArg integer)
   if (! NewtRefIsInteger(integer))
     return NewtThrow(kNErrNotAnInteger, integer);
   
-  return NewtMakeInt32(- (NewtRefToInteger(integer)));
+  return NewtMakeInteger(- (NewtRefToInteger(integer)));
 }
 
 newtRef NsSetContains(newtRefArg rcvr, newtRefArg array, newtRefArg item) {
@@ -2256,8 +2259,8 @@ newtRef NsSetContains(newtRefArg rcvr, newtRefArg array, newtRefArg item) {
   }
   
   newtRef *	slots;
-  uint32_t	n;
-  uint32_t	i;
+  size_t	n;
+  size_t	i;
   
   slots = NewtRefToSlots(array);
   n = NewtLength(array);

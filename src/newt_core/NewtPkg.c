@@ -12,6 +12,7 @@
 
 /* header files */
 #include <string.h>
+#include <inttypes.h>
 
 #include "NewtPkg.h"
 #include "NewtErrs.h"
@@ -85,8 +86,8 @@ typedef struct {
 typedef struct {
 	uint8_t		pkg_version;	///< rw corrsponds to the last charof the signature
 	uint8_t *	data;			///< rw package data
-	uint32_t	size;			///< rw size of package
-	uint32_t	data_size;		///< w  size of data block
+	size_t		size;			///< rw size of package
+	size_t		data_size;		///< w  size of data block
 	pkg_header_t *header;		///< r  pointer to the package header
 	uint32_t	header_size;	///< w  size of header structure w/o var data
 	uint8_t *	var_data;		///< r  extra data for header
@@ -108,24 +109,26 @@ typedef struct {
 	pkg_relocation_t relocations;
 } pkg_stream_t;
 
+// In packages, references are limited to 32 bits.
+typedef uint32_t pkgNewtRef;
 
 /* functions */
 
-static int32_t	PkgArraySearch(newtRefArg array, newtRefArg r);
-static uint32_t	PkgAlign(pkg_stream_t *pkg, uint32_t offset);
-static uint32_t	PkgGetSlotInt(newtRefArg frame, newtRefArg name, uint32_t def);
+static ssize_t	PkgArraySearch(newtRefArg array, newtRefArg r);
+static size_t	PkgAlign(pkg_stream_t *pkg, size_t offset);
+static intptr_t	PkgGetSlotInt(newtRefArg frame, newtRefArg name, intptr_t def);
 
-static newtRef	PkgPartGetPrecedent(pkg_stream_t *pkg, newtRefArg ref);
-static void		PkgPartSetPrecedent(pkg_stream_t *pkg, newtRefArg ref, newtRefArg val);
+static pkgNewtRef	PkgPartGetPrecedent(pkg_stream_t *pkg, newtRefArg ref);
+static void		PkgPartSetPrecedent(pkg_stream_t *pkg, newtRefArg ref, pkgNewtRef val);
 
-static void		PkgMakeRoom(pkg_stream_t *pkg, uint32_t offset, uint32_t size);
-static void		PkgWriteData(pkg_stream_t *pkg, uint32_t offset, void *data, uint32_t size);
-static void		PkgWriteU32(pkg_stream_t *pkg, uint32_t offset, uint32_t v);
-static void		PgkWriteVarData(pkg_stream_t *pkg, uint32_t offset, newtRefVar frame, newtRefVar sym);
-static newtRef	PkgWriteFrame(pkg_stream_t *pkg, newtRefArg frame);
-static newtRef	PkgWriteArray(pkg_stream_t *pkg, newtRefArg array);
-static newtRef	PkgWriteBinary(pkg_stream_t *pkg, newtRefArg obj);
-static newtRef	PkgWriteObject(pkg_stream_t *pkg, newtRefArg obj);
+static void		PkgMakeRoom(pkg_stream_t *pkg, size_t offset, size_t size);
+static void		PkgWriteData(pkg_stream_t *pkg, size_t offset, void *data, size_t size);
+static void		PkgWriteU32(pkg_stream_t *pkg, size_t offset, uint32_t v);
+static void		PgkWriteVarData(pkg_stream_t *pkg, size_t offset, newtRefVar frame, newtRefVar sym);
+static pkgNewtRef	PkgWriteFrame(pkg_stream_t *pkg, newtRefArg frame);
+static pkgNewtRef	PkgWriteArray(pkg_stream_t *pkg, newtRefArg array);
+static pkgNewtRef	PkgWriteBinary(pkg_stream_t *pkg, newtRefArg obj);
+static pkgNewtRef	PkgWriteObject(pkg_stream_t *pkg, newtRefArg obj);
 static void		PkgWritePart(pkg_stream_t *pkg, newtRefArg part);
 
 static uint32_t	PkgReadU32(uint8_t *d) ;
@@ -149,11 +152,11 @@ static newtRef	PkgReadHeader(pkg_stream_t *pkg);
  *
  * @see NewtSearchArray(newtRefArg array, newtRefArg r)
  */
-int32_t PkgArraySearch(newtRefArg array, newtRefArg r)
+ssize_t PkgArraySearch(newtRefArg array, newtRefArg r)
 {
     newtRef *	slots;
-	uint32_t	len;
-	uint32_t	i;
+	size_t		len;
+	size_t		i;
 
 	len = NewtArrayLength(array);
     slots = NewtRefToSlots(array);
@@ -176,11 +179,11 @@ int32_t PkgArraySearch(newtRefArg array, newtRefArg r)
  * @retval	ref to the previously written object
  * @retval	or kNewtRefUnbind if the object still needs to be written
  */
-newtRef PkgPartGetPrecedent(pkg_stream_t *pkg, newtRefArg ref)
+pkgNewtRef PkgPartGetPrecedent(pkg_stream_t *pkg, newtRefArg ref)
 {
-	int32_t ix = PkgArraySearch(pkg->precedents, ref);
+	ssize_t ix = PkgArraySearch(pkg->precedents, ref);
 	if (ix>=0) {
-		return NewtGetArraySlot(pkg->instances, ix);
+		return (pkgNewtRef) NewtGetArraySlot(pkg->instances, ix);
 	} else {
 		return kNewtRefUnbind;
 	}
@@ -193,9 +196,9 @@ newtRef PkgPartGetPrecedent(pkg_stream_t *pkg, newtRefArg ref)
  * @param ref		[in] the original reference in memory
  * @param val		[in] the reference needed to find this object in the package
  */
-void PkgPartSetPrecedent(pkg_stream_t *pkg, newtRefArg ref, newtRefArg val)
+void PkgPartSetPrecedent(pkg_stream_t *pkg, newtRefArg ref, pkgNewtRef val)
 {
-	uint32_t n = NewtArrayLength(pkg->instances);
+	size_t n = NewtArrayLength(pkg->instances);
 	// the code below gets horribly slow and fragments memory
 	// we should consider implementing a binary search tree at some point
 	NewtInsertArraySlot(pkg->instances, n, val);
@@ -213,7 +216,7 @@ void PkgPartSetPrecedent(pkg_stream_t *pkg, newtRefArg ref, newtRefArg val)
  * @todo We shoudld add 4-byte alignment support at some point, so the 
  *       generated package is a bit smaller
  */
-uint32_t PkgAlign(pkg_stream_t *pkg, uint32_t offset)
+size_t PkgAlign(pkg_stream_t *pkg, size_t offset)
 {
 	return (offset+7)&(~7);
 }
@@ -227,10 +230,10 @@ uint32_t PkgAlign(pkg_stream_t *pkg, uint32_t offset)
  *
  * @retval	value read if found, or default value if not found
  */
-uint32_t PkgGetSlotInt(newtRefArg frame, newtRefArg name, uint32_t def)
+intptr_t PkgGetSlotInt(newtRefArg frame, newtRefArg name, intptr_t def)
 {
 	newtRef slot;
-	int32_t ix;
+	ssize_t ix;
 	
 	ix = NewtFindSlotIndex(frame, name);
 	if (ix<0)
@@ -250,13 +253,13 @@ uint32_t PkgGetSlotInt(newtRefArg frame, newtRefArg name, uint32_t def)
  * @param offset	[in] offset where we will need room
  * @param size	[in] number of bytes that we will need
  */
-void PkgMakeRoom(pkg_stream_t *pkg, uint32_t offset, uint32_t size)
+void PkgMakeRoom(pkg_stream_t *pkg, size_t offset, size_t size)
 {
-	uint32_t new_size = offset+size;
+	size_t new_size = offset+size;
 
 	if (pkg->data_size<new_size) {
-		uint32_t os = pkg->data_size;
-		uint32_t ns = (new_size+16383) & (~16383); // alocate in 16k blocks
+		size_t os = pkg->data_size;
+		size_t ns = (new_size+16383) & (~16383); // alocate in 16k blocks
 		pkg->data = realloc(pkg->data, ns);
 		memset(pkg->data+os, 0xbf, ns-os); // filler byte
 		pkg->data_size = ns;
@@ -274,7 +277,7 @@ void PkgMakeRoom(pkg_stream_t *pkg, uint32_t offset, uint32_t size)
  * @param data		[in] data to be copied to package
  * @param size		[in] size of data block
  */
-void PkgWriteData(pkg_stream_t *pkg, uint32_t offset, void *data, uint32_t size)
+void PkgWriteData(pkg_stream_t *pkg, size_t offset, void *data, size_t size)
 {
 	if (pkg->data_size<offset+size) 
 		PkgMakeRoom(pkg, offset, size);
@@ -290,7 +293,7 @@ void PkgWriteData(pkg_stream_t *pkg, uint32_t offset, void *data, uint32_t size)
  * @param offset	[in] offset to the beginning of data
  * @param v			[in] value to be written 
  */
-void PkgWriteU32(pkg_stream_t *pkg, uint32_t offset, uint32_t v)
+void PkgWriteU32(pkg_stream_t *pkg, size_t offset, uint32_t v)
 {
 	v = htonl(v);
 	PkgWriteData(pkg, offset, &v, 4);
@@ -304,10 +307,10 @@ void PkgWriteU32(pkg_stream_t *pkg, uint32_t offset, uint32_t v)
  * @param frame		[in] frame containing the data 
  * @param sym		[in] symbol of slot containing the data
  */
-void PgkWriteVarData(pkg_stream_t *pkg, uint32_t offset, newtRefVar frame, newtRefVar sym)
+void PgkWriteVarData(pkg_stream_t *pkg, size_t offset, newtRefVar frame, newtRefVar sym)
 {
 	newtRef info;
-	uint32_t ix;
+	ssize_t ix;
 	
 	PkgWriteU32(pkg, offset, 0);
 
@@ -316,17 +319,17 @@ void PgkWriteVarData(pkg_stream_t *pkg, uint32_t offset, newtRefVar frame, newtR
 		return;
 	info = NewtGetFrameSlot(frame, ix);
 	if (NewtRefIsBinary(info)) {
-		uint32_t size = NewtBinaryLength(info);
+		size_t size = NewtBinaryLength(info);
 		uint8_t *data = NewtRefToBinary(info);
 		pkg_info_ref_t info_ref;
 
 #		ifdef HAVE_LIBICONV
 			if (NewtRefIsString(info)) {
 				size_t buflen;
-				char *buf = NewtIconv(pkg->to_utf16, data, size, &buflen);
+				char *buf = NewtIconv(pkg->to_utf16, (const char*) data, size, &buflen);
 				if (buf) {
-					size = buflen;
-					data = buf;
+					size = (uint32_t) buflen;
+					data = (uint8_t*) buf;
 				}
 			}
 #		endif /* HAVE_LIBICONV */
@@ -347,13 +350,13 @@ void PgkWriteVarData(pkg_stream_t *pkg, uint32_t offset, newtRefVar frame, newtR
  * @param pkg		[inout] the package
  * @param frame		[in] the frame that we will write
  *
- * @retval	offset to the beginning of the object in the package file
+ * @retval	reference to the object (offset to the beginning of the object in the package file + 1)
  */
-newtRef PkgWriteFrame(pkg_stream_t *pkg, newtRefArg frame)
+pkgNewtRef PkgWriteFrame(pkg_stream_t *pkg, newtRefArg frame)
 {
-	uint32_t dst, size, i, n;
-	newtRef map, map_pos;
-	newtRef slot, slot_pos;
+	size_t dst, size, i, n;
+	newtRef map, slot;
+	newtRef map_pos, slot_pos;
 
 	// calculate the size of this chunk
 	dst = PkgAlign(pkg, pkg->size);
@@ -362,22 +365,22 @@ newtRef PkgWriteFrame(pkg_stream_t *pkg, newtRefArg frame)
 
 	// make room for the entire chunk and write the header
 	PkgMakeRoom(pkg, dst, size);
-	PkgWriteU32(pkg, dst, (size<<8) | 0x40 | kObjSlotted | kObjFrame);
+	PkgWriteU32(pkg, dst, (uint32_t) ((size<<8) | 0x40 | kObjSlotted | kObjFrame)); // Possible overflow
 	PkgWriteU32(pkg, dst+4, 0);
 
 	// recursively add all arrays making up the map
 	map = NewtFrameMap(frame);
 	map_pos = PkgWriteObject(pkg, map);
-	PkgWriteU32(pkg, dst+8, map_pos);
+	PkgWriteU32(pkg, dst+8, (uint32_t) map_pos);
 
 	// now add all slots and fill in the rest of our chunk
 	for (i=0; i<n; i++) {
 		slot = NewtGetFrameSlot(frame, i);
 		slot_pos = PkgWriteObject(pkg, slot);
-		PkgWriteU32(pkg, dst+12+4*i, slot_pos);
+		PkgWriteU32(pkg, dst+12+4*i, (uint32_t) slot_pos);
 	}
 
-	return NewtMakePointer(dst);
+	return (pkgNewtRef) NewtMakePointer(dst);
 }
 
 /*------------------------------------------------------------------------*/
@@ -386,11 +389,11 @@ newtRef PkgWriteFrame(pkg_stream_t *pkg, newtRefArg frame)
  * @param pkg		[inout] the package
  * @param array		[in] the array that we will write
  *
- * @retval	offset to the beginning of the object in the package file
+ * @retval    reference to the object (offset to the beginning of the object in the package file + 1)
  */
-newtRef PkgWriteArray(pkg_stream_t *pkg, newtRefArg array)
+pkgNewtRef PkgWriteArray(pkg_stream_t *pkg, newtRefArg array)
 {
-	uint32_t dst, size, i, n;
+	size_t dst, size, i, n;
 	newtRef klass, klass_pos;
 	newtRef slot, slot_pos;
 
@@ -401,22 +404,22 @@ newtRef PkgWriteArray(pkg_stream_t *pkg, newtRefArg array)
 
 	// make room for the entire chunk and write the header
 	PkgMakeRoom(pkg, dst, size);
-	PkgWriteU32(pkg, dst, (size<<8) | 0x40 | kObjSlotted);
+	PkgWriteU32(pkg, dst, (uint32_t) ((size<<8) | 0x40 | kObjSlotted)); // Possible overflow
 	PkgWriteU32(pkg, dst+4, 0);
 
 	// add the class information
 	klass = NcClassOf(array);
 	klass_pos = PkgWriteObject(pkg, klass);
-	PkgWriteU32(pkg, dst+8, klass_pos);
+	PkgWriteU32(pkg, dst+8, (uint32_t) klass_pos);
 
 	// now add all slots and fill in the rest of our chunk
 	for (i=0; i<n; i++) {
 		slot = NewtGetArraySlot(array, i);
 		slot_pos = PkgWriteObject(pkg, slot);
-		PkgWriteU32(pkg, dst+12+4*i, slot_pos);
+		PkgWriteU32(pkg, dst+12+4*i, (uint32_t) slot_pos);
 	}
 
-	return NewtMakePointer(dst);
+	return (pkgNewtRef) NewtMakePointer(dst);
 }
 
 /*------------------------------------------------------------------------*/
@@ -425,29 +428,29 @@ newtRef PkgWriteArray(pkg_stream_t *pkg, newtRefArg array)
  * @param pkg		[inout] the package
  * @param obj		[in] the binary object that we will write
  *
- * @retval	offset to the beginning of the object in the package file
+ * @retval    reference to the object (offset to the beginning of the object in the package file + 1)
  */
-newtRef PkgWriteBinary(pkg_stream_t *pkg, newtRefArg obj)
+pkgNewtRef PkgWriteBinary(pkg_stream_t *pkg, newtRefArg obj)
 {
-	uint32_t dst, size;
+	size_t dst, size;
 	uint8_t *data;
 	newtRef klass, klass_ref = kNewtRefUnbind;
 
 	// calculate the size of this chunk
 	dst = PkgAlign(pkg, pkg->size);
-	size = NewtBinaryLength(obj);
+	size = (uint32_t) NewtBinaryLength(obj);
 	data = NewtRefToBinary(obj);
 
 	// make room for the binary chunk and write the header
 	if (NewtRefIsSymbol(obj)) {
-		size = NewtSymbolLength(obj)+5; // remember the trailing zero!
+		size = (uint32_t) NewtSymbolLength(obj)+5; // remember the trailing zero!
 	} else if (NewtRefIsString(obj)) {
 #		ifdef HAVE_LIBICONV
 			size_t buflen;
-			char *buf = NewtIconv(pkg->to_utf16, data, size, &buflen);
+			char *buf = NewtIconv(pkg->to_utf16, (const char*) data, size, &buflen);
 			if (buf) {
-				size = buflen;
-				data = buf;
+				size = (uint32_t) buflen;
+				data = (uint8_t*) buf;
 			}
 #		endif /* HAVE_LIBICONV */
 	}
@@ -455,7 +458,7 @@ newtRef PkgWriteBinary(pkg_stream_t *pkg, newtRefArg obj)
 
 	// make room for the binary chunk and write the header
 	PkgMakeRoom(pkg, dst, size);
-	PkgWriteU32(pkg, dst, (size<<8) | 0x40);
+	PkgWriteU32(pkg, dst, (uint32_t) ((size<<8) | 0x40));   // Possible overflow
 	PkgWriteU32(pkg, dst+4, 0);
 
 	// symbols have special handling to avoid recursion
@@ -463,13 +466,13 @@ newtRef PkgWriteBinary(pkg_stream_t *pkg, newtRefArg obj)
 		PkgWriteU32(pkg, dst+8, kNewtSymbolClass);
 		PkgWriteU32(pkg, dst+12, NewtRefToHash(obj)); // make sure the hash has the right endianness
 		PkgWriteData(pkg, dst+16, (uint8_t*)NewtSymbolGetName(obj), size-16);
-		return NewtMakePointer(dst);
+		return (pkgNewtRef) NewtMakePointer(dst);
 	}
 
 	// add the class information
 	klass = NcClassOf(obj);
 	klass_ref = PkgWriteObject(pkg, klass);
-	PkgWriteU32(pkg, dst+8, klass_ref);
+	PkgWriteU32(pkg, dst+8, (uint32_t) klass_ref);
 
 	// copy the binary data over
 	if (klass==NSSYM0(int32)) {
@@ -485,7 +488,7 @@ newtRef PkgWriteBinary(pkg_stream_t *pkg, newtRefArg obj)
 		PkgWriteData(pkg, dst+12, data, size-12);
 	}
 
-	return NewtMakePointer(dst);
+	return (pkgNewtRef) NewtMakePointer(dst);
 }
 
 /*------------------------------------------------------------------------*/
@@ -494,18 +497,18 @@ newtRef PkgWriteBinary(pkg_stream_t *pkg, newtRefArg obj)
  * @param pkg		[inout] the package
  * @param obj		[in] the object that we will write
  *
- * @retval	offset to the beginning of the object in the package file
+ * @retval    reference to the object (offset to the beginning of the object in the package file + 1)
  */
-newtRef PkgWriteObject(pkg_stream_t *pkg, newtRefArg obj)
+pkgNewtRef PkgWriteObject(pkg_stream_t *pkg, newtRefArg obj)
 {
-	uint32_t dst = pkg->size;
-	newtRef prec;
+	pkgNewtRef prec;
+	pkgNewtRef result;
 
 	// FIXME add handling named magic pointers here
 	if (NewtRefIsImmediate(obj)) {
 		// immediates have the same form in memory as in packages
 		// immediates include magic pointers
-		return obj;
+		return (uint32_t) obj;
 	} 
 	
 	prec = PkgPartGetPrecedent(pkg, obj);
@@ -514,11 +517,11 @@ newtRef PkgWriteObject(pkg_stream_t *pkg, newtRefArg obj)
 	}
 
 	if (NewtRefIsFrame(obj)) {
-		dst = PkgWriteFrame(pkg, obj);
+		result = PkgWriteFrame(pkg, obj);
 	} else if (NewtRefIsArray(obj)) {
-		dst = PkgWriteArray(pkg, obj);
+		result = PkgWriteArray(pkg, obj);
 	} else if (NewtRefIsBinary(obj)) {
-		dst = PkgWriteBinary(pkg, obj);
+		result = PkgWriteBinary(pkg, obj);
 	} else {
 #		ifdef DEBUG_PKG
 			// we do not know how to write this object
@@ -529,9 +532,9 @@ newtRef PkgWriteObject(pkg_stream_t *pkg, newtRefArg obj)
 	}
 
 	// make this ref available for later incarnations of the same object
-	PkgPartSetPrecedent(pkg, obj, dst);
+	PkgPartSetPrecedent(pkg, obj, result);
 
-	return dst;
+	return result;
 }
 
 /*------------------------------------------------------------------------*/
@@ -550,9 +553,9 @@ void PkgWritePart(pkg_stream_t *pkg, newtRefArg part)
 {
 	uint32_t	dst = pkg->part_offset;
 	uint32_t	hdr = pkg->part_header_offset;
-	int32_t		ix;
+	ssize_t		ix;
 	newtRef		data;
-	uint32_t	part_size;
+	size_t		part_size;
 
 	ix = NewtFindSlotIndex(part, NSSYM(data));
 	if (ix<0) 
@@ -576,15 +579,15 @@ void PkgWritePart(pkg_stream_t *pkg, newtRefArg part)
 		// offset
 	PkgWriteU32(pkg, hdr, pkg->part_offset - pkg->directory_size);
 		// size
-	PkgWriteU32(pkg, hdr+4, part_size);
+	PkgWriteU32(pkg, hdr+4, (uint32_t) part_size);
 		// size2
-	PkgWriteU32(pkg, hdr+8, part_size);
+	PkgWriteU32(pkg, hdr+8, (uint32_t) part_size);
 		// type
-	PkgWriteU32(pkg, hdr+12, PkgGetSlotInt(part, NSSYM(type), 0x666f726d)); // "form"
+	PkgWriteU32(pkg, hdr+12, (uint32_t) PkgGetSlotInt(part, NSSYM(type), 0x666f726d)); // "form"
 		// reserved1
 	PkgWriteU32(pkg, hdr+16, 0); 
 		// flags
-	PkgWriteU32(pkg, hdr+20, PkgGetSlotInt(part, NSSYM(flags), 0));
+	PkgWriteU32(pkg, hdr+20, (uint32_t) PkgGetSlotInt(part, NSSYM(flags), 0));
 		// reserved2
 	PkgWriteU32(pkg, hdr+28, 0); 
 
@@ -616,7 +619,8 @@ void PkgWritePart(pkg_stream_t *pkg, newtRefArg part)
 newtRef NewtWritePkg(newtRefArg package)
 {
 	pkg_stream_t	pkg;
-	int32_t			num_parts, i, ix;
+    size_t			num_parts, i;
+    ssize_t			ix;
 	newtRef			parts, result;
 
 	// setup pkg_stream_t
@@ -633,35 +637,35 @@ newtRef NewtWritePkg(newtRefArg package)
 	if (ix>=0) {
 		parts = NewtGetFrameSlot(package, ix);
 		num_parts = NewtFrameLength(parts);
-		pkg.header_size = sizeof(pkg_header_t) + num_parts * sizeof(pkg_part_t);
+		pkg.header_size = (uint32_t) (sizeof(pkg_header_t) + num_parts * sizeof(pkg_part_t));   // Abnormal number of parts is unlikely
 
 		// start setting up the header with whatever we know
 			// sig
 		PkgWriteData(&pkg, 0, "package0", 8);
 		pkg.data[7] = (uint8_t)('0' + PkgGetSlotInt(package, NSSYM(pkg_version), 0));
 			// type
-		PkgWriteU32(&pkg, 8, PkgGetSlotInt(package, NSSYM(type), 0x78787878)); // "xxxx"
+		PkgWriteU32(&pkg, 8, (uint32_t) PkgGetSlotInt(package, NSSYM(type), 0x78787878)); // "xxxx"
 			// flags
-		PkgWriteU32(&pkg, 12, PkgGetSlotInt(package, NSSYM(flags), 0));
+		PkgWriteU32(&pkg, 12, (uint32_t) PkgGetSlotInt(package, NSSYM(flags), 0));
 			// version
-		PkgWriteU32(&pkg, 16, PkgGetSlotInt(package, NSSYM(version), 0));
+		PkgWriteU32(&pkg, 16, (uint32_t) PkgGetSlotInt(package, NSSYM(version), 0));
 			// copyright
 		PgkWriteVarData(&pkg, 20, package, NSSYM(copyright));
 			// name
 		PgkWriteVarData(&pkg, 24, package, NSSYM(name));
 			// date
-		PkgWriteU32(&pkg, 32, time(0L)+2082844800);
+		PkgWriteU32(&pkg, 32, (uint32_t) (time(0L)+2082844800));    // Possible overflow
 			// reserved2
 		PkgWriteU32(&pkg, 36, 0); 
 			// reserved3
 		PkgWriteU32(&pkg, 40, 0); 
 			// numParts
-		PkgWriteU32(&pkg, 48, num_parts);
+		PkgWriteU32(&pkg, 48, (uint32_t) (num_parts));
 
 		// calculate the size of the header so we can correctly set our refs in the parts
 		for (i=0; i<num_parts; i++) {
 			newtRef part = NewtGetArraySlot(parts, i);
-			PgkWriteVarData(&pkg, sizeof(pkg_header_t) + i*sizeof(pkg_part_t) + 24, part, NSSYM(info));
+			PgkWriteVarData(&pkg, (uint32_t) (sizeof(pkg_header_t) + i*sizeof(pkg_part_t) + 24), part, NSSYM(info));
 		}
 
 		// the original file has this (c) message embedded
@@ -675,21 +679,21 @@ newtRef NewtWritePkg(newtRefArg package)
 			pkg.var_data_size += sizeof(msg);
 		}
 
-		pkg.part_offset = pkg.directory_size = PkgAlign(&pkg, pkg.header_size + pkg.var_data_size);
+		pkg.part_offset = pkg.directory_size = (uint32_t) PkgAlign(&pkg, pkg.header_size + pkg.var_data_size);
 			// directorySize
 		PkgWriteU32(&pkg, 44, pkg.directory_size);
 
 		// create all parts
 		for (i=0; i<num_parts; i++) {
 			newtRef part = NewtGetArraySlot(parts, i);
-			pkg.part_header_offset = sizeof(pkg_header_t) + i*sizeof(pkg_part_t);
+			pkg.part_header_offset = (uint32_t) (sizeof(pkg_header_t) + i*sizeof(pkg_part_t));
 			PkgWritePart(&pkg, part);
 		}
 	}
 
 	// finish filling in the header
 		// size
-	PkgWriteU32(&pkg, 28, pkg.size);
+	PkgWriteU32(&pkg, 28, (uint32_t) pkg.size);
 
 	result = NewtMakeBinary(NSSYM(package), pkg.data, pkg.size, false);
 
@@ -954,7 +958,7 @@ newtRef PkgReadNOSPart(pkg_stream_t *pkg)
 	// verify that we have a correct lead-in 
 	if (PkgReadU32(pkg->part)!=0x00001041 || PkgReadU32(pkg->part+8)!=0x00000002) {
 #		ifdef DEBUG_PKG
-		printf("*** PkgReader: PkgReadPart - unsupported NOS Part intro at %d\n",
+		printf("*** PkgReader: PkgReadPart - unsupported NOS Part intro at %" PRIdPTR "\n",
 			pkg->part-pkg->data);
 #		endif
 		return kNewtRefNIL;
@@ -1151,7 +1155,7 @@ newtRef NewtReadPkg(uint8_t * data, size_t size)
 	memset(&pkg, 0, sizeof(pkg));
 	pkg.pkg_version = data[7]-'0';
 	pkg.data = data;
-	pkg.size = size;
+	pkg.size = (uint32_t) size;
 	pkg.header = (pkg_header_t*)data;
 	pkg.num_parts = ntohl(pkg.header->numParts);
 	if (ntohl(pkg.header->flags) & kRelocationFlag) {
@@ -1190,7 +1194,7 @@ newtRef NewtReadPkg(uint8_t * data, size_t size)
 
 newtRef NsReadPkg(newtRefArg rcvr, newtRefArg r)
 {
-	uint32_t	len;
+	size_t	len;
 
     if (! NewtRefIsBinary(r))
         return NewtThrow(kNErrNotABinaryObject, r);

@@ -490,7 +490,7 @@ newtRef NVMMakeExceptionFrame(newtRefArg name, newtRefArg data)
 void NVMThrowData(newtRefArg name, newtRefArg data)
 {
     vm_excp_t *	excp;
-    uint32_t	i;
+    size_t		i;
 
 	// 例外処理中ならクリアする
 	NVMClearCurrException();
@@ -846,8 +846,8 @@ void stk_push_varg(int argc, va_list ap)
 
 void stk_push_array(newtRefVar argArray)
 {
-	int		numArgs;
-	int		i;
+	size_t		numArgs;
+	size_t		i;
 
 	numArgs = NewtArrayLength(argArray);
 
@@ -889,7 +889,7 @@ bool excp_push(newtRefArg sym, newtRefArg pc)
     excp->callsp = CALLSP;
     excp->excppc = PC;
     excp->sym = sym;
-    excp->pc = NewtRefToInteger(pc);
+    excp->pc = (uint32_t) NewtRefToInteger(pc);
 
     EXCPSP++;
 
@@ -1031,8 +1031,8 @@ void iter_next(newtRefArg iter)
     newtRefVar	index = kNewtRefUnbind;
     newtRefVar	value = kNewtRefUnbind;
     newtRefVar	map;
-    int32_t	pos;
-    int32_t	len;
+    intptr_t	pos;
+    intptr_t	len;
 
     obj = NewtGetArraySlot(iter, kIterObj);
     deeply = NewtGetArraySlot(iter, kIterDeeply);
@@ -1112,8 +1112,8 @@ void iter_next(newtRefArg iter)
 
 bool iter_done(newtRefArg iter)
 {
-    int32_t	pos;
-    int32_t	len;
+    size_t	pos;
+    size_t	len;
 
     pos = NewtRefToInteger(NewtGetArraySlot(iter, kIterPos));
     len = NewtRefToInteger(NewtGetArraySlot(iter, kIterMax));
@@ -1160,7 +1160,7 @@ newtRef NVMMakeArgsArray(uint16_t numArgs)
 void NVMBindArgs(uint16_t numArgs)
 {
     newtRefVar	indefinite;
-	int32_t		minArgs;
+	size_t		minArgs;
 	int16_t		i;
     newtRefVar	v;
 
@@ -1221,7 +1221,7 @@ void NVMThrowBC(newtErr err, newtRefArg value, int16_t pop, bool push)
 bool NVMFuncCheckNumArgs(newtRefArg fn, int16_t numArgs)
 {
     newtRefVar	indefinite;
-    int32_t		minArgs;
+    size_t		minArgs;
 
     minArgs = NewtRefToInteger(NcGetSlot(fn, NSSYM0(numArgs)));
     indefinite = NcGetSlot(fn, NSSYM0(indefinite));
@@ -1272,7 +1272,7 @@ void NVMCallNativeFn(newtRefArg fn, int16_t numArgs)
     newtRefVar	r = kNewtRefUnbind;
     newtRefVar	indefinite;
     nvm_func_t	funcPtr;
-	int32_t		minArgs;
+	size_t		minArgs;
 
     funcPtr = (nvm_func_t)NewtRefToAddress(NcGetSlot(fn, NSSYM0(funcPtr)));
 
@@ -1496,7 +1496,7 @@ void NVMCallNativeFunc(newtRefArg fn, newtRefArg rcvr, int16_t numArgs)
     newtRefVar	r = kNewtRefUnbind;
     newtRefVar	indefinite;
     nvm_func_t	funcPtr;
-	int32_t		minArgs;
+	size_t		minArgs;
 
     funcPtr = (nvm_func_t)NewtRefToAddress(NcGetSlot(fn, NSSYM0(funcPtr)));
 
@@ -2611,7 +2611,7 @@ void is_push_constant(int16_t b)
 
     if (NewtRefIsInteger(r))
 	{
-		int32_t	n;
+		size_t	n;
 
 		n = NewtRefToInteger(r);
 
@@ -3065,7 +3065,7 @@ void is_incr_var(int16_t b)
 {
     newtRefVar	addend;
     newtRefVar	n;
-    int32_t	v;
+    intptr_t	v;
 
     addend = stk_top();
     n = NewtGetFrameSlot(LOCALS, b);
@@ -3090,9 +3090,9 @@ void is_branch_if_loop_not_done(int16_t b)
     newtRefVar	r_incr;
     newtRefVar	r_index;
     newtRefVar	r_limit;
-    int32_t	incr;
-    int32_t	index;
-    int32_t	limit;
+    size_t	incr;
+    size_t	index;
+    size_t	limit;
 
     r_limit = stk_pop();
     r_index = stk_pop();
@@ -3304,7 +3304,7 @@ void NVMDumpStackTop(FILE * f, char * s)
  * @return			なし
  */
 
-void NVMDumpCode(FILE * f, uint8_t * bc, uint32_t len)
+void NVMDumpCode(FILE * f, uint8_t * bc, size_t len)
 {
     uint8_t	op;
     uint8_t	a;
@@ -3359,7 +3359,7 @@ void NVMDumpBC(FILE * f, newtRefArg instructions)
     if (NewtRefIsBinary(instructions))
     {
         uint8_t *	bc;
-        uint32_t	len;
+        size_t		len;
     
         len = NewtLength(instructions);
         bc = NewtRefToBinary(instructions);

@@ -74,7 +74,7 @@ NewtNSApplicationMain(newtRefArg inRcvr, newtRefArg inArgv)
 
 	NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
 
-	int nbArgs = NewtArrayLength(inArgv);
+	int nbArgs = (int) NewtArrayLength(inArgv);
 	const char** argv = (const char**) malloc(sizeof(const char*) * (nbArgs + 1));
 	int indexArgs;
 	for (indexArgs = 0; indexArgs < nbArgs; indexArgs++)

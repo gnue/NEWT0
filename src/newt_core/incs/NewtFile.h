@@ -46,7 +46,7 @@ char *		NewtRelToAbsPath(char * s);
 char *		NewtJoinPath(char * s1, char * s2, char sep);
 newtRef		NewtExpandPath(const char * s);
 
-char *		NewtBaseName(char * s, uint32_t len);
+char *		NewtBaseName(char * s, size_t len);
 
 newtRef		NsCompileFile(newtRefArg rcvr, newtRefArg r);
 newtRef		NsLoadLib(newtRefArg rcvr, newtRefArg r);

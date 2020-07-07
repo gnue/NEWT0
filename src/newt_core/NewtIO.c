@@ -310,8 +310,8 @@ newtRef NewtFgets(FILE * stream)
 	char *  str;
 	char	c;
 	int		maxsize;
-	int		oldlen;
-	int		len;
+	size_t	oldlen;
+	size_t	len;
 
 	maxsize = sizeof(buff) - 1;
 

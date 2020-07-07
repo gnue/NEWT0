@@ -39,7 +39,7 @@ static void			lex_newline(void);
 static char *		lex_truncstr(char *s);
 static char *		lex_escapestr(char *s);
 static char			lex_escapechar(char c);
-static int			lex_htoi(char *s, int len);
+static intptr_t		lex_htoi(char *s, ssize_t len);
 static uint32_t		lex_getop(char *s);
 static int			lex_op(char *s, int op);
 static int			lex_reserveword(int tokn, char *s);
@@ -47,11 +47,11 @@ static int			lex_reserveword(int tokn, char *s);
 static int			lex_makesymbol(char *s, bool trunc);
 static int			lex_makestring(char *s, bool trunc);
 static int			lex_makeregex(char *s, bool trunc);
-static int			lex_makechar(int c);
-static int			lex_makeinteger(int n);
+static int			lex_makechar(intptr_t c);
+static int			lex_makeinteger(intptr_t n);
 static int			lex_makereal(double n);
 
-static int			lex_makemagicpointer(int n);
+static int			lex_makemagicpointer(intptr_t n);
 static int			lex_makenamedmp(char *s, bool trunc);
 
 static void			lex_debug(int type);
@@ -183,11 +183,11 @@ __LINE__						{ return lex_makeinteger(nps_env.lineno); }
 "$\\u"{HEX-DIGIT}{4}			{ return lex_makechar(lex_htoi(yytext + 3, -1)); }
 "$"{NON-ESCAPE-CHARACTER}		{ return lex_makechar(yytext[1]); }
 
-"@"{DIGIT}+						{ return lex_makemagicpointer(atoi(yytext + 1)); }
+"@"{DIGIT}+						{ return lex_makemagicpointer(atol(yytext + 1)); }
 "@"{SYMBOL}						{ return lex_makenamedmp(yytext + 1, false); }
 "@""|"{SYMBOL-SEQUENCE}"|"		{ return lex_makenamedmp(yytext + 1, true); }
 
-{DIGIT}+						{ return lex_makeinteger(atoi(yytext)); }
+{DIGIT}+						{ return lex_makeinteger(atol(yytext)); }
 "0x"{HEX-DIGIT}+				{ return lex_makeinteger(lex_htoi(yytext + 2, -1)); }
 
 {REAL}							{ return lex_makereal(atof(yytext)); }
@@ -428,9 +428,9 @@ char lex_escapechar(char c)
  * @return			整数
  */
 
-int lex_htoi(char *s, int len)
+intptr_t lex_htoi(char *s, ssize_t len)
 {
-    int	n = 0;
+    intptr_t	n = 0;
 
     if (len < 0)
         len = strlen(s) + 1 + len;
@@ -465,7 +465,7 @@ int lex_htoi(char *s, int len)
 uint32_t lex_getop(char *s)
 {
     uint32_t	op;
-    int	len;
+    size_t	len;
 
 	len = strlen(s);
 
@@ -613,7 +613,7 @@ int lex_makeregex(char *s, bool trunc)
  * @return			トークンID
  */
 
-int lex_makechar(int c)
+int lex_makechar(intptr_t c)
 {
     yylval.obj = NewtMakeCharacter(c);
     lex_debug(kCHARACTER);
@@ -630,7 +630,7 @@ int lex_makechar(int c)
  * @return			トークンID
  */
 
-int lex_makeinteger(int n)
+int lex_makeinteger(intptr_t n)
 {
     yylval.obj = NewtMakeInteger(n);
     lex_debug(kINTEGER);
@@ -714,7 +714,7 @@ int lex_makenamedmp(char *s, bool trunc)
  * @return			トークンID
  */
 
-int lex_makemagicpointer(int n)
+int lex_makemagicpointer(intptr_t n)
 {
 	if (0x03ff < n)
 	{	// 数値が範囲外

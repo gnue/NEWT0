@@ -40,10 +40,10 @@ typedef struct {
 
 /// NSOFストリーム構造体
 typedef struct {
-	int32_t		verno;			///< NSOFバージョン番号
+	intptr_t	verno;			///< NSOFバージョン番号
 	uint8_t *	data;			///< データ
-	uint32_t	len;			///< データの長さ
-	uint32_t	offset;			///< 作業中の位置
+	size_t		len;			///< データの長さ
+	size_t		offset;			///< 作業中の位置
 	newtRefVar	precedents;		///< 出現済みオブジェクトのリスト
 	newtErr		lastErr;		///< 最後のエラーコード
 
@@ -59,14 +59,14 @@ typedef struct {
 /* 関数プロトタイプ */
 static bool			NewtRefIsByte(newtRefArg r);
 static bool			NewtRefIsSmallRect(newtRefArg r);
-static int32_t		NewtArraySearch(newtRefArg array, newtRefArg r);
+static ssize_t		NewtArraySearch(newtRefArg array, newtRefArg r);
 
 static newtErr		NSOFWriteByte(nsof_stream_t * nsof, uint8_t value);
 static newtErr		NSOFWriteXlong(nsof_stream_t * nsof, int32_t value);
 static uint8_t		NSOFReadByte(nsof_stream_t * nsof);
 static int32_t		NSOFReadXlong(nsof_stream_t * nsof);
 
-static newtErr		NSOFWritePrecedent(nsof_stream_t * nsof, int32_t pos);
+static newtErr		NSOFWritePrecedent(nsof_stream_t * nsof, size_t pos);
 static newtErr		NSOFWriteImmediate(nsof_stream_t * nsof, newtRefArg r);
 static newtErr		NSOFWriteCharacter(nsof_stream_t * nsof, newtRefArg r);
 static newtErr		NSOFWriteBinary(nsof_stream_t * nsof, newtRefArg r, uint16_t objtype);
@@ -102,7 +102,7 @@ bool NewtRefIsByte(newtRefArg r)
 {
 	if (NewtRefIsInteger(r))
 	{
-		int32_t		n;
+		intptr_t		n;
 
 		n = NewtRefToInteger(r);
 
@@ -150,11 +150,11 @@ bool NewtRefIsSmallRect(newtRefArg r)
  * @retval			-1		見つからなかった
  */
 
-int32_t NewtArraySearch(newtRefArg array, newtRefArg r)
+ssize_t NewtArraySearch(newtRefArg array, newtRefArg r)
 {
     newtRef *	slots;
-	uint32_t	len;
-	uint32_t	i;
+	size_t	   	len;
+	size_t	   	i;
 
 	len = NewtArrayLength(array);
     slots = NewtRefToSlots(array);
@@ -297,10 +297,11 @@ int32_t NSOFReadXlong(nsof_stream_t * nsof)
  * @note			nsof->data が NULL の場合は nsof->offset のみ更新される
  */
  
-newtErr NSOFWritePrecedent(nsof_stream_t * nsof, int32_t pos)
+newtErr NSOFWritePrecedent(nsof_stream_t * nsof, size_t pos)
 {
 	NSOFWriteByte(nsof, kNSOFPrecedent);
-	NSOFWriteXlong(nsof, pos);
+    if (pos > INT32_MAX) return kNErrOutOfRange;
+	NSOFWriteXlong(nsof, (int32_t) pos);
 
 	return nsof->lastErr;
 }
@@ -320,7 +321,7 @@ newtErr NSOFWritePrecedent(nsof_stream_t * nsof, int32_t pos)
 newtErr NSOFWriteImmediate(nsof_stream_t * nsof, newtRefArg r)
 {
 	NSOFWriteByte(nsof, kNSOFImmediate);
-	NSOFWriteXlong(nsof, r);
+	NSOFWriteXlong(nsof, (int32_t) r);
 
 	return nsof->lastErr;
 }
@@ -374,7 +375,7 @@ newtErr NSOFWriteCharacter(nsof_stream_t * nsof, newtRefArg r)
 newtErr NSOFWriteBinary(nsof_stream_t * nsof, newtRefArg r, uint16_t objtype)
 {
 	newtRefVar	klass;
-	uint32_t	size;
+	size_t	size;
 	char *		buff = NULL;
 	int			type;
 
@@ -386,6 +387,7 @@ newtErr NSOFWriteBinary(nsof_stream_t * nsof, newtRefArg r, uint16_t objtype)
 		type = kNSOFBinaryObject;
 
 	size = NewtBinaryLength(r);
+    if (size > INT32_MAX) return kNErrOutOfBounds;
 
 #ifdef HAVE_LIBICONV
 	if (objtype == kNewtString)
@@ -400,7 +402,7 @@ newtErr NSOFWriteBinary(nsof_stream_t * nsof, newtRefArg r, uint16_t objtype)
 #endif /* HAVE_LIBICONV */
 
 	NSOFWriteByte(nsof, type);
-	NSOFWriteXlong(nsof, size);
+	NSOFWriteXlong(nsof, (int32_t) size);
 
 	if (type == kNSOFBinaryObject)
 	{
@@ -415,6 +417,7 @@ newtErr NSOFWriteBinary(nsof_stream_t * nsof, newtRefArg r, uint16_t objtype)
 
 		switch (objtype)
 		{
+			case kNewtInt64:
 			case kNewtInt32:
 				if (NSOFIsNOS(nsof->verno))
 				{
@@ -422,11 +425,8 @@ newtErr NSOFWriteBinary(nsof_stream_t * nsof, newtRefArg r, uint16_t objtype)
 				}
 				else
 				{
-					int32_t	n;
-
-					n = NewtRefToInteger(r);
-					n = htonl(n);
-					memcpy(data, (uint8_t *)&n, sizeof(n));
+					// Internally, int64 and int32 are in big endian, suitable for exchange
+					memcpy(data, NewtRefToBinary(r), size);
 				}
 				break;
 
@@ -469,11 +469,12 @@ newtErr NSOFWriteBinary(nsof_stream_t * nsof, newtRefArg r, uint16_t objtype)
 
 newtErr NSOFWriteSymbol(nsof_stream_t * nsof, newtRefArg r)
 {
-	uint32_t	size;
+	size_t	size;
 	char *		buff = NULL;
 	char *		name;
 
 	size = NewtSymbolLength(r);
+    if (size > INT32_MAX) return kNErrOutOfBounds;
 	name = NewtRefToSymbol(r)->name;
 
 #ifdef HAVE_LIBICONV
@@ -491,7 +492,7 @@ newtErr NSOFWriteSymbol(nsof_stream_t * nsof, newtRefArg r)
 #endif /* HAVE_LIBICONV */
 
 	NSOFWriteByte(nsof, kNSOFSymbol);
-	NSOFWriteXlong(nsof, size);
+	NSOFWriteXlong(nsof, (int32_t) size);
 
 	if (nsof->data) memcpy(nsof->data + nsof->offset, name, size);
 	nsof->offset += size;
@@ -528,12 +529,13 @@ newtErr NSOFWriteNamedMP(nsof_stream_t * nsof, newtRefArg r)
 	}
 	else
 	{
-		uint32_t	size;
+		size_t	size;
 
 		size = NewtSymbolLength(sym);
+        if (size > INT32_MAX) return kNErrOutOfBounds;
 
 		NSOFWriteByte(nsof, kNSOFNamedMagicPointer);
-		NSOFWriteXlong(nsof, size);
+		NSOFWriteXlong(nsof, (int32_t) size);
 
 		if (nsof->data) memcpy(nsof->data + nsof->offset, NewtRefToSymbol(sym)->name, size);
 		nsof->offset += size;
@@ -559,11 +561,12 @@ newtErr NSOFWriteArray(nsof_stream_t * nsof, newtRefArg r)
 {
 	newtRefVar	klass;
     newtRef *	slots;
-	uint32_t	numSlots;
+	size_t		numSlots;
 	uint32_t	i;
 	int			type;
 
 	numSlots = NewtArrayLength(r);
+    if (numSlots > INT32_MAX) return kNErrOutOfBounds;
 	klass = NcClassOf(r);
 
 	if (klass == NSSYM0(array))
@@ -573,7 +576,7 @@ newtErr NSOFWriteArray(nsof_stream_t * nsof, newtRefArg r)
 
 	NSOFWriteByte(nsof, type);
 
-	NSOFWriteXlong(nsof, numSlots);
+	NSOFWriteXlong(nsof, (int32_t) numSlots);
 
 	if (type == kNSOFArray)
 	{
@@ -608,15 +611,16 @@ newtErr NSOFWriteFrame(nsof_stream_t * nsof, newtRefArg r)
 {
     newtRefVar	map;
     newtRef *	slots;
-	uint32_t	numSlots;
-    uint32_t	index;
-	uint32_t	i;
+	size_t		numSlots;
+    size_t		index;
+	size_t		i;
 
 	numSlots = NewtFrameLength(r);
+    if (numSlots > INT32_MAX) return kNErrOutOfBounds;
     map = NewtFrameMap(r);
 
 	NSOFWriteByte(nsof, kNSOFFrame);
-	NSOFWriteXlong(nsof, numSlots);
+	NSOFWriteXlong(nsof, (int32_t) numSlots);
 
     slots = NewtRefToSlots(r);
 
@@ -684,7 +688,7 @@ newtErr NewtWriteNSOF(nsof_stream_t * nsof, newtRefArg r)
 	}
 	else
 	{
-		int32_t	foundPrecedent;
+		size_t	foundPrecedent;
 
 		foundPrecedent = NewtArraySearch(nsof->precedents, r);
 
@@ -1226,7 +1230,7 @@ newtRef NewtReadNSOF(uint8_t * data, size_t size)
 
 newtRef NsReadNSOF(newtRefArg rcvr, newtRefArg r)
 {
-	uint32_t	len;
+	size_t	len;
 
     if (! NewtRefIsBinary(r))
         return NewtThrow(kNErrNotABinaryObject, r);

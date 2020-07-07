@@ -26,9 +26,9 @@ extern "C" {
 #endif
 
 
-extern int		yylex();
+extern int		yylex(void);
 extern void		yyerror(char * s);
-extern int		yyparse();
+extern int		yyparse(void);
 
 
 #ifdef __cplusplus

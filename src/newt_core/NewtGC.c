@@ -198,7 +198,7 @@ newtObjRef NewtObjChainAlloc(newtPool pool, size_t size, size_t dataSize)
 
 void NewtObjFree(newtPool pool, newtObjRef obj)
 {
-    uint32_t	datasize;
+    size_t	datasize;
 
     if (NewtObjIsLiteral(obj))
     {
@@ -394,8 +394,8 @@ void NewtGCRefMark(newtRefArg r, bool mark)
             if (NewtObjIsSlotted(obj))
             {
                 newtRef *	slots;
-                uint32_t	len;
-                uint32_t	i;
+                size_t	  	len;
+                size_t    	i;
     
                 len = NewtObjSlotsLength(obj);
                 slots = NewtObjToSlots(obj);

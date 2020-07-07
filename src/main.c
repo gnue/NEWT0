@@ -460,7 +460,7 @@ int main (int argc, const char * argv[])
             case 'e':
                 i++;
                 err = newt_option_with_arg(*s, argc, argv, i);
-                exit(err);
+                exit((int) err);
                 break;
 
             default:
@@ -471,7 +471,7 @@ int main (int argc, const char * argv[])
 
     err = newt_interpret_file(argc, argv, i);
 
-    return err;
+    return (int) err;
 }
 
 

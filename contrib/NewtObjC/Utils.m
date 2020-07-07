@@ -132,13 +132,13 @@ RefToDoubleConverting(newtRefVar inRef)
  * @param inRef		reference to the NewtonScript object
  * @return the value of the reference.
  */
-int
+intptr_t
 RefToIntConverting(newtRefVar inRef)
 {
-	int theResult = 0;
+	intptr_t theResult = 0;
 	if (NewtRefIsReal(inRef))
 	{
-		theResult = (int) NewtRefToReal(inRef);
+		theResult = (intptr_t) NewtRefToReal(inRef);
 	} else if (NewtRefIsInteger(inRef)) {
 		theResult = NewtRefToInteger(inRef);
 	} else if (NewtRefIsCharacter(inRef)) {
@@ -1078,19 +1078,19 @@ CastResultToObjC(
 		case 'c':
 		case 'C':
 			// char
-			return (id) (int) RefToCharConverting(inObject);
+			return (id) (long) (char) RefToCharConverting(inObject);
 			break;
 
 		case 's':
 		case 'S':
 			// short
-			return (id) (int) (short) RefToIntConverting(inObject);
+			return (id) (long) (short) RefToIntConverting(inObject);
 			break;
 
 		case 'i':
 		case 'I':
 			// int
-			return (id) (int) RefToIntConverting(inObject);
+			return (id) (long) (int) RefToIntConverting(inObject);
 			break;
 
 		case 'l':

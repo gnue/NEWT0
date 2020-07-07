@@ -144,7 +144,7 @@ char NewtGetFileSeparator(void)
 char * NewtGetHomeDir(const char * s, char ** subdir)
 {	// UNIX の場合
 	struct passwd * pswd = NULL;
-	uint32_t	len;
+	uintptr_t	len;
 	char *  login = NULL;
 	char *  dir = NULL;
 	char *  sepp;
@@ -207,9 +207,9 @@ char * NewtGetHomeDir(const char * s, char ** subdir)
 char * NewtJoinPath(char * s1, char * s2, char sep)
 {
 	char *		path;
-	uint32_t	len;
-	uint32_t	len1;
-	uint32_t	len2;
+	size_t	   	len;
+	size_t	   	len1;
+	size_t	   	len2;
 
 	len1 = strlen(s1);
 	len2 = strlen(s2);
@@ -364,7 +364,7 @@ newtRef NewtExpandPath(const char *	s)
  * @return			ファイル名
  */
 
-char * NewtBaseName(char * s, uint32_t len)
+char * NewtBaseName(char * s, size_t len)
 {
 	uint32_t	base = 0;
 	uint32_t	i;
@@ -541,7 +541,7 @@ newtRef NcRequire0(newtRefArg r)
 		newtRefVar  dir;
 		newtRefVar  patharray;
 		newtRefVar  path;
-		uint32_t	len;
+		size_t	   	len;
 		uint32_t	nb_suffixes;
 		uint32_t	i;
 		uint32_t	j;
@@ -780,9 +780,9 @@ newtRef NsLoadBinary(newtRefArg rcvr, newtRefArg r)
         size_t size = ftell(f);
         fseek(f, 0, SEEK_SET);
         uint8_t *data = (uint8_t*)malloc(size);
-        int err = fread(data, size, 1, f);
+        (void) fread(data, size, 1, f);
         fclose(f);
-        return NewtMakeBinary(NSSYM(data), data, size, false); 
+        return NewtMakeBinary(NSSYM(data), data, size, false);
     } else {
         return NewtThrow(kNErrNotAString, r);
     }
@@ -807,7 +807,7 @@ newtRef NsSaveBinary(newtRefArg rcvr, newtRefArg r1, newtRefArg r2)
             if (!f)
                 return NewtThrow(kNErrFileNotFound, r2);
             uint8_t *data = NewtRefToBinary(r1);
-            int size = NewtBinaryLength(r1);
+            size_t size = NewtBinaryLength(r1);
             fwrite(data, size, 1, f);
             fclose(f);
             return kNewtRefNIL;
