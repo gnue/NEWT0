@@ -25,33 +25,42 @@
 
 
 #define NewtRefIsInt30(r)			((r & 3) == 0)						///< 30bit整数オブジェクトか？
-#define	NewtRefToInt30(r)			(int32_t)((int32_t)r >> 2)			///< オブジェクトを 30bit整数に変換
-#define	NewtMakeInt30(v)			(newtRef)((int32_t)(v) << 2)		///< 30bit整数オブジェクトを作成
+#define	NewtRefToInt30(r)			(int32_t)((uintptr_t)r >> 2)			///< オブジェクトを 30bit整数に変換
+#define	NewtMakeInt30(v)			(newtRef)((uintptr_t)(v) << 2)		///< 30bit整数オブジェクトを作成
 
 #define	NewtRefIsPointer(r)			((r & 3) == 1)						///< ポインタオブジェクトか？
-#define	NewtRefToPointer(r)			(newtObjRef)((uint32_t)r - 1)		///< オブジェクト参照をポインタに変換
-#define	NewtMakePointer(v)			(newtRef)((uint32_t)(v) + 1)		///< ポインタオブジェクトを作成
+#define	NewtRefToPointer(r)			(newtObjRef)((uintptr_t)r - 1)		///< オブジェクト参照をポインタに変換
+#define	NewtMakePointer(v)			(newtRef)((uintptr_t)(v) + 1)		///< ポインタオブジェクトを作成
 
 #define	NewtRefIsCharacter(r)		((r & 0xF) == 6)					///< 文字オブジェクトか？
-#define	NewtRefToCharacter(r)		(int)(((uint32_t)r >> 4) & 0xFFFF)	///< オブジェクト参照を文字に変換
-#define	NewtMakeCharacter(v)		(newtRef)(((uint32_t)(v) << 4) | 6)	///< 文字オブジェクトを作成
+#define	NewtRefToCharacter(r)		(int)(((uintptr_t)r >> 4) & 0xFFFF)	///< オブジェクト参照を文字に変換
+#define	NewtMakeCharacter(v)		(newtRef)(((uintptr_t)(v) << 4) | 6)	///< 文字オブジェクトを作成
 
 #define	NewtRefIsSpecial(r)			((r & 0xF) == 2)					///< 特殊オブジェクトか？
-#define	NewtRefToSpecial(r)			(int32_t)((uint32_t)r >> 2)			///< オブジェクト参照を特殊値に変換
+#define	NewtRefToSpecial(r)			(int32_t)((uintptr_t)r >> 2)			///< オブジェクト参照を特殊値に変換
 
 #define NewtRefIsMagicPointer(r)	((r & 3) == 3)										///< マジックポインタか？（数値および名前付）
 
+// On 32 bits platform, we use the highest bit, which may be a problem.
+// On 64 bits platform, we assume MIN_ALIGN is 16 and use a low bit.
 #ifdef __NAMED_MAGIC_POINTER__
+#if INTPTR_MAX == INT32_MAX
 #	define NewtRefIsNamedMP(r)		((r & 0x80000003) == 0x80000003)					///< 名前付マジックポインタか？
 #	define NewtMakeNamedMP(r)		NewtSymbolToMP(NewtMakeSymbol(r))					///< 名前付マジックポインタを作成
-#	define NewtMPToSymbol(r)		((newtRef)((((uint32_t)r << 1) & 0xFFFFFFF8) | 1))	///< 名前付マジックポインタをシンボルに変換
-#	define NewtSymbolToMP(r)		((newtRef)(((uint32_t)r >> 1) | 0x80000003))		///< シンボルを名前付マジックポインタに変換
+#	define NewtMPToSymbol(r)		((newtRef)((((uintptr_t)r << 1) & 0xFFFFFFF8) | 1))	///< 名前付マジックポインタをシンボルに変換
+#	define NewtSymbolToMP(r)		((newtRef)(((uintptr_t)r >> 1) | 0x80000003))		///< シンボルを名前付マジックポインタに変換
+#else
+#	define NewtRefIsNamedMP(r)		((r & 0x7) == 0x7)	///< 名前付マジックポインタか？
+#	define NewtMakeNamedMP(r)		NewtSymbolToMP(NewtMakeSymbol(r))					///< 名前付マジックポインタを作成
+#	define NewtMPToSymbol(r)		((newtRef)((((uintptr_t)r << 1) & 0xFFFFFFFFFFFFFFF0) | 1))	///< 名前付マジックポインタをシンボルに変換
+#	define NewtSymbolToMP(r)		((newtRef)(((uintptr_t)r >> 1) | 0x7))		///< シンボルを名前付マジックポインタに変換
+#endif
 #endif /* __NAMED_MAGIC_POINTER__ */
 
 #define NewtRefIsNumberedMP(r)		((r & 0x80000003) == 3)								///< 数値マジックポインタか？
 #define NewtMakeMagicPointer(t, i)	((newtRef)((t << 14) | ((i & 0x03ff) << 2) | 3))	///< マジックポインタを作成
-#define	NewtMPToTable(r)			((int32_t)((uint32_t)r >> 14))						///< マジックポインタのテーブル番号を取得
-#define	NewtMPToIndex(r)			((int32_t)(((uint32_t)r >> 2) & 0x03ff))			///< マジックポインタのインデックスを取得
+#define	NewtMPToTable(r)			((int32_t)((uintptr_t)r >> 14))						///< マジックポインタのテーブル番号を取得
+#define	NewtMPToIndex(r)			((int32_t)(((uintptr_t)r >> 2) & 0x03ff))			///< マジックポインタのインデックスを取得
 
 #define	NewtRefIsNotNIL(v)			(! NewtRefIsNIL(v))								///< NIL 以外か？
 #define	NewtMakeBoolean(v)			((newtRef)((v)?(kNewtRefTRUE):(kNewtRefNIL)))	///< ブール値オブジェクトを作成
@@ -128,9 +137,9 @@ const char*	NewtSymbolGetName(newtRefArg inSymbol);
 uint16_t	NewtGetRefType(newtRefArg r, bool detail);
 uint16_t	NewtGetObjectType(newtObjRef obj, bool detail);
 
-uint32_t	NewtObjCalcDataSize(uint32_t n);
-newtObjRef	NewtObjAlloc(newtRefArg r, uint32_t n, uint16_t type, bool literal);
-newtObjRef	NewtObjResize(newtObjRef r, uint32_t n);
+size_t	    NewtObjCalcDataSize(size_t n);
+newtObjRef	NewtObjAlloc(newtRefArg r, size_t n, uint16_t type, bool literal);
+newtObjRef	NewtObjResize(newtObjRef r, size_t n);
 void *		NewtObjData(newtObjRef obj);
 newtRef		NewtObjClone(newtRefArg r);
 newtRef		NewtPackLiteral(newtRefArg r);
@@ -142,8 +151,9 @@ bool		NewtRefIsSymbol(newtRefArg r);
 uint32_t	NewtRefToHash(newtRefArg r);
 bool		NewtRefIsString(newtRefArg r);
 bool		NewtRefIsInteger(newtRefArg r);
-int32_t		NewtRefToInteger(newtRefArg r);
+intptr_t	NewtRefToInteger(newtRefArg r);
 bool		NewtRefIsInt32(newtRefArg r);
+bool        NewtRefIsInt64(newtRefArg r);
 bool		NewtRefIsReal(newtRefArg r);
 double		NewtRefToReal(newtRefArg r);
 bool		NewtRefIsBinary(newtRefArg r);
@@ -160,37 +170,38 @@ int			NewtRefFunctionType(newtRefArg r);
 bool		NewtRefIsRegex(newtRefArg r);
 void *		NewtRefToAddress(newtRefArg r);
 
-newtRef		NewtMakeBinary(newtRefArg klass, uint8_t * data, uint32_t size, bool literal);
+newtRef		NewtMakeBinary(newtRefArg klass, uint8_t * data, size_t size, bool literal);
 newtRef		NewtMakeBinaryFromHex(newtRefArg klass, const char *hex, bool literal);
 newtRef		NewtMakeSymbol(const char *s);
 newtRef		NewtMakeString(const char *s, bool literal);
-newtRef		NewtMakeString2(const char *s, uint32_t len, bool literal);
-newtRef		NewtBinarySetLength(newtRefArg r, uint32_t n);
-newtRef		NewtStringSetLength(newtRefArg r, uint32_t n);
-newtRef		NewtMakeInteger(int32_t v);
+newtRef		NewtMakeString2(const char *s, size_t len, bool literal);
+newtRef		NewtBinarySetLength(newtRefArg r, size_t n);
+newtRef		NewtStringSetLength(newtRefArg r, size_t n);
+newtRef		NewtMakeInteger(int64_t v);
 newtRef		NewtMakeInt32(int32_t v);
+newtRef     NewtMakeInt64(int64_t v);
 newtRef		NewtMakeReal(double v);
-newtRef		NewtMakeArray(newtRefArg klass, uint32_t n);
-newtRef		NewtMakeArray2(newtRefArg klass, uint32_t n, const newtRefVar v[]);
-newtRef		NewtMakeMap(newtRefArg superMap, uint32_t n, newtRefVar v[]);
+newtRef		NewtMakeArray(newtRefArg klass, size_t n);
+newtRef		NewtMakeArray2(newtRefArg klass, size_t n, const newtRefVar v[]);
+newtRef		NewtMakeMap(newtRefArg superMap, size_t n, newtRefVar v[]);
 void		NewtSetMapFlags(newtRefArg map, int32_t bit);
 void		NewtClearMapFlags(newtRefArg map, int32_t bit);
-uint32_t	NewtMapLength(newtRefArg map);
-newtRef		NewtMakeFrame(newtRefArg map, uint32_t n);
-newtRef		NewtMakeFrame2(uint32_t n, newtRefVar v[]);
-newtRef		NewtMakeSlotsObj(newtRefArg r, uint32_t n, uint16_t type);
-uint32_t	NewtObjSlotsLength(newtObjRef obj);
+size_t	    NewtMapLength(newtRefArg map);
+newtRef		NewtMakeFrame(newtRefArg map, size_t n);
+newtRef		NewtMakeFrame2(size_t n, newtRefVar v[]);
+newtRef		NewtMakeSlotsObj(newtRefArg r, size_t n, uint16_t type);
+size_t	    NewtObjSlotsLength(newtObjRef obj);
 newtRef		NewtObjAddArraySlot(newtObjRef obj, newtRefArg v);
-newtRef		NewtSlotsSetLength(newtRefArg r, uint32_t n, newtRefArg v);
-newtRef		NewtSetLength(newtRefArg r, uint32_t n);
+newtRef		NewtSlotsSetLength(newtRefArg r, size_t n, newtRefArg v);
+newtRef		NewtSetLength(newtRefArg r, size_t n);
 newtRef		NewtMakeAddress(void * addr);
 
-newtRef		NewtThrow0(int32_t err); 
-newtRef		NewtThrow(int32_t err, newtRefArg value); 
-newtRef		NewtThrowSymbol(int32_t err, newtRefArg symbol); 
-newtRef		NewtErrOutOfBounds(newtRefArg value, int32_t index);
-void		NewtErrMessage(int32_t err);
-const char * NewtErrorMessage(int32_t err);
+newtRef		NewtThrow0(intptr_t err);
+newtRef		NewtThrow(intptr_t err, newtRefArg value);
+newtRef		NewtThrowSymbol(intptr_t err, newtRefArg symbol);
+newtRef		NewtErrOutOfBounds(newtRefArg value, size_t index);
+void		NewtErrMessage(intptr_t err);
+const char * NewtErrorMessage(intptr_t err);
 
 int			NewtSymbolCompareLex(newtRefArg r1, newtRefArg r2);
 int16_t		NewtObjectCompare(newtRefArg r1, newtRefArg r2);
@@ -198,45 +209,45 @@ bool		NewtRefEqual(newtRefArg r1, newtRefArg r2);
 bool		NewtObjectEqual(newtRefArg r1, newtRefArg r2);
 bool		NewtSymbolEqual(newtRefArg r1, newtRefArg r2);
 
-uint32_t	NewtLength(newtRefArg r);
-uint32_t	NewtDeeplyLength(newtRefArg r);
-uint32_t	NewtBinaryLength(newtRefArg r);
-uint32_t	NewtSymbolLength(newtRefArg r);
-uint32_t	NewtStringLength(newtRefArg r);
-uint32_t	NewtSlotsLength(newtRefArg r);
-uint32_t	NewtDeeplyFrameLength(newtRefArg r);
+size_t	    NewtLength(newtRefArg r);
+size_t	    NewtDeeplyLength(newtRefArg r);
+size_t	    NewtBinaryLength(newtRefArg r);
+size_t	    NewtSymbolLength(newtRefArg r);
+size_t	    NewtStringLength(newtRefArg r);
+size_t	    NewtSlotsLength(newtRefArg r);
+size_t	    NewtDeeplyFrameLength(newtRefArg r);
 
 newtRef		NewtObjGetSlot(newtObjRef obj, newtRefArg slot);
 newtRef		NewtObjSetSlot(newtObjRef obj, newtRefArg slot, newtRefArg v);
 void		NewtObjRemoveSlot(newtObjRef obj, newtRefArg slot);
 
-newtRef		NewtGetMapIndex(newtRefArg r, uint32_t index, uint32_t * indexP);
-int32_t		NewtFindArrayIndex(newtRefArg r, newtRefArg v, uint16_t st);
-bool		NewtFindMapIndex(newtRefArg r, newtRefArg v, uint32_t * indexP);
+newtRef		NewtGetMapIndex(newtRefArg r, size_t index, size_t * indexP);
+ssize_t		NewtFindArrayIndex(newtRefArg r, newtRefArg v, uint16_t st);
+bool		NewtFindMapIndex(newtRefArg r, newtRefArg v, size_t * indexP);
 newtRef		NewtFrameMap(newtRefArg r);
 
-int32_t		NewtFindSlotIndex(newtRefArg frame, newtRefArg slot);
+ssize_t		NewtFindSlotIndex(newtRefArg frame, newtRefArg slot);
 bool		NewtHasProto(newtRefArg frame);
 bool		NewtHasSlot(newtRefArg frame, newtRefArg slot);
 newtRef		NewtSlotsGetPath(newtRefArg r, newtRefArg p);
 bool		NewtHasPath(newtRefArg r, newtRefArg p);
 newtRef		NewtGetPath(newtRefArg r, newtRefArg p, newtRefVar * slotP);
-newtRef		NewtGetBinarySlot(newtRefArg r, uint32_t p);
-newtRef		NewtSetBinarySlot(newtRefArg r, uint32_t p, newtRefArg v);
-newtRef		NewtGetStringSlot(newtRefArg r, uint32_t p);
-newtRef		NewtSetStringSlot(newtRefArg r, uint32_t p, newtRefArg v);
-newtRef		NewtSlotsGetSlot(newtRefArg r, uint32_t p);
-newtRef		NewtSlotsSetSlot(newtRefArg r, uint32_t p, newtRefArg v);
-newtRef		NewtSlotsInsertSlot(newtRefArg r, uint32_t p, newtRefArg v);
-newtRef		NewtGetArraySlot(newtRefArg r, uint32_t p);
-newtRef		NewtSetArraySlot(newtRefArg r, uint32_t p, newtRefArg v);
-newtRef		NewtInsertArraySlot(newtRefArg r, uint32_t p, newtRefArg v);
-newtRef		NewtGetFrameSlot(newtRefArg r, uint32_t p);
-newtRef		NewtSetFrameSlot(newtRefArg r, uint32_t p, newtRefArg v);
-newtRef		NewtGetFrameKey(newtRefArg inFrame, uint32_t inIndex);
+newtRef		NewtGetBinarySlot(newtRefArg r, size_t p);
+newtRef		NewtSetBinarySlot(newtRefArg r, size_t p, newtRefArg v);
+newtRef		NewtGetStringSlot(newtRefArg r, size_t p);
+newtRef		NewtSetStringSlot(newtRefArg r, size_t p, newtRefArg v);
+newtRef		NewtSlotsGetSlot(newtRefArg r, size_t p);
+newtRef		NewtSlotsSetSlot(newtRefArg r, size_t p, newtRefArg v);
+newtRef		NewtSlotsInsertSlot(newtRefArg r, size_t p, newtRefArg v);
+newtRef		NewtGetArraySlot(newtRefArg r, size_t p);
+newtRef		NewtSetArraySlot(newtRefArg r, size_t p, newtRefArg v);
+newtRef		NewtInsertArraySlot(newtRefArg r, size_t p, newtRefArg v);
+newtRef		NewtGetFrameSlot(newtRefArg r, size_t p);
+newtRef		NewtSetFrameSlot(newtRefArg r, size_t p, newtRefArg v);
+newtRef		NewtGetFrameKey(newtRefArg inFrame, size_t inIndex);
 
-newtRef		NewtARef(newtRefArg r, uint32_t p);
-newtRef		NewtSetARef(newtRefArg r, uint32_t p, newtRefArg v);
+newtRef		NewtARef(newtRefArg r, size_t p);
+newtRef		NewtSetARef(newtRefArg r, size_t p, newtRefArg v);
 
 bool		NewtAssignment(newtRefArg start, newtRefArg name, newtRefArg value);
 bool		NewtLexicalAssignment(newtRefArg start, newtRefArg name, newtRefArg value);
@@ -245,18 +256,18 @@ bool		NewtHasVariable(newtRefArg r, newtRefArg name);
 
 void *		NewtRefToNativeFn(newtRefArg r);
 // old style
-newtRef		NewtMakeNativeFn0(void * funcPtr, uint32_t numArgs, bool indefinite, char * doc);
-newtRef		NewtDefGlobalFn0(newtRefArg sym, void * funcPtr, uint32_t numArgs, bool indefinite, char * doc);
+newtRef		NewtMakeNativeFn0(void * funcPtr, size_t numArgs, bool indefinite, char * doc);
+newtRef		NewtDefGlobalFn0(newtRefArg sym, void * funcPtr, size_t numArgs, bool indefinite, char * doc);
 // new style
-newtRef		NewtMakeNativeFunc0(void * funcPtr, uint32_t numArgs, bool indefinite, char * doc);
-newtRef		NewtDefGlobalFunc0(newtRefArg sym, void * funcPtr, uint32_t numArgs, bool indefinite, char * doc);
+newtRef		NewtMakeNativeFunc0(void * funcPtr, size_t numArgs, bool indefinite, char * doc);
+newtRef		NewtDefGlobalFunc0(newtRefArg sym, void * funcPtr, size_t numArgs, bool indefinite, char * doc);
 
 bool		NewtHasSubclass(newtRefArg sub, newtRefArg supr);
 bool		NewtIsSubclass(newtRefArg sub, newtRefArg supr);
 bool		NewtIsInstance(newtRefArg obj, newtRefArg r);
 
 newtRef		NewtStrCat(newtRefArg r, char * s);
-newtRef		NewtStrCat2(newtRefArg r, char * s, uint32_t slen);
+newtRef		NewtStrCat2(newtRefArg r, char * s, size_t slen);
 
 newtRef		NewtGetEnv(const char * s);
 

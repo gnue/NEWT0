@@ -53,7 +53,7 @@ static nps_inputdata_t  nps_inputdata;  ///< 入力データ
 
 /* 関数プロトタイプ */
 static void		NPSBindParserInput(const char * s);
-static int		nps_yyinput_str(char * buff, int max_size);
+static size_t	nps_yyinput_str(char * buff, size_t max_size);
 
 static void		NPSInit(newtPool pool);
 
@@ -92,9 +92,9 @@ void NPSBindParserInput(const char * s)
  * @return			取出したデータサイズ
  */
 
-int nps_yyinput_str(char * buff, int max_size)
+size_t nps_yyinput_str(char * buff, size_t max_size)
 {
-    int	n;
+    size_t	n;
 
     n = nps_inputdata.limit - nps_inputdata.currp;
     if (max_size < n) n = max_size;
@@ -119,7 +119,7 @@ int nps_yyinput_str(char * buff, int max_size)
  * @return			取出したデータサイズ
  */
 
-int nps_yyinput(FILE * yyin, char * buff, int max_size)
+size_t nps_yyinput(FILE * yyin, char * buff, size_t max_size)
 {
     if (nps_inputdata.data != NULL)
         return nps_yyinput_str(buff, max_size);
@@ -977,7 +977,7 @@ newtRef NPSMakeBinary(newtRefArg v)
 
 newtRef NPSAddARef(newtRefArg r, newtRefArg v)
 {
-    int32_t	len;
+    size_t	len;
 
     len = NewtBinaryLength(r);
     NewtBinarySetLength(r, len + 1);
@@ -1022,7 +1022,7 @@ void NPSErrorStr(char c, char * s)
 #ifdef NEWT0_IGNORE_TABS
     NewtFprintf(stderr, "%*s\n", nps_env.tokenpos - nps_env.yyleng + 1, "^");
 #else
-    int i = 0, n = nps_env.tokenpos - nps_env.yyleng, m = strlen(nps_env.linebuf);
+    size_t i = 0, n = nps_env.tokenpos - nps_env.yyleng, m = strlen(nps_env.linebuf);
     for ( ; i<n; ++i ) {
         if (i<m && nps_env.linebuf[i]=='\t') 
             NewtFprintf(stderr, "\t");

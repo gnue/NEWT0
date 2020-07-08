@@ -146,6 +146,7 @@ void NewtInitSYM(void)
     INITSYM(frame);
     INITSYM2(NS_INT, "int");
     INITSYM(int32);
+    INITSYM(int64);
     INITSYM(pathExpr);
     INITSYM(bits);
     INITSYM(cbits);
@@ -817,7 +818,7 @@ newtRef NcResolveMagicPointer(newtRefArg r)
 newtRef NsDefMagicPointer(newtRefArg rcvr, newtRefArg r, newtRefArg v)
 {
 	int32_t	table = 0;
-	int32_t	index;
+	intptr_t index;
 
 	if (NewtRefIsNumberedMP(r))
 	{

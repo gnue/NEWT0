@@ -69,7 +69,7 @@ bool		NewtStackExpand(newtStack * stackinfo, uint32_t n);
 void		NewtStackSlim(newtStack * stackinfo, uint32_t n);
 void		NewtStackFree(newtStack * stackinfo);
 
-uint32_t	NewtAlign(uint32_t n, uint16_t byte);
+size_t  	NewtAlign(size_t n, uint16_t byte);
 
 
 #ifdef __cplusplus

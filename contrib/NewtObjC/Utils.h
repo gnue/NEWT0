@@ -55,7 +55,7 @@
 void* BinaryToPointer(newtRefArg);
 newtRef PointerToBinary(void*);
 double RefToDoubleConverting(newtRefVar);
-int RefToIntConverting(newtRefVar);
+intptr_t RefToIntConverting(newtRefVar);
 char RefToCharConverting(newtRefVar);
 
 void RefToRange(newtRefArg, NSRange*);

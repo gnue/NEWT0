@@ -196,6 +196,7 @@ size_t protoFILE_fwriteObj(FILE * f, newtRefArg r)
 
         case kNewtInt30:
         case kNewtInt32:
+        case kNewtInt64:
 //            NewtPrintInteger(f, r);
             break;
 
@@ -381,7 +382,7 @@ newtRef protoFILE_gets(newtRefArg rcvr)
 	if (NewtRefIsNotNIL(r))
 	{
 		newtRefVar  lineno;
-		int32_t n = 0;
+		intptr_t n = 0;
 
 		lineno = NcGetSlot(rcvr, NSSYM(_lineno));
 
@@ -431,8 +432,8 @@ newtRef protoFILE_write(newtRefArg rcvr, newtRefArg binary)
 	newtRefVar stream;
 	FILE* theFile;
 	void* data;
-	int len;
-	int theResult;
+	size_t len;
+	size_t theResult;
 	
 	stream = NcGetSlot(rcvr, NSSYM(_stream));
 	if (NewtRefIsNIL(stream))

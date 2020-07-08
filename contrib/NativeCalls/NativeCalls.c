@@ -110,7 +110,7 @@ NativeCalls_ReleaseBuffer(SBufferZone* ioBuffer)
  * @param inSize	segment size.
  */
 void*
-NativeCalls_AllocateBufferSegment(SBufferZone* ioBuffer, int inSize)
+NativeCalls_AllocateBufferSegment(SBufferZone* ioBuffer, size_t inSize)
 {
 	void* theResult = malloc(inSize);
 	int newBufferCount = ++ioBuffer->fNumberBuffers;
@@ -196,8 +196,8 @@ NativeCalls_DoOpenLib(const char* inPath)
 		char thePath[PATH_MAX];
 		char* theDirName;
 		char* theBaseName;
-		int baseNameLen;
-		int pathLen;
+		size_t baseNameLen;
+		size_t pathLen;
 		DIR* theDir;
 
 		/* try to open the library without any suffix */
@@ -455,7 +455,7 @@ NativeCalls_CastTypeAndValue(
  */
 bool
 NativeCalls_CastTypesAndValues(
-		int inNbArgs,
+		size_t inNbArgs,
 		newtRefVar inNSTypes,
 		newtRefVar inNSValues,
 		ffi_type*** outFFITypes,
@@ -468,8 +468,8 @@ NativeCalls_CastTypesAndValues(
 	SStorage*	argsStorage;
 	void*		cursorStorage;
 	int			indexArgs;
-	int			ffitypes_size = (inNbArgs + 1) * sizeof(ffi_type*);
-	int			storage_size = inNbArgs * sizeof(SStorage);
+	size_t		ffitypes_size = (inNbArgs + 1) * sizeof(ffi_type*);
+	size_t		storage_size = inNbArgs * sizeof(SStorage);
 	bool 		typeError = false;	
 
 	/* build the ffi lists */
@@ -543,7 +543,7 @@ NativeCalls_CastTypeAndValue(
 	if (NewtRefIsArray(inNSType))
 	{
 		// Structure.
-		int nbVals = NewtArrayLength(inNSType);
+		size_t nbVals = NewtArrayLength(inNSType);
 		if (nbVals != NewtArrayLength(inNSValue))
 		{
 			theResult = false;
@@ -754,7 +754,7 @@ NativeCalls_GenericFunction(newtRef inRcvr, newtRef inArgs)
 	ffi_type**	ffiArgsTypes;
 	void**		argsValues;
 	SBufferZone	storage;
-	int			nbArgs;
+	size_t		nbArgs;
 	SStorage	result;
 	newtRefVar	resultRef = kNewtRefNIL;
 	ffi_type*	ffiResultType;
@@ -830,7 +830,7 @@ NativeCalls_GenericFunction(newtRef inRcvr, newtRef inArgs)
 	if (!typeError)
 	{
 		if (ffi_prep_cif(
-				&cif, FFI_DEFAULT_ABI, nbArgs,
+				&cif, FFI_DEFAULT_ABI, (int) nbArgs,
 				ffiResultType, ffiArgsTypes) == FFI_OK)
 		{
 			ffi_call(&cif, theSymbolPtr, &result, argsValues);
@@ -1065,7 +1065,7 @@ NativeCalls_Close(newtRefArg inRcvr)
 	theGlobalFnsList = NcGetSlot(inRcvr, NSSYM(_globalFns));
 	if (NewtRefIsNotNIL(theGlobalFnsList))
 	{
-		int indexFns, nbFns;
+		size_t indexFns, nbFns;
 
 		nbFns = NewtArrayLength(theGlobalFnsList);
 		for (indexFns = 0; indexFns < nbFns; indexFns++)

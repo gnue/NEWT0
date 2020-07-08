@@ -84,7 +84,7 @@ enum {
 /// VM レジスタ
 typedef struct {
     newtRefVar	func;	///< FUNC   実行中の関数オブジェクト
-    uint32_t	pc;		///< PC     実行中の instructionオブジェクトのインデックス
+    uint32_t  	pc;		///< PC     実行中の instructionオブジェクトのインデックス
     uint32_t	sp;		///< SP     スタックポインタ
     newtRefVar	locals;	///< LOCALS 実行中のローカルフレーム
     newtRefVar	rcvr;	///< RCVR   実行中のレシーバ（for メッセージ送信）
@@ -106,7 +106,7 @@ typedef struct {
 typedef struct vm_env_t {
     // バイトコード
     uint8_t *	bc;				///< バイトコード
-    uint32_t	bclen;			///< バイトコードの長さ
+    size_t	    bclen;			///< バイトコードの長さ
 
     // レジスタ
     vm_reg_t	reg;			///< レジスタ
@@ -150,7 +150,7 @@ void		NVMClearException(void);
 bool		NVMFuncCheckNumArgs(newtRefArg fn, int16_t numArgs);
 
 void		NVMDumpInstName(FILE * f, uint8_t a, int16_t b);
-void		NVMDumpCode(FILE * f, uint8_t * bc, uint32_t len);
+void		NVMDumpCode(FILE * f, uint8_t * bc, size_t len);
 void		NVMDumpBC(FILE * f, newtRefArg instructions);
 void		NVMDumpFn(FILE * f, newtRefArg fn);
 void		NVMDumpStackTop(FILE * f, char * s);

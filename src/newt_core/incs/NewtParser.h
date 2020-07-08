@@ -208,7 +208,7 @@ extern "C" {
 #endif
 
 
-int			nps_yyinput(FILE * yyin, char * buff, int max_size);
+size_t		nps_yyinput(FILE * yyin, char * buff, size_t max_size);
 void		nps_yyinit(void);
 int			nps_yycleanup(void);
 

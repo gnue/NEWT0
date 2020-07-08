@@ -211,7 +211,7 @@ void NewtStackSlim(newtStack * stackinfo, uint32_t n)
 {
     if (0 < n)
     {
-        uint32_t	newsize;
+        uintptr_t	newsize;
 		void *		newp;
 
         newsize = stackinfo->datasize * n;
@@ -242,9 +242,9 @@ void NewtStackSlim(newtStack * stackinfo, uint32_t n)
  * @return			アラインされた値
  */
 
-uint32_t NewtAlign(uint32_t n, uint16_t byte)
+size_t NewtAlign(size_t n, uint16_t byte)
 {
-    uint32_t	mod;
+    size_t	mod;
 
     mod = n % byte;
     if (0 < mod) n += byte - mod;
