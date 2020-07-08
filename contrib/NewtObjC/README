@@ -4,7 +4,6 @@ Introduction
 ------------
 NewtObjC is a bridge to call ObjC code from NEWT/0.
 It is authored by Paul Guyot and licensed under the MIT license.
-It requires objc-runtime-x.dylib (put both dylibs next to newt binary).
 
 Definitions
 -----------
@@ -166,6 +165,9 @@ The current version has some limitations, including:
 
 Change History
 --------------
+2020/07/07
+- converted to ObjC2 runtime.
+
 2005/06/18
 - fixed an issue with Tiger by better parsing method arrays.
 

@@ -85,12 +85,12 @@ GetInstanceVariable(newtRef inRcvr, newtRef inName)
 	newtRefVar theResult = kNewtRefNIL;
 	id theObjCObject = (id) BinaryToPointer(NcGetSlot(inRcvr, NSSYM(_self)));
 	Ivar theVarDef = class_getInstanceVariable(
-						theObjCObject->isa,
+						object_getClass(theObjCObject),
 						NewtRefToString(inName));
 	if (theVarDef)
 	{
-		void* theVariable = (void*) (((uintptr_t) theObjCObject) + theVarDef->ivar_offset);
-		theResult = CastStructToNS(theVariable, theVarDef->ivar_type);
+		void* theVariable = (void*) (((uintptr_t) theObjCObject) + ivar_getOffset(theVarDef));
+		theResult = CastStructToNS(theVariable, ivar_getTypeEncoding(theVarDef));
 	}
 	
 	return theResult;
@@ -118,7 +118,7 @@ InstanceVariableExists(newtRef inRcvr, newtRef inName)
 	newtRefVar theResult = kNewtRefNIL;
 	id theObjCObject = (id) BinaryToPointer(NcGetSlot(inRcvr, NSSYM(_self)));
 	Ivar theVarDef = class_getInstanceVariable(
-						theObjCObject->isa,
+						object_getClass(theObjCObject),
 						NewtRefToString(inName));
 	if (theVarDef)
 	{
@@ -136,7 +136,7 @@ GenericObjCMethod(id inSelf, SEL _cmd, ...)
 {
 	newtRefVar theInstance = GetInstanceFrame(inSelf);
 
-	Method theObjCMethod = class_getInstanceMethod(inSelf->isa, _cmd);
+	Method theObjCMethod = class_getInstanceMethod(object_getClass(inSelf), _cmd);
 	const char* theObjCMethodName = sel_getName(_cmd);
 
 	// Get the NewtonScript method.
@@ -180,7 +180,7 @@ GenericObjCMethod(id inSelf, SEL _cmd, ...)
 		}
 		
 		// Cast the result.
-		objCResult = CastResultToObjC(theObjCMethod->method_types, theResult);
+		objCResult = CastResultToObjC(method_getTypeEncoding(theObjCMethod), theResult);
 	} else {
 		(void) NewtThrow(kNErrUndefinedMethod, theMethodSym);
 		newtRefVar theEx = NVMCurrentException();
@@ -205,8 +205,9 @@ ObjCAllocWithZoneMethod(id inSelf, SEL _cmd, NSZone* inZone)
 	// Call super's allocWithZone:
 	struct objc_super superCall;
 	superCall.receiver = inSelf;
-	superCall.class = inSelf->isa->super_class;
-	id theResult = objc_msgSendSuper(&superCall, _cmd, inZone);
+	superCall.super_class = class_getSuperclass(object_getClass(inSelf));
+    void* (*objc_msgSendSuperTyped)(struct objc_super *self, SEL _cmd, NSZone*) = (void*)objc_msgSendSuper;
+	id theResult = objc_msgSendSuperTyped(&superCall, _cmd, inZone);
 	
 	// Create the instance frame.
 	CreateInstanceFrame(theResult);
@@ -226,8 +227,9 @@ ObjCAllocMethod(id inSelf, SEL _cmd)
 	// Call super's alloc
 	struct objc_super superCall;
 	superCall.receiver = inSelf;
-	superCall.class = inSelf->isa->super_class;
-	id theResult = objc_msgSendSuper(&superCall, _cmd);
+	superCall.super_class = class_getSuperclass(object_getClass(inSelf));
+    void* (*objc_msgSendSuperTyped)(struct objc_super *self, SEL _cmd) = (void*)objc_msgSendSuper;
+    id theResult = objc_msgSendSuperTyped(&superCall, _cmd);
 	
 	// Set the instance frame.
 	CreateInstanceFrame(theResult);
@@ -245,11 +247,11 @@ void
 ObjCInitializeMethod(id inSelf, SEL _cmd)
 {
 	// Grab the class frame.
-	newtRefVar theClassFrame = GetClassFromName(((Class) inSelf)->name);
+	newtRefVar theClassFrame = GetClassFromName(class_getName(((Class) inSelf)));
 	
 	// Set it as the _ns variable the objc object.
-	Ivar theVarDef = class_getInstanceVariable(inSelf->isa, kObjCNSFrameVarName);
-	*((TNewtObjCRef**) ((uintptr_t) inSelf + theVarDef->ivar_offset)) =
+	Ivar theVarDef = class_getInstanceVariable(object_getClass(inSelf), kObjCNSFrameVarName);
+	*((TNewtObjCRef**) ((uintptr_t) inSelf + ivar_getOffset(theVarDef))) =
 		[TNewtObjCRef refWithRef: theClassFrame];
 }
 
@@ -268,9 +270,9 @@ void
 CreateInstanceFrame(id inObjCObject)
 {
 	// Get a pointer to the _ns variable of the objc object.
-	Ivar theVarDef = class_getInstanceVariable(inObjCObject->isa, kObjCNSFrameVarName);
+	Ivar theVarDef = class_getInstanceVariable(object_getClass(inObjCObject), kObjCNSFrameVarName);
 	TNewtObjCRef** theHandle =
-		((TNewtObjCRef**) ((uintptr_t) inObjCObject + theVarDef->ivar_offset));
+		((TNewtObjCRef**) ((uintptr_t) inObjCObject + ivar_getOffset(theVarDef)));
 
 	if (*theHandle == NULL)
 	{
@@ -278,7 +280,7 @@ CreateInstanceFrame(id inObjCObject)
 		newtRefVar theObjectFrame = NcMakeFrame();
 		
 		// Get the class frame.
-		newtRefVar theClassFrame = GetClassFromName(inObjCObject->isa->name);
+        newtRefVar theClassFrame = GetClassFromName(class_getName(object_getClass(inObjCObject)));
 		
 		// Get the instance methods.
 		newtRefVar instanceMethods =
@@ -308,8 +310,8 @@ newtRef
 GetInstanceFrame(id inObject)
 {
 	// Get a pointer to the _ns variable of the objc object.
-	Ivar theVarDef = class_getInstanceVariable(inObject->isa, kObjCNSFrameVarName);
-	TNewtObjCRef** theHandle = ((TNewtObjCRef**) ((uintptr_t) inObject + theVarDef->ivar_offset));
+	Ivar theVarDef = class_getInstanceVariable(object_getClass(inObject), kObjCNSFrameVarName);
+	TNewtObjCRef** theHandle = ((TNewtObjCRef**) ((uintptr_t) inObject + ivar_getOffset(theVarDef)));
 	return [*theHandle ref];
 }
 
@@ -320,23 +322,19 @@ newtRef
 GenericMethod(newtRef inRcvr, newtRef inArgs)
 {
 	// Retrieve the method
-	marg_list arguments;
 	id objcSelf;
-	unsigned nbOfArguments, sizeOfArguments;
+	unsigned nbOfArguments;
 	int indexArgs, nbArgsNS;
 	struct objc_method* theMethod;
-	const char* theType;
 	newtRefVar theResultObj = kNewtRefNIL;
-	int theOffset;
 	id result;
 	void** storage;
 	newtRefVar theCurrentFunc = NVMCurrentFunction();
 	theMethod = (struct objc_method*)
 		BinaryToPointer(NcGetSlot(theCurrentFunc, NSSYM(_method)));
 
-	sizeOfArguments = method_getSizeOfArguments(theMethod);
 	nbOfArguments = method_getNumberOfArguments(theMethod) - 2;
-	nbArgsNS = NewtArrayLength(inArgs);
+	nbArgsNS = (int) NewtArrayLength(inArgs);
 	if (nbOfArguments != nbArgsNS)
 	{
 		// Throw an error
@@ -345,187 +343,138 @@ GenericMethod(newtRef inRcvr, newtRef inArgs)
 					NcGetSlot(theCurrentFunc, NSSYM(docString)));
 	}
 
-	marg_malloc(arguments, theMethod);
+    const char* methodTypes = method_getTypeEncoding(theMethod);
+    NSMethodSignature* methodSig = [NSMethodSignature signatureWithObjCTypes: methodTypes];
+    NSInvocation* invocation = [NSInvocation invocationWithMethodSignature: methodSig];
 	objcSelf = (id) BinaryToPointer(NcGetSlot(inRcvr, NSSYM(_self)));
 
 	// Add both the id and the selector
-	(void) method_getArgumentInfo(
-							theMethod,
-							0,
-							&theType,
-							&theOffset );
-	marg_setValue(arguments, theOffset, id, objcSelf);
-	(void) method_getArgumentInfo(
-							theMethod,
-							1,
-							&theType,
-							&theOffset );
-	marg_setValue(arguments, theOffset, SEL, theMethod->method_name);
+    invocation.target = objcSelf;
+    invocation.selector = method_getName(theMethod);
 
 	NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
 
 	// Convert and stuff the arguments
-	storage = (void**) malloc( nbOfArguments * sizeof( void * ) );
-#if defined(__ppc__) || defined(ppc)
-	int indexDoubles = 0;
-#endif
 	for (indexArgs = 0; indexArgs < nbOfArguments; indexArgs++)
 	{
-		storage[indexArgs] = NULL;
-		(void) method_getArgumentInfo(
-							theMethod,
-							indexArgs + 2,
-							&theType,
-							&theOffset );
-#if defined(__ppc__) || defined(ppc)
-		if (theOffset > 0)
-		{
-			// Fix offset for float & double parameters.
-			if ((theType[0] == 'f') || (theType[0] == 'd'))
-			{
-				// It's always a double.
-				theOffset = (indexDoubles * sizeof(double)) - marg_prearg_size;
-				indexDoubles++;
-			}
-		}
-#endif
-
-		CastParamToObjC(
-			arguments,
-			theOffset,
-			theType,
-			&storage[indexArgs],
-			NewtGetArraySlot(inArgs, indexArgs),
-			false);
-	}
+        char* theType = method_copyArgumentType(theMethod, indexArgs + 2);
+        CastParamToObjC(theMethod, invocation, indexArgs + 2, NewtGetArraySlot(inArgs, indexArgs));
+        free(theType);
+    }
 	
 	// Catch exceptions (we'll cast them)
 	NS_DURING
 
+	[invocation invoke];
+	NSUInteger methodReturnLength = [methodSig methodReturnLength];
+
 	// Determine if the return type is a structure
-	theType = theMethod->method_types;
-//	printf( "calling %s (type = %s)\n", sel_getName(theMethod->method_name), theType );
-	if (theType[0] == '{')
-	{
-		if ((strncmp(theType, "{_NSRange}", 10) == 0)
-			|| (strncmp(theType, "{_NSRange=", 10) == 0))
-		{
+	if (methodTypes[0] == '{') {
+		if ((strncmp(methodTypes, "{_NSRange}", 10) == 0)
+			|| (strncmp(methodTypes, "{_NSRange=", 10) == 0)) {
 			NSRange theRange;
-			objc_methodCallv_stret(
-								&theRange,
-								objcSelf,
-								theMethod->method_name,
-								theMethod->method_imp,
-								sizeOfArguments,
-								arguments);
-			theResultObj = NSRangeToRef(theRange);
-		} 
-#if !TARGET_OS_IPHONE
-    else if ((strncmp(theType, "{_NSRect}", 9) == 0)
-			|| (strncmp(theType, "{_NSRect=", 9) == 0)) {
-			NSRect theRect;
-			objc_methodCallv_stret(
-								&theRect,
-								objcSelf,
-								theMethod->method_name,
-								theMethod->method_imp,
-								sizeOfArguments,
-								arguments);
-			theResultObj = NSRectToRef(theRect);
-		} else if ((strncmp(theType, "{_NSPoint}", 10) == 0)
-			|| (strncmp(theType, "{_NSPoint=", 10) == 0)) {
+			if (methodReturnLength != sizeof(theRange)) {
+				printf("Return type size mismatch, got %d, expected %d (NSRange)\n", (int) methodReturnLength, (int) sizeof(theRange));
+				theResultObj = kNewtRefNIL;
+			} else {
+				[invocation getReturnValue:&theRange];
+				theResultObj = NSRangeToRef(theRange);
+			}
+		} else if ((strncmp(methodTypes, "{_NSRect}", 9) == 0)
+			|| (strncmp(methodTypes, "{_NSRect=", 9) == 0)) {
+            NSRect theRect;
+            if (methodReturnLength != sizeof(theRect)) {
+				printf("Return type size mismatch, got %d, expected %d (NSRect)\n", (int) methodReturnLength, (int) sizeof(theRect));
+				theResultObj = kNewtRefNIL;
+            } else {
+				[invocation getReturnValue:&theRect];
+				theResultObj = NSRectToRef(theRect);
+            }
+		} else if ((strncmp(methodTypes, "{_NSPoint}", 10) == 0)
+			|| (strncmp(methodTypes, "{_NSPoint=", 10) == 0)) {
 			NSPoint thePoint;
-			objc_methodCallv_stret(
-								&thePoint,
-								objcSelf,
-								theMethod->method_name,
-								theMethod->method_imp,
-								sizeOfArguments,
-								arguments);
-			theResultObj = NSPointToRef(thePoint);
-		} else if ((strncmp(theType, "{_NSSize}", 9) == 0)
-			|| (strncmp(theType, "{_NSSize=", 9) == 0)) {
+			if (methodReturnLength != sizeof(thePoint)) {
+				printf("Return type size mismatch, got %d, expected %d (NSPoint)\n", (int) methodReturnLength, (int) sizeof(thePoint));
+				theResultObj = kNewtRefNIL;
+			} else {
+				[invocation getReturnValue:&thePoint];
+				theResultObj = NSPointToRef(thePoint);
+			}
+		} else if ((strncmp(methodTypes, "{_NSSize}", 9) == 0)
+			|| (strncmp(methodTypes, "{_NSSize=", 9) == 0)) {
 			NSSize theSize;
-			objc_methodCallv_stret(
-								&theSize,
-								objcSelf,
-								theMethod->method_name,
-								theMethod->method_imp,
-								sizeOfArguments,
-								arguments);
-			theResultObj = NSSizeToRef(theSize);
-		} 
-#endif
-    else if ((strncmp(theType, "{_CGRect}", 9) == 0)
-             || (strncmp(theType, "{_CGRect=", 9) == 0)) {
+			if (methodReturnLength != sizeof(theSize)) {
+				printf("Return type size mismatch, got %d, expected %d (NSSize)\n", (int) methodReturnLength, (int) sizeof(theSize));
+				theResultObj = kNewtRefNIL;
+			} else {
+				[invocation getReturnValue:&theSize];
+				theResultObj = NSSizeToRef(theSize);
+			}
+		} else if ((strncmp(methodTypes, "{_CGRect}", 9) == 0)
+             || (strncmp(methodTypes, "{_CGRect=", 9) == 0)) {
 			CGRect theRect;
-			objc_methodCallv_stret(
-                             &theRect,
-                             objcSelf,
-                             theMethod->method_name,
-                             theMethod->method_imp,
-                             sizeOfArguments,
-                             arguments);
-			theResultObj = CGRectToRef(theRect);
-		} else if ((strncmp(theType, "{_CGPoint}", 10) == 0)
-               || (strncmp(theType, "{_CGPoint=", 10) == 0)) {
+			if (methodReturnLength != sizeof(theRect)) {
+				printf("Return type size mismatch, got %d, expected %d (CGRect)\n", (int) methodReturnLength, (int) sizeof(theRect));
+				theResultObj = kNewtRefNIL;
+			} else {
+				[invocation getReturnValue:&theRect];
+				theResultObj = CGRectToRef(theRect);
+			}
+		} else if ((strncmp(methodTypes, "{_CGPoint}", 10) == 0)
+               || (strncmp(methodTypes, "{_CGPoint=", 10) == 0)) {
 			CGPoint thePoint;
-			objc_methodCallv_stret(
-                             &thePoint,
-                             objcSelf,
-                             theMethod->method_name,
-                             theMethod->method_imp,
-                             sizeOfArguments,
-                             arguments);
-			theResultObj = CGPointToRef(thePoint);
-		} else if ((strncmp(theType, "{_CGSize}", 9) == 0)
-               || (strncmp(theType, "{_CGSize=", 9) == 0)) {
+			if (methodReturnLength != sizeof(thePoint)) {
+				printf("Return type size mismatch, got %d, expected %d (CGPoint)\n", (int) methodReturnLength, (int) sizeof(thePoint));
+				theResultObj = kNewtRefNIL;
+			} else {
+				[invocation getReturnValue:&thePoint];
+				theResultObj = CGPointToRef(thePoint);
+			}
+		} else if ((strncmp(methodTypes, "{_CGSize}", 9) == 0)
+               || (strncmp(methodTypes, "{_CGSize=", 9) == 0)) {
 			CGSize theSize;
-			objc_methodCallv_stret(
-                             &theSize,
-                             objcSelf,
-                             theMethod->method_name,
-                             theMethod->method_imp,
-                             sizeOfArguments,
-                             arguments);
-			theResultObj = CGSizeToRef(theSize);
-		} 
-    else {
-			printf("Unhandled structure %s\n", theType);
+			if (methodReturnLength != sizeof(theSize)) {
+				printf("Return type size mismatch, got %d, expected %d (CGPoint)\n", (int) methodReturnLength, (int) sizeof(theSize));
+				theResultObj = kNewtRefNIL;
+			} else {
+				[invocation getReturnValue:&theSize];
+				theResultObj = CGSizeToRef(theSize);
+			}
+		} else {
+			printf("Unhandled structure %s\n", methodTypes);
 			theResultObj = kNewtRefNIL;
 		}
-	} else if (theType[0] == 'f') {
-		float theFloat =
-			(*(float(*)(id, SEL, IMP, unsigned, marg_list))objc_methodCallv)(
-							objcSelf,
-							theMethod->method_name,
-							theMethod->method_imp,
-							sizeOfArguments,
-							arguments);
+	} else if (methodTypes[0] == 'f') {
+        float theFloat;
+        if (methodReturnLength != sizeof(theFloat)) {
+            printf("Return type size mismatch, got %d, expected %d (float)\n", (int) methodReturnLength, (int) sizeof(theFloat));
+            theResultObj = kNewtRefNIL;
+        } else {
+            [invocation getReturnValue:&theFloat];
+            // Cast the result
+            theResultObj = CastToNS((id*) &theFloat, methodTypes);
+        }
+	} else if (methodTypes[0] == 'd') {
+        double theDouble;
+        if (methodReturnLength != sizeof(theDouble)) {
+            printf("Return type size mismatch, got %d, expected %d (double)\n", (int) methodReturnLength, (int) sizeof(theDouble));
+            theResultObj = kNewtRefNIL;
+        } else {
+            [invocation getReturnValue:&theDouble];
+            // Cast the result
+            theResultObj = CastToNS((id*) &theDouble, methodTypes);
+        }
+    } else if (methodReturnLength == sizeof(id)) {
+        id theResult;
+        [invocation getReturnValue:&result];
 		// Cast the result
-		theResultObj = CastStructToNS(&theFloat, theType);
-	} else if (theType[0] == 'd') {
-		double theDouble =
-			(*(double(*)(id, SEL, IMP, unsigned, marg_list))objc_methodCallv)(
-							objcSelf,
-							theMethod->method_name,
-							theMethod->method_imp,
-							sizeOfArguments,
-							arguments);
-		// Cast the result
-		theResultObj = CastStructToNS(&theDouble, theType);		
-	} else {
-		// Send the message (actually call the method)
-		result = objc_methodCallv(
-							objcSelf,
-							theMethod->method_name,
-							theMethod->method_imp,
-							sizeOfArguments,
-							arguments);
-	
-		// Cast the result
-		theResultObj = CastToNS(&result, theType);
-	}
+		theResultObj = CastToNS(&theResult, methodTypes);
+    } else if (methodReturnLength == 0) {
+        theResultObj = kNewtRefNIL;
+    } else {
+        printf("Return type size mismatch, got %d, expected %d (%s)\n", (int) methodReturnLength, (int) sizeof(id), methodTypes);
+        theResultObj = kNewtRefNIL;
+    }
 
 	NS_HANDLER
 		// Convert the exception and throw it as a NS exception.
@@ -561,46 +510,40 @@ CreateClassObjectMethods(Class inObjCClass)
 {
 	newtRef result = NcMakeFrame();
 	
-	void* iterator = 0;
-    struct objc_method_list* mlist;
-
-	// Iterate on the methods of the class
-	mlist = class_nextMethodList( inObjCClass, &iterator );
-	while( mlist != NULL )
+    Class theClass = inObjCClass;
+	while(theClass != NULL)
 	{
+        unsigned int nbMethods;
+        Method* methods = class_copyMethodList(theClass, &nbMethods);
+
 		int indexMethods;
-		int nbMethods;
-		
-		nbMethods = mlist->method_count;
 		for (indexMethods = 0; indexMethods < nbMethods; indexMethods++)
 		{
-			newtRefVar nsMethod;
-			struct objc_method* theMethod = &mlist->method_list[indexMethods];
-			const char* theObjCName = sel_getName(theMethod->method_name);
+            Method theMethod = methods[indexMethods];
+            const char* theObjCName = sel_getName(method_getName(theMethod));
 			char* theNSName = ObjCNSNameTranslation(theObjCName);
+            newtRef theNSNameSymbol = NewtMakeSymbol(theNSName);
 
-			// create the (ns) native method
-			nsMethod =
-				NewtMakeNativeFunc0(GenericMethod, 0, true, (char*) theNSName);
+            // Do not add methods we already have (from subclasses)
+            if (!NcHasSlot(result, theNSNameSymbol)) {
+				newtRefVar nsMethod;
 
-			// add the objc method ptr itself so the glue will be able to call
-			// it
-			NcSetSlot(nsMethod, NSSYM(_method), PointerToBinary(theMethod));
-			
-			// add the method to the frame
-			NcSetSlot(result, NewtMakeSymbol(theNSName), nsMethod);
+				// create the (ns) native method
+				nsMethod =
+					NewtMakeNativeFunc0(GenericMethod, 0, true, (char*) theNSName);
+
+				// add the objc method ptr itself so the glue will be able to call
+				// it
+				NcSetSlot(nsMethod, NSSYM(_method), PointerToBinary(theMethod));
+
+				// add the method to the frame
+				NcSetSlot(result, NewtMakeSymbol(theNSName), nsMethod);
+            }
 			
 			free(theNSName);
 		}
-		
-		// On 10.4, the following lines need to be commented.
-		// Not using them creates problem on 10.3
-//		if (inObjCClass->info & CLS_METHOD_ARRAY)
-//		{
-			mlist = class_nextMethodList( inObjCClass, &iterator );
-//		} else {
-//			break;
-//		}
+        free(methods);
+        theClass = class_getSuperclass(theClass);
 	}
 	
 	return result;
@@ -631,14 +574,14 @@ CreateClassObject(Class inObjCClass)
 	NcSetSlot(result, NSSYM(_self), PointerToBinary(inObjCClass));
 
 	// Create the class methods frame.
-	newtRefVar classMethodsFrame = CreateClassObjectMethods( inObjCClass->isa );
+	newtRefVar classMethodsFrame = CreateClassObjectMethods(object_getClass(inObjCClass));
 
 	// Link it with super class class methods frame.
-	struct objc_class* super_class = inObjCClass->super_class;
+	Class super_class = class_getSuperclass(inObjCClass);
 	newtRefVar superClassFrame = kNewtRefNIL;
 	if (super_class)
 	{
-		superClassFrame = GetClassFromName(super_class->name);
+		superClassFrame = GetClassFromName(class_getName(super_class));
 		NcSetSlot(
 			classMethodsFrame,
 			NSSYM(_proto),
@@ -725,41 +668,30 @@ GetClassFromName(const char* inName)
  */
 void
 CreateObjCVariables(
-	struct objc_class* ioClass,
+	Class ioClass,
 	newtRefArg inVariables)
 {
 	// Set the instance variables.
-	int nbVars = 0;
+	size_t nbVars = 0;
 	if (!NewtRefIsNIL(inVariables))
 	{
 		nbVars = NewtArrayLength(inVariables);
 	}
-	
-	struct objc_ivar_list* theIvarlist =
-		(struct objc_ivar_list*) malloc( sizeof(struct objc_ivar_list)
-			+ ((nbVars /* +1 -1*/) * sizeof(struct objc_ivar)));
-	theIvarlist->ivar_count = nbVars + 1;
-	
-	int ivar_offset = ioClass->super_class->instance_size;
 
 	// Create the variables from the list.
-	int indexVars;
+	size_t indexVars;
 	for (indexVars = 0; indexVars < nbVars; indexVars++)
 	{
 		newtRefVar theNSVarDef = NewtSlotsGetSlot( inVariables, indexVars );
 		if (!NewtRefIsFrame(theNSVarDef))
 		{
 			(void) NewtThrow(kNErrNotAFrame, theNSVarDef);
-			theIvarlist->ivar_count = 1;
-			nbVars = 0;
 			break;
 		}
 		newtRefVar theName = NcGetSlot(theNSVarDef, NSSYM(name));
 		if (!NewtRefIsString(theName))
 		{
 			(void) NewtThrow(kNErrNotAString, theName);
-			theIvarlist->ivar_count = 1;
-			nbVars = 0;
 			break;
 		}
 		const char* theNameCStr = NewtRefToString(theName);
@@ -768,8 +700,6 @@ CreateObjCVariables(
 		if (!NewtRefIsString(theType))
 		{
 			(void) NewtThrow(kNErrNotAString, theType);
-			theIvarlist->ivar_count = 1;
-			nbVars = 0;
 			break;
 		}
 		const char* theTypeCStr = NewtRefToString(theType);
@@ -777,29 +707,15 @@ CreateObjCVariables(
 		if (strcmp(theTypeCStr, kObjCOutletTypeStr) == 0)
 		{
 			// Copy the name.
-			theIvarlist->ivar_list[indexVars].ivar_name = strdup(theNameCStr);
-			theIvarlist->ivar_list[indexVars].ivar_type = kObjCOutletTypeStr;
-			theIvarlist->ivar_list[indexVars].ivar_offset = ivar_offset;
-			ivar_offset += sizeof(id);
+            class_addIvar(ioClass, theNameCStr, sizeof(id), log2(_Alignof(id)), kObjCOutletTypeStr);
 		} else {
 			fprintf(stderr, "I don't handle types other than kObjCOutletType yet");
-			theIvarlist->ivar_count = 1;
-			nbVars = 0;
 			break;
 		}
 	}
 
 	// Finish with variable is _ns
-	theIvarlist->ivar_list[nbVars].ivar_name = kObjCNSFrameVarName;
-	theIvarlist->ivar_list[nbVars].ivar_type = kObjCNSFrameVarType;
-	theIvarlist->ivar_list[nbVars].ivar_offset = ivar_offset;
-	ivar_offset += sizeof(newtRefVar);
-
-	// Save the pointer.
-	ioClass->ivars = theIvarlist;
-
-	// Set the instance size.
-	ioClass->instance_size = ivar_offset;
+    class_addIvar(ioClass, kObjCNSFrameVarName, sizeof(newtRefVar), log2(_Alignof(newtRefVar)), kObjCNSFrameVarType);
 }
 
 /**
@@ -812,40 +728,17 @@ CreateObjCVariables(
  */
 void
 CreateObjCMethods(
-	struct objc_class* ioClass,
+	Class ioClass,
 	newtRefArg inMethods,
 	int isMetaClass)
 {
-	ioClass->methodLists =
-		(struct objc_method_list**)
-			calloc( 2, sizeof(struct objc_method_list*) );
-	// Fix for a bug in objc runtime (CLS_METHOD_ARRAY isn't checked).
-	ioClass->methodLists[1] = (struct objc_method_list*) -1;
-
-	uint32_t nbMethods = 0;
-	uint32_t nbNSMethods = 0;
-	uint32_t indexMethods;
+	size_t nbNSMethods = 0;
+	size_t indexMethods;
 
 	if (!NewtRefIsNIL(inMethods))
 	{
 		nbNSMethods = NewtFrameLength(inMethods);
 	}
-	
-	if (isMetaClass)
-	{
-		// I add 3 class methods (+initialize, +alloc and +allocWithZone)
-		nbMethods = nbNSMethods + 3;
-	} else {
-		nbMethods = nbNSMethods;
-	}
-	
-	ioClass->methodLists[0] =
-		(struct objc_method_list*)
-			malloc( sizeof(struct objc_method_list)
-				+ ((nbMethods - 1) * sizeof(struct objc_method)) );
-	ioClass->methodLists[0]->obsolete = NULL;
-	ioClass->methodLists[0]->method_count = nbMethods;
-	struct objc_method* methodsCrsr = (*ioClass->methodLists)->method_list;
 	
 	// Get the initialize/init method
 	SEL theInitMethodSEL = NULL;
@@ -858,6 +751,7 @@ CreateObjCMethods(
 		theAllocWithZoneMethodSEL = sel_registerName("allocWithZone:");
 	}
 	Method theOriginalMethod;
+    Class superClass = class_getSuperclass(ioClass);
 
 	for (indexMethods = 0; indexMethods < nbNSMethods; indexMethods++)
 	{
@@ -879,14 +773,13 @@ CreateObjCMethods(
 				|| (theMethodSEL == theAllocWithZoneMethodSEL))
 			{
 				// Skip this one.
-				(*ioClass->methodLists)->method_count--;
 				continue;
 			}
 		}
 		
 		// Get the method of super class.
 		theOriginalMethod =
-			class_getInstanceMethod(ioClass->super_class, theMethodSEL);
+			class_getInstanceMethod(superClass, theMethodSEL);
 		
 		if (theOriginalMethod)
 		{
@@ -898,11 +791,7 @@ CreateObjCMethods(
 				break;
 			}
 			
-			// I suppose the original method won't go away and therefore
-			// I don't need to copy the type.
-			methodsCrsr->method_name = theMethodSEL;
-			methodsCrsr->method_types = theOriginalMethod->method_types;
-			methodsCrsr->method_imp = GenericObjCMethod;
+            class_addMethod(ioClass, theMethodSEL, (IMP) GenericObjCMethod, method_getTypeEncoding(theOriginalMethod));
 		} else {
 			// I need the type (from the function definition).
 			newtRef value = NewtGetFrameSlot(inMethods, indexMethods);
@@ -910,56 +799,43 @@ CreateObjCMethods(
 			if (NewtRefIsString(theType))
 			{
 				const char* theTypeString = NewtRefToString(theType);
-
-				methodsCrsr->method_name = theMethodSEL;
-				methodsCrsr->method_types = strdup(theTypeString);
-				methodsCrsr->method_imp = GenericObjCMethod;
+				class_addMethod(ioClass, theMethodSEL, (IMP) GenericObjCMethod, theTypeString);
 			} else {
 				// Use the default type.
+				const char* theTypeString;
 				if (NVMFuncCheckNumArgs(function, 0))
 				{
-					methodsCrsr->method_types = kObjCDefaultFunc0TypeStr;
+					theTypeString = kObjCDefaultFunc0TypeStr;
 				} else if (NVMFuncCheckNumArgs(function, 1)) {
-					methodsCrsr->method_types = kObjCDefaultFunc1TypeStr;
+					theTypeString = kObjCDefaultFunc1TypeStr;
 				} else if (NVMFuncCheckNumArgs(function, 2)) {
-					methodsCrsr->method_types = kObjCDefaultFunc2TypeStr;
+					theTypeString = kObjCDefaultFunc2TypeStr;
 				} else if (NVMFuncCheckNumArgs(function, 3)) {
-					methodsCrsr->method_types = kObjCDefaultFunc3TypeStr;
+					theTypeString = kObjCDefaultFunc3TypeStr;
 				} else {
 					(void) NewtThrow( kNErrWrongNumberOfArgs, function );
 					// XXX Cleanup
 					break;
 				}
-				methodsCrsr->method_name = theMethodSEL;
-				methodsCrsr->method_imp = GenericObjCMethod;
+				class_addMethod(ioClass, theMethodSEL, (IMP) GenericObjCMethod, theTypeString);
 			}
 		}
-		
-		methodsCrsr++;
 	}
 
 	// Add the initialize, alloc & allocWithZone class method
 	if (isMetaClass)
 	{
 		theOriginalMethod =
-			class_getInstanceMethod(ioClass->super_class, theInitMethodSEL);
-		methodsCrsr->method_name = theInitMethodSEL;
-		methodsCrsr->method_types = theOriginalMethod->method_types;
-		methodsCrsr->method_imp = (IMP) ObjCInitializeMethod;
-		methodsCrsr++;
+			class_getInstanceMethod(superClass, theInitMethodSEL);
+        class_addMethod(ioClass, theInitMethodSEL, (IMP) ObjCInitializeMethod, method_getTypeEncoding(theOriginalMethod));
 
 		theOriginalMethod =
-			class_getInstanceMethod(ioClass->super_class, theAllocMethodSEL);
-		methodsCrsr->method_name = theAllocMethodSEL;
-		methodsCrsr->method_types = theOriginalMethod->method_types;
-		methodsCrsr->method_imp = (IMP) ObjCAllocMethod;
-		methodsCrsr++;
+			class_getInstanceMethod(superClass, theAllocMethodSEL);
+        class_addMethod(ioClass, theAllocMethodSEL, (IMP) ObjCAllocMethod, method_getTypeEncoding(theOriginalMethod));
 
 		theOriginalMethod =
-			class_getInstanceMethod(ioClass->super_class, theAllocWithZoneMethodSEL);
-		methodsCrsr->method_name = theAllocWithZoneMethodSEL;
-		methodsCrsr->method_types = theOriginalMethod->method_types;
-		methodsCrsr->method_imp = (IMP) ObjCAllocWithZoneMethod;
+			class_getInstanceMethod(superClass, theAllocWithZoneMethodSEL);
+        class_addMethod(ioClass, theAllocWithZoneMethodSEL, (IMP) ObjCAllocWithZoneMethod, method_getTypeEncoding(theOriginalMethod));
 	}
 }
 
@@ -1022,18 +898,11 @@ CreateObjCClass(newtRefArg inRcvr, newtRefArg inDef)
 	const char* name = NewtRefToString( nsNameString );
 	const char* superclassName = NewtRefToString( nsSuperString );
 
-	// (code below is directly copied from Apple documentation).
-	
-	struct objc_class* meta_class;
-	struct objc_class* super_class;
-	struct objc_class* new_class;
-	struct objc_class* root_class;
-
 	//
 	// Ensure that the superclass exists and that someone
 	// hasn't already implemented a class with the same name
 	//
-	super_class = (struct objc_class*) objc_lookUpClass(superclassName);
+	Class super_class = (Class) objc_lookUpClass(superclassName);
 	if (super_class == nil)
 	{
 		return kNewtRefNIL;
@@ -1043,54 +912,11 @@ CreateObjCClass(newtRefArg inRcvr, newtRefArg inDef)
 		return kNewtRefNIL;
 	}
 
-	// Find the root class
-	root_class = super_class;
-	while( root_class->super_class != nil )
-	{
-		root_class = root_class->super_class;
-	}
-	
 	// Allocate space for the class and its metaclass
-	new_class = calloc( 2, sizeof(struct objc_class) );
-	meta_class = &new_class[1];
-	
-	// setup class
-	new_class->isa      = meta_class;
-	new_class->info     = CLS_CLASS;
-	meta_class->info    = CLS_META;
-	
-	//
-	// Create a copy of the class name.
-	// For efficiency, we have the metaclass and the class itself 
-	// to share this copy of the name, but this is not a requirement
-	// imposed by the runtime.
-	//
-	new_class->name = strdup(name);
-	meta_class->name = new_class->name;
-	
-	//
-	// Connect the class definition to the class hierarchy:
-	// Connect the class to the superclass.
-	// Connect the metaclass to the metaclass of the superclass.
-	// Connect the metaclass of the metaclass to
-	//      the metaclass of the root class.
-	new_class->super_class  = super_class;
-	meta_class->super_class = super_class->isa;
-	meta_class->isa         = (void*) root_class->isa;
+    Class new_class = objc_allocateClassPair(super_class, name, 0);
+    Class meta_class = object_getClass(new_class);
 
-	// Set the version.
-	new_class->version = 0;
-	meta_class->version = 0;
-
-	// Set the cache.
-	new_class->cache = NULL;
-	meta_class->cache = NULL;
-
-	// Set the protocols.
-	new_class->protocols = NULL;
-	meta_class->protocols = NULL;
-	
-	// Set the instance variables lists.
+    // Set the instance variables lists.
 	CreateObjCVariables(new_class, nsInstanceVariables);
 	CreateObjCVariables(meta_class, nsClassVariables);
 	
@@ -1100,15 +926,15 @@ CreateObjCClass(newtRefArg inRcvr, newtRefArg inDef)
 	CreateObjCMethods(meta_class, nsClassMethods, 1);
     
 	// Finally, register the class with the runtime.
-	objc_addClass( new_class );
+	objc_registerClassPair(new_class);
 
 	// Get the class frame as if it was an ObjC class.
-	newtRefVar theClassFrame = GetClassFromName( new_class->name );
+	newtRefVar theClassFrame = GetClassFromName(class_getName(new_class));
 
 	// The result frame includes native methods (instead of ns methods).
 	// I have to modify the methods frame to include the ns methods.
-	int nbMethods;
-	int indexMethods;
+	size_t nbMethods;
+	size_t indexMethods;
 	if (NewtRefIsNotNIL(nsClassMethods))
 	{
 		newtRefVar originalMethods = NcGetSlot(theClassFrame, NSSYM(_proto));

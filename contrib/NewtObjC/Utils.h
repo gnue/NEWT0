@@ -83,7 +83,7 @@ newtRef CastToNS(id*, const char*);
 newtRef CastStructToNS(void*, const char*);
 newtRef CastIdToNS(id inObjCObject);
 newtRef CastParamsToNS(va_list inArgList, Method inMethod);
-void CastParamToObjC(void*, int, const char*, void**, newtRefArg, int);
+void CastParamToObjC(Method, NSInvocation*, int, newtRefArg);
 id CastResultToObjC(const char* inType, newtRefArg inObject);
 void Lock(newtRefArg);
 NSException* CastExToObjC(newtRefArg inNSException);

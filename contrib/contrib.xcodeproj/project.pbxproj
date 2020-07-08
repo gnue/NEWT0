@@ -29,7 +29,6 @@
 		DAE3D4400A42ADDC00FE1B1F /* ObjCObjects.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE3D32C0A429D9000FE1B1F /* ObjCObjects.m */; };
 		DAE3D4410A42ADDD00FE1B1F /* TNewtObjCRef.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE3D3300A429D9000FE1B1F /* TNewtObjCRef.m */; };
 		DAE3D4420A42ADDF00FE1B1F /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = DAE3D3330A429D9000FE1B1F /* Utils.m */; };
-		DAE3D4640A42AE5A00FE1B1F /* objc-runtime-x.s in Sources */ = {isa = PBXBuildFile; fileRef = DAE3D3290A429D9000FE1B1F /* objc-runtime-x.s */; };
 		DAE3D49E0A42B03300FE1B1F /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAE3D49D0A42B03300FE1B1F /* Cocoa.framework */; };
 /* End PBXBuildFile section */
 
@@ -48,13 +47,6 @@
 			remoteGlobalIDString = DAE3D42D0A42ADB900FE1B1F;
 			remoteInfo = NewtObjC;
 		};
-		DAE3D48D0A42AF8E00FE1B1F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = DAE3D4560A42AE3A00FE1B1F;
-			remoteInfo = "objc-runtime-x";
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -66,8 +58,6 @@
 		DAE3D31C0A429D9000FE1B1F /* FoundationFunctions.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FoundationFunctions.h; sourceTree = "<group>"; };
 		DAE3D31D0A429D9000FE1B1F /* FoundationFunctions.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = FoundationFunctions.m; sourceTree = "<group>"; };
 		DAE3D3200A429D9000FE1B1F /* NewtObjC.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = NewtObjC.m; sourceTree = "<group>"; };
-		DAE3D3270A429D9000FE1B1F /* objc-runtime-x.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = "objc-runtime-x.h"; sourceTree = "<group>"; };
-		DAE3D3290A429D9000FE1B1F /* objc-runtime-x.s */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.asm; path = "objc-runtime-x.s"; sourceTree = "<group>"; };
 		DAE3D32B0A429D9000FE1B1F /* ObjCObjects.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ObjCObjects.h; sourceTree = "<group>"; };
 		DAE3D32C0A429D9000FE1B1F /* ObjCObjects.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ObjCObjects.m; sourceTree = "<group>"; };
 		DAE3D32F0A429D9000FE1B1F /* TNewtObjCRef.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = TNewtObjCRef.h; sourceTree = "<group>"; };
@@ -75,7 +65,6 @@
 		DAE3D3320A429D9000FE1B1F /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
 		DAE3D3330A429D9000FE1B1F /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
 		DAE3D43C0A42ADB900FE1B1F /* NewtObjC.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = NewtObjC.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
-		DAE3D4630A42AE3A00FE1B1F /* objc-runtime-x.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = "objc-runtime-x.dylib"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAE3D49D0A42B03300FE1B1F /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		F53BCC700670CDF00013103E /* NewtIO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewtIO.h; sourceTree = "<group>"; };
 		F541CF5107D8582D0071DCE6 /* Newton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Newton.h; sourceTree = "<group>"; };
@@ -120,13 +109,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DAE3D45E0A42AE3A00FE1B1F /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -155,7 +137,6 @@
 			children = (
 				DAE3D2F90A429D6A00FE1B1F /* NativeCalls.dylib */,
 				DAE3D43C0A42ADB900FE1B1F /* NewtObjC.dylib */,
-				DAE3D4630A42AE3A00FE1B1F /* objc-runtime-x.dylib */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -177,7 +158,6 @@
 				DAE3D31C0A429D9000FE1B1F /* FoundationFunctions.h */,
 				DAE3D31D0A429D9000FE1B1F /* FoundationFunctions.m */,
 				DAE3D3200A429D9000FE1B1F /* NewtObjC.m */,
-				DAE3D3220A429D9000FE1B1F /* objc-runtime-x */,
 				DAE3D32B0A429D9000FE1B1F /* ObjCObjects.h */,
 				DAE3D32C0A429D9000FE1B1F /* ObjCObjects.m */,
 				DAE3D32F0A429D9000FE1B1F /* TNewtObjCRef.h */,
@@ -186,15 +166,6 @@
 				DAE3D3330A429D9000FE1B1F /* Utils.m */,
 			);
 			path = NewtObjC;
-			sourceTree = "<group>";
-		};
-		DAE3D3220A429D9000FE1B1F /* objc-runtime-x */ = {
-			isa = PBXGroup;
-			children = (
-				DAE3D3270A429D9000FE1B1F /* objc-runtime-x.h */,
-				DAE3D3290A429D9000FE1B1F /* objc-runtime-x.s */,
-			);
-			path = "objc-runtime-x";
 			sourceTree = "<group>";
 		};
 		F52FA68F0594745700087763 /* Frameworks */ = {
@@ -284,27 +255,10 @@
 			buildRules = (
 			);
 			dependencies = (
-				DAE3D48E0A42AF8E00FE1B1F /* PBXTargetDependency */,
 			);
 			name = NewtObjC;
 			productName = protoFILE;
 			productReference = DAE3D43C0A42ADB900FE1B1F /* NewtObjC.dylib */;
-			productType = "com.apple.product-type.library.dynamic";
-		};
-		DAE3D4560A42AE3A00FE1B1F /* objc-runtime-x */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = DAE3D45F0A42AE3A00FE1B1F /* Build configuration list for PBXNativeTarget "objc-runtime-x" */;
-			buildPhases = (
-				DAE3D4570A42AE3A00FE1B1F /* Sources */,
-				DAE3D45E0A42AE3A00FE1B1F /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "objc-runtime-x";
-			productName = protoFILE;
-			productReference = DAE3D4630A42AE3A00FE1B1F /* objc-runtime-x.dylib */;
 			productType = "com.apple.product-type.library.dynamic";
 		};
 /* End PBXNativeTarget section */
@@ -313,14 +267,15 @@
 		08FB7793FE84155DC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0430;
+				LastUpgradeCheck = 1150;
 			};
 			buildConfigurationList = F541302B096D1DEB00CFD896 /* Build configuration list for PBXProject "contrib" */;
 			compatibilityVersion = "Xcode 2.4";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 08FB7794FE84155DC02AAC07 /* newt */;
 			projectDirPath = "";
@@ -328,7 +283,6 @@
 			targets = (
 				DAE3D2F10A429D6A00FE1B1F /* NativeCalls */,
 				DAE3D42D0A42ADB900FE1B1F /* NewtObjC */,
-				DAE3D4560A42AE3A00FE1B1F /* objc-runtime-x */,
 				DA16688F0A438DE6005937AA /* All */,
 			);
 		};
@@ -356,14 +310,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		DAE3D4570A42AE3A00FE1B1F /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				DAE3D4640A42AE5A00FE1B1F /* objc-runtime-x.s in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -377,42 +323,32 @@
 			target = DAE3D42D0A42ADB900FE1B1F /* NewtObjC */;
 			targetProxy = DA1668980A438DED005937AA /* PBXContainerItemProxy */;
 		};
-		DAE3D48E0A42AF8E00FE1B1F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = DAE3D4560A42AE3A00FE1B1F /* objc-runtime-x */;
-			targetProxy = DAE3D48D0A42AF8E00FE1B1F /* PBXContainerItemProxy */;
-		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		DA16689C0A438E15005937AA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = i386;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				PRODUCT_NAME = All;
 				SDKROOT = macosx;
-				SDKROOT_i386 = macosx;
-				SDKROOT_ppc = macosx;
 			};
 			name = Debug;
 		};
 		DA16689D0A438E15005937AA /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = i386;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				PRODUCT_NAME = All;
 				SDKROOT = macosx;
-				SDKROOT_i386 = macosx;
-				SDKROOT_ppc = macosx;
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -420,23 +356,20 @@
 		DAE3D2F60A429D6A00FE1B1F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUGGING_SYMBOLS = "<Multiple values>";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = "<Multiple values>";
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = "DYLIBSUFFIX='\"dylib\"'";
-				GCC_VERSION = "";
 				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
 				GCC_WARN_UNKNOWN_PRAGMAS = NO;
 				LIBRARY_STYLE = BUNDLE;
 				MACH_O_TYPE = mh_dylib;
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					"-undefined",
@@ -445,9 +378,7 @@
 					"-lffi",
 				);
 				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
 				PRODUCT_NAME = NativeCalls;
-				SDKROOT = macosx;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost";
 				ZERO_LINK = YES;
@@ -457,21 +388,18 @@
 		DAE3D2F70A429D6A00FE1B1F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUGGING_SYMBOLS = "<Multiple values>";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = "<Multiple values>";
 				GCC_PREPROCESSOR_DEFINITIONS = "DYLIBSUFFIX='\"dylib\"'";
-				GCC_VERSION = "";
 				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
 				GCC_WARN_UNKNOWN_PRAGMAS = NO;
 				LIBRARY_STYLE = BUNDLE;
 				MACH_O_TYPE = mh_dylib;
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					"-undefined",
@@ -480,9 +408,7 @@
 					"-lffi",
 				);
 				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
 				PRODUCT_NAME = NativeCalls;
-				SDKROOT = macosx;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost";
 				ZERO_LINK = NO;
@@ -492,17 +418,15 @@
 		DAE3D4390A42ADB900FE1B1F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUGGING_SYMBOLS = "<Multiple values>";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = "<Multiple values>";
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_VERSION = "";
 				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
 				GCC_WARN_UNKNOWN_PRAGMAS = NO;
 				LIBRARY_SEARCH_PATHS = (
@@ -511,7 +435,6 @@
 				);
 				LIBRARY_STYLE = BUNDLE;
 				MACH_O_TYPE = mh_dylib;
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					"-undefined",
@@ -519,9 +442,7 @@
 					"-flat_namespace",
 				);
 				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
 				PRODUCT_NAME = NewtObjC;
-				SDKROOT = macosx;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost";
 				ZERO_LINK = YES;
@@ -531,15 +452,13 @@
 		DAE3D43A0A42ADB900FE1B1F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUGGING_SYMBOLS = "<Multiple values>";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = "<Multiple values>";
-				GCC_VERSION = "";
 				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
 				GCC_WARN_UNKNOWN_PRAGMAS = NO;
 				LIBRARY_SEARCH_PATHS = (
@@ -548,7 +467,6 @@
 				);
 				LIBRARY_STYLE = BUNDLE;
 				MACH_O_TYPE = mh_dylib;
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					"-undefined",
@@ -556,77 +474,7 @@
 					"-flat_namespace",
 				);
 				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
 				PRODUCT_NAME = NewtObjC;
-				SDKROOT = macosx;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = "-Wmost";
-				ZERO_LINK = NO;
-			};
-			name = Release;
-		};
-		DAE3D4600A42AE3A00FE1B1F /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				COPY_PHASE_STRIP = NO;
-				DEBUGGING_SYMBOLS = "<Multiple values>";
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = "<Multiple values>";
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_VERSION = "";
-				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
-				GCC_WARN_UNKNOWN_PRAGMAS = NO;
-				LIBRARY_STYLE = BUNDLE;
-				MACH_O_TYPE = mh_dylib;
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
-				OTHER_CFLAGS = "-no-integrated-as";
-				OTHER_LDFLAGS = (
-					"-undefined",
-					suppress,
-					"-flat_namespace",
-				);
-				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = "objc-runtime-x";
-				SDKROOT = macosx;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = "-Wmost";
-				ZERO_LINK = YES;
-			};
-			name = Debug;
-		};
-		DAE3D4610A42AE3A00FE1B1F /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				COPY_PHASE_STRIP = YES;
-				DEBUGGING_SYMBOLS = "<Multiple values>";
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = "<Multiple values>";
-				GCC_VERSION = "";
-				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
-				GCC_WARN_UNKNOWN_PRAGMAS = NO;
-				LIBRARY_STYLE = BUNDLE;
-				MACH_O_TYPE = mh_dylib;
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
-				OTHER_CFLAGS = "-no-integrated-as";
-				OTHER_LDFLAGS = (
-					"-undefined",
-					suppress,
-					"-flat_namespace",
-				);
-				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = "objc-runtime-x";
-				SDKROOT = macosx;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost";
 				ZERO_LINK = NO;
@@ -636,44 +484,86 @@
 		F541302C096D1DEB00CFD896 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				GCC_VERSION = "";
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
-				SDKROOT = macosx;
-				SDKROOT_i386 = macosx;
-				SDKROOT_ppc = macosx;
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				ONLY_ACTIVE_ARCH = YES;
 			};
 			name = Debug;
 		};
 		F541302D096D1DEB00CFD896 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = "";
 				FRAMEWORK_VERSION = A;
 				GCC_DYNAMIC_NO_PIC = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_ENABLE_TRIGRAPHS = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = "";
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_VERSION = "";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNKNOWN_PRAGMAS = NO;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
 				INSTALL_PATH = "$(HOME)/bin";
 				LIBRARY_SEARCH_PATHS = "";
 				LIBRARY_STYLE = STATIC;
-				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				OTHER_CFLAGS = "";
 				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
 				REZ_EXECUTABLE = YES;
-				SDKROOT = macosx;
-				SDKROOT_i386 = macosx;
-				SDKROOT_ppc = macosx;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = (
 					"-Wmost",
@@ -710,15 +600,6 @@
 			buildConfigurations = (
 				DAE3D4390A42ADB900FE1B1F /* Debug */,
 				DAE3D43A0A42ADB900FE1B1F /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		DAE3D45F0A42AE3A00FE1B1F /* Build configuration list for PBXNativeTarget "objc-runtime-x" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				DAE3D4600A42AE3A00FE1B1F /* Debug */,
-				DAE3D4610A42AE3A00FE1B1F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

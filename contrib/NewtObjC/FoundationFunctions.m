@@ -65,7 +65,7 @@ NewtNSLog(newtRefArg inRcvr, newtRefArg inFormat, newtRefArg additionalArgs)
 	
 	NS_DURING
 	
-	NSLog(@"%@", [NSString stringWithCString: NewtRefToString(inFormat)]);
+    NSLog(@"%@", [NSString stringWithCString: NewtRefToString(inFormat) encoding: NSUTF8StringEncoding]);
 	
 	NS_HANDLER
 		// Convert the exception and throw it as a NS exception.

@@ -60,17 +60,6 @@ void newt_install(void);
 
 void newt_install(void)
 {
-#if !TARGET_OS_IPHONE
-	// Load the objc-runtime extension dynamic library.
-	if (!NSAddLibraryWithSearching("@loader_path/objc-runtime-x.dylib")	// Tiger and higher.
-		&& !NSAddLibraryWithSearching("@executable_path/objc-runtime-x.dylib") // In-place.
-		&& !NSAddLibraryWithSearching(__LIBDIR__ "/objc-runtime-x.dylib")) // Installed path.
-	{
-		(void) NewtThrow(kNErrObjCRuntimeErr, NewtMakeString("Couldn't find objc-runtime-x.dylib", true));
-    return;
-	}
-#endif
-  
   // Add the GetObjCClass global function.
   NewtDefGlobalFunc(
                     NSSYM(GetObjCClass),
