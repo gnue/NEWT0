@@ -461,7 +461,6 @@ newtRef NsStrReplace(newtRefArg rcvr, newtRefArg string, newtRefArg substr, newt
   }
   strcpy(tmp, orig);
 
-  orig = NewtRefToString(string);
   NewtSetLength(string, strlen(result));
   strcpy(NewtRefToData(string), result);
   free(result);

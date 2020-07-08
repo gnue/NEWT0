@@ -3852,7 +3852,6 @@ void NVMFnCall(newtRefArg fn, int16_t numArgs)
 newtRef NVMCall(newtRefArg fn, int16_t numArgs, newtErr * errP)
 {
 	newtRefVar	result = kNewtRefUnbind;
-	newtErr		err = kNErrNone;
 
     if (NewtRefIsNotNIL(fn))
     {
@@ -3871,9 +3870,7 @@ newtRef NVMCall(newtRefArg fn, int16_t numArgs, newtErr * errP)
 
     if (errP != NULL)
 	{
-		if (err == kNErrNone)
-			err = NVMGetExceptionErrCode(CURREXCP, true);
-
+		newtErr err = NVMGetExceptionErrCode(CURREXCP, true);
         *errP = err;
 	}
 
@@ -3893,7 +3890,6 @@ newtRef NVMCall(newtRefArg fn, int16_t numArgs, newtErr * errP)
 newtRef NVMInterpret(newtRefArg fn, newtErr * errP)
 {
 	newtRefVar	result = kNewtRefUnbind;
-	newtErr		err = kNErrNone;
 
     if (NewtRefIsNotNIL(fn))
     {
@@ -3903,13 +3899,11 @@ newtRef NVMInterpret(newtRefArg fn, newtErr * errP)
 		NVMInit();
 		NewtGC();
 
-        result = NVMCall(fn, 0, &err);
+        result = NVMCall(fn, 0, errP);
 
         NVMClean();
     }
 
-    if (errP != NULL)
-        *errP = err;
 
     return result;
 }
@@ -4178,7 +4172,6 @@ newtRef NcCallWithArgArray(newtRefArg fn, newtRefArg args)
 {
 	vm_env_t	saveVM;
 	newtRefVar	result;
-	newtErr		err;
 
 	if (! NewtRefIsArray(args))
 	{
@@ -4189,7 +4182,7 @@ newtRef NcCallWithArgArray(newtRefArg fn, newtRefArg args)
 	vm_env_push(&saveVM);
 
 	stk_push_array(args);
-	result = NVMCall(fn, NewtArrayLength(args), &err);
+	result = NVMCall(fn, NewtArrayLength(args), NULL);
 
 	// restore the VM
 	vm_env_pop();

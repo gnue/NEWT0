@@ -36,7 +36,7 @@
 /* macros */
 
 /// Test first 8 bytes for any of the package signatures
-#define PkgIsPackage(data) ((strncmp(data, "package0", 8)==0) || (strncmp(data, "package1", 8)==0))
+#define PkgIsPackage(data) ((strncmp((const char*) data, "package0", 8)==0) || (strncmp((const char*) data, "package1", 8)==0))
 
 #define kRelocationFlag 0x04000000
 
@@ -793,14 +793,13 @@ newtRef PkgReadBinaryObject(pkg_stream_t *pkg, uint32_t p_obj)
 {
 	uint32_t size = PkgReadU32(pkg->data + p_obj) >> 8;
 	newtRef klass, result = kNewtRefNIL;
-	newtRef ins = NSSYM0(instructions);
 
 	klass = PkgReadRef(pkg, p_obj+8);
 
 	if (klass==kNewtSymbolClass) {
-		result = NewtMakeSymbol(pkg->data + p_obj + 16);
+		result = NewtMakeSymbol((const char*) pkg->data + p_obj + 16);
 	} else if (klass==NSSYM0(string)) {
-		char *src = pkg->data + p_obj + 12;
+		const char *src = (const char*) pkg->data + p_obj + 12;
 		int sze = size-12;
 #		ifdef HAVE_LIBICONV
 			size_t buflen;
@@ -1055,7 +1054,7 @@ newtRef PkgReadVardataString(pkg_stream_t *pkg, pkg_info_ref_t *info_ref)
 	if (info_ref->size==0) {
 		return kNewtRefNIL;
 	} else {
-		char *src = pkg->var_data + ntohs(info_ref->offset);
+		char *src = (char*) pkg->var_data + ntohs(info_ref->offset);
 		int size = ntohs(info_ref->size);
 #		ifdef HAVE_LIBICONV
 			size_t buflen;

@@ -32,7 +32,7 @@ extern "C" {
 #endif
 
 
-char *		NewtIconv(iconv_t cd, char* src, size_t srclen, size_t* dstlenp);
+char *		NewtIconv(iconv_t cd, const char* src, size_t srclen, size_t* dstlenp);
 
 
 #ifdef __cplusplus

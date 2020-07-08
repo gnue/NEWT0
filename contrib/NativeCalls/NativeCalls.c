@@ -95,7 +95,7 @@ NativeCalls_ReleaseBuffer(SBufferZone* ioBuffer)
 	for (indexBuffers = 0; indexBuffers < nbBuffers; indexBuffers++)
 	{
 		free(*cursor);
-		*cursor++;
+		cursor++;
 	}
 	
 	free(ioBuffer->fBufferTable);
