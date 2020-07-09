@@ -1,0 +1,105 @@
+func TestEquality(x, y)
+begin
+    local equal := nil;
+    if IsImmediate(x) then equal := x = y;
+    if IsBinary(x) then equal := IsBinary(y) and BinEqual(x, y);
+    if IsFrame(x) then begin
+        if IsFrame(y) and Length(x) = Length(y) then
+        begin
+            equal := true;
+            foreach k, v in x do
+                equal := equal and HasSlot(k, y) and TestEquality(v, y.k)
+        end;
+    end;
+    if IsArray(x) then begin
+        if IsArray(y) and Length(x) = Length(y) then
+        begin
+            equal := true;
+            foreach k, v in x do
+                equal := equal and TestEquality(v, y[k])
+        end;
+    end;
+    return equal;
+end;
+
+global protoTestCase := {
+    Run: func()
+    begin
+        local finalResult := true;
+        foreach k, v in self do
+        begin
+            local symbolAsStr := k & "";
+            if BeginsWith(symbolAsStr, "test") and IsFunction(v) then
+            begin
+                local len := StrLen(symbolAsStr);
+                while len < 70 do
+                begin
+                    symbolAsStr := symbolAsStr & ".";
+                    len := len + 1;
+                end;
+                Print(symbolAsStr);
+                local resultStr := "OK";
+                local failedException := nil;
+                try
+                    Perform(self, k, []);
+                onexception |evt.ex.test| do
+                begin
+                    resultStr := "FAILED";
+                    finalResult := nil;
+                    failedException := CurrentException();
+                end
+                onexception |evt| do
+                begin
+                    resultStr := "ERROR";
+                    finalResult := nil;
+                    failedException := CurrentException();
+                end;
+                Print(" " & resultStr & "\n");
+                if failedException then
+                    P(failedException);
+            end;
+        end;
+        return finalResult;
+    end,
+
+    AssertTrue: func(x)
+    begin
+        if not x then
+        begin
+            Throw('|evt.ex.test.assertTrueFailed|, {x: x})
+        end;
+    end,
+    
+    AssertEqual: func(x, y)
+    begin
+        if not TestEquality(x, y) then
+        begin
+            Throw('|evt.ex.test.assertEqualFailed|, {x: x, y: y})
+        end;
+    end,
+
+    AssertEqualDelta: func(x, y, delta)
+    begin
+        if x > y + delta or x < y - delta then
+        begin
+            Throw('|evt.ex.test.assertEqualDeltaFailed|, {x: x, y: y, delta: delta})
+        end;
+    end,
+    
+    AssertThrow: func(sym, closure)
+    begin
+        local caught := nil;
+        local exception := nil;
+        try
+            call closure with ()
+        onexception |evt| do
+        begin
+            exception := CurrentException();
+            caught := HasSubclass(exception.name, sym);
+        end;
+        if not caught then
+        begin
+            Throw('|evt.ex.test.assertThrowFailed|, {sym: sym, exception: exception, closure: closure})
+        end;
+    end,
+};

@@ -38,7 +38,7 @@ enum {
     kNBCSetLexScope			= 004,	// 004 set-lex-scope
     kNBCIterNext			= 005,	// 005 iter-next
     kNBCIterDone			= 006,	// 006 iter-done
-    kNBCPopHandlers			= 007	// 007 000 001 pop-handlers
+    kNBCPopHandlers			= 007	// 007 000 007 pop-handlers
 };
 
 

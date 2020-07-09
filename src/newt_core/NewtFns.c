@@ -203,15 +203,14 @@ newtRef NcLookupSymbol(newtRefArg r, newtRefArg name)
  * @param name		[in] 例外シンボル
  * @param data		[in] 例外データ
  *
- * @retval			NIL
+ * @retval			stack head (to be pushed by calling function)
  *
  * @note			スクリプトからの呼出し用
  */
 
 newtRef NsThrow(newtRefArg rcvr, newtRefArg name, newtRefArg data)
 {
-    NVMThrow(name, data);
-    return kNewtRefNIL;
+    return NVMThrow(name, data);
 }
 
 
@@ -220,15 +219,14 @@ newtRef NsThrow(newtRefArg rcvr, newtRefArg name, newtRefArg data)
  *
  * @param rcvr		[in] レシーバ
  *
- * @retval			NIL
+ * @retval			stack head (to be pushed by calling function)
  *
  * @note			スクリプトからの呼出し用
  */
 
 newtRef NsRethrow(newtRefArg rcvr)
 {
-    NVMRethrow();
-    return kNewtRefNIL;
+    return NVMRethrow();
 }
 
 
@@ -2201,6 +2199,56 @@ newtRef NsGetEnv(newtRefArg rcvr, newtRefArg r)
 #if 0
 #pragma mark -
 #endif
+
+/*------------------------------------------------------------------------*/
+/**
+ * Determine if two binaries are equal.
+ *
+ * @param rcvr  self (ignored).
+ * @param a     the first binary to consider.
+ * @param b     the second binary to consider.
+ * @return true if the two binaries are equal, nil otherwise.
+ */
+newtRef NsBinEqual(newtRefArg rcvr, newtRefArg a, newtRefArg b)
+{
+    char* aString;
+    char* bString;
+    newtRefVar theResult = kNewtRefNIL;
+
+    (void) rcvr;
+
+    /* check parameters */
+    if (! NewtRefIsBinary(a))
+    {
+        theResult = NewtThrow(kNErrNotABinaryObject, a);
+    } else if (! NewtRefIsBinary(b)) {
+        theResult = NewtThrow(kNErrNotABinaryObject, b);
+    } else if (a == b) {
+        theResult = kNewtRefTRUE;
+    } else {
+        size_t aLen = NewtBinaryLength(a);
+        size_t bLen = NewtBinaryLength(b);
+
+        if (aLen == bLen) {
+            newtObjRef aObj = NewtRefToPointer(a);
+            newtObjRef bObj = NewtRefToPointer(b);
+            newtRefVar aKlass = aObj->as.klass;
+            newtRefVar bKlass = bObj->as.klass;
+
+            if (NewtRefEqual(aKlass, bKlass)) {
+                uint8_t* aPtr = NewtRefToBinary(a);
+                uint8_t* bPtr = NewtRefToBinary(b);
+
+                if (memcmp(aPtr, bPtr, aLen) == 0) {
+                    theResult = kNewtRefTRUE;
+                }
+            }
+        }
+    }
+
+    return theResult;
+}
+
 /*------------------------------------------------------------------------*/
 /** オフセット位置から符号付きの1バイトを取り出す。 
  *
