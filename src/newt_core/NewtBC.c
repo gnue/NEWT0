@@ -927,17 +927,24 @@ newtRef NBCFnDone(nbc_env_t ** envP)
     {
         newtRefVar	instr;
         newtRefVar	literals;
+        newtRefVar	numArgs;
 
         NBCGenCodeEnv(env, kNBCReturn, 0);
 
         fn = env->func;
-        instr = NewtMakeBinary(kNewtRefNIL, ENV_BC(env), ENV_CX(env), true);
+        instr = NewtMakeBinary(NSSYM0(instructions), ENV_BC(env), ENV_CX(env), true);
         NcSetSlot(fn, NSSYM0(instructions), instr);
     
         literals = NcGetSlot(fn, NSSYM0(literals));
 
-        if (NewtRefIsNotNIL(literals) && NcLength(literals) == 0)
+        if (NewtRefIsNotNIL(literals) && NewtLength(literals) == 0)
             NcSetSlot(fn, NSSYM0(literals), kNewtRefNIL);
+
+        // Drop argframe if it is just empty
+        // A fasterFunctions optimization
+        numArgs = NcGetSlot(fn, NSSYM0(numArgs));
+        if (NewtRefIsLiteral(numArgs) && NewtLength(env->argFrame) == 3 + NewtRefToInteger(numArgs))
+            NcSetSlot(fn, NSSYM0(argFrame), kNewtRefNIL);
 
         *envP = env->parent;
         NBCEnvFree(env);
@@ -1837,6 +1844,7 @@ void NBCGenAssign(nps_syntax_node_t * stree,
 {
     if (NewtRefIsSymbol(lvalue))
     {
+        ssize_t b;
         if (NewtHasSlot(CONSTANT, lvalue))
         {
             // 定数の場合
@@ -1845,7 +1853,13 @@ void NBCGenAssign(nps_syntax_node_t * stree,
         }
 
         NBCGenBC_op(stree, expr);
-        NBCGenCodeL(kNBCFindAndSetVar, lvalue);
+        // If variable is in argframe, we don't need to find it
+        b = NewtFindSlotIndex(ARGFRAME, lvalue);
+        if (b == -1) {
+            NBCGenCodeL(kNBCFindAndSetVar, lvalue);
+        } else {
+            NBCGenCode(kNBCSetVar, b);
+        }
 
         if (ret)
             NBCGenCodeL(kNBCFindVar, lvalue);
@@ -2009,12 +2023,16 @@ void NBCGenMethodExists(nps_syntax_node_t * stree,
 void NBCGenFn(nps_syntax_node_t * stree, nps_node_t args, nps_node_t expr)
 {
     newtRefVar	fn;
+    newtRefVar argFrame;
 
     (void) NBCMakeFnEnv(stree, args);
     NBCGenBC_op(stree, expr);
     fn = NBCFnDone(&newt_bc_env);
     NBCGenPUSH(fn);
-    NBCGenCode(kNBCSetLexScope, 0);
+    argFrame = NcGetSlot(fn, NSSYM0(argFrame));
+    // Only set scope if called function has an argFrame.
+    if (NewtRefIsFrame(argFrame) && NewtFrameLength(argFrame) > 3)
+        NBCGenCode(kNBCSetLexScope, 0);
 }
 
 
@@ -2575,6 +2593,12 @@ void NBCGenBC_sub(nps_syntax_node_t * stree, uint32_t n, bool ret)
             NBCGenBC_op(stree, node->op1);
             NBCGenBC_op(stree, node->op2);
             NBCGenCode(node->code, 1);
+            break;
+
+        case kNPSReturn:
+            // Optimization not present in NewtonOS compiler: we don't need a
+            // pop here that would never be executed.
+            handled = false;
             break;
 
         default:

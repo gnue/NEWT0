@@ -110,6 +110,7 @@ static void			iter_next(newtRefArg iter);
 static bool			iter_done(newtRefArg iter);
 
 static newtRef		NVMMakeArgsArray(uint16_t numArgs);
+static newtRef		NVMMakeFastFunctionArgFrame(newtRefArg fn);
 static void			NVMBindArgs(uint16_t numArgs);
 static void			NVMThrowBC(newtErr err, newtRefArg value, int16_t pop, bool push);
 static newtErr		NVMFuncCheck(newtRefArg fn, int16_t numArgs);
@@ -653,6 +654,42 @@ void NVMNoStackFrameForReturn(void)
     PC = (uint32_t) -1;
 }
 
+/*------------------------------------------------------------------------*/
+/** Build a new arg frame for a fast function that does not have any.
+ *
+ * @return		a new arg frame
+ */
+newtRef NVMMakeFastFunctionArgFrame(newtRefArg fn)
+{
+    uintptr_t fnNumArgs;
+    size_t argFrameSize;
+    newtRefVar argFrameMap;
+    newtRefVar result;
+    size_t argIndex;
+
+    fnNumArgs = NewtRefToInteger(NcGetSlot(fn, NSSYM0(numArgs)));
+    argFrameSize = fnNumArgs + 3;
+
+    argFrameMap = NewtMakeSlotsObj(NewtMakeInteger(0), argFrameSize + 1, 0);
+
+    NewtSlotsSetSlot(argFrameMap, 0, kNewtRefNIL);
+    NewtSlotsSetSlot(argFrameMap, 1, NSSYM0(_nextArgFrame));
+    NewtSlotsSetSlot(argFrameMap, 2, NSSYM0(_parent));
+    NewtSlotsSetSlot(argFrameMap, 3, NSSYM0(_implementor));
+
+    result = NewtMakeFrame(argFrameMap, argFrameSize);
+    NewtSetFrameSlot(result, 0, kNewtRefNIL);
+    NewtSetFrameSlot(result, 1, kNewtRefNIL);
+    NewtSetFrameSlot(result, 2, kNewtRefNIL);
+
+    // Other elements just don't have any name and will be accessed by position.
+    for (argIndex = 0; argIndex < fnNumArgs; argIndex++) {
+         NewtSetArraySlot(argFrameMap, argIndex + 4, kNewtRefNIL);
+         NewtSetFrameSlot(result, argIndex + 3, kNewtRefNIL);
+    }
+
+    return result;
+}
 
 #if 0
 #pragma mark *** 呼出しスタック
@@ -1782,7 +1819,14 @@ void NVMFuncCall(newtRefArg fn, int16_t numArgs)
     PC = 0;					// 5. PC に 0 をセット
 
     // 6. ローカルフレーム（FUNC.argFrame）をクローンして LOCALS にセット
-    LOCALS = NcClone(NcGetSlot(FUNC, NSSYM0(argFrame)));
+    newtRefVar af = NcGetSlot(FUNC, NSSYM0(argFrame));
+    // argFrame can be nil if function does not use any variable from
+    // caller. Just create an argFrame to hold passed arguments
+    if (NewtRefIsNIL(af)) {
+        LOCALS = NVMMakeFastFunctionArgFrame(FUNC);
+    } else {
+        LOCALS = NcClone(af);
+    }
 
     // 7. LOCALS の引数スロットにスタックにある引数をセットする
     //    引数は LOCALS の４番スロットから開始し左から右へ挿入される
@@ -1866,7 +1910,14 @@ void NVMMessageSend(newtRefArg impl, newtRefArg receiver, newtRefArg fn, int16_t
     IMPL = impl;			// 7. IMPL IMPL implementor をセット
 
     // 8. ローカルフレーム（FUNC.argFrame）をクローンして LOCALS にセット
-    LOCALS = NcClone(NcGetSlot(FUNC, NSSYM0(argFrame)));
+    newtRefVar af = NcGetSlot(FUNC, NSSYM0(argFrame));
+    // argFrame can be nil if function does not use any variable from
+    // caller. Just create an argFrame to hold passed arguments
+    if (NewtRefIsNIL(af)) {
+        LOCALS = NVMMakeFastFunctionArgFrame(FUNC);
+    } else {
+        LOCALS = NcClone(af);
+    }
 
     // 9. RCVR を LOCALS._parent にセット
     NcSetSlot(LOCALS, NSSYM0(_parent), RCVR);
@@ -2063,9 +2114,9 @@ void si_pushself(void)
 void si_set_lex_scope(void)
 {
     newtRefVar	fn;
-    newtRefVar	af;
     int type;
 
+    uint32_t pc = PC;
     fn = stk_pop();
     type = NewtRefFunctionType(fn);
     if (type == kNewtNotFunction) {
@@ -2074,10 +2125,19 @@ void si_set_lex_scope(void)
     if (type != kNewtNativeFn && type != kNewtNativeFunc)
     {
         fn = NcClone(fn);
-        af = NcClone(NcGetSlot(fn, NSSYM0(argFrame)));
-        NcSetSlot(af, NSSYM0(_nextArgFrame), LOCALS);
-        NcSetSlot(af, NSSYM0(_parent), RCVR);
-        NcSetSlot(af, NSSYM0(_implementor), IMPL);
+        newtRefVar	af = NcGetSlot(fn, NSSYM0(argFrame));
+        if (NewtRefIsNIL(af)) {
+            // We can have a si_set_lex_scope for a function with no argFrame.
+            // Create a dummy one.
+            af = NVMMakeFastFunctionArgFrame(fn);
+        } else if (NewtRefIsFrame(af)) {
+            af = NcClone(af);
+            NcSetSlot(af, NSSYM0(_nextArgFrame), LOCALS);
+            NcSetSlot(af, NSSYM0(_parent), RCVR);
+            NcSetSlot(af, NSSYM0(_implementor), IMPL);
+        } else {
+            return stk_push(NVMThrow(kNErrNotAFunction, fn));
+        }
         NcSetSlot(fn, NSSYM0(argFrame), af);
     }
     stk_push(fn);
