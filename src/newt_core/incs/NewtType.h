@@ -125,8 +125,9 @@ enum {
 
 /* 型宣言 */
 
-// Ref(Integer, Pointer, Charcter, Spatial, Magic pointer)
+// Ref(Integer, Pointer, Character, Special, Magic pointer)
 typedef uintptr_t		newtRef;		///< オブジェクト参照
+// NewtGC() is only called when there should be no lingering newtRefVar on the stack.
 typedef newtRef			newtRefVar;		///< オブジェクト参照変数
 typedef const newtRef	newtRefArg;		///< オブジェクト参照引数
 

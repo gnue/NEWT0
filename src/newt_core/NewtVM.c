@@ -220,7 +220,7 @@ static simple_instruction_t	simple_instructions[] =
                 si_set_lex_scope,	// 004 set-lex-scope
                 si_iternext,		// 005 iter-next
                 si_iterdone,		// 006 iter-done
-                si_pop_handlers		// 007 000 001 pop-handlers
+                si_pop_handlers		// 007 000 007 pop-handlers
             };
 
 
@@ -439,8 +439,10 @@ newtErr NVMGetExceptionErrCode(newtRefArg r, bool dump)
     if (NewtRefIsNIL(r))
         return kNErrNone;
 
-    if (dump)
+    if (dump) {
+        NewtFprintf(stderr, "Uncaught exception:\n");
         NewtPrintObject(stderr, r);
+    }
 
     err = NcGetSlot(r, NSSYM0(error));
 
@@ -484,20 +486,27 @@ newtRef NVMMakeExceptionFrame(newtRefArg name, newtRefArg data)
  * @param name	[in] シンボル
  * @param data	[in] 例外フレーム
  *
- * @return		なし
+ * @return		stack head (to be pushed back)
  */
 
-void NVMThrowData(newtRefArg name, newtRefArg data)
+newtRef NVMThrowData(newtRefArg name, newtRefArg data)
 {
     vm_excp_t *	excp;
     size_t		i;
+    size_t		next_excpstack_top;
 
 	// 例外処理中ならクリアする
 	NVMClearCurrException();
 
     CURREXCP = data;
-
-    for (i = EXCPSP; 0 < i; i--)
+	// Do not rewind past the current environment
+	// Instead, we'll rethrow on environment pop.
+	if (vm_env.next) {
+		next_excpstack_top = vm_env.next->excpstack.sp;
+	} else {
+		next_excpstack_top = 0;
+	}
+    for (i = EXCPSP; next_excpstack_top < i; i--)
     {
         excp = &EXCPSTACK[i - 1];
 
@@ -505,11 +514,15 @@ void NVMThrowData(newtRefArg name, newtRefArg data)
         {
             reg_rewind(excp->callsp);
             PC = excp->pc;
-            return;
+            SP = excp->sp;
+            return stk_pop0();
         }
     }
 
+    // Could not find any handler in this environment, will pass to next
+    // environment (vm_env_pop will rethrow)
     NVMNoStackFrameForReturn();
+    return kNewtRefNIL;
 }
 
 
@@ -519,25 +532,25 @@ void NVMThrowData(newtRefArg name, newtRefArg data)
  * @param name	[in] シンボル
  * @param data	[in] データ
  *
- * @return		なし
+ * @return		stack head (to be pushed back)
  */
 
-void NVMThrow(newtRefArg name, newtRefArg data)
+newtRef NVMThrow(newtRefArg name, newtRefArg data)
 {
     newtRefVar	r;
 
     r = NVMMakeExceptionFrame(name, data);
-    NVMThrowData(name, r);
+    return NVMThrowData(name, r);
 }
 
 
 /*------------------------------------------------------------------------*/
 /** rethrow する
  *
- * @return		なし
+ * @return		stack head (to be pushed back)
  */
 
-void NVMRethrow(void)
+newtRef NVMRethrow(void)
 {
     if (NewtRefIsNotNIL(CURREXCP))
     {
@@ -547,9 +560,9 @@ void NVMRethrow(void)
 		currexcp = CURREXCP;
         name = NcGetSlot(currexcp, NSSYM0(name));
 
-//        excp_pop_handlers();
-        NVMThrowData(name, currexcp);
+        return NVMThrowData(name, currexcp);
     }
+    return kNewtRefNIL;
 }
 
 
@@ -636,7 +649,8 @@ void NVMNoStackFrameForReturn(void)
 {
     BC = NULL;
     BCLEN = 0;
-    CALLSP = 0;
+    // Change PC to exit other tests such as si_set_lex_scope.
+    PC = (uint32_t) -1;
 }
 
 
@@ -887,6 +901,7 @@ bool excp_push(newtRefArg sym, newtRefArg pc)
     excp = &EXCPSTACK[EXCPSP];
 
     excp->callsp = CALLSP;
+    excp->sp = SP;
     excp->excppc = PC;
     excp->sym = sym;
     excp->pc = (uint32_t) NewtRefToInteger(pc);
@@ -1735,10 +1750,12 @@ void NVMFuncCall(newtRefArg fn, int16_t numArgs)
     if (type == kNewtNativeFn || type == kNewtNativeFunc)
     {	// ネイティブ関数の呼出し
     	// Save CALLSP to know if an exception occurred.
+		// Also set PC to 0 if there was no handler.
     	uint32_t saveCALLSP;
 		reg_save(SP - numArgs + 1);
 		FUNC = fn;
 		saveCALLSP = CALLSP;
+		PC = 0;
 
 		switch (type)
 		{
@@ -1753,7 +1770,7 @@ void NVMFuncCall(newtRefArg fn, int16_t numArgs)
 				break;
 		}
 
-        if (saveCALLSP == CALLSP)
+        if (saveCALLSP == CALLSP && PC == 0)
         {
 			reg_pop();
 		}
@@ -1813,12 +1830,14 @@ void NVMMessageSend(newtRefArg impl, newtRefArg receiver, newtRefArg fn, int16_t
     if (type == kNewtNativeFn || type == kNewtNativeFunc)
     {	// ネイティブ関数の呼出し
     	// Save CALLSP to know if an exception occurred.
+		// Also set PC to 0 if there was no handler.
     	uint32_t saveCALLSP;
 		reg_save(SP - numArgs + 1);
 		FUNC = fn;
 		RCVR = receiver;
 		IMPL = impl;
 		saveCALLSP = CALLSP;
+		PC = 0;
 
 		switch (type)
 		{
@@ -1833,7 +1852,7 @@ void NVMMessageSend(newtRefArg impl, newtRefArg receiver, newtRefArg fn, int16_t
 				break;
 		}
 
-		if (saveCALLSP == CALLSP)
+		if (saveCALLSP == CALLSP && PC == 0)
 		{
 			reg_pop();
 		}
@@ -2045,13 +2064,22 @@ void si_set_lex_scope(void)
 {
     newtRefVar	fn;
     newtRefVar	af;
+    int type;
 
-    fn = NcClone(stk_pop());
-    af = NcClone(NcGetSlot(fn, NSSYM0(argFrame)));
-    NcSetSlot(af, NSSYM0(_nextArgFrame), LOCALS);
-    NcSetSlot(af, NSSYM0(_parent), RCVR);
-    NcSetSlot(af, NSSYM0(_implementor), IMPL);
-    NcSetSlot(fn, NSSYM0(argFrame), af);
+    fn = stk_pop();
+    type = NewtRefFunctionType(fn);
+    if (type == kNewtNotFunction) {
+        return stk_push(NVMThrow(kNErrNotAFunction, fn));
+    }
+    if (type != kNewtNativeFn && type != kNewtNativeFunc)
+    {
+        fn = NcClone(fn);
+        af = NcClone(NcGetSlot(fn, NSSYM0(argFrame)));
+        NcSetSlot(af, NSSYM0(_nextArgFrame), LOCALS);
+        NcSetSlot(af, NSSYM0(_parent), RCVR);
+        NcSetSlot(af, NSSYM0(_implementor), IMPL);
+        NcSetSlot(fn, NSSYM0(argFrame), af);
+    }
     stk_push(fn);
 }
 
@@ -3452,7 +3480,26 @@ void vm_env_pop(void)
 
 	if (next)
 	{
+		// Save current exception, if any, for a possible rethrow.
+		newtRefVar	currexcp = kNewtRefUnbind;
+		if (PC == (uint32_t) -1) {
+			currexcp = CURREXCP;
+		}
+
+		// Pointers can have been changed by realloc
+		next->stack.stackp = vm_env.stack.stackp;
+		next->callstack.stackp = vm_env.callstack.stackp;
+		next->excpstack.stackp = vm_env.excpstack.stackp;
+
 		vm_env = *next;
+
+		// Rethrow, but not with NVMRethrow that is meant for rethrow bytecode
+		// instruction (executed in a handler), but with NVMThrowData.
+		if (NewtRefIsNotNIL(currexcp)) {
+			newtRefVar	name;
+			name = NcGetSlot(currexcp, NSSYM0(name));
+			stk_push(NVMThrowData(name, currexcp));
+		}
 	}
 }
 
@@ -3611,6 +3658,8 @@ void NVMInitGlobalFns1(void)
   
   NewtDefGlobalFunc(NSSYM(Array),	NsMakeArray,	2, "Array(size, initialValue)");
   NewtDefGlobalFunc(NSSYM(SetContains),	NsSetContains,	2, "SetContains( array, item )");
+
+    NewtDefGlobalFunc(NSSYM(BinEqual),		NsBinEqual,			2, "BinEqual(a, b)");
 }
 
 
@@ -3727,6 +3776,7 @@ void NVMInit(void)
 	newtRefVar  result;
 
 	vm_env.level = 0;
+	vm_env.next = NULL;
 
     NVMInitREG();
     NVMInitSTACK();
@@ -3776,7 +3826,7 @@ void NVMLoop(uint32_t callsp)
 	if (NEWT_DEBUG)
 		NewtDebugMsg("VM", "VM Level = %d\n", vm_env.level);
 
-    while (callsp < CALLSP && PC < BCLEN)
+    while (callsp < CALLSP && PC < BCLEN && BC != NULL)
     {
         op = BC[PC];
 
@@ -3834,8 +3884,10 @@ void NVMLoop(uint32_t callsp)
 
 void NVMFnCall(newtRefArg fn, int16_t numArgs)
 {
+    uint32_t pc = PC;
     stk_push(fn);  
     si_set_lex_scope();
+    if (pc != PC) return;
     is_invoke(numArgs);
 }
 
@@ -3865,7 +3917,7 @@ newtRef NVMCall(newtRefArg fn, int16_t numArgs, newtErr * errP)
         NVMLoop(CALLSP - 1);
         result = stk_top();
 
-		// restore the VM
+		// restore the VM, rethrowing if required.
 		vm_env_pop();
     }
 

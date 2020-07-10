@@ -1,0 +1,112 @@
+#!newt
+
+if not load("test_common.newt") then
+begin
+    Print("Could not load test_common.newt\n");
+    Exit(1);
+end;
+
+local testCases := [
+    {
+        _proto: protoTestCase,
+        testCatchBuiltIn: func() begin
+            :AssertThrow('|evt.ex.fr|, func() begin
+                5 / 0
+            end);
+            :AssertTrue(begin
+                local caught := nil;
+                try
+                    5 / 0
+                onexception |evt.ex.fr| do
+                    caught := true;
+                caught
+            end)
+        end,
+        testCatchCustom: func() begin
+            :AssertTrue(begin
+                local caught := nil;
+                try
+                    Throw('|evt.ex.foo|, nil)
+                onexception |evt.ex.foo| do
+                    caught := true;
+                caught
+            end)
+        end,
+        testCatchCustomWithData: func() begin
+            :AssertEqual({}, begin
+                local result := nil;
+                try
+                    Throw('|evt.ex.foo;type.ref.frame|, {})
+                onexception |evt.ex.foo| do
+                    result := CurrentException().data;
+                result
+            end)
+        end,
+        testCatchCustomWithString: func() begin
+            :AssertEqual("Some data", begin
+                local result := nil;
+                try
+                    Throw('|evt.ex.foo;type.ref.string|, "Some data")
+                onexception |evt.ex.foo| do
+                    result := CurrentException().data;
+                result
+            end)
+        end,
+        testCatchCustomWithSubException: func() begin
+            :AssertTrue(begin
+                local caught := nil;
+                try
+                    Throw('|evt.ex.foo.sub|, nil)
+                onexception |evt.ex.foo| do
+                    caught := true;
+                caught
+            end)
+        end,
+        testCatchCustomWithApply: func() begin
+            :AssertTrue(begin
+                local caught := nil;
+                try
+                    Apply(GetGlobalFn('Throw), ['|evt.ex.foo.sub|, nil])
+                onexception |evt.ex.foo| do
+                    caught := true;
+                caught
+            end)
+        end,
+        testCatchCustomWithPerform: func() begin
+            :AssertTrue(begin
+                local caught := nil;
+                try
+                    Perform({throw: func() begin Throw('|evt.ex.foo.sub|, nil) end}, 'throw, [])
+                onexception |evt.ex.foo| do
+                    caught := true;
+                caught
+            end)
+        end,
+        testRethrow: func() begin
+            :AssertTrue(begin
+                local caught := nil;
+                local recaught := nil;
+                try
+                    try
+                        Throw('|evt.ex.foo|, nil);
+                    onexception |evt.ex.foo| do
+                    begin
+                        caught := true;
+                        Rethrow();
+                    end;
+                onexception |evt.ex.foo| do
+                    recaught := true;
+                caught and recaught
+            end)
+        end,
+    }
+];
+
+local finalResult := true;
+
+foreach tc in testCases do
+begin
+    finalResult := finalResult && tc:Run();
+end;
+
+if not finalResult then Exit(1);

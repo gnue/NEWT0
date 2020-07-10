@@ -161,6 +161,7 @@ newtRef		NsExit(newtRefArg rcvr, newtRefArg r);
 newtRef		NsCompile(newtRefArg rcvr, newtRefArg r);
 newtRef		NsGetEnv(newtRefArg rcvr, newtRefArg r);
 
+newtRef		NsBinEqual(newtRefArg rcvr, newtRefArg a, newtRefArg b);
 newtRef		NsExtractByte(newtRefArg rcvr, newtRefArg r, newtRefArg offset);
 newtRef		NsExtractWord(newtRefArg rcvr, newtRefArg r, newtRefArg offset);
 

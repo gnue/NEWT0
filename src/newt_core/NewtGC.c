@@ -465,20 +465,18 @@ void NewtGCStackMark(vm_env_t * env, bool mark)
     // 例外ハンドラ・スタック
     NewtGCRefMark(env->currexcp, mark);
 
-/*
     {
         vm_excp_t *	excpstack;
         vm_excp_t *	excp;
 
         excpstack = (vm_excp_t *)env->excpstack.stackp;
 
-        for (i = 0; i < env->excpsp; i++)
+        for (i = 0; i < env->excpstack.sp; i++)
         {
             excp = &excpstack[i];
             NewtGCRefMark(excp->sym, mark);
         }
     }
-*/
 }
 
 

@@ -95,6 +95,7 @@ typedef struct {
 /// 例外ハンドラ
 typedef struct {
     uint32_t	callsp;		///< 呼出しスタックのスタックポインタ
+    uint32_t	sp;			///< Saved stack pointer
     uint32_t	excppc;		///< 例外ハンドラを作成したときのプログラムカウンタ
 
     newtRefVar	sym;		///< シンボル
@@ -141,9 +142,9 @@ newtRef		NVMSelf(void);
 newtRef		NVMCurrentFunction(void);
 newtRef		NVMCurrentImplementor(void);
 bool		NVMHasVar(newtRefArg name);
-void		NVMThrowData(newtRefArg name, newtRefArg data);
-void		NVMThrow(newtRefArg name, newtRefArg data);
-void		NVMRethrow(void);
+newtRef		NVMThrowData(newtRefArg name, newtRefArg data);
+newtRef		NVMThrow(newtRefArg name, newtRefArg data);
+newtRef		NVMRethrow(void);
 newtRef		NVMCurrentException(void);
 void		NVMClearException(void);
 

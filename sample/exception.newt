@@ -18,12 +18,24 @@ begin
 		Throw('|evt.ex.foo;type.ref.frame|, {});
 	onexception |evt.ex.foo| do
 		Print("Caught custom with data\n");
-	
+
 	// Catch and print data.
 	try
 		Throw('|evt.ex.foo;type.ref.string|, "Some data");
 	onexception |evt.ex.foo| do
 		Print("Caught: " & CurrentException().data & "\n");
+
+	// Catch custom with subexception.
+	try
+		Throw('|evt.ex.foo.sub|, nil);
+	onexception |evt.ex.foo| do
+		Print("Caught custom sub\n");
+
+	// Catch custom with subexception and Apply
+	try
+		Apply(GetGlobalFn('Throw), ['|evt.ex.foo.sub|, nil]);
+	onexception |evt.ex.foo| do
+		Print("Caught custom sub with apply\n");
 	
 	// Don't catch.
 	try

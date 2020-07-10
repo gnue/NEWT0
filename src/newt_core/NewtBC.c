@@ -121,12 +121,12 @@ static int16_t			NBCMakeFnArgs(newtRefArg fn, nps_syntax_node_t * stree, nps_nod
 static nbc_env_t *		NBCMakeFnEnv(nps_syntax_node_t * stree, nps_node_t args);
 static uint32_t			NBCGenBranch(uint8_t a);
 static void				NBCDefLocal(newtRefArg type, newtRefArg r, bool init);
-static void				NBCBackPatch(uint32_t cx, int16_t b);
+static void				NBCBackPatch(uint32_t cx, uintptr_t b);
 static void				NBCPushBreakStack(uint32_t cx);
 static void				NBCBreakBackPatchs(uint32_t loop_head, uint32_t cx);
 static void				NBCPushOnexcpStack(uint32_t cx);
-static void				NBCOnexcpBackPatchs(uint32_t try_head, uint32_t cx);
-static void				NBCGenOnexcpPC(int32_t pc);
+static void				NBCOnexcpBackPatchs(uint32_t try_head);
+static void				NBCGenOnexcpPC(void);
 static void				NBCGenOnexcpBranch(void);
 static void				NBCOnexcpBackPatchL(uint32_t sp, int32_t pc);
 
@@ -142,8 +142,8 @@ static void				NBCGenGlobalVar(nps_syntax_node_t * stree, nps_node_t r);
 static void				NBCGenLocalVar(nps_syntax_node_t * stree, nps_node_t type, nps_node_t r);
 static bool				NBCTypeValid(nps_node_t type);
 static int16_t			NBCGenTryPre(nps_syntax_node_t * stree, nps_node_t r);
-static int16_t			NBCGenTryPost(nps_syntax_node_t * stree, nps_node_t r, uint32_t * onexcpspP);
-static void				NBCGenTry(nps_syntax_node_t * stree, nps_node_t expr, nps_node_t onexception_list);
+static int16_t			NBCGenTryPost(nps_syntax_node_t * stree, nps_node_t r, uint32_t * onexcpspP, bool ret);
+static void				NBCGenTry(nps_syntax_node_t * stree, nps_node_t expr, nps_node_t onexception_list, bool ret);
 static void				NBCGenIfThenElse(nps_syntax_node_t * stree, nps_node_t cond, nps_node_t thenelse, bool ret);
 static void				NBCGenAnd(nps_syntax_node_t * stree, nps_node_t op1, nps_node_t op2);
 static void				NBCGenOr(nps_syntax_node_t * stree, nps_node_t op1, nps_node_t op2);
@@ -222,7 +222,13 @@ void NBCGenCodeEnv(nbc_env_t * env, uint8_t a, int16_t b)
 	bc = ENV_BC(env);
 
     if (a == kNBCFieldMask)
-        b = 1;
+        b = 7;
+        // pop-handler is 07 00 07
+        // Quoting Walter Smith:
+        // Due to historical stupidity, the pophandlers instruction is the
+        // nonexistent eighth unary1op. Its encoding is 07 00 07!
+        // https://github.com/wrs/prota/blob/a07c772bce39c5153687dd853206c0803dabdf05/runtime/interpreter.cpp#L593
+        // NEWT/0 and @wrs' Prota don't care, but NewtonOS might.
 
     if (a != kNBCFieldMask &&
         ((a & kNBCFieldMask) == a ||
@@ -599,10 +605,27 @@ void NBCDefLocal(newtRefArg type, newtRefArg r, bool init)
  *　@note				分岐命令やループ命令などすぐにオペデータが決定しない場合に使う
  */
 
-void NBCBackPatch(uint32_t cx, int16_t b)
+void NBCBackPatch(uint32_t cx, uintptr_t b)
 {
-    BC[cx + 1] = b >> 8;
-    BC[cx + 2] = b & 0xff;
+    // If value fits on 16 bits, simply write it
+    // Otherwise, add it to literals and modify previous instruction.
+    // Values might not fit if it is a push constant of an integer > 8192
+    // which may happen for exception handlers (branches are limited to 2^16
+    // so exceptions should be possible up to 2^16).
+    if (b < 0x10000) {
+        BC[cx + 1] = b >> 8;
+        BC[cx + 2] = b & 0xff;
+    } else {
+        if (BC[cx] == (kNBCPushConstant | kNBCFieldMask)) {
+            // push-constant
+            ssize_t ix = NewtFindArrayIndex(newt_bc_env->literals, b, 0);
+            if (ix == -1) // リテラルに追加
+                ix = NBCAddLiteralEnv(newt_bc_env, b);
+            BC[cx + 1] = ix >> 8;
+            BC[cx + 2] = ix & 0xff;
+            BC[cx] = kNBCPush | kNBCFieldMask;
+        }
+    }
 }
 
 
@@ -689,7 +712,7 @@ void NBCPushOnexcpStack(uint32_t cx)
  * @return			なし
  */
 
-void NBCOnexcpBackPatchs(uint32_t try_head, uint32_t cx)
+void NBCOnexcpBackPatchs(uint32_t try_head)
 {
     uint32_t	branch;
 
@@ -700,7 +723,12 @@ void NBCOnexcpBackPatchs(uint32_t try_head, uint32_t cx)
         if (branch < try_head)
             break;
 
-        NBCBackPatch(branch, cx);	// ブランチをバックパッチ
+        if (branch + 3 == CX) {
+            // Simplify and remove branch.
+            CX -= 3;
+        } else {
+            NBCBackPatch(branch, CX);	// ブランチをバックパッチ
+        }
     }
 }
 
@@ -708,20 +736,16 @@ void NBCOnexcpBackPatchs(uint32_t try_head, uint32_t cx)
 /*------------------------------------------------------------------------*/
 /** 例外処理命令のバイトコードを生成する
  *
- * @param pc		[in] 例外処理命令のプログラムカウンタ
- *
  * @return			なし
  */
 
-void NBCGenOnexcpPC(int32_t pc)
+void NBCGenOnexcpPC(void)
 {
-    newtRefVar	r;
-    int16_t	b;
+    uint32_t	cx = CX;
 
-    r = NewtMakeInteger(pc);
-    b = NBCGenPushLiteral(r);
-
-    NBCPushOnexcpStack(b);	// バックパッチのためにスタックにプッシュする
+    NBCGenCode(kNBCPushConstant, 0xFFFF);  // push constant, later patched
+                                           // as push literal if required.
+    NBCPushOnexcpStack(cx);			// バックパッチのためにスタックにプッシュする
 }
 
 
@@ -757,7 +781,7 @@ void NBCOnexcpBackPatchL(uint32_t sp, int32_t pc)
         return;
 
     r = NewtMakeInteger(pc);
-    NewtSetArraySlot(LITERALS, ONEXCPSTACK[sp], r);
+    NBCBackPatch(ONEXCPSTACK[sp], r);
 }
 
 
@@ -1159,7 +1183,7 @@ int16_t NBCGenTryPre(nps_syntax_node_t * stree, nps_node_t r)
         {
             case kNPSOnexception:
                 NBCGenPUSH(node->op1);	// シンボル
-                NBCGenOnexcpPC(-1);	// PC（ダミー）
+                NBCGenOnexcpPC();
 
                 numExcps = 1;
                 break;
@@ -1186,7 +1210,7 @@ int16_t NBCGenTryPre(nps_syntax_node_t * stree, nps_node_t r)
  */
 
 int16_t NBCGenTryPost(nps_syntax_node_t * stree, nps_node_t r,
-            uint32_t * onexcpspP)
+            uint32_t * onexcpspP, bool ret)
 {
     int16_t	numExcps = 0;
 
@@ -1204,15 +1228,15 @@ int16_t NBCGenTryPost(nps_syntax_node_t * stree, nps_node_t r,
                 (*onexcpspP)++;
 
                 // onexception のコード生成
-                NBCGenBC_stmt(stree, node->op2, true);
+                NBCGenBC_stmt(stree, node->op2, ret);
                 NBCGenOnexcpBranch();
 
                 numExcps = 1;
                 break;
 
             case kNPSOnexceptionList:
-                numExcps = NBCGenTryPost(stree, node->op1, onexcpspP)
-                            + NBCGenTryPost(stree, node->op2, onexcpspP);
+                numExcps = NBCGenTryPost(stree, node->op1, onexcpspP, ret)
+                            + NBCGenTryPost(stree, node->op2, onexcpspP, ret);
                 break;
         }
     }
@@ -1232,7 +1256,7 @@ int16_t NBCGenTryPost(nps_syntax_node_t * stree, nps_node_t r,
  */
 
 void NBCGenTry(nps_syntax_node_t * stree, nps_node_t expr,
-        nps_node_t onexception_list)
+        nps_node_t onexception_list, bool ret)
 {
     uint32_t	onexcp_cx;
     uint32_t	branch_cx;
@@ -1244,17 +1268,17 @@ void NBCGenTry(nps_syntax_node_t * stree, nps_node_t expr,
     NBCGenCode(kNBCNewHandlers, numExcps);
 
     // 実行文
-    NBCGenBC_op(stree, expr);
+    NBCGenBC_stmt(stree, expr, ret);
     NBCGenCode(kNBCPopHandlers, 0);
 
     branch_cx = NBCGenBranch(kNBCBranch);
 
     // onexception
     onexcp_cx = CX;
-    NBCGenTryPost(stree, onexception_list, &onexcpsp);
+    NBCGenTryPost(stree, onexception_list, &onexcpsp, ret);
 
     // onexception の終了
-    NBCOnexcpBackPatchs(onexcp_cx, CX);	// onexception の終了をバックパッチ
+    NBCOnexcpBackPatchs(onexcp_cx);	// onexception の終了をバックパッチ
     NBCGenCode(kNBCPopHandlers, 0);
 
     // ONEXCPSP を戻す
@@ -2278,13 +2302,11 @@ void NBCGenSyntaxCode(nps_syntax_node_t * stree, nps_syntax_node_t * node, bool 
             break;
 
         case kNPSTry:
-            NBCGenTry(stree, node->op1, node->op2);
-            NVCGenNoResult(ret);
+            NBCGenTry(stree, node->op1, node->op2, ret);
             break;
 
         case kNPSIf:
             NBCGenIfThenElse(stree, node->op1, node->op2, ret);
-//            NVCGenNoResult(ret);
             break;
 
         case kNPSLoop:
