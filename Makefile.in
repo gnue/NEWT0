@@ -238,7 +238,8 @@ install::
 ### TEST
 
 test:
-	$(NEWT) -C sample test_all.newt
+	$(NEWT) -C tests test_compile.newt
+	$(NEWT) -C tests test_exceptions.newt
 
 
 ### CLEAN
