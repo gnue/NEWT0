@@ -183,11 +183,11 @@ __LINE__						{ return lex_makeinteger(nps_env.lineno); }
 "$\\u"{HEX-DIGIT}{4}			{ return lex_makechar(lex_htoi(yytext + 3, -1)); }
 "$"{NON-ESCAPE-CHARACTER}		{ return lex_makechar(yytext[1]); }
 
-"@"{DIGIT}+						{ return lex_makemagicpointer(atol(yytext + 1)); }
+"@"{DIGIT}+						{ return lex_makemagicpointer(atoll(yytext + 1)); }
 "@"{SYMBOL}						{ return lex_makenamedmp(yytext + 1, false); }
 "@""|"{SYMBOL-SEQUENCE}"|"		{ return lex_makenamedmp(yytext + 1, true); }
 
-{DIGIT}+						{ return lex_makeinteger(atol(yytext)); }
+{DIGIT}+						{ return lex_makeinteger(atoll(yytext)); }
 "0x"{HEX-DIGIT}+				{ return lex_makeinteger(lex_htoi(yytext + 2, -1)); }
 
 {REAL}							{ return lex_makereal(atof(yytext)); }
