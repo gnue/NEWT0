@@ -42,6 +42,26 @@ local testCases := [
                 result
             end)
         end,
+        testCatchCustomWithError: func() begin
+            :AssertEqual(-42, begin
+                local result := nil;
+                try
+                    Throw('|evt.ex.foo|, -42)
+                onexception |evt.ex.foo| do
+                    result := CurrentException().error;
+                result
+            end)
+        end,
+        testCatchCustomWithMessage: func() begin
+            :AssertEqual("error", begin
+                local result := nil;
+                try
+                    Throw('|evt.ex.msg.foo|, "error")
+                onexception |evt.ex.msg| do
+                    result := CurrentException().message;
+                result
+            end)
+        end,
         testCatchCustomWithString: func() begin
             :AssertEqual("Some data", begin
                 local result := nil;

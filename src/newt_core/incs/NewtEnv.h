@@ -175,13 +175,13 @@ typedef struct {
         newtRefVar	ref;			///< type.ref
     } type;
 
-	/// ext
+	/// evt
     struct {
-		/// ext.ex
+		/// evt.ex
         struct {
-            newtRefVar	msg;		///< ext.ex.msg
+            newtRefVar	msg;		///< evt.ex.msg
         } ex;
-    } ext;
+    } evt;
 
     newtRefVar	name;				///< name
     newtRefVar	data;				///< data
