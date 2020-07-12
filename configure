@@ -4923,7 +4923,29 @@ ac_link='$OBJC -o conftest$ac_exeext $OBJCFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_
 ac_compiler_gnu=$ac_cv_objc_compiler_gnu
 
 
-ac_ext=m
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_objc_try_compile "$LINENO"; then :
+
+    have_objc_compiler=yes
+
+else
+
+    have_objc_compiler=no
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+if test "$have_objc_compiler" != "no"; then
+    ac_ext=m
 ac_cpp='$OBJCPP $CPPFLAGS'
 ac_compile='$OBJC -c $OBJCFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$OBJC -o conftest$ac_exeext $OBJCFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
@@ -5065,7 +5087,7 @@ if test "x$ac_cv_header_Cocoa_Cocoa_h" = xyes; then :
 #define HAVE_COCOA_COCOA_H 1
 _ACEOF
 
-    for ac_header in objc/objc.h
+        for ac_header in objc/objc.h
 do :
   ac_fn_objc_check_header_mongrel "$LINENO" "objc/objc.h" "ac_cv_header_objc_objc_h" "$ac_includes_default"
 if test "x$ac_cv_header_objc_objc_h" = xyes; then :
@@ -5073,7 +5095,7 @@ if test "x$ac_cv_header_objc_objc_h" = xyes; then :
 #define HAVE_OBJC_OBJC_H 1
 _ACEOF
 
-        for ac_header in Foundation/Foundation.h
+            for ac_header in Foundation/Foundation.h
 do :
   ac_fn_objc_check_header_mongrel "$LINENO" "Foundation/Foundation.h" "ac_cv_header_Foundation_Foundation_h" "$ac_includes_default"
 if test "x$ac_cv_header_Foundation_Foundation_h" = xyes; then :
@@ -5081,7 +5103,7 @@ if test "x$ac_cv_header_Foundation_Foundation_h" = xyes; then :
 #define HAVE_FOUNDATION_FOUNDATION_H 1
 _ACEOF
 
-            HAVE_OBJC='yes'
+                HAVE_OBJC='yes'
 
 fi
 
@@ -5097,6 +5119,7 @@ fi
 
 done
 
+fi
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'

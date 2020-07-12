@@ -80,13 +80,20 @@ AC_CHECK_FUNCS([getcwd memchr memmove memset regcomp strcasecmp strchr strdup st
 
 HAVE_OBJC='no'
 AC_LANG_PUSH([Objective C])
-AC_CHECK_HEADERS([Cocoa/Cocoa.h], [
-    AC_CHECK_HEADERS([objc/objc.h], [
-        AC_CHECK_HEADERS([Foundation/Foundation.h], [
-            HAVE_OBJC='yes'
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [
+    have_objc_compiler=yes
+], [
+    have_objc_compiler=no
+])
+if test "$have_objc_compiler" != "no"; then
+    AC_CHECK_HEADERS([Cocoa/Cocoa.h], [
+        AC_CHECK_HEADERS([objc/objc.h], [
+            AC_CHECK_HEADERS([Foundation/Foundation.h], [
+                HAVE_OBJC='yes'
+            ])
         ])
     ])
-])
+fi
 AC_LANG_POP([Objective C])
 
 #
