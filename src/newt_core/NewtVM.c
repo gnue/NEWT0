@@ -661,14 +661,20 @@ void NVMNoStackFrameForReturn(void)
  */
 newtRef NVMMakeFastFunctionArgFrame(newtRefArg fn)
 {
-    uintptr_t fnNumArgs;
+    newtRefVar numArgs;
+    uint16_t fnNumArgs;
+    uintptr_t fnNumLocals;
     size_t argFrameSize;
     newtRefVar argFrameMap;
     newtRefVar result;
     size_t argIndex;
 
-    fnNumArgs = NewtRefToInteger(NcGetSlot(fn, NSSYM0(numArgs)));
-    argFrameSize = fnNumArgs + 3;
+    numArgs = NcGetSlot(fn, NSSYM0(numArgs));
+    fnNumArgs = FFNumArgsToNumArgs(numArgs);
+    if (NewtRefIsNotNIL(NcGetSlot(fn, NSSYM0(indefinite))))
+        fnNumArgs++;
+    fnNumLocals = FFNumArgsToLocals(numArgs);
+    argFrameSize = fnNumArgs + fnNumLocals + 3;
 
     argFrameMap = NewtMakeSlotsObj(NewtMakeInteger(0), argFrameSize + 1, 0);
 
@@ -683,7 +689,7 @@ newtRef NVMMakeFastFunctionArgFrame(newtRefArg fn)
     NewtSetFrameSlot(result, 2, kNewtRefNIL);
 
     // Other elements just don't have any name and will be accessed by position.
-    for (argIndex = 0; argIndex < fnNumArgs; argIndex++) {
+    for (argIndex = 0; argIndex < fnNumArgs + fnNumLocals; argIndex++) {
          NewtSetArraySlot(argFrameMap, argIndex + 4, kNewtRefNIL);
          NewtSetFrameSlot(result, argIndex + 3, kNewtRefNIL);
     }
@@ -1216,7 +1222,7 @@ void NVMBindArgs(uint16_t numArgs)
 	int16_t		i;
     newtRefVar	v;
 
-	minArgs = NewtRefToInteger(NcGetSlot(FUNC, NSSYM0(numArgs)));
+	minArgs = FFNumArgsToNumArgs(NcGetSlot(FUNC, NSSYM0(numArgs)));
     indefinite = NcGetSlot(FUNC, NSSYM0(indefinite));
 
 	if (NewtRefIsNotNIL(indefinite))
@@ -1275,7 +1281,7 @@ bool NVMFuncCheckNumArgs(newtRefArg fn, int16_t numArgs)
     newtRefVar	indefinite;
     size_t		minArgs;
 
-    minArgs = NewtRefToInteger(NcGetSlot(fn, NSSYM0(numArgs)));
+    minArgs = FFNumArgsToNumArgs(NcGetSlot(fn, NSSYM0(numArgs)));
     indefinite = NcGetSlot(fn, NSSYM0(indefinite));
 
 	if (NewtRefIsNIL(indefinite))
@@ -1331,7 +1337,7 @@ void NVMCallNativeFn(newtRefArg fn, int16_t numArgs)
 	if (funcPtr == NULL)
 		return;
 
-	minArgs = NewtRefToInteger(NcGetSlot(fn, NSSYM0(numArgs)));
+	minArgs = FFNumArgsToNumArgs(NcGetSlot(fn, NSSYM0(numArgs)));
     indefinite = NcGetSlot(fn, NSSYM0(indefinite));
 
 	if (NewtRefIsNIL(indefinite))
@@ -1555,7 +1561,7 @@ void NVMCallNativeFunc(newtRefArg fn, newtRefArg rcvr, int16_t numArgs)
 	if (funcPtr == NULL)
 		return;
 
-	minArgs = NewtRefToInteger(NcGetSlot(fn, NSSYM0(numArgs)));
+	minArgs = FFNumArgsToNumArgs(NcGetSlot(fn, NSSYM0(numArgs)));
     indefinite = NcGetSlot(fn, NSSYM0(indefinite));
 
 	if (NewtRefIsNIL(indefinite))
@@ -3690,6 +3696,9 @@ void NVMInitGlobalFns1(void)
     NewtDefGlobalFunc(NSSYM(GetRoot),		NsGetRoot,			0, "GetRoot()");
     NewtDefGlobalFunc(NSSYM(GetGlobals),	NsGetGlobals,		0, "GetGlobals()");
     NewtDefGlobalFunc(NSSYM(GC),			NsGC,				0, "GC()");
+    NewtDefGlobalFunc(NSSYM(Compile),		NsCompile,			1, "Compile(str)");
+    NewtDefGlobalFunc(NSSYM(GetCompileOptions),	NsGetCompileOptions,	0, "GetCompileOptions()");
+    NewtDefGlobalFunc(NSSYM(SetCompileOptions),	NsSetCompileOptions,	1, "SetCompileOptions(opts)");
     NewtDefGlobalFunc(NSSYM(Compile),		NsCompile,			1, "Compile(str)");
 
     NewtDefGlobalFunc(NSSYM(GetGlobalFn),	NsGetGlobalFn,		1, "GetGlobalFn(symbol)");

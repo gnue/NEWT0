@@ -38,6 +38,8 @@ struct nbc_env_t {
     newtRefVar	literals;		///< 関数オブジェクトのリテラルフレーム
     newtRefVar	argFrame;		///< 関数オブジェクトのフレーム
     newtRefVar	constant;		///< 定数フレーム
+
+    bool		needargframe;	///< Whether function needs argFrame because of set-lex-scope or find-var
 };
 
 
@@ -62,6 +64,7 @@ typedef struct {
 #define	LITERALS				(newt_bc_env->literals)							///< 作成中関数オブジェクトのリテラル
 #define	ARGFRAME				(newt_bc_env->argFrame)							///< 作成中関数オブジェクトの引数フレーム
 #define	CONSTANT				(newt_bc_env->constant)							///< 定数フレーム
+#define NEEDARGFRAME			(newt_bc_env->needargframe)						///< Whether we need argFrame
 
 #define NBCAddLiteral(r)		NBCAddLiteralEnv(newt_bc_env, r)				///< リテラルリストにオブジェクトを追加
 #define NBCGenCode(a, b)		NBCGenCodeEnv(newt_bc_env, a, b)				///< バイトコードを生成
@@ -380,8 +383,10 @@ void NBCGenGetVar(nps_syntax_node_t * stree, newtRefArg r)
     
         if (b != -1)
             NBCGenCode(kNBCGetVar, b);
-        else
+        else {
+            NEEDARGFRAME = true;
             NBCGenCodeL(kNBCFindVar, r);
+        }
     }
 }
 
@@ -506,8 +511,9 @@ int16_t NBCMakeFnArgs(newtRefArg fn, nps_syntax_node_t * stree, nps_node_t r)
         argFrame = NcGetSlot(fn, NSSYM0(argFrame));
         numArgs = NBCMakeFnArgFrame(argFrame, stree, r, &indefinite);
 
+        // We don't know yet how many locals we will have
         if (0 < numArgs)
-            NcSetSlot(fn, NSSYM0(numArgs), NewtMakeInteger(numArgs));
+            NcSetSlot(fn, NSSYM0(numArgs), MakeFFNumArgs(numArgs, 0));
  
 		if (indefinite)
             NcSetSlot(fn, NSSYM0(indefinite), kNewtRefTRUE);
@@ -798,8 +804,14 @@ void NBCOnexcpBackPatchL(uint32_t sp, int32_t pc)
 
 newtRef NBCMakeFn(nbc_env_t * env)
 {
+    newtRefVar funcClass;
+    if (NEWT_MODE_NOS1_FUNCTIONS) {
+        funcClass = NSSYM0(CodeBlock);
+    } else {
+        funcClass = kNewtFastFunctionClass;  // fasterFunctions
+    }
     newtRefVar	fnv[] = {
-                            NS_CLASS,				NSSYM0(CodeBlock),
+                            NS_CLASS,				funcClass,
                             NSSYM0(instructions),	kNewtRefNIL,
                             NSSYM0(literals),		kNewtRefNIL,
                             NSSYM0(argFrame),		kNewtRefNIL,
@@ -824,11 +836,10 @@ newtRef NBCMakeFn(nbc_env_t * env)
     // function
     fn = NewtMakeFrame2(sizeof(fnv) / (sizeof(newtRefVar) * 2), fnv);
 
-//    NcSetClass(fn, NSSYM0(CodeBlock));
     NcSetSlot(fn, NSSYM0(instructions), kNewtRefNIL);
     NcSetSlot(fn, NSSYM0(literals), env->literals);
     NcSetSlot(fn, NSSYM0(argFrame), env->argFrame);
-    NcSetSlot(fn, NSSYM0(numArgs), NewtMakeInteger(numArgs));
+    NcSetSlot(fn, NSSYM0(numArgs), MakeFFNumArgs(numArgs, 0));
 
     env->func = fn;
 
@@ -927,7 +938,6 @@ newtRef NBCFnDone(nbc_env_t ** envP)
     {
         newtRefVar	instr;
         newtRefVar	literals;
-        newtRefVar	numArgs;
 
         NBCGenCodeEnv(env, kNBCReturn, 0);
 
@@ -940,11 +950,25 @@ newtRef NBCFnDone(nbc_env_t ** envP)
         if (NewtRefIsNotNIL(literals) && NewtLength(literals) == 0)
             NcSetSlot(fn, NSSYM0(literals), kNewtRefNIL);
 
-        // Drop argframe if it is just empty
-        // A fasterFunctions optimization
-        numArgs = NcGetSlot(fn, NSSYM0(numArgs));
-        if (NewtRefIsLiteral(numArgs) && NewtLength(env->argFrame) == 3 + NewtRefToInteger(numArgs))
-            NcSetSlot(fn, NSSYM0(argFrame), kNewtRefNIL);
+        // FasterFunctions optimization
+        if (!NEWT_MODE_NOS1_FUNCTIONS) {
+            newtRefVar	indefinite;
+            size_t		numArgs;
+            size_t		numLocals;
+            // Drop argframe if we never call set-lex-scope
+            if (!NEEDARGFRAME) {;
+                NcSetSlot(fn, NSSYM0(argFrame), kNewtRefNIL);
+            }
+            // Set numArgs to (min)NumArgs + (0x10000 * number of local variables)
+            numArgs = FFNumArgsToNumArgs(NcGetSlot(fn, NSSYM0(numArgs)));
+            indefinite = NcGetSlot(fn, NSSYM0(indefinite));
+            numLocals = NewtFrameLength(ARGFRAME) - numArgs - 3;
+            if (NewtRefIsNotNIL(indefinite))
+                numLocals--;
+            if (numLocals) {
+                NcSetSlot(fn, NSSYM0(numArgs), MakeFFNumArgs(numArgs, numLocals));
+            }
+        }
 
         *envP = env->parent;
         NBCEnvFree(env);
@@ -1856,13 +1880,15 @@ void NBCGenAssign(nps_syntax_node_t * stree,
         // If variable is in argframe, we don't need to find it
         b = NewtFindSlotIndex(ARGFRAME, lvalue);
         if (b == -1) {
+            NEEDARGFRAME = true;
             NBCGenCodeL(kNBCFindAndSetVar, lvalue);
+            if (ret)
+                NBCGenCodeL(kNBCFindVar, lvalue);
         } else {
             NBCGenCode(kNBCSetVar, b);
+            if (ret)
+                NBCGenCodeL(kNBCGetVar, lvalue);
         }
-
-        if (ret)
-            NBCGenCodeL(kNBCFindVar, lvalue);
     }
 #ifdef __NAMED_MAGIC_POINTER__
 	else if (NewtRefIsNamedMP(lvalue))
@@ -2024,15 +2050,24 @@ void NBCGenFn(nps_syntax_node_t * stree, nps_node_t args, nps_node_t expr)
 {
     newtRefVar	fn;
     newtRefVar argFrame;
+    size_t     numLocals;
+    int        funcType;
 
     (void) NBCMakeFnEnv(stree, args);
     NBCGenBC_op(stree, expr);
     fn = NBCFnDone(&newt_bc_env);
     NBCGenPUSH(fn);
     argFrame = NcGetSlot(fn, NSSYM0(argFrame));
-    // Only set scope if called function has an argFrame.
-    if (NewtRefIsFrame(argFrame) && NewtFrameLength(argFrame) > 3)
+    numLocals = FFNumArgsToLocals(NcGetSlot(fn, NSSYM0(numArgs)));
+    // set-lex-scope is required:
+    // - if function is a classic CodeBlock function
+    // - if function is a kNewtFastFunction with local variables/argFrame
+    funcType = NewtRefFunctionType(fn);
+    if (funcType == kNewtCodeBlock
+        || (funcType == kNewtFastFunction && (NewtRefIsNotNIL(argFrame) || numLocals > 0))) {
+        NEEDARGFRAME = true;
         NBCGenCode(kNBCSetLexScope, 0);
+    }
 }
 
 

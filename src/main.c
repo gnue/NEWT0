@@ -33,6 +33,7 @@
 enum {
     optNone			= 0,
     optNos2,
+    optNos1Functions,
     optCopyright,
     optVersion,
     optStaff,
@@ -46,6 +47,7 @@ static keyword_t	reserved_words[] = {
         // アルファベット順にソートしておくこと
         {"copyright",	optCopyright},
         {"newton",		optNos2},
+        {"nos1Functions",	optNos1Functions},
         {"nos2",		optNos2},
         {"staff",		optStaff},
         {"version",		optVersion},
@@ -361,6 +363,11 @@ void newt_option(const char * s)
 			NEWT_MODE_NOS2 = true;
 			break;
 
+		// As opposed to NewtonOS 2.x-only faster functions
+		case optNos1Functions:
+			NEWT_MODE_NOS1_FUNCTIONS = true;
+			break;
+
         // コピーライト
         case optCopyright:
             newt_show_copyright();
@@ -445,8 +452,7 @@ int main (int argc, const char * argv[])
         if (*s == '-')
         {
             newt_option(s + 1);
-            i++;
-            break;
+            continue;
         }
 
         switch (*s)

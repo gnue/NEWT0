@@ -1049,6 +1049,7 @@ bool NewtRefIsImmediate(newtRefArg r)
 
 /*------------------------------------------------------------------------*/
 /** オブジェクトがコードブロック（関数オブジェクト）かチェックする
+ * Fast functions are also CodeBlocks.
  *
  * @param r			[in] オブジェクト
  *
@@ -1065,6 +1066,9 @@ bool NewtRefIsCodeBlock(newtRefArg r)
         klass = NcClassOf(r);
 
         if (NewtRefEqual(klass, NSSYM0(CodeBlock)))
+            return true;
+
+        if (NewtRefEqual(klass, kNewtFastFunctionClass))
             return true;
     }
 
@@ -1144,6 +1148,9 @@ int NewtRefFunctionType(newtRefArg r)
 
         if (NewtRefEqual(klass, NSSYM0(CodeBlock)))
 			return kNewtCodeBlock;
+
+        if (NewtRefEqual(klass, kNewtFastFunctionClass))
+			return kNewtFastFunction;
 
 		if (NewtRefEqual(klass, NSSYM0(_function.native0)))
 			return kNewtNativeFn;
@@ -4125,7 +4132,7 @@ newtRef NewtMakeNativeFn0(void * funcPtr, size_t numArgs, bool indefinite, char 
     fn = NewtMakeFrame2(sizeof(fnv) / (sizeof(newtRefVar) * 2), fnv);
 
     NcSetSlot(fn, NSSYM0(funcPtr), NewtMakeAddress(funcPtr));
-    NcSetSlot(fn, NSSYM0(numArgs), NewtMakeInteger(numArgs));
+    NcSetSlot(fn, NSSYM0(numArgs), MakeFFNumArgs(numArgs, 0));
     NcSetSlot(fn, NSSYM0(indefinite), NewtMakeBoolean(indefinite));
     NcSetSlot(fn, NSSYM0(docString), NSSTRCONST(doc));
 
@@ -4181,7 +4188,7 @@ newtRef NewtMakeNativeFunc0(void * funcPtr, size_t numArgs, bool indefinite, cha
     fn = NewtMakeFrame2(sizeof(fnv) / (sizeof(newtRefVar) * 2), fnv);
 
     NcSetSlot(fn, NSSYM0(funcPtr), NewtMakeAddress(funcPtr));
-    NcSetSlot(fn, NSSYM0(numArgs), NewtMakeInteger(numArgs));
+    NcSetSlot(fn, NSSYM0(numArgs), MakeFFNumArgs(numArgs, 0));
     NcSetSlot(fn, NSSYM0(indefinite), NewtMakeBoolean(indefinite));
     NcSetSlot(fn, NSSYM0(docString), NSSTRCONST(doc));
 

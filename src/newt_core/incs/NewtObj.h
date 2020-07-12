@@ -16,7 +16,7 @@
 
 /* ヘッダファイル */
 #include "NewtType.h"
-
+#include <sys/types.h>
 
 /* マクロ */
 /// addr <--> integer　時のシフト
@@ -38,6 +38,7 @@
 
 #define	NewtRefIsSpecial(r)			((r & 0xF) == 2)					///< 特殊オブジェクトか？
 #define	NewtRefToSpecial(r)			(int32_t)((uintptr_t)r >> 2)			///< オブジェクト参照を特殊値に変換
+#define	NewtRefMakeSpecial(v)		(newtRef)(((uintptr_t)(v) << 4) | 2)	///< 特殊オブジェクトを作成
 
 #define NewtRefIsMagicPointer(r)	((r & 3) == 3)										///< マジックポインタか？（数値および名前付）
 
@@ -105,12 +106,20 @@
 #define NewtMakeNativeFunc(funcPtr, numArgs, doc)		NewtMakeNativeFunc0(funcPtr, numArgs, false, doc)	
 #define NewtDefGlobalFunc(sym, funcPtr, numArgs, doc)	NewtDefGlobalFunc0(sym, funcPtr, numArgs, false, doc)	
 
+#define FFNumArgsToLocals(i)		(NewtRefToInt30(i) >> 16)
+#define FFNumArgsToNumArgs(i)		(NewtRefToInt30(i) & 0xFFFF)
+#define MakeFFNumArgs(n, l)			NewtMakeInt30(n | (l << 16))
+
+// C++ Headers mention the possibility of more classes:
+// const Ref	kFuncClass = MAKEIMMED(kImmedSpecial, 3);			// Actually encompasses xxxxxx32
+#define kNewtFastFunctionClass		NewtRefMakeSpecial(3)
 
 /* 定数 */
 
 enum {
 	kNewtNotFunction			= 0,
 	kNewtCodeBlock,						// バイトコード関数
+	kNewtFastFunction,					// NewtonOS 2.x functions
 	kNewtNativeFn,						// ネイティブ関数（rcvrなし、old style）
 	kNewtNativeFunc						// ネイティブ関数（rcvrあり、new style）
 };

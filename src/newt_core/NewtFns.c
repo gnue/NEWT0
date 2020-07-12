@@ -2196,6 +2196,51 @@ newtRef NsGetEnv(newtRefArg rcvr, newtRefArg r)
 }
 
 
+/*------------------------------------------------------------------------*/
+/** Get compilation options applying to further calls to Compile
+ *
+ * @param rcvr		[in] レシーバ
+ *
+ * @return			Frame representing new compilation mode.
+ */
+
+newtRef NsGetCompileOptions(newtRefArg rcvr)
+{
+    newtRefVar result = NcMakeFrame();
+    NcSetSlot(result, NSSYM0(nosCompatible), NewtMakeBoolean(NEWT_MODE_NOS2));
+    NcSetSlot(result, NSSYM0(nos1Functions), NewtMakeBoolean(NEWT_MODE_NOS1_FUNCTIONS));
+
+    return result;
+}
+
+
+/*------------------------------------------------------------------------*/
+/** Set compilation options for further calls to Compile
+ *
+ * @param rcvr		[in] レシーバ
+ * @param r			[in] Frame with option flags
+ *
+ * @return			Frame representing new compilation mode.
+ */
+
+newtRef NsSetCompileOptions(newtRefArg rcvr, newtRefArg r)
+{
+    if (! NewtRefIsFrame(r))
+        return NewtThrow(kNErrNotAFrame, r);
+
+    newtRefVar nosCompatible = NcGetSlot(r, NSSYM0(nosCompatible));
+    if (NewtRefIsNotNIL(nosCompatible)) {
+        NEWT_MODE_NOS2 = true;
+    }
+    newtRefVar nos1Functions = NcGetSlot(r, NSSYM0(nos1Functions));
+    if (NewtRefIsNotNIL(nos1Functions)) {
+        NEWT_MODE_NOS1_FUNCTIONS = true;
+    }
+
+    return NsGetCompileOptions(rcvr);
+}
+
+
 #if 0
 #pragma mark -
 #endif

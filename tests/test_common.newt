@@ -23,6 +23,8 @@ begin
 end;
 
 global protoTestCase := {
+    SetUp: func() nil,
+    TearDown: func() nil,
     Run: func()
     begin
         local finalResult := true;
@@ -41,7 +43,9 @@ global protoTestCase := {
                 local resultStr := "OK";
                 local failedException := nil;
                 try
+                    :SetUp();
                     Perform(self, k, []);
+                    :TearDown();
                 onexception |evt.ex.test| do
                 begin
                     resultStr := "FAILED";
