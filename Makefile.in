@@ -74,9 +74,11 @@ PARSEROBJS    = $(yytmp)/y.tab.o \
 NEWTLIBS      = $(ext)/protoFILE \
                 $(ext)/protoREGEX
 
-CONTRIBLIBS   = $(contrib)/inwt \
-				$(contrib)/NewtObjC \
-				$(contrib)/NativeCalls
+CONTRIBLIBS   = $(contrib)/inwt
+
+CONTRIBLIBS_OBJC = $(contrib)/NewtObjC
+
+CONTRIBLIBS_LIBFFI = $(contrib)/NativeCalls
 
 OBJS          = $(MAINOBJ) $(UTILSOBJS) $(PARSEROBJS) $(COREOBJS)
 
@@ -113,7 +115,7 @@ HEADERS       = $(headerdir)/NewtBC.h \
 
 ### all
 
-all: newt libnewt @MAKE_EXT@ @MAKE_CONTRIB@
+all: newt libnewt @MAKE_EXT@ @MAKE_CONTRIB@ @MAKE_CONTRIB_OBJC@ @MAKE_CONTRIB_LIBFFI@
 
 ### make directory
 
@@ -180,7 +182,15 @@ ext: $(NEWTLIBS)
 $(NEWTLIBS)::
 	$(MAKE) -C $@
 
+contrib_objc: $(CONTRIBLIBS_OBJC)
+contrib_libffi: $(CONTRIBLIBS_LIBFFI)
 contrib: $(CONTRIBLIBS)
+
+$(CONTRIBLIBS_OBJC)::
+	$(MAKE) -C $@
+
+$(CONTRIBLIBS_LIBFFI)::
+	$(MAKE) -C $@
 
 $(CONTRIBLIBS)::
 	$(MAKE) -C $@
@@ -214,7 +224,7 @@ doc:
 
 ### INSTALL
 
-.PHONY : install install_ext install_contrib
+.PHONY : install install_ext install_contrib install_contrib_objc install_contrib_libffi
 
 install_ext::
 	@for subdir in $(NEWTLIBS); do \
@@ -226,6 +236,16 @@ install_contrib::
 		(cd $$subdir && $(MAKE) install) || exit 1; \
 	done
 
+install_contrib_libffi::
+	@for subdir in $(CONTRIBLIBS_LIBFFI); do \
+		(cd $$subdir && $(MAKE) install) || exit 1; \
+	done
+
+install_contrib_objc::
+	@for subdir in $(CONTRIBLIBS_OBJC); do \
+		(cd $$subdir && $(MAKE) install) || exit 1; \
+	done
+
 install::
 	install -m 755 $(NEWT) $(DESTDIR)$(bindir)
 	install -m 644 $(LIBNEWT) $(DESTDIR)$(libdir)
@@ -234,8 +254,25 @@ install::
 	install -m 644 $(HEADERS) $(DESTDIR)$(includedir)
 	test "x@MAKE_EXT@" = x || $(MAKE) install_ext
 	test "x@MAKE_CONTRIB@" = x || $(MAKE) install_contrib
+	test "x@MAKE_CONTRIB_LIBFFI@" = x || $(MAKE) install_contrib_libffi
+	test "x@MAKE_CONTRIB_OBJC@" = x || $(MAKE) install_contrib_objc
 
 ### TEST
+
+test_contrib::
+	@for subdir in $(CONTRIBLIBS); do \
+		(cd $$subdir && $(MAKE) test NEWT=$(PWD)/$(NEWT)) || exit 1; \
+	done
+
+test_contrib_libffi::
+	@for subdir in $(CONTRIBLIBS_LIBFFI); do \
+		(cd $$subdir && $(MAKE) test NEWT=$(PWD)/$(NEWT)) || exit 1; \
+	done
+
+test_contrib_objc::
+	@for subdir in $(CONTRIBLIBS_OBJC); do \
+		(cd $$subdir && $(MAKE) test NEWT=$(PWD)/$(NEWT)) || exit 1; \
+	done
 
 test:
 	$(NEWT) -C tests test_arithmetic.newt
@@ -255,7 +292,18 @@ clean_contrib::
 		(cd $$subdir && $(MAKE) clean) || exit 1; \
 	done
 
+clean_contrib_libffi::
+	@for subdir in $(CONTRIBLIBS_LIBFFI); do \
+		(cd $$subdir && $(MAKE) clean) || exit 1; \
+	done
+
+clean_contrib_objc::
+	@for subdir in $(CONTRIBLIBS_OBJC); do \
+		(cd $$subdir && $(MAKE) clean) || exit 1; \
+	done
+
 clean:
 	rm -rf build/*
 	test "x@MAKE_CONTRIB@" = x || $(MAKE) clean_contrib
-
+	test "x@MAKE_CONTRIB_LIBFFI@" = x || $(MAKE) clean_contrib_libffi
+	test "x@MAKE_CONTRIB_OBJC@" = x || $(MAKE) clean_contrib_objc

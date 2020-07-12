@@ -17,3 +17,6 @@ install::
 
 clean:
 	rm -f $(SCRIPT)
+
+test:
+	echo "No test defined for inwt"

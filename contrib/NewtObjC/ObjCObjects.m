@@ -44,7 +44,6 @@
 #include <objc/objc-class.h>
 #include <objc/objc-runtime.h>
 #include <Foundation/Foundation.h>
-#include "objc-runtime-x/objc-runtime-x.h"
 
 // NEWT/0
 #include "NewtCore.h"
@@ -54,6 +53,13 @@
 #import "Constants.h"
 #import "TNewtObjCRef.h"
 #import "Utils.h"
+
+// As an alternative to the ASM glue, we use more portable NSInvocation.
+// However, we need this private function.
+// Cf: https://www.mikeash.com/pyblog/friday-qa-2011-10-28-generic-block-proxying.html
+@interface NSInvocation (PrivateHack)
+- (void)invokeUsingIMP: (IMP)imp;
+@end
 
 // Additional prototypes
 newtRef GenericMethod(newtRef, newtRef);
@@ -145,7 +151,7 @@ GenericObjCMethod(id inSelf, SEL _cmd, ...)
 	free(theNSMethodName);
 	newtRefVar theIMPL = theInstance;
 	newtRefVar theNSMethod = kNewtRefNIL;
-	while (NewtRefIsNotNIL(theIMPL))
+	while (NewtRefIsFrame(theIMPL))
 	{
 		if (NewtHasSlot(theIMPL, theMethodSym))
 		{
@@ -246,24 +252,44 @@ ObjCAllocMethod(id inSelf, SEL _cmd)
 void
 ObjCInitializeMethod(id inSelf, SEL _cmd)
 {
+    // Create proto frame shared by all instances of the class.
+	newtRefVar theProtoFrame = NcMakeFrame();
+
 	// Grab the class frame.
 	newtRefVar theClassFrame = GetClassFromName(class_getName(((Class) inSelf)));
-	
-	// Set it as the _ns variable the objc object.
-	Ivar theVarDef = class_getInstanceVariable(object_getClass(inSelf), kObjCNSFrameVarName);
-	*((TNewtObjCRef**) ((uintptr_t) inSelf + ivar_getOffset(theVarDef))) =
-		[TNewtObjCRef refWithRef: theClassFrame];
+
+    // Get the instance methods.
+    newtRefVar instanceMethods =
+        NcGetSlot(theClassFrame, NSSYM(_instanceMethods));
+    // Set _proto slot to be the instance methods frame.
+    NcSetSlot(theProtoFrame, NSSYM(_proto), instanceMethods);
+
+    // Store the class in the _class frame.
+    NcSetSlot(theProtoFrame, NSSYM(_class), theClassFrame);
+
+	// Set it as index Ivar
+	TNewtObjCRef** indexedIVars = (TNewtObjCRef**) object_getIndexedIvars(inSelf);
+	*indexedIVars = [TNewtObjCRef refWithRef: theProtoFrame];
+}
+
+newtRef
+GetClassProtoFrame(Class inClass)
+{
+	TNewtObjCRef** indexedIVars = (TNewtObjCRef**) object_getIndexedIvars((id) inClass);
+	return [*indexedIVars ref];
 }
 
 /**
  * Create the instance frame and set the variable on the object accordingly.
- * This is done by getting the class and getting the methods from there.
+ * This is done by getting the class proto frame.
  * An instance frame is made of:
  * {
- *	_proto: instance methods frame
+ *  _proto: {
+ *	  _proto: instance methods frame
+ *    _class: class frame
+ *  },
  *  _parent: utility methods
  *  _self: pointer to the object
- *  _class: class frame
  * }
  */
 void
@@ -278,25 +304,16 @@ CreateInstanceFrame(id inObjCObject)
 	{
 		// Create a new frame.
 		newtRefVar theObjectFrame = NcMakeFrame();
-		
-		// Get the class frame.
-        newtRefVar theClassFrame = GetClassFromName(class_getName(object_getClass(inObjCObject)));
-		
-		// Get the instance methods.
-		newtRefVar instanceMethods =
-			NcGetSlot(theClassFrame, NSSYM(_instanceMethods));
-		// Set _proto slot to be the instance methods frame.
-		NcSetSlot(theObjectFrame, NSSYM(_proto), instanceMethods);
+
+	    newtRefVar theClassProtoFrame = GetClassProtoFrame(object_getClass(inObjCObject));
+		NcSetSlot(theObjectFrame, NSSYM(_proto), theClassProtoFrame);
 		
 		// Store the id in the _self frame.
 		NcSetSlot(theObjectFrame, NSSYM(_self), PointerToBinary(inObjCObject));
 
-		// Store the class in the _class frame.
-		NcSetSlot(theObjectFrame, NSSYM(_class), theClassFrame);
-
-		// Set _parent to the utility methods.
-		NcSetSlot(theObjectFrame, NSSYM(_parent),
-			NcResolveMagicPointer(NewtSymbolToMP(kInstanceParentMagicPtrKey)));
+        // Set _parent to the utility methods.
+        NcSetSlot(theObjectFrame, NSSYM(_parent),
+            NcResolveMagicPointer(NewtSymbolToMP(kInstanceParentMagicPtrKey)));
 
 		// Save it to the variable.
 		*theHandle = [TNewtObjCRef refWithRef: theObjectFrame];
@@ -307,11 +324,11 @@ CreateInstanceFrame(id inObjCObject)
  * Get the instance frame from a given object.
  */
 newtRef
-GetInstanceFrame(id inObject)
+GetInstanceFrame(id inObjCObject)
 {
-	// Get a pointer to the _ns variable of the objc object.
-	Ivar theVarDef = class_getInstanceVariable(object_getClass(inObject), kObjCNSFrameVarName);
-	TNewtObjCRef** theHandle = ((TNewtObjCRef**) ((uintptr_t) inObject + ivar_getOffset(theVarDef)));
+	Ivar theVarDef = class_getInstanceVariable(object_getClass(inObjCObject), kObjCNSFrameVarName);
+	TNewtObjCRef** theHandle =
+		((TNewtObjCRef**) ((uintptr_t) inObjCObject + ivar_getOffset(theVarDef)));
 	return [*theHandle ref];
 }
 
@@ -327,8 +344,6 @@ GenericMethod(newtRef inRcvr, newtRef inArgs)
 	int indexArgs, nbArgsNS;
 	struct objc_method* theMethod;
 	newtRefVar theResultObj = kNewtRefNIL;
-	id result;
-	void** storage;
 	newtRefVar theCurrentFunc = NVMCurrentFunction();
 	theMethod = (struct objc_method*)
 		BinaryToPointer(NcGetSlot(theCurrentFunc, NSSYM(_method)));
@@ -365,7 +380,10 @@ GenericMethod(newtRef inRcvr, newtRef inArgs)
 	// Catch exceptions (we'll cast them)
 	NS_DURING
 
-	[invocation invoke];
+    // We need to use a private API call here to call super without a lookup for
+    // the imp. Otherwise, we'll run into infinite loops for NewtonScript usage
+    // of inheritance.
+	[invocation invokeUsingIMP: method_getImplementation(theMethod)];
 	NSUInteger methodReturnLength = [methodSig methodReturnLength];
 
 	// Determine if the return type is a structure
@@ -465,8 +483,8 @@ GenericMethod(newtRef inRcvr, newtRef inArgs)
             theResultObj = CastToNS((id*) &theDouble, methodTypes);
         }
     } else if (methodReturnLength == sizeof(id)) {
-        id theResult;
-        [invocation getReturnValue:&result];
+        id theResult = nil;
+        [invocation getReturnValue:&theResult];
 		// Cast the result
 		theResultObj = CastToNS(&theResult, methodTypes);
     } else if (methodReturnLength == 0) {
@@ -484,16 +502,6 @@ GenericMethod(newtRef inRcvr, newtRef inArgs)
 		theResultObj = kNewtRefNIL;
 	NS_ENDHANDLER
 
-	// Release the temporary storage
-	for (indexArgs = 0; indexArgs < nbOfArguments; indexArgs++)
-	{
-		if (storage[indexArgs])
-		{
-			free( storage[indexArgs] );
-		}
-	}
-	free( storage );
-		
 	[pool release];
 
 	return theResultObj;
@@ -525,7 +533,7 @@ CreateClassObjectMethods(Class inObjCClass)
             newtRef theNSNameSymbol = NewtMakeSymbol(theNSName);
 
             // Do not add methods we already have (from subclasses)
-            if (!NcHasSlot(result, theNSNameSymbol)) {
+            if (!NewtHasSlot(result, theNSNameSymbol)) {
 				newtRefVar nsMethod;
 
 				// create the (ns) native method
@@ -663,7 +671,7 @@ GetClassFromName(const char* inName)
 /**
  * Create the list of variables.
  *
- * @param ioClass		class we're defining (or the metaclass).
+ * @param ioClass		class we're defining
  * @param inVariables	list of the variables to define (array).
  */
 void
@@ -884,7 +892,6 @@ CreateObjCClass(newtRefArg inRcvr, newtRefArg inDef)
 	newtRefVar nsInstanceMethods = NcGetSlot(inDef, NSSYM(instanceMethods));
 	newtRefVar nsClassMethods = NcGetSlot(inDef, NSSYM(classMethods));
 	newtRefVar nsInstanceVariables = NcGetSlot(inDef, NSSYM(instanceVariables));
-	newtRefVar nsClassVariables = NcGetSlot(inDef, NSSYM(classVariables));
 
 	if (!NewtRefIsString(nsNameString))
 	{
@@ -913,18 +920,17 @@ CreateObjCClass(newtRefArg inRcvr, newtRefArg inDef)
 	}
 
 	// Allocate space for the class and its metaclass
-    Class new_class = objc_allocateClassPair(super_class, name, 0);
+    Class new_class = objc_allocateClassPair(super_class, name, sizeof(TNewtObjCRef*));
     Class meta_class = object_getClass(new_class);
 
     // Set the instance variables lists.
 	CreateObjCVariables(new_class, nsInstanceVariables);
-	CreateObjCVariables(meta_class, nsClassVariables);
-	
+
 	// Define the ObjC methods (those that will call ns methods and those
 	// that will initialize the object).
 	CreateObjCMethods(new_class, nsInstanceMethods, 0);
 	CreateObjCMethods(meta_class, nsClassMethods, 1);
-    
+
 	// Finally, register the class with the runtime.
 	objc_registerClassPair(new_class);
 
@@ -956,7 +962,7 @@ CreateObjCClass(newtRefArg inRcvr, newtRefArg inDef)
 		{
 			newtRef key = NewtGetFrameKey(nsInstanceMethods, indexMethods);
 			newtRef function = NewtGetFrameSlot(nsInstanceMethods, indexMethods);
-	
+
 			NcSetSlot(originalMethods, key, function);
 		}
 	}
