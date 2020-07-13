@@ -23,4 +23,11 @@ local testCases := [
     }
 ];
 
-RunTestCases(testCases);
+local finalResult := true;
+
+foreach tc in testCases do
+begin
+    finalResult := finalResult and tc:Run();
+end;
+
+if not finalResult then Exit(1);
