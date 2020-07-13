@@ -434,7 +434,7 @@ newtRef NsLoadLib(newtRefArg rcvr, newtRefArg r)
 
     if (lib != NULL)
 	{
-        return NewtMakeInteger((int32_t)lib);
+        return NewtMakeInteger((intptr_t)lib);
 	}
 	else
 	{
