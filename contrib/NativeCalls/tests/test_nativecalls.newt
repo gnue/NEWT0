@@ -1,0 +1,50 @@
+#!newt
+
+if not load("../../../tests/test_common.newt") then
+begin
+    Print("Could not load ../../../tests/test_common.newt\n");
+    Exit(1);
+end;
+
+local testCases := [
+    {
+        _proto: protoTestCase,
+        testRequire: func() begin
+            Require("NativeCalls");
+        end,
+        testOpenLibc: func() begin
+            Require("NativeCalls");
+        	local libc := OpenNativeLibrary("libc");
+        	:AssertNotNIL(libc);
+        end,
+        testGetHostname: func() begin
+            Require("NativeCalls");
+        	local libc := OpenNativeLibrary("libc");
+        	libc:DefGlobalFn(
+		        '|libc.gethostname|,
+        		{name: "gethostname",
+		        args: ['string, 'sint32],
+        		result: 'sint32});
+            // strings aren't in unicode??
+            local hostname := MakeBinary(256, 'string);
+
+            // Get the hostname using gethostname.
+            local result := |libc.gethostname|(hostname, Length(hostname));
+            :AssertEqual(result, 0);
+            :AssertNotEqual(Length(hostname), 0);
+        end,
+        testCosine: func() begin
+            Require("NativeCalls");
+            local libm := OpenNativeLibrary("libm");
+            libm:DefGlobalFn(
+                '|libm.cos|,
+                {name: "cos",
+                args: ['double],
+                result: 'double});
+            local result := |libm.cos|(0.0);
+            :AssertEqual(result, 1.0);
+        end,
+    }
+];
+
+RunTestCases(testCases);
