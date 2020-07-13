@@ -209,6 +209,12 @@ void NewtObjFree(newtPool pool, newtObjRef obj)
         datasize = sizeof(newtObj) + sizeof(uint8_t *);
         datasize += NewtObjCalcDataSize(NewtObjSize(obj));
 
+        if (NewtObjIsIndirectBinary(obj)) {
+            newtCObject* objData;
+            objData = (newtCObject*) NewtObjData(obj);
+            if (objData->dtor)
+                objData->dtor(objData->cObj);
+        }
         NewtMemFree(NewtObjData(obj));
     }
 
@@ -404,10 +410,14 @@ void NewtGCRefMark(newtRefArg r, bool mark)
                 {
                     NewtGCRefMark(slots[i], mark);
                 }
+                if (NewtObjIsFrame(obj))
+                    NewtGCRefMark(obj->as.map, mark);
+            } else if (NewtObjIsIndirectBinary(obj)) {
+                newtCObject* objData;
+                objData = (newtCObject*) NewtObjData(obj);
+                if (objData->marker)
+                    objData->marker(objData->cObj);
             }
-    
-            if (NewtObjIsFrame(obj))
-                NewtGCRefMark(obj->as.map, mark);
         }
     }
 }

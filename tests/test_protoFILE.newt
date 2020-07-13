@@ -1,0 +1,55 @@
+#!newt
+
+if not load("test_common.newt") then
+begin
+    Print("Could not load test_common.newt\n");
+    Exit(1);
+end;
+
+local testCases := [
+    {
+        _proto: protoTestCase,
+        testRequire: func() begin
+            Require("protoFILE");
+        end,
+        testOpen: func() begin
+            Require("protoFILE");
+            local f := {
+                _proto: @protoFILE,
+            };
+            f:Open("/dev/null", "w");
+            local r := f:Close();
+            :AssertEqual(r, 0);
+        end,
+        testGC: func() begin
+            Require("protoFILE");
+            local f := {
+                _proto: @protoFILE,
+            };
+            f:Open("/dev/null", "w");
+            local fn := f:Fileno();
+            local maxFileno := fn;
+            for i := 0 to 64 do
+            begin
+                local g := {
+                    _proto: @protoFILE,
+                };
+                g:Open("/dev/null", "w");
+                local gn := g:Fileno();
+                if (gn > maxFileno) then
+                    maxFileno := gn;
+            end;
+            // Force a garbage collect by looping...
+            for i := 0 to 200 do
+                f:Fileno();
+            local h := {
+                _proto: @protoFILE,
+            };
+            h:Open("/dev/null", "w");
+            local hn := h:Fileno();
+            :AssertTrue(hn < maxFileno);
+        end,
+    }
+];
+
+RunTestCases(testCases);

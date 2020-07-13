@@ -80,6 +80,7 @@
 #define	NewtObjIsSlotted(v)			((v->header.h & kNewtObjSlotted) != 0)  ///< オブジェクトデータがスロットか？
 #define	NewtObjIsArray(v)			(NewtObjType(v) == 1)					///< オブジェクトデータが配列か？
 #define	NewtObjIsFrame(v)			(NewtObjType(v) == 3)					///< オブジェクトデータがフレームか？
+#define	NewtObjIsIndirectBinary(v)	(NewtObjType(v) == kNewtObjIndirectBin)	///< Indirect binaries special value
 #define NewtObjIsLiteral(v)			((v->header.h & kNewtObjLiteral) == kNewtObjLiteral)		///< リテラルか？
 #define NewtObjIsSweep(v, mark)		(((v->header.h & kNewtObjSweep) == kNewtObjSweep) == mark)  ///< スウィープ対象か？
 #define	NewtObjSize(v)				(v->header.h >> 8)					///< オブジェクトデータのサイズを取得
@@ -181,6 +182,9 @@ void *		NewtRefToAddress(newtRefArg r);
 
 newtRef		NewtMakeBinary(newtRefArg klass, uint8_t * data, size_t size, bool literal);
 newtRef		NewtMakeBinaryFromHex(newtRefArg klass, const char *hex, bool literal);
+newtRef		NewtAllocCObjectBinary(void* cObj, newtCObjectBinaryProc dtor, newtCObjectBinaryProc marker);
+bool		NewtGetCObjectPtr(newtRefArg bin, void** ptr);
+void		NewtFreeCObject(newtRefArg bin);
 newtRef		NewtMakeSymbol(const char *s);
 newtRef		NewtMakeString(const char *s, bool literal);
 newtRef		NewtMakeString2(const char *s, size_t len, bool literal);

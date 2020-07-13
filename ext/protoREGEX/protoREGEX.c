@@ -19,27 +19,24 @@
 #include "NewtCore.h"
 #include "NewtVM.h"
 
+/*------------------------------------------------------------------------*/
+/** Destructor called by garbage collector.
+ *
+ * @param cObj		[in] actual regex_t*
+ */
 
-bool protoREGEX_refIsPreg(newtRefArg r)
+void protoREGEX_preg_dtor(void* cObj)
 {
-    if (! NewtRefIsBinary(r))
-	{
-        NewtThrow(kNErrNotABinaryObject, r);
-		return false;
-	}
-
-    if (NewtLength(r) != sizeof(regex_t))
-	{
-        NewtThrow(kNErrNegativeLength, r);
-		return false;
-	}
-
-	return true;
+    if (cObj) {
+        regex_t* preg = (regex_t*) cObj;
+        regfree(preg);
+        free(preg);
+    }
 }
 
 newtRef protoREGEX_regcomp(newtRefArg pattern, newtRefArg opt)
 {
-	regex_t	preg;
+	regex_t*preg;
 	int		cflags = REG_EXTENDED;
 	int		err;
 
@@ -75,18 +72,19 @@ newtRef protoREGEX_regcomp(newtRefArg pattern, newtRefArg opt)
 		}
 	}
 
-	err = regcomp(&preg, NewtRefToString(pattern), cflags);
+    preg = malloc(sizeof(regex_t));
+	err = regcomp(preg, NewtRefToString(pattern), cflags);
 
 	if (err != 0)
 	{
         return NewtThrow(kNErrRegcomp, pattern);
 	}
 
-	return NewtMakeBinary(kNewtRefUnbind, (uint8_t *)&preg, sizeof(preg), false);
+    return NewtAllocCObjectBinary(preg, protoREGEX_preg_dtor, NULL);
 }
 
 
-newtRef protoREGEX_regexec(newtRefArg preg, newtRefArg str)
+newtRef protoREGEX_regexec(newtRefArg pregBin, newtRefArg str)
 {
 	newtRefVar	substr;
 	newtRefVar	r;
@@ -96,11 +94,12 @@ newtRef protoREGEX_regexec(newtRefArg preg, newtRefArg str)
 	int		eflags = 0;
 	int		err;
 	int		i;
+	regex_t* preg;
 
     if (NewtRefIsNIL(str))
         return kNewtRefNIL;
 
-    if (! protoREGEX_refIsPreg(preg))
+    if (!NewtGetCObjectPtr(pregBin, (void**)&preg))
         return kNewtRefUnbind;
 
     if (! NewtRefIsString(str))
@@ -109,7 +108,7 @@ newtRef protoREGEX_regexec(newtRefArg preg, newtRefArg str)
 	nmatch = sizeof(pmatch) / sizeof(regmatch_t);
 
 	src = NewtRefToString(str);
-    err = regexec((regex_t*)NewtRefToBinary(preg), src, nmatch, pmatch, eflags);
+    err = regexec(preg, src, nmatch, pmatch, eflags);
 
 	if (err != 0)
 		return kNewtRefNIL;
@@ -129,12 +128,15 @@ newtRef protoREGEX_regexec(newtRefArg preg, newtRefArg str)
 }
 
 
-newtRef protoREGEX_regfree(newtRefArg preg)
+newtRef protoREGEX_regfree(newtRefArg pregBin)
 {
-	if (! protoREGEX_refIsPreg(preg))
-		return kNewtRefUnbind;
+    regex_t* preg;
+    if (!NewtGetCObjectPtr(pregBin, (void**)&preg))
+        return kNewtRefUnbind;
 
-    regfree((regex_t*)NewtRefToBinary(preg));
+    regfree(preg);
+    free(preg);
+    NewtFreeCObject(pregBin);
 
 	return kNewtRefNIL;
 }
@@ -211,7 +213,6 @@ void protoREGEX_install(void)
   
 	NcSetSlot(r, NSSYM(Class),		NSSYM(Regex));
   
-  //	NcSetSlot(r, NSSYM(_gcScript),	NewtMakeNativeFunc(MyCleanup,	0, "_gcScript()"));
 	NcSetSlot(r, NSSYM(Compile),	NewtMakeNativeFunc(protoREGEX_compile,	0, "Compile()"));
 	NcSetSlot(r, NSSYM(Match),		NewtMakeNativeFunc(protoREGEX_match,		1, "Match(str)"));
 	NcSetSlot(r, NSSYM(Cleanup),	NewtMakeNativeFunc(protoREGEX_cleanup,	0, "Cleanup()"));

@@ -71,6 +71,9 @@ enum {
 enum {
     kNewtObjSlotted		= 0x01,		///< スロット
     kNewtObjFrame		= 0x02,		///< フレーム
+    // If set, object is a frame. Cannot be set unless kObjSlotted is also set.
+    // Actually, we have indirect binaries with type equal to 0x02, probably a NewtonOS 2 addition.
+    kNewtObjIndirectBin	= 0x02,
 
     kNewtObjLiteral		= 0x40,		///< リテラル
     kNewtObjSweep		= 0x80		///< ゴミ掃除（GC用）
@@ -153,6 +156,16 @@ typedef struct newtObj {
     } as;
 } newtObj;
 
+
+// CObjects
+typedef void (*newtCObjectBinaryProc)(void*);
+/// Structure for CObjects which embed pointers that can be garbage collected.
+/// Mimics NewtonOS CObjects
+typedef struct newtCObject {
+	void*					cObj;	///< Embedded pointer
+	newtCObjectBinaryProc	dtor;	///< Destructor
+	newtCObjectBinaryProc	marker;	///< Marker function, or NULL. Should mark reachable objects during garbage collection.
+} newtCObject;
 
 /// シンボルデータ
 typedef struct {
