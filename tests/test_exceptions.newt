@@ -106,7 +106,7 @@ local finalResult := true;
 
 foreach tc in testCases do
 begin
-    finalResult := finalResult && tc:Run();
+    finalResult := finalResult and tc:Run();
 end;
 
 if not finalResult then Exit(1);

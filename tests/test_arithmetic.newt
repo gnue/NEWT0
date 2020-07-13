@@ -1,0 +1,49 @@
+#!newt
+
+if not load("test_common.newt") then
+begin
+    Print("Could not load test_common.newt\n");
+    Exit(1);
+end;
+
+local testCases := [
+    {
+        _proto: protoTestCase,
+        testAdd: func() begin
+            :AssertEqual(2, 1 + 1);
+            :AssertEqual(2, call Compile("1 + 1") with ());
+        end,
+        test32bits: func() begin
+            :AssertEqual(1073741824, call Compile("1") with () << 30);
+            :AssertEqual(1879048192, call Compile("7340032 * 256") with ());
+            :AssertEqual(7340032, call Compile("7340032 * 256") with () / 256);
+        end,
+        test64bits: func() begin
+            :AssertEqual(0x8000000000000000, call Compile("1") with () << 63);
+            :AssertEqual(549755813888, call Compile("4611686018427387904") with () >> 23);
+            :AssertEqual(8070450532247928832, call Compile("7340032*16777216") with () * 65536);
+        end,
+        testParseHex: func() begin
+            :AssertEqual(536870912, 0x20000000);
+            :AssertEqual(-536870912, 0xFFFFFFFFE0000000);
+            :AssertEqual(3735929054, 0xDEADC0DE);
+        // The integer -536870912 can’t be specified as a literal but it can be computed.
+        // The NewtonScript Programming Language, page 2-10.
+        // Likewise, NEWT/0 cannot parse -9223372036854775808.
+        //     :AssertEqual(-9223372036854775808, 0x8000000000000000);
+        end,
+        testFloats: func() begin
+            :AssertEqualDelta(1.0, call Compile("0.5") with () * 2.0, 0.0001);
+            :AssertEqualDelta(0.5, call Compile("1.0") with () / 2.0, 0.0001);
+        end,
+    }
+];
+
+local finalResult := true;
+
+foreach tc in testCases do
+begin
+    finalResult := finalResult and tc:Run();
+end;
+
+if not finalResult then Exit(1);
