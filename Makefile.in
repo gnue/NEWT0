@@ -241,6 +241,9 @@ test:
 	$(NEWT) -C tests test_arithmetic.newt
 	$(NEWT) -C tests test_compile.newt
 	$(NEWT) -C tests test_exceptions.newt
+	test "x@MAKE_CONTRIB@" = x || $(MAKE) test_contrib
+	test "x@MAKE_CONTRIB_LIBFFI@" = x || $(MAKE) test_contrib_libffi
+	test "x@MAKE_CONTRIB_OBJC@" = x || $(MAKE) test_contrib_objc
 	test "x@MAKE_EXT@" = x || $(NEWT) -C tests test_protoFILE.newt
 	test "x@MAKE_EXT@" = x || $(NEWT) -C tests test_protoREGEX.newt
 
