@@ -40,6 +40,7 @@
 						"  -v              print version number\n"		\
 						"  -h              print this help message\n"	\
 						"  --newton,--nos2 Newton OS 2.0 compatible	\n"	\
+						"  --nos1Functions Newton OS 1.x functions\n"	\
 						"  --copyright     print copyright\n"			\
 						"  --version       print version number\n"		\
 						"  --staff         list of developers\n"

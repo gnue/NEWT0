@@ -13,6 +13,7 @@
 /* ヘッダファイル */
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 
 #include "NewtParser.h"
 #include "NewtErrs.h"
@@ -219,7 +220,7 @@ newtErr NPSParseFile(const char * path,
 
         if (yyin == NULL)
         {
-            NewtFprintf(stderr, "not open file.\n");
+            NewtFprintf(stderr, "Could not open file %s (errno=%d).\n", path, errno);
             return kNErrFileNotOpen;
         }
 

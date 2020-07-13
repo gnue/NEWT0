@@ -219,6 +219,10 @@ void NewtInitSYM(void)
     INITSYM(_ENV_);
     INITSYM(NEWTLIB);
 
+    // Compile options
+    INITSYM(nosCompatible);
+    INITSYM(nos1Functions);
+
 	// ARGV
     INITSYM(_ARGV_);
     INITSYM(_EXEDIR_);

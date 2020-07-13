@@ -1,0 +1,227 @@
+#!newt
+
+if not load("test_common.newt") then
+begin
+    Print("Could not load test_common.newt\n");
+    Exit(1);
+end;
+
+// These test cases were compared with NewtonOS compiler.
+// In some cases, NEWT/0 does not generate exactly the same bytecode, which is
+// fine as long as the behavior is the same.
+local testCases := [
+    {
+        _proto: protoTestCase,
+        SetUp: func()
+            SetCompileOptions({nos1Functions: nil, nosCompatible: true}),
+        testCompileReturnNil: func() begin
+            local f := Compile("return nil");
+            :AssertNotEqual(f.class, 'CodeBlock);   // There is no MakeSpecial/MakeImmed yet
+            :AssertEqual(f.numArgs, 0);
+            :AssertEqual(f.instructions, MakeBinaryFromHex("220202", 'instructions));
+        end,
+        testCompileReturnTrue: func() begin
+            local f := Compile("return true");
+            :AssertEqual(f.instructions, MakeBinaryFromHex("27001A0202", 'instructions));
+        end,
+        testCompileUnusedLocal: func() begin
+            local f := Compile("local a := true; return nil");
+            :AssertEqual(f.instructions, MakeBinaryFromHex("27001AA3220202", 'instructions));
+        end,
+        testExpressionValue: func() begin
+            local f := Compile("nil");
+            :AssertEqual(f.instructions, MakeBinaryFromHex("2202", 'instructions));
+        end,
+        testExpressionValueWithUnusedLocal: func() begin
+            local f := Compile("local a := true; 1");
+            :AssertEqual(f.instructions, MakeBinaryFromHex("27001AA32402", 'instructions));
+            :AssertEqual(f.literals, NIL);
+        end,
+        testClosure: func() begin
+            local f := Compile("local f := func() return a; local a := 1; f");
+            :AssertEqual(f.instructions, MakeBinaryFromHex("1804A324A47B02", 'instructions));
+                // NewtonOS 2.1 compiler:
+                // Optimizes the number of local variables to 1
+                // 0 : 18        push (b=0)
+                // 1 : 04        set-lex-scope
+                // 2 : A3        set-var (b=3)
+                // 7 : 24        push-constant (b=4) (int=1)
+                // 6 : A9        find-and-set-var (b=1)
+                // 27: 7B        get-var (b=3)
+                // 8 : 02        return
+                // NEWT/0
+                // 0 : 18        push (b=0)
+                // 1 : 04        set-lex-scope
+                // 2 : A3        set-var (b=3)
+                // 7 : 24        push-constant (b=4) (int=1)
+                // 6 : A4        set-var (b=4)  // optimization of using set-var instead of find-and-set-var
+                // 27: 7B        get-var (b=3)
+                // 8 : 02        return
+            :AssertEqual(Length(f.literals), 1);
+            local f0 := f.literals[0];
+            :AssertEqual(f0.literals[0], 'a);
+            :AssertTrue(IsFrame(f0.argFrame));
+            :AssertEqual(3, Length(f0.argFrame));
+        end,
+        testTryWithOnException: func() begin
+            local f := Compile("try 1 onexception |evt| do 2");
+            :AssertEqual(f.literals[0], 'evt);
+            :AssertEqual(f.instructions, MakeBinaryFromHex(
+                "18270030C9240700075F001227000807000702",
+                'instructions));
+                // Identical to NewtonOS 2.1 compiler:
+                // 0 : 18        push (b=0)
+                // 1 : 270030    push-constant (b=48) (int=12)
+                // 4 : C9        new-handlers
+                // 5 : 24        push-constant (b=4) (int=1)
+                // 6 : 070007    pop-handlers
+                // 9 : 5F0012    branch (b=18 vs b=21???)
+                // 12: 270008    push-constant (b=8) (int=2)
+                // 15: 070007    pop-handlers
+                // 18: 02        return
+        end,
+        testTryWithOnExceptionAndReturn: func() begin
+            // https://github.com/gnue/NEWT0/issues/7
+            local f := Compile("try Throw('|evt.ex|, 1); onexception |evt.ex| do return 2; return 3;");
+            :AssertEqual(f.literals[0], '|evt.ex|);
+            :AssertEqual(f.literals[1], 'Throw);
+            :AssertEqual(f.instructions, MakeBinaryFromHex(
+                   "18270040C91824192A000700075F00172700080207000727000C0202",
+                'instructions));
+                // "18270040C91824192A000700075F0018270008020007000727000C0202",
+                // NewtonOS 2.1 compiler:
+                // 0 : 18        push (b=0)
+                // 1 : 270040    push-constant (b=64) (int=16)
+                // 4 : C9        new-handlers
+                // 5 : 18        push (b=0)
+                // 6 : 24        push-constant (b=4) (int=1)
+                // 7 : 19        push (b=1)
+                // 8 : 2A        call (b=2)
+                // 9 : 00        pop
+                // 10: 070007    pop-handlers
+                // 13: 5F0018    branch (b=24)
+                // 16: 270008    push-constant (b=8) (int=2)
+                // 19: 02        return
+                // 20: 00        pop            // useless pop, that we don't encode
+                // 21: 070007    pop-handlers
+                // 24: 27000C    push-constant (b=12) (int=3)
+                // 27: 02        return
+                // 28: 02        return         // useless second return
+        end,
+        testTryWithOnExceptionAndAssign: func() begin
+            local f := Compile("local r := 1; try Throw('|evt.ex|, 2); onexception |evt.ex| do r := 3; r");
+            :AssertEqual(f.literals[0], '|evt.ex|);
+            :AssertEqual(f.literals[1], 'Throw);
+            :AssertEqual(f.instructions, MakeBinaryFromHex(
+                "24A318270050C918270008192A000700075F001B27000CA30700077B02",
+                'instructions));
+                // NewtonOS 2.1 compiler:
+                // 0 : 24        push-constant (b=4) (int=1)
+                // 1 : A3        set-var (b=3)
+                // 2 : 18        push (b=0)
+                // 3 : 270050    push-constant (b=80) (int=20)
+                // 6 : C9        new-handlers (b=1)
+                // 7 : 18        push (b=0)
+                // 8 : 270008    push-constant (b=8) (int=2)
+                // 11: 19        push (b=1)
+                // 12: 2A        call (b=2)
+                // 13: 00        pop
+                // 14: 070007    pop-handlers
+                // 17: 5F001B    branch (b=27)
+                // 20: 27000C    push-constant (b=12) (int=3)
+                // 23: A3        set-var (b=3)
+                // 24: 070007    pop-handlers
+                // 27: 7B        get-var (b=3)
+                // 28: 02        return
+        end,
+        testNoVariableIsCreatedForParameters: func() begin
+            local f0 := Compile("func f(x, y) [x, y]; f(1, 2)");
+            :AssertEqual(f0.literals[0], 'f);
+            :AssertTrue(IsFunction(f0.literals[1]));
+            :AssertEqual(f0.literals[2], 'DefGlobalFn);
+            :AssertEqual(f0.argFrame, nil);
+            local f := f0.literals[1];
+            :AssertEqual(Length(f.literals), 1);
+            :AssertEqual(f.literals[0], 'Array);
+            :AssertEqual(f.argFrame, nil);
+            :AssertEqual(f.instructions, MakeBinaryFromHex(
+                "7B7C188A02",
+                'instructions));
+                // NewtonOS 2.1 compiler:
+                // 0 : 7B        get-var (b=3)
+                // 1 : 7C        get-var (b=4)
+                // 2 : 18        push (b=0)
+                // 3 : 8A        make-array (b = 2)
+                // 11: 02        return
+            :AssertEqual(f0.instructions, MakeBinaryFromHex(
+                "18191A2A0024270008182A02",
+                'instructions));
+                // NewtonOS 2.1 compiler:
+                // 0 : 18        push (b=0)
+                // 1 : 19        push (b=1)
+                // 2 : 1A        push (b=2)
+                // 3 : 2A        call (b=2)
+                // 4 : 00        pop
+                // 5 : 24        push-constant (b=4) (int=1)
+                // 6 : 270008    push-constant (b=8) (int=2)
+                // 7 : 18        push (b=0)
+                // 8 : 2A        call (b=2)
+                // 9 : 02        return
+        end,
+        testSubfunction: func() begin
+            local f0 := Compile("func f(x, y) [x, y]; f(1, 2)");
+            :AssertEqual(f0.literals[0], 'f);
+            :AssertTrue(IsFunction(f0.literals[1]));
+            :AssertEqual(f0.literals[2], 'DefGlobalFn);
+            :AssertEqual(f0.argFrame, nil);
+            local f := f0.literals[1];
+            :AssertEqual(Length(f.literals), 1);
+            :AssertEqual(f.literals[0], 'Array);
+            :AssertEqual(f.argFrame, nil);
+            :AssertEqual(f.instructions, MakeBinaryFromHex(
+                "7B7C188A02",
+                'instructions));
+                // NewtonOS 2.1 compiler:
+                // 0 : 7B        get-var (b=3)
+                // 1 : 7C        get-var (b=4)
+                // 2 : 18        push (b=0)
+                // 3 : 8A        make-array (b = 2)
+                // 11: 02        return
+            :AssertEqual(f0.instructions, MakeBinaryFromHex(
+                "18191A2A0024270008182A02",
+                'instructions));
+                // NewtonOS 2.1 compiler:
+                // 0 : 18        push (b=0)
+                // 1 : 19        push (b=1)
+                // 2 : 1A        push (b=2)
+                // 3 : 2A        call (b=2)
+                // 4 : 00        pop
+                // 5 : 24        push-constant (b=4) (int=1)
+                // 6 : 270008    push-constant (b=8) (int=2)
+                // 7 : 18        push (b=0)
+                // 8 : 2A        call (b=2)
+                // 9 : 02        return
+        end,
+    },
+    // NOS 1.x compatible tests (without fast functions)
+    {
+        _proto: protoTestCase,
+        SetUp: func()
+            SetCompileOptions({nos1Functions: true, nosCompatible: true}),
+        testNOS1CompileReturnNil: func() begin
+            local f := Compile("return nil");
+            :AssertEqual(f.class, 'CodeBlock);
+            :AssertEqual(f.numArgs, 0);
+            :AssertEqual(f.instructions, MakeBinaryFromHex("220202", 'instructions));
+        end,
+    }
+];
+
+local finalResult := true;
+
+foreach tc in testCases do
+begin
+    finalResult := finalResult and tc:Run();
+end;
+
+if not finalResult then Exit(1);

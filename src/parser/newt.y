@@ -307,7 +307,7 @@ array
 		;
 
 array_item_list
-		: /* empty */					{ $$ = NPSMakeArray(kNewtRefUnbind); }
+		: /* empty */					{ $$ = NPSMakeArray(NSSYM0(array)); }
 		| object						{ $$ = NPSMakeArray($1); }
 		| array_item_list ','
 		| array_item_list ',' object	{ $$ = NPSAddArraySlot($1, $3); }
@@ -339,7 +339,7 @@ binary_item_list
 constructor
 		// 配列の生成
 		: '[' kSYMBOL ':' expr_list ']'		{ $$ = NPSGenNode2(kNPSMakeArray, $2, $4); }
-		| '[' expr_list ']'					{ $$ = NPSGenNode2(kNPSMakeArray, kNewtRefUnbind, $2); }
+		| '[' expr_list ']'					{ $$ = NPSGenNode2(kNPSMakeArray, NSSYM0(array), $2); }
 
 		// フレームの生成
 		| '{' frame_constructor_list '}'	{ $$ = NPSGenNode1(kNPSMakeFrame, $2); }

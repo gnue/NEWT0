@@ -30,6 +30,7 @@
 #define NEWT_SWEEP			(newt_env.sweep)				///< SWEEPフラグ
 #define NEWT_NEEDGC			(newt_env.needgc)				///< GCフラグ
 #define NEWT_MODE_NOS2		(newt_env.mode.nos2)			///< NOS2 コンパチブル
+#define NEWT_MODE_NOS1_FUNCTIONS	(newt_env.mode.nos1Functions)	///< As opposed to NewtonOS 2.x-only faster functions
 
 #define NSSTR(s)			(NewtMakeString(s, false))		///< 文字列オブジェクトの作成
 #define NSSTRCONST(s)		(NewtMakeString(s, true))		///< 文字列定数オブジェクトの作成
@@ -87,6 +88,7 @@ typedef struct {
 
 	/// モード
 	struct {
+		bool	nos1Functions;	///< As opposed to NewtonOS 2.x-only faster functions
 		bool	nos2;			///< NOS2 コンパチブル
 	} mode;
 
@@ -218,6 +220,10 @@ typedef struct {
 	// ENV
     newtRefVar	_ENV_;				///< _ENV_
     newtRefVar	NEWTLIB;			///< NEWTLIB
+
+	// Compile options
+    newtRefVar	nosCompatible;		///< nosCompatible
+    newtRefVar	nos1Functions;		///< nos1Functions
 
 	// ARGV
     newtRefVar	_ARGV_;				///< _ARGV_

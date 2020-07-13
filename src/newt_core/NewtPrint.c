@@ -731,7 +731,7 @@ void NIOPrintFnFrame(newtStream_t * f, newtRefArg r)
     size_t		numArgs;
 	char *		indefiniteStr = "";
 
-    numArgs = NewtRefToInteger(NcGetSlot(r, NSSYM0(numArgs)));
+    numArgs = FFNumArgsToNumArgs(NcGetSlot(r, NSSYM0(numArgs)));
 	indefinite = NcGetSlot(r, NSSYM0(indefinite));
 
 	if (NewtRefIsNotNIL(indefinite))
@@ -840,9 +840,13 @@ void NIOPrintObjFrame(newtStream_t * f, newtRefArg r, int32_t depth, bool litera
 
             slot = NewtGetMapIndex(obj->as.map, i, &index);
 			if (slot == kNewtRefUnbind) break;
-
-            NIOPrintObjSymbol(f, slot);
-            NIOFputs(": ", f);
+            // Special case of fastFunctions maps with NIL slot names
+            if (slot == kNewtRefNIL) {
+                NIOFputs("NIL: ", f);
+            } else {
+                NIOPrintObjSymbol(f, slot);
+                NIOFputs(": ", f);
+            }
             NIOPrintObj2(f, slots[i], depth, literal);
 
         }
