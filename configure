@@ -5248,7 +5248,20 @@ if test "$ac_res" != no; then :
 
 fi
 
-    test "$ac_cv_search" != "no" && HAVE_LIBFFI='yes'
+    if test "$ac_cv_search" != "no"; then
+        for ac_header in ffi/ffi.h
+do :
+  ac_fn_c_check_header_mongrel "$LINENO" "ffi/ffi.h" "ac_cv_header_ffi_ffi_h" "$ac_includes_default"
+if test "x$ac_cv_header_ffi_ffi_h" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_FFI_FFI_H 1
+_ACEOF
+ HAVE_LIBFFI='yes'
+fi
+
+done
+
+    fi
     ;;
 esac
 
