@@ -37,7 +37,6 @@
 #include <limits.h>
 #include <errno.h>
 #include <dlfcn.h>
-#include <ffi/ffi.h>
 #include <libgen.h>
 #include <sys/types.h>
 #include <dirent.h>
@@ -46,6 +45,13 @@
 #include "NewtLib.h"
 #include "NewtCore.h"
 #include "NewtVM.h"
+
+#ifdef HAVE_FFI_FFI_H
+#include <ffi/ffi.h>
+#endif
+#ifdef HAVE_FFI_H
+#include <ffi.h>
+#endif
 
 #define kNErrNative					(kNErrMiscBase - 2)	///< OK. Maybe change this.
 #define kLibParentMagicPtrKey		NSSYM(parentNativeLib)

@@ -15,8 +15,6 @@ jobs:
         os: [ubuntu-latest, macos-latest]
 
     steps:
-    - name: Install dependencies
-      run: which apt-get && sudo apt-get install -y libffi-dev || echo ok
     - uses: actions/checkout@v2
     - name: configure
       run: |

@@ -5249,12 +5249,13 @@ if test "$ac_res" != no; then :
 fi
 
     if test "$ac_cv_search" != "no"; then
-        for ac_header in ffi/ffi.h
+        for ac_header in ffi/ffi.h, ffi.h
 do :
-  ac_fn_c_check_header_mongrel "$LINENO" "ffi/ffi.h" "ac_cv_header_ffi_ffi_h" "$ac_includes_default"
-if test "x$ac_cv_header_ffi_ffi_h" = xyes; then :
+  as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
+ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
+if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
   cat >>confdefs.h <<_ACEOF
-#define HAVE_FFI_FFI_H 1
+#define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
 _ACEOF
  HAVE_LIBFFI='yes'
 fi

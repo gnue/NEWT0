@@ -160,7 +160,7 @@ case "$HAVE_DLOPEN" in
     HAVE_LIBFFI='no'
     AC_SEARCH_LIBS(ffi_call, ffi)
     if test "$ac_cv_search" != "no"; then
-        AC_CHECK_HEADERS([ffi/ffi.h], [HAVE_LIBFFI='yes'])
+        AC_CHECK_HEADERS([ffi/ffi.h, ffi.h], [HAVE_LIBFFI='yes'])
     fi
     ;;
 esac
