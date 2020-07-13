@@ -29,7 +29,7 @@ local testCases := [
             f:Open("/dev/null", "w");
             local fn := f:Fileno();
             local maxFileno := fn;
-            for i := 0 to 64 do
+            for i := 0 to 128 do
             begin
                 local g := {
                     _proto: @protoFILE,
@@ -47,7 +47,7 @@ local testCases := [
             };
             h:Open("/dev/null", "w");
             local hn := h:Fileno();
-            :AssertTrue(hn < maxFileno);
+            :AssertLessThan(hn, maxFileno);
         end,
     }
 ];

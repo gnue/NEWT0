@@ -89,6 +89,14 @@ global protoTestCase := {
             Throw('|evt.ex.test.assertEqualDeltaFailed|, {x: x, y: y, delta: delta})
         end;
     end,
+
+    AssertLessThan: func(x, y)
+    begin
+        if not x < y then
+        begin
+            Throw('|evt.ex.test.AssertLessThanFailed|, {x: x, y: y})
+        end;
+    end,
     
     AssertThrow: func(sym, closure)
     begin
