@@ -43,22 +43,25 @@
 #define NewtRefIsMagicPointer(r)	((r & 3) == 3)										///< マジックポインタか？（数値および名前付）
 
 // On 32 bits platform, we use the highest bit, which may be a problem.
-// On 64 bits platform, we assume MIN_ALIGN is 16 and use a low bit.
+// On 64 bits platform, we assume MIN_ALIGN is 16 and use a low bit to store the highest bit.
 #ifdef __NAMED_MAGIC_POINTER__
+#	define NewtMakeNamedMP(r)		NewtSymbolToMP(NewtMakeSymbol(r))					///< 名前付マジックポインタを作成
 #if INTPTR_MAX == INT32_MAX
 #	define NewtRefIsNamedMP(r)		((r & 0x80000003) == 0x80000003)					///< 名前付マジックポインタか？
-#	define NewtMakeNamedMP(r)		NewtSymbolToMP(NewtMakeSymbol(r))					///< 名前付マジックポインタを作成
 #	define NewtMPToSymbol(r)		((newtRef)((((uintptr_t)r << 1) & 0xFFFFFFF8) | 1))	///< 名前付マジックポインタをシンボルに変換
 #	define NewtSymbolToMP(r)		((newtRef)(((uintptr_t)r >> 1) | 0x80000003))		///< シンボルを名前付マジックポインタに変換
 #else
-#	define NewtRefIsNamedMP(r)		((r & 0x7) == 0x7)	///< 名前付マジックポインタか？
-#	define NewtMakeNamedMP(r)		NewtSymbolToMP(NewtMakeSymbol(r))					///< 名前付マジックポインタを作成
-#	define NewtMPToSymbol(r)		((newtRef)((((uintptr_t)r << 1) & 0xFFFFFFFFFFFFFFF0) | 1))	///< 名前付マジックポインタをシンボルに変換
-#	define NewtSymbolToMP(r)		((newtRef)(((uintptr_t)r >> 1) | 0x7))		///< シンボルを名前付マジックポインタに変換
+#	define NewtRefIsNamedMP(r)		((r & 0x8000000000000003) == 0x8000000000000003)	///< 名前付マジックポインタか？
+#	define NewtMPToSymbol(r)		((newtRef)((((uintptr_t)r << 1) & 0x7FFFFFFFFFFFFFF8) | ((((uintptr_t)r & 4) << 61)) | 1))
+#	define NewtSymbolToMP(r)		((newtRef)(((uintptr_t)r >> 1) | (((uintptr_t)r & 0x8000000000000000) >> 61) | 0x8000000000000003))
 #endif
 #endif /* __NAMED_MAGIC_POINTER__ */
 
+#if INTPTR_MAX == INT32_MAX
 #define NewtRefIsNumberedMP(r)		((r & 0x80000003) == 3)								///< 数値マジックポインタか？
+#else
+#define NewtRefIsNumberedMP(r)		((r & 0x8000000000000003) == 3)								///< 数値マジックポインタか？
+#endif
 #define NewtMakeMagicPointer(t, i)	((newtRef)((t << 14) | ((i & 0x03ff) << 2) | 3))	///< マジックポインタを作成
 #define	NewtMPToTable(r)			((int32_t)((uintptr_t)r >> 14))						///< マジックポインタのテーブル番号を取得
 #define	NewtMPToIndex(r)			((int32_t)(((uintptr_t)r >> 2) & 0x03ff))			///< マジックポインタのインデックスを取得
