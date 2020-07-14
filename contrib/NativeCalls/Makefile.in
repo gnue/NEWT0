@@ -29,7 +29,7 @@ NEWTLIBNAME	= NativeCalls
 NEWTEXLIB	= $(build)/$(NEWTLIBNAME).$(DLEXT)
 
 LIBOBJ		= $(build)/$(NEWTLIBNAME).o
-CFLAGS		+= -Wall -DDYLIBSUFFIX='"$(DLEXT)"'
+CFLAGS		+= -Wall -DDYLIBSUFFIX='"$(DLEXT)"' -O2 -pipe @NEWT_CFLAGS@
 
 .c.o:
 	$(CC) $(CFLAGS) $(INCS) -c $< -o $@

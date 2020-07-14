@@ -37,7 +37,7 @@ LIBOBJ		= \
 	TNewtObjCRef.o \
 	Utils.o
 
-CFLAGS		+= -Wall
+CFLAGS		+= -Wall -O2 -pipe @NEWT_CFLAGS@
 
 %.o: %.m
 	$(CC) $(CFLAGS) $(INCS) -c $< -o $@
