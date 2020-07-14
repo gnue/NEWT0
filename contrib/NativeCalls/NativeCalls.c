@@ -52,6 +52,93 @@
 #ifdef HAVE_FFI_H
 #include <ffi.h>
 #endif
+#ifdef HAVE_GNU_LIB_NAMES_H
+#include <gnu/lib-names.h>
+#endif
+
+#ifdef HAVE_GNU_LIB_NAMES_H
+const char* kLibNamesAliases[] = {
+#ifdef LD_LINUX_X86_64_SO
+    "ld-linux-x86-64", LD_LINUX_X86_64_SO,
+#endif
+#ifdef LD_SO
+    "ld-linux-x86-64", LD_SO,
+#endif
+#ifdef LIBANL_SO
+    "libanl", LIBANL_SO,
+#endif
+#ifdef LIBBROKENLOCALE_SO
+    "libBrokenLocale", LIBBROKENLOCALE_SO,
+#endif
+#ifdef LIBCRYPT_SO
+    "libcrypt", LIBCRYPT_SO,
+#endif
+#ifdef LIBC_SO
+    "libc", LIBC_SO,
+#endif
+#ifdef LIBDL_SO
+    "libdl", LIBDL_SO,
+#endif
+#ifdef LIBGCC_S_SO
+    "libgcc_s", LIBGCC_S_SO,
+#endif
+#ifdef LIBMVEC_SO
+    "libmvec", LIBMVEC_SO,
+#endif
+#ifdef LIBM_SO
+    "libm", LIBM_SO,
+#endif
+#ifdef LIBNSL_SO
+    "libnsl", LIBNSL_SO,
+#endif
+#ifdef LIBNSS_COMPAT_SO
+    "libnss_compat", LIBNSS_COMPAT_SO,
+#endif
+#ifdef LIBNSS_DB_SO
+    "libnss_db", LIBNSS_DB_SO,
+#endif
+#ifdef LIBNSS_DNS_SO
+    "libnss_dns", LIBNSS_DNS_SO,
+#endif
+#ifdef LIBNSS_FILES_SO
+    "libnss_files", LIBNSS_FILES_SO,
+#endif
+#ifdef LIBNSS_HESIOD_SO
+    "libnss_hesiod", LIBNSS_HESIOD_SO,
+#endif
+#ifdef LIBNSS_LDAP_SO
+    "libnss_ldap", LIBNSS_LDAP_SO,
+#endif
+#ifdef LIBNSS_NISPLUS_SO
+    "libnss_nisplus", LIBNSS_NISPLUS_SO,
+#endif
+#ifdef LIBNSS_NIS_SO
+    "libnss_nis", LIBNSS_NIS_SO,
+#endif
+#ifdef LIBNSS_TEST1_SO
+    "libnss_test1", LIBNSS_TEST1_SO,
+#endif
+#ifdef LIBNSS_TEST2_SO
+    "libnss_test2", LIBNSS_TEST2_SO,
+#endif
+#ifdef LIBPTHREAD_SO
+    "libpthread", LIBPTHREAD_SO,
+#endif
+#ifdef LIBRESOLV_SO
+    "libresolv", LIBRESOLV_SO,
+#endif
+#ifdef LIBRT_SO
+    "librt", LIBRT_SO,
+#endif
+#ifdef LIBTHREAD_DB_SO
+    "libthread_db", LIBTHREAD_DB_SO,
+#endif
+#ifdef LIBUTIL_SO
+    "libutil", LIBUTIL_SO,
+#endif
+    NULL
+};
+#endif
 
 #define kNErrNative					(kNErrMiscBase - 2)	///< OK. Maybe change this.
 #define kLibParentMagicPtrKey		NSSYM(parentNativeLib)
@@ -280,7 +367,13 @@ NativeCalls_DoOpenLib(const char* inPath)
 /**
  * Open a library. Return a reference to the binary holding the handle.
  * Algorithm:
- * -> if the path is absolute, check 
+ * -> if the path is not absolute,
+ *     -> check among known gnu/lib-names macros,
+ *     -> try in /lib/
+ *     -> try in /usr/lib/
+ * -> if the path is absolute, try directly.
+ * In each case, we try without suffix first, then with then with suffix and
+ * anything.
  *
  * @param inPath	path of the library to open.
  * @return a reference to a library object.
@@ -295,6 +388,17 @@ NativeCalls_OpenLib(const char* inPath)
 	do {
 		if (inPath[0] != '/')
 		{
+			/* check known gnu/lib-names macros */
+#ifdef HAVE_GNU_LIB_NAMES_H
+			const char** libname_crsr = kLibNamesAliases;
+			while (*libname_crsr) {
+				if (strcmp(libname_crsr[0], inPath) == 0) {
+					inPath = libname_crsr[1];
+					break;
+				}
+				libname_crsr += 2;
+			}
+#endif
 			/* try with /lib/<inPath> */
 			(void) snprintf(
 						thePath,
