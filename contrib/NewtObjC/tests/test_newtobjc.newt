@@ -1,0 +1,80 @@
+#!newt
+
+if not load("../../../tests/test_common.newt") then
+begin
+    Print("Could not load ../../../tests/test_common.newt\n");
+    Exit(1);
+end;
+
+local testCases := [
+    {
+        _proto: protoTestCase,
+        testRequire: func() begin
+            Require("NewtObjC");
+        end,
+        testMutableArray: func() begin
+            Require("NewtObjC");
+        	local NSMutableArray := GetObjCClass("NSMutableArray");
+        	local NSNumber := GetObjCClass("NSNumber");
+        	local NSValue := GetObjCClass("NSValue");
+        	local myNSArray := NSMutableArray:arrayWithCapacity_(5);
+        	myNSArray:insertObject_atIndex_(NSNumber:numberWithInt_(1), 0);
+        	myNSArray:insertObject_atIndex_("hello", 1);
+        	myNSArray:insertObject_atIndex_(NSNumber:numberWithFloat_(3.14), 2);
+        	myNSArray:insertObject_atIndex_(NSValue:valueWithPointer_('world), 3);
+        	myNSArray:insertObject_atIndex_("hello", 4);
+            :AssertEqual(1, myNSArray:indexOfObject_("hello"));
+            :AssertEqual(4, myNSArray:indexOfObject_inRange_("hello", {location: 2, length: 3}));
+        end,
+        testClassAndInheritedCall: func() begin
+            Require("NewtObjC");
+            local actionCalled := nil;
+            local actionParam := nil;
+            local descriptionCalled := nil;
+            local MyResponder :=
+                CreateObjCClass(
+                    {
+                        name: "MyResponder",
+                        super: "NSResponder",
+                        instanceMethods:
+                            {
+                                someAction_: func(inObject)
+                                    begin
+                                        actionCalled := self.slotX;
+                                        actionParam := inObject;
+                                    end,
+                                description: func()
+                                    begin
+                                        descriptionCalled := true;
+                                        return "I'm just a" && inherited:description();
+                                    end,
+                            },
+                        instanceVariables:
+                            [
+                                {
+                                    name: "foo",
+                                    type: kObjCOutletType
+                                }
+                            ],
+                    });
+        	local NSCalendarDate := GetObjCClass("NSCalendarDate");
+            local theDate := NSCalendarDate:calendarDate();
+            local theDescription := theDate:description();
+            local someResponder := MyResponder:new();
+            someResponder.slotX := "direct call";
+            someResponder:someAction_(theDate);            
+            :AssertEqual("direct call", actionCalled);
+            :AssertEqual(theDate, actionParam);
+            actionParam := nil;
+            someResponder.slotX := "call via objc";
+            someResponder:performSelector_withObject_('someAction_, theDate);
+            :AssertEqual("call via objc", actionCalled);
+            :AssertEqual(theDate, actionParam);
+            :AssertTrue(BeginsWith(someResponder:description(), "I'm just a <MyResponder: "));
+            :AssertTrue(BeginsWith(someResponder:performSelector_('description), "I'm just a <MyResponder: "));
+            :AssertTrue(BeginsWith(someResponder:performSelector_withObject_('performSelector_, 'description), "I'm just a <MyResponder: "));
+        end,
+    }
+];
+
+RunTestCases(testCases);
