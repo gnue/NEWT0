@@ -1219,7 +1219,7 @@ void * NewtRefToAddress(newtRefArg r)
  * @return			バイナリオブジェクト
  */
 
-newtRef NewtMakeBinary(newtRefArg klass, uint8_t * data, size_t size, bool literal)
+newtRef NewtMakeBinary(newtRefArg klass, const uint8_t * data, size_t size, bool literal)
 {
     newtObjRef	obj;
 

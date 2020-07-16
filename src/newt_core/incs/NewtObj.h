@@ -179,7 +179,7 @@ int			NewtRefFunctionType(newtRefArg r);
 bool		NewtRefIsRegex(newtRefArg r);
 void *		NewtRefToAddress(newtRefArg r);
 
-newtRef		NewtMakeBinary(newtRefArg klass, uint8_t * data, size_t size, bool literal);
+newtRef		NewtMakeBinary(newtRefArg klass, const uint8_t * data, size_t size, bool literal);
 newtRef		NewtMakeBinaryFromHex(newtRefArg klass, const char *hex, bool literal);
 newtRef		NewtMakeSymbol(const char *s);
 newtRef		NewtMakeString(const char *s, bool literal);
