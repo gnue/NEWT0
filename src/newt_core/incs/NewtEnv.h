@@ -146,6 +146,7 @@ typedef struct {
     newtRefVar	cbits;			///< cbits
     newtRefVar	nativeModule;			///< NTKC native module
     newtRefVar	CObject;			///< GC-aware CObjects
+    newtRefVar	code;			///< NTKC code block
 
     // for loop
     newtRefVar	collect;			///< collect

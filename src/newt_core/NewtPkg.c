@@ -54,6 +54,19 @@ typedef struct {
 	uint8_t*        data;
 } pkg_relocation_t;
 
+typedef struct {
+	uint32_t	reserved;
+	uint32_t	relocation_size;
+	uint32_t	page_size;
+	uint32_t	num_entries;
+	uint32_t	base_address;
+} relocation_header_t;
+
+typedef struct {
+	uint16_t   	page_number;
+	uint16_t   	offset_count;
+} relocation_set_t;
+
 /// package header structure
 typedef struct {
 	uint8_t		sig[8];			///< 8 byte signature
@@ -106,7 +119,9 @@ typedef struct {
 	iconv_t		from_utf16;		///< r  strings in compatible packages are UTF16
 	iconv_t		to_utf16;		///< w  strings in compatible packages are UTF16
 #endif /* HAVE_LIBICONV */
+	size_t		code_offset;	///< rw native code block offset
 	pkg_relocation_t relocations;
+	uint32_t	relocation_size;
 } pkg_stream_t;
 
 // In packages, references are limited to 32 bits.
@@ -487,6 +502,10 @@ pkgNewtRef PkgWriteBinary(pkg_stream_t *pkg, newtRefArg obj)
 	} else {
 		PkgWriteData(pkg, dst+12, data, size-12);
 	}
+	if (klass==NSSYM0(code)) {
+		pkg->code_offset = dst+12;
+		printf("Added native code at %d, size %d\n", dst+12, size-12);
+	}
 
 	return (pkgNewtRef) NewtMakePointer(dst);
 }
@@ -577,7 +596,7 @@ void PkgWritePart(pkg_stream_t *pkg, newtRefArg part)
 	PkgMakeRoom(pkg, PkgAlign(pkg, pkg->size), 0);
 	part_size = pkg->size - pkg->part_offset;
 		// offset
-	PkgWriteU32(pkg, hdr, pkg->part_offset - pkg->directory_size);
+	PkgWriteU32(pkg, hdr, pkg->part_offset - pkg->directory_size - pkg->relocation_size);
 		// size
 	PkgWriteU32(pkg, hdr+4, (uint32_t) part_size);
 		// size2
@@ -594,6 +613,92 @@ void PkgWritePart(pkg_stream_t *pkg, newtRefArg part)
 	pkg->part_offset += part_size;
 }
 
+
+/*------------------------------------------------------------------------*/
+/** Reserve space for relocation information
+ * 
+ * Add space for the relocation data after the variable data. The relocation
+ * information will be updated once the location of the code block is known
+ * (currently, only one code block is supported). The relocation data is assumed
+ * to be sorted, allowing to estimate the number of pages which need relocation.
+ *
+ * @param pkg		[inout] the package
+ */
+void PkgReserveRelocations(newtRefArg package, pkg_stream_t *pkg)
+{
+	ssize_t ix = NewtFindSlotIndex(package, NSSYM(relocations));
+	if (ix >= 0) {
+		newtRef relocation_binary = NewtGetFrameSlot(package, ix);
+		uint32_t *relocations = NewtRefToBinary(relocation_binary);
+		size_t num_relocations = htonl(relocations[0]);
+		uint32_t num_pages = 2 + ((htonl(relocations[num_relocations]) - htonl(relocations[1])) / 1024);
+		pkg->relocation_size = PkgAlign(&pkg, sizeof(relocation_header_t) + num_pages * sizeof(relocation_set_t)
+			+ num_relocations);
+		PkgMakeRoom(&pkg, pkg->directory_size, pkg->relocation_size);
+	} else {
+		pkg->relocation_size = 0;
+	}
+}
+
+void PkgUpdateRelocations(newtRefArg package, pkg_stream_t *pkg)
+{
+	ssize_t ix = NewtFindSlotIndex(package, NSSYM(relocations));
+	if (ix >= 0) {
+		newtRef relocation_binary = NewtGetFrameSlot(package, ix);
+		uint32_t *relocations = NewtRefToBinary(relocation_binary);
+		size_t num_relocations = htonl(relocations[0]);
+		uint32_t num_pages;
+		relocation_header_t header;
+		relocation_set_t reloc_set;
+		uint8_t reloc_data[256];
+		size_t num_reloc_data;
+		uint32_t page_number;
+		uint32_t reloc_sets_size;
+
+		num_reloc_data = 0;
+		reloc_sets_size = 0;
+		num_pages = 0;
+		memset (reloc_data, 0, sizeof(reloc_data));
+		page_number = (htonl(relocations[1]) + pkg->code_offset) / 1024;
+		for (size_t i = 0; i < num_relocations; i++) {
+			uint32_t pkg_reloc = htonl(relocations[i + 1]) + pkg->code_offset;
+			if (pkg_reloc / 1024 != page_number) {
+				printf ("New page: %04x %04x %04x %d\n", page_number, pkg_reloc / 1024, pkg_reloc, reloc_sets_size);
+				reloc_set.offset_count = htons(num_reloc_data);
+				reloc_set.page_number = htons(page_number);
+				PkgWriteData(pkg, pkg->header_size + pkg->var_data_size + sizeof(header) + reloc_sets_size,
+						&reloc_set, sizeof(reloc_set));
+				PkgWriteData(pkg, pkg->header_size + pkg->var_data_size + sizeof(header) + reloc_sets_size + sizeof(reloc_set),
+						reloc_data, num_reloc_data);
+				reloc_sets_size += sizeof(reloc_set) + num_reloc_data;
+				reloc_sets_size = (reloc_sets_size + 3) & ~3;
+				num_reloc_data = 0;
+				memset (reloc_data, 0, sizeof(reloc_data));
+				page_number = pkg_reloc / 1024;
+				num_pages++;
+			}
+			reloc_data[num_reloc_data++] = (pkg_reloc - page_number * 1024) / 4;
+		}
+		if (num_reloc_data > 0) {
+			printf ("Finishing page: %04x, offset %d count %d\n", page_number, reloc_sets_size, num_reloc_data);
+			reloc_set.offset_count = htons(num_reloc_data);
+			reloc_set.page_number = htons(page_number);
+			PkgWriteData(pkg, pkg->header_size + pkg->var_data_size + sizeof(header) + reloc_sets_size,
+					&reloc_set, sizeof(reloc_set));
+			PkgWriteData(pkg, pkg->header_size + pkg->var_data_size + sizeof(header) + reloc_sets_size + sizeof(reloc_set),
+					reloc_data, num_reloc_data);
+			num_pages++;
+		}
+		header.reserved = 0;
+		header.relocation_size = htonl(pkg->relocation_size);
+		header.page_size = htonl(0x400);
+		header.num_entries = htonl(num_pages);
+		header.base_address = htonl(-pkg->code_offset);
+		PkgWriteData(pkg, pkg->header_size + pkg->var_data_size,
+				&header, sizeof(header));
+
+	}
+}
 /*------------------------------------------------------------------------*/
 /** Create a new binary object that contains the object tree in package format.
  *
@@ -620,6 +725,7 @@ newtRef NewtWritePkg(newtRefArg package)
 {
 	pkg_stream_t	pkg;
     size_t			num_parts, i;
+	size_t			relocation_size;
     ssize_t			ix;
 	newtRef			parts, result;
 
@@ -679,16 +785,19 @@ newtRef NewtWritePkg(newtRefArg package)
 			pkg.var_data_size += sizeof(msg);
 		}
 
-		pkg.part_offset = pkg.directory_size = (uint32_t) PkgAlign(&pkg, pkg.header_size + pkg.var_data_size);
+		pkg.directory_size = (uint32_t) PkgAlign(&pkg, pkg.header_size + pkg.var_data_size);
 			// directorySize
 		PkgWriteU32(&pkg, 44, pkg.directory_size);
+		PkgReserveRelocations(package, &pkg);
 
+		pkg.part_offset = PkgAlign(&pkg, pkg.directory_size + pkg.relocation_size);
 		// create all parts
 		for (i=0; i<num_parts; i++) {
 			newtRef part = NewtGetArraySlot(parts, i);
 			pkg.part_header_offset = (uint32_t) (sizeof(pkg_header_t) + i*sizeof(pkg_part_t));
 			PkgWritePart(&pkg, part);
 		}
+		PkgUpdateRelocations(package, &pkg);
 	}
 
 	// finish filling in the header
@@ -1157,7 +1266,7 @@ newtRef NewtReadPkg(uint8_t * data, size_t size)
 	pkg.size = (uint32_t) size;
 	pkg.header = (pkg_header_t*)data;
 	pkg.num_parts = ntohl(pkg.header->numParts);
-	if (ntohl(pkg.header->flags) & kRelocationFlag) {
+	if (pkg.header->flags & kRelocationFlag) {
 		pkg.relocations.size = ntohl(*(uint32_t *) (data + ntohl(pkg.header->directorySize) + sizeof(uint32_t)));
 	} else {
 		pkg.relocations.size = 0;
