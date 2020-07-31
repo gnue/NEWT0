@@ -693,7 +693,7 @@ void PkgUpdateRelocations(newtRefArg package, pkg_stream_t *pkg)
 		header.relocation_size = htonl(pkg->relocation_size);
 		header.page_size = htonl(0x400);
 		header.num_entries = htonl(num_pages);
-		header.base_address = htonl(-pkg->code_offset);
+		header.base_address = htonl(65536 - pkg->code_offset);
 		PkgWriteData(pkg, pkg->header_size + pkg->var_data_size,
 				&header, sizeof(header));
 
