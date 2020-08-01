@@ -632,7 +632,7 @@ void PkgReserveRelocations(newtRefArg package, pkg_stream_t *pkg)
 		uint32_t *relocations = NewtRefToBinary(relocation_binary);
 		size_t num_relocations = htonl(relocations[0]);
 		uint32_t num_pages = 2 + ((htonl(relocations[num_relocations]) - htonl(relocations[1])) / 1024);
-		pkg->relocation_size = PkgAlign(&pkg, sizeof(relocation_header_t) + num_pages * sizeof(relocation_set_t)
+		pkg->relocation_size = PkgAlign(&pkg, sizeof(relocation_header_t) + num_pages * (sizeof(relocation_set_t) + 4)
 			+ num_relocations);
 		PkgMakeRoom(&pkg, pkg->directory_size, pkg->relocation_size);
 	} else {
