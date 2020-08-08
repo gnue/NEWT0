@@ -1,0 +1,69 @@
+#!newt
+
+if not load("test_common.newt") then
+begin
+    Print("Could not load test_common.newt\n");
+    Exit(1);
+end;
+
+func DumpBin(bin)
+begin
+    local str := "";
+    local x := Length(bin);
+    for i := 0 to x - 1 do
+    begin
+        local b := ExtractByte(bin, i);
+        local hb := b >> 4;
+        if (hb >= 10) then
+            str := str & (chr(hb + ord($A) - 10))
+        else
+            str := str & (chr(hb + ord($0)));
+        local lb := Band(b, 0xF);
+        if (lb >= 10) then
+            str := str & (chr(lb + ord($A) - 10))
+        else
+            str := str & (chr(lb + ord($0)));
+    end;
+    Print(str);
+end;
+
+func GetWalterSmithStructure()
+begin
+	x := {name: "Walter Smith",
+		cats: 2,
+		bounds: {left: 10, top: 14, right: 40, bottom: 100},
+		uChar: $\u2022,
+		phones: ["408-996-1010", nil]};
+	x.phones[1] := SetClass("408-974-9094", 'faxPhone);
+	x.nameAgain := x.name;
+	return x;
+end;
+
+local testCases := [
+    {
+        _proto: protoTestCase,
+        testEncodeDecodedNIL: func() begin
+            local nsof := MakeNSOF(NIL, 2);
+            :AssertEqual(nsof, MakeBinaryFromHex("020A", 'nsof));
+            local decoded := ReadNSOF(nsof);
+            :AssertEqual(decoded, NIL);
+        end,
+        testEncodeDecodedString: func() begin
+            local nsof := MakeNSOF("Walter Smith", 2);
+            :AssertEqual(nsof, MakeBinaryFromHex("02081A00570061006C00740065007200200053006D0069007400680000", 'nsof));
+            local decoded := ReadNSOF(nsof);
+            :AssertEqual(decoded, "Walter Smith");
+        end,
+        testEncodeDecodedWalterSmithStructure: func() begin
+            local nsof := MakeNSOF(GetWalterSmithStructure(), 2);
+            :AssertEqual(nsof, MakeBinaryFromHex("02060607046E616D650704636174730706626F756E647307057543686172070670686F6E657307096E616D65416761696E081A00570061006C00740065007200200053006D006900740068000000080B0E0A64280220220502081A003400300038002D003900390036002D00310030003100300000030D070866617850686F6E653430382D3937342D39303934000907", 'nsof));
+            local decoded := ReadNSOF(nsof);
+            :AssertEqual(decoded, GetWalterSmithStructure());
+        end,
+    }
+];
+
+RunTestCases(testCases);
+
+
+

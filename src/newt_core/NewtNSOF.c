@@ -688,7 +688,7 @@ newtErr NewtWriteNSOF(nsof_stream_t * nsof, newtRefArg r)
 	}
 	else
 	{
-		size_t	foundPrecedent;
+		ssize_t	foundPrecedent;
 
 		foundPrecedent = NewtArraySearch(nsof->precedents, r);
 
