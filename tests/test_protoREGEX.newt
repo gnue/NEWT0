@@ -1,0 +1,33 @@
+#!newt
+
+if not load("test_common.newt") then
+begin
+    Print("Could not load test_common.newt\n");
+    Exit(1);
+end;
+
+local testCases := [
+    {
+        _proto: protoTestCase,
+        testRequire: func() begin
+            Require("protoREGEX");
+        end,
+        testMatch: func() begin
+            Require("protoREGEX");
+            local re := /([a-zA-Z]+)([0-9]*)/;
+            local matches := re:match("foo123");
+            :AssertNotNIL(matches);
+            :AssertEqual("123", matches[2]);
+            :AssertEqual("foo", matches[1]);
+        end,
+    }
+];
+
+local finalResult := true;
+
+foreach tc in testCases do
+begin
+    finalResult := finalResult and tc:Run();
+end;
+
+if not finalResult then Exit(1);

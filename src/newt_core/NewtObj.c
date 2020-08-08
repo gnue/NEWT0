@@ -453,6 +453,138 @@ newtObjRef NewtObjAlloc(newtRefArg r, size_t n, uint16_t type, bool literal)
 
 
 /*------------------------------------------------------------------------*/
+/** Allocate an indirect binary.
+ * Similar to TObjectHeap::AllocateIndirectBinary(const RefVar&, long)
+ *
+ * @param n         [in] サイズ
+ *
+ * @return          オブジェクト
+ */
+
+newtObjRef NewtObjAllocIndirectBinary(newtRefArg r, size_t n)
+{
+    newtObjRef	obj;
+
+    obj = NewtObjMemAlloc(NEWT_POOL, n, false);
+    if (obj == NULL) return NULL;
+
+    obj->header.h |= (n << 8) | kNewtObjIndirectBin;
+
+    if (NEWT_SWEEP)
+        obj->header.h |= kNewtObjSweep;
+
+    obj->as.klass = r;
+
+    return obj;
+}
+
+
+/*------------------------------------------------------------------------*/
+/** Allocate a CObject binary.
+ * During garbage collection, if the object is marked, the marker function is
+ * called; If the object shall be freed, the dtor is called with the provided
+ * pointer.
+ *
+ * @param cObj      [in] pointer to embed
+ * @param dtor      [in] destructor function (to free cObj pointer). Unlike
+ *                  NewtonOS function, can be NULL
+ * @param marker    [in] marker function (to mark subobjects), can be NULL
+ *
+ * @return          オブジェクト
+ */
+
+newtObjRef NewtObjAllocCObjectBinary(void* cObj, newtCObjectBinaryProc dtor, newtCObjectBinaryProc marker)
+{
+	newtObjRef obj;
+	newtCObject* objData;
+
+	obj = NewtObjAllocIndirectBinary(NSSYM0(CObject), sizeof(newtCObject));
+	objData = (newtCObject*) NewtObjData(obj);
+	objData->cObj = cObj;
+	objData->dtor = dtor;
+	objData->marker = marker;
+	return obj;
+}
+
+/*------------------------------------------------------------------------*/
+/** Allocate a CObject binary.
+ * Similar to:
+ * Ref AllocateCObjectBinary(void* cObj, CObjectBinaryProc destructor,
+ *     CObjectBinaryProc marker = nil, CObjectBinaryProc updater = nil);
+ *
+ * @param cObj      [in] pointer to embed
+ * @param dtor      [in] destructor function (to free cObj pointer). Unlike
+ *                  NewtonOS function, can be NULL
+ * @param marker    [in] marker function (to mark subobjects), can be NULL
+ *
+ * @return			バイナリオブジェクト
+ */
+newtRef  NewtAllocCObjectBinary(void* cObj, newtCObjectBinaryProc dtor, newtCObjectBinaryProc marker)
+{
+	newtObjRef obj;
+
+	obj = NewtObjAllocCObjectBinary(cObj, dtor, marker);
+    return NewtMakePointer(obj);
+}
+
+
+/*------------------------------------------------------------------------*/
+/** Get a CObject pointer.
+ * NewtonOS equivalent:
+ * Ptr		ObjectPtr(Ref obj);
+ *
+ * @param bin       [in] CObject binary
+ * @param ptr       [out] pointer to extract
+ *
+ * @return			true if the pointer was extracted, false otherwise
+ */
+bool  NewtGetCObjectPtr(newtRefArg bin, void** ptr)
+{
+    newtObjRef	obj;
+    newtCObject* objData;
+
+    if (!NewtRefIsPointer(bin))
+        return false;
+
+    obj = NewtRefToPointer(bin);
+    if ((obj->header.h & 0x3) != kNewtObjIndirectBin)
+        return false;
+    if ((obj->header.h >> 8) != sizeof(newtCObject))
+        return false;
+
+    objData = (newtCObject*) NewtObjData(obj);
+    *ptr = objData->cObj;
+    return true;
+}
+
+
+/*------------------------------------------------------------------------*/
+/** Clear a CObject binary before it is cleared by garbage collector.
+ * Make sure the garbage collector will no longer call the destructor.
+ * There is no NewtonOS equivalent.
+ *
+ * @param bin       [in] CObject binary
+ */
+void  NewtFreeCObject(newtRefArg bin)
+{
+    newtObjRef	obj;
+    newtCObject* objData;
+
+    if (!NewtRefIsPointer(bin))
+        return;
+
+    obj = NewtRefToPointer(bin);
+    if ((obj->header.h & 0x3) != kNewtObjIndirectBin)
+        return;
+    if ((obj->header.h >> 8) != sizeof(newtCObject))
+        return;
+
+    objData = (newtCObject*) NewtObjData(obj);
+    objData->cObj = NULL;
+    objData->dtor = NULL;
+}
+
+/*------------------------------------------------------------------------*/
 /** オブジェクトデータのメモリ再確保
  *
  * @param pool		[in] メモリプール

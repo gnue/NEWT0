@@ -20,9 +20,17 @@
 #include "NewtVM.h"
 #include "NewtPrint.h"
 
+/*------------------------------------------------------------------------*/
+/** Destructor called by garbage collector.
+ *
+ * @param cObj		[in] actual FILE*
+ */
 
-#define NewtRefToFILE(r)		((FILE *)NewtRefToAddress(r))   ///< オブジェクト参照をファイル参照に変換
-
+void protoFILE_stream_dtor(void* cObj)
+{
+    if (cObj)
+        fclose((FILE*) cObj);
+}
 
 /*------------------------------------------------------------------------*/
 /** ファイルをオープンする
@@ -47,7 +55,7 @@ newtRef protoFILE_fopen(newtRefArg rcvr, newtRefArg path, newtRefArg mode)
 	stream = fopen(NewtRefToString(path), NewtRefToString(mode));
 
 	if (stream != NULL)
-		return NewtMakeAddress(stream);
+		return NewtAllocCObjectBinary(stream, protoFILE_stream_dtor, NULL);
 	else
 		return kNewtRefUnbind;
 }
@@ -65,11 +73,14 @@ newtRef protoFILE_fopen(newtRefArg rcvr, newtRefArg path, newtRefArg mode)
 newtRef protoFILE_fclose(newtRefArg rcvr, newtRefArg stream)
 {
 	int		result;
+	FILE*   file;
 
-    if (! NewtRefIsInteger(stream))
-        return NewtThrow(kNErrNotAnInteger, stream);
+    if (!NewtGetCObjectPtr(stream, (void**)&file))
+        return NewtThrow(kNErrNotABinaryObject, stream);
 
-	result = fclose(NewtRefToFILE(stream));
+	result = fclose(file);
+
+	NewtFreeCObject(stream);
 
 	return NewtMakeInteger(result);
 }
@@ -77,10 +88,12 @@ newtRef protoFILE_fclose(newtRefArg rcvr, newtRefArg stream)
 
 newtRef protoFILE_feof(newtRefArg stream)
 {
-    if (! NewtRefIsInteger(stream))
-        return NewtThrow(kNErrNotAnInteger, stream);
+	FILE*   file;
 
-	if (feof(NewtRefToFILE(stream)) == 0)
+    if (!NewtGetCObjectPtr(stream, (void**)&file))
+        return NewtThrow(kNErrNotABinaryObject, stream);
+
+	if (feof(file) == 0)
 		return kNewtRefNIL;
 	else
 		return kNewtRefTRUE;
@@ -91,9 +104,10 @@ newtRef protoFILE_fseek(newtRefArg stream, newtRefArg offset, newtRefArg whence)
 {
 	int		result;
 	int		wh;
+	FILE*   file;
 
-    if (! NewtRefIsInteger(stream))
-        return NewtThrow(kNErrNotAnInteger, stream);
+    if (!NewtGetCObjectPtr(stream, (void**)&file))
+        return NewtThrow(kNErrNotABinaryObject, stream);
 
     if (! NewtRefIsInteger(offset))
         return NewtThrow(kNErrNotAnInteger, offset);
@@ -110,7 +124,7 @@ newtRef protoFILE_fseek(newtRefArg stream, newtRefArg offset, newtRefArg whence)
 	else
 		wh = SEEK_SET;
 
-	result = fseek(NewtRefToFILE(stream), NewtRefToInteger(offset), wh);
+	result = fseek(file, NewtRefToInteger(offset), wh);
 
 	return NewtMakeInteger(result);
 }
@@ -119,11 +133,12 @@ newtRef protoFILE_fseek(newtRefArg stream, newtRefArg offset, newtRefArg whence)
 newtRef protoFILE_ftell(newtRefArg stream)
 {
 	long  result;
+	FILE*   file;
 
-    if (! NewtRefIsInteger(stream))
-        return NewtThrow(kNErrNotAnInteger, stream);
+    if (!NewtGetCObjectPtr(stream, (void**)&file))
+        return NewtThrow(kNErrNotABinaryObject, stream);
 
-	result = ftell(NewtRefToFILE(stream));
+	result = ftell(file);
 
 	return NewtMakeInteger(result);
 }
@@ -131,10 +146,12 @@ newtRef protoFILE_ftell(newtRefArg stream)
 
 newtRef protoFILE_frewind(newtRefArg stream)
 {
-    if (! NewtRefIsInteger(stream))
-        return NewtThrow(kNErrNotAnInteger, stream);
+	FILE*   file;
 
-	rewind(NewtRefToFILE(stream));
+    if (!NewtGetCObjectPtr(stream, (void**)&file))
+        return NewtThrow(kNErrNotABinaryObject, stream);
+
+	rewind(file);
 
 	return kNewtRefNIL;
 }
@@ -143,18 +160,17 @@ newtRef protoFILE_frewind(newtRefArg stream)
 newtRef protoFILE_fread(newtRefArg rcvr, newtRefArg stream, newtRefArg len)
 {
 	newtRefVar  r;
-	FILE *  f;
+	FILE *  file;
 	void *  data;
 	size_t  dataSize;
 	size_t  readSize;
 
-    if (! NewtRefIsInteger(stream))
-        return NewtThrow(kNErrNotAnInteger, stream);
+    if (!NewtGetCObjectPtr(stream, (void**)&file))
+        return NewtThrow(kNErrNotABinaryObject, stream);
 
     if (! NewtRefIsInteger(len))
         return NewtThrow(kNErrNotAnInteger, len);
 
-	f = NewtRefToFILE(stream);
 	dataSize = NewtRefToInteger(len);
 
 	r = NewtMakeBinary(kNewtRefUnbind, NULL, dataSize, false);
@@ -163,7 +179,7 @@ newtRef protoFILE_fread(newtRefArg rcvr, newtRefArg stream, newtRefArg len)
         return r;
 
 	data = NewtRefToBinary(r);
-	readSize = fread(data, 1, dataSize, f);
+	readSize = fread(data, 1, dataSize, file);
 
 	if (readSize == 0)
 		r = kNewtRefNIL;
@@ -252,11 +268,12 @@ size_t protoFILE_fwriteObj(FILE * f, newtRefArg r)
 newtRef protoFILE_fwrite(newtRefArg rcvr, newtRefArg stream, newtRefArg r)
 {
 	size_t  result;
+	FILE*   file;
 
-    if (! NewtRefIsInteger(stream))
-        return NewtThrow(kNErrNotAnInteger, stream);
+    if (!NewtGetCObjectPtr(stream, (void**)&file))
+        return NewtThrow(kNErrNotABinaryObject, stream);
 
-	result = protoFILE_fwriteObj(NewtRefToFILE(stream), r);
+	result = protoFILE_fwriteObj(file, r);
 
 	return NewtMakeInteger(result);
 }
@@ -265,10 +282,12 @@ newtRef protoFILE_fwrite(newtRefArg rcvr, newtRefArg stream, newtRefArg r)
 
 newtRef protoFILE_fprint(newtRefArg stream, newtRefArg r)
 {
-    if (! NewtRefIsInteger(stream))
-        return NewtThrow(kNErrNotAnInteger, stream);
+	FILE*   file;
 
-	NewtPrint(NewtRefToFILE(stream), r);
+    if (!NewtGetCObjectPtr(stream, (void**)&file))
+        return NewtThrow(kNErrNotABinaryObject, stream);
+
+	NewtPrint(file, r);
 
 	return kNewtRefNIL;
 }
@@ -368,16 +387,17 @@ newtRef protoFILE_gets(newtRefArg rcvr)
 {
 	newtRefVar  stream;
 	newtRefVar  r;
+	FILE*   file;
 
 	if (NewtRefIsNIL(rcvr))
 		return kNewtRefUnbind;
 
 	stream = NcGetSlot(rcvr, NSSYM(_stream));
 
-    if (! NewtRefIsInteger(stream))
-        return NewtThrow(kNErrNotAnInteger, stream);
+    if (!NewtGetCObjectPtr(stream, (void**)&file))
+        return NewtThrow(kNErrNotABinaryObject, stream);
 
-	r = NewtFgets(NewtRefToFILE(stream));
+	r = NewtFgets(file);
 
 	if (NewtRefIsNotNIL(r))
 	{
@@ -398,22 +418,24 @@ newtRef protoFILE_gets(newtRefArg rcvr)
 newtRef protoFILE_getc(newtRefArg rcvr)
 {
 	newtRefVar stream;
-	FILE* theFile;
+	FILE* file;
 	int theResult;
 	
 	stream = NcGetSlot(rcvr, NSSYM(_stream));
 	if (NewtRefIsNIL(stream))
 		return kNewtRefUnbind;
 
-	theFile = NewtRefToFILE(stream);
-	theResult = fgetc(theFile);
+    if (!NewtGetCObjectPtr(stream, (void**)&file))
+        return NewtThrow(kNErrNotABinaryObject, stream);
+
+	theResult = fgetc(file);
 	return NewtMakeInteger(theResult);
 }
 
 newtRef protoFILE_putc(newtRefArg rcvr, newtRefArg byte)
 {
 	newtRefVar stream;
-	FILE* theFile;
+	FILE* file;
 	char theByte;
 	int theResult;
 	
@@ -421,16 +443,18 @@ newtRef protoFILE_putc(newtRefArg rcvr, newtRefArg byte)
 	if (NewtRefIsNIL(stream))
 		return kNewtRefUnbind;
 
-	theFile = NewtRefToFILE(stream);
+    if (!NewtGetCObjectPtr(stream, (void**)&file))
+        return NewtThrow(kNErrNotABinaryObject, stream);
+
 	theByte = NewtRefToInteger(byte);
-	theResult = fputc(theByte, theFile);
+	theResult = fputc(theByte, file);
 	return NewtMakeInteger(theResult);
 }
 
 newtRef protoFILE_write(newtRefArg rcvr, newtRefArg binary)
 {
 	newtRefVar stream;
-	FILE* theFile;
+	FILE* file;
 	void* data;
 	size_t len;
 	size_t theResult;
@@ -439,12 +463,33 @@ newtRef protoFILE_write(newtRefArg rcvr, newtRefArg binary)
 	if (NewtRefIsNIL(stream))
 		return kNewtRefUnbind;
 
-	theFile = NewtRefToFILE(stream);
+    if (!NewtGetCObjectPtr(stream, (void**)&file))
+        return NewtThrow(kNErrNotABinaryObject, stream);
+
 	data = NewtRefToBinary(binary);
 	len = NewtBinaryLength(binary);
-	theResult = fwrite(data, len, 1, theFile);
+	theResult = fwrite(data, len, 1, file);
 
 	return NewtMakeInteger(theResult);
+}
+
+newtRef protoFILE_fileno(newtRefArg rcvr)
+{
+	newtRefVar  stream;
+	newtRefVar  r;
+	FILE*   file;
+
+	if (NewtRefIsNIL(rcvr))
+		return kNewtRefUnbind;
+
+	stream = NcGetSlot(rcvr, NSSYM(_stream));
+
+    if (!NewtGetCObjectPtr(stream, (void**)&file))
+        return NewtThrow(kNErrNotABinaryObject, stream);
+
+	r = NewtMakeInteger(fileno(file));
+
+	return r;
 }
 
 void protoFILE_install(void)
@@ -462,7 +507,6 @@ void protoFILE_install(void)
   
 	NcSetSlot(r, NSSYM(Class),		NSSYM(File));
   
-  //	NcSetSlot(r, NSSYM(_gcScript),	NewtMakeNativeFunc(protoFILE_close,		0, "_gcScript()"));
 	NcSetSlot(r, NSSYM(Open),		NewtMakeNativeFunc(protoFILE_open,		2, "Open(path, mode)"));
 	NcSetSlot(r, NSSYM(Close),		NewtMakeNativeFunc(protoFILE_close,		0, "Close()"));
 	NcSetSlot(r, NSSYM(Eof),		NewtMakeNativeFunc(protoFILE_eof,		0, "Eof()"));
@@ -475,6 +519,7 @@ void protoFILE_install(void)
 	NcSetSlot(r, NSSYM(Getc),		NewtMakeNativeFunc(protoFILE_getc,		0, "Getc()"));
 	NcSetSlot(r, NSSYM(Putc),		NewtMakeNativeFunc(protoFILE_putc,		1, "Putc(byte)"));
 	NcSetSlot(r, NSSYM(Write),		NewtMakeNativeFunc(protoFILE_write,		1, "Write(binary)"));
+	NcSetSlot(r, NSSYM(Fileno),		NewtMakeNativeFunc(protoFILE_fileno,    0, "Fileno()"));
   
 	NcSetSlot(r, NSSYM(_stream),	kNewtRefNIL);
 	NcSetSlot(r, NSSYM(_lineno),	kNewtRefNIL);
