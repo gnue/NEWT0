@@ -27,7 +27,7 @@ extern "C" {
 #endif
 
 
-newtRef		NewtReadNSOF(uint8_t * data, size_t size);
+newtRef		NewtReadNSOF(const uint8_t * data, size_t size);
 
 newtRef		NsMakeNSOF(newtRefArg rcvr, newtRefArg r, newtRefArg ver);
 newtRef		NsReadNSOF(newtRefArg rcvr, newtRefArg r);

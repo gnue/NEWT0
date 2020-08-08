@@ -48,9 +48,9 @@ static void			NewtObjRemoveArraySlot(newtObjRef obj, size_t n);
 static void			NewtDeeplyCopyMap(newtRef * dst, size_t * pos, newtRefArg src);
 static newtRef		NewtDeeplyCloneMap(newtRefArg map, size_t len);
 static void			NewtObjRemoveFrameSlot(newtObjRef obj, newtRefArg slot);
-static bool			NewtStrNBeginsWith(char * str, size_t len, char * sub, size_t sublen);
-static bool			NewtStrIsSubclass(char * sub, size_t sublen, char * supr, size_t suprlen);
-static bool			NewtStrHasSubclass(char * sub, size_t sublen, char * supr, size_t suprlen);
+static bool			NewtStrNBeginsWith(const char * str, size_t len, const char * sub, size_t sublen);
+static bool			NewtStrIsSubclass(const char * sub, size_t sublen, const char * supr, size_t suprlen);
+static bool			NewtStrHasSubclass(const char * sub, size_t sublen, const char * supr, size_t suprlen);
 
 
 #if 0
@@ -1358,7 +1358,7 @@ void * NewtRefToAddress(newtRefArg r)
  * @return			バイナリオブジェクト
  */
 
-newtRef NewtMakeBinary(newtRefArg klass, uint8_t * data, size_t size, bool literal)
+newtRef NewtMakeBinary(newtRefArg klass, const uint8_t * data, size_t size, bool literal)
 {
     newtObjRef	obj;
 
@@ -4255,7 +4255,7 @@ void * NewtRefToNativeFn(newtRefArg r)
  * @return				関数オブジェクト
  */
 
-newtRef NewtMakeNativeFn0(void * funcPtr, size_t numArgs, bool indefinite, char * doc)
+newtRef NewtMakeNativeFn0(void * funcPtr, size_t numArgs, bool indefinite, const char * doc)
 {
     newtRefVar	fnv[] = {
                             NS_CLASS,			NSSYM0(_function.native0),
@@ -4291,7 +4291,7 @@ newtRef NewtMakeNativeFn0(void * funcPtr, size_t numArgs, bool indefinite, char 
  * @return				関数オブジェクト
  */
 
-newtRef NewtDefGlobalFn0(newtRefArg sym, void * funcPtr, size_t numArgs, bool indefinite, char * doc)
+newtRef NewtDefGlobalFn0(newtRefArg sym, void * funcPtr, size_t numArgs, bool indefinite, const char * doc)
 {
     newtRefVar	fn;
 
@@ -4311,7 +4311,7 @@ newtRef NewtDefGlobalFn0(newtRefArg sym, void * funcPtr, size_t numArgs, bool in
  * @return				関数オブジェクト
  */
 
-newtRef NewtMakeNativeFunc0(void * funcPtr, size_t numArgs, bool indefinite, char * doc)
+newtRef NewtMakeNativeFunc0(void * funcPtr, size_t numArgs, bool indefinite, const char * doc)
 {
     newtRefVar	fnv[] = {
                             NS_CLASS,			NSSYM0(_function.native),
@@ -4347,7 +4347,7 @@ newtRef NewtMakeNativeFunc0(void * funcPtr, size_t numArgs, bool indefinite, cha
  * @return				関数オブジェクト
  */
 
-newtRef NewtDefGlobalFunc0(newtRefArg sym, void * funcPtr, size_t numArgs, bool indefinite, char * doc)
+newtRef NewtDefGlobalFunc0(newtRefArg sym, void * funcPtr, size_t numArgs, bool indefinite, const char * doc)
 {
     newtRefVar	fn;
 
@@ -4371,7 +4371,7 @@ newtRef NewtDefGlobalFunc0(newtRefArg sym, void * funcPtr, size_t numArgs, bool 
  * @retval			false	前半部が部分文字列と一致しない
  */
 
-bool NewtStrNBeginsWith(char * str, size_t len, char * sub, size_t sublen)
+bool NewtStrNBeginsWith(const char * str, size_t len, const char * sub, size_t sublen)
 {
 	if (len < sublen)
 		return false;
@@ -4392,7 +4392,7 @@ bool NewtStrNBeginsWith(char * str, size_t len, char * sub, size_t sublen)
  * @retval			false	サブクラスでない
  */
 
-bool NewtStrIsSubclass(char * sub, size_t sublen, char * supr, size_t suprlen)
+bool NewtStrIsSubclass(const char * sub, size_t sublen, const char * supr, size_t suprlen)
 {
     if (sublen == suprlen)
         return (strncasecmp(sub, supr, suprlen) == 0);
@@ -4419,10 +4419,10 @@ bool NewtStrIsSubclass(char * sub, size_t sublen, char * supr, size_t suprlen)
  * @retval			false	サブクラスを含まない
  */
 
-bool NewtStrHasSubclass(char * sub, size_t sublen, char * supr, size_t suprlen)
+bool NewtStrHasSubclass(const char * sub, size_t sublen, const char * supr, size_t suprlen)
 {
-    char *	last;
-    char *	w;
+    const char *	last;
+    const char *	w;
 
     last = sub + sublen;
 
@@ -4523,7 +4523,7 @@ bool NewtIsInstance(newtRefArg obj, newtRefArg r)
  * @return			文字列オブジェクト
  */
 
-newtRef NewtStrCat(newtRefArg r, char * s)
+newtRef NewtStrCat(newtRefArg r, const char * s)
 {
     if (NewtRefIsPointer(r))
 		return NewtStrCat2(r, s, strlen(s));
@@ -4542,7 +4542,7 @@ newtRef NewtStrCat(newtRefArg r, char * s)
  * @return			文字列オブジェクト
  */
 
-newtRef NewtStrCat2(newtRefArg r, char * s, size_t slen)
+newtRef NewtStrCat2(newtRefArg r, const char * s, size_t slen)
 {
     newtObjRef	obj;
 

@@ -1180,14 +1180,14 @@ newtRef NSOFReadNSOF(nsof_stream_t * nsof)
  * @return			オブジェクト
  */
 
-newtRef NewtReadNSOF(uint8_t * data, size_t size)
+newtRef NewtReadNSOF(const uint8_t * data, size_t size)
 {
 	nsof_stream_t	nsof;
-	newtRefVar		reault;
+	newtRefVar		result;
 
 	memset(&nsof, 0, sizeof(nsof));
 
-	nsof.data = data;
+	nsof.data = (uint8_t*) data;
 	nsof.len = size;
 	nsof.precedents = NewtMakeArray(kNewtRefUnbind, 0);
 	nsof.verno = NSOFReadByte(&nsof);
@@ -1208,14 +1208,14 @@ newtRef NewtReadNSOF(uint8_t * data, size_t size)
 	}
 #endif /* HAVE_LIBICONV */
 
-	reault = NSOFReadNSOF(&nsof);
+	result = NSOFReadNSOF(&nsof);
 
 #ifdef HAVE_LIBICONV
 	if (nsof.cd.from.utf16be != (iconv_t)-1) iconv_close(nsof.cd.from.utf16be);
 	if (nsof.cd.from.macroman != (iconv_t)-1) iconv_close(nsof.cd.from.macroman);
 #endif /* HAVE_LIBICONV */
 
-	return reault;
+	return result;
 }
 
 

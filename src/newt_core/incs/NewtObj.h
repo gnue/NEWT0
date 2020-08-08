@@ -183,7 +183,7 @@ int			NewtRefFunctionType(newtRefArg r);
 bool		NewtRefIsRegex(newtRefArg r);
 void *		NewtRefToAddress(newtRefArg r);
 
-newtRef		NewtMakeBinary(newtRefArg klass, uint8_t * data, size_t size, bool literal);
+newtRef		NewtMakeBinary(newtRefArg klass, const uint8_t * data, size_t size, bool literal);
 newtRef		NewtMakeBinaryFromHex(newtRefArg klass, const char *hex, bool literal);
 newtRef		NewtAllocCObjectBinary(void* cObj, newtCObjectBinaryProc dtor, newtCObjectBinaryProc marker);
 bool		NewtGetCObjectPtr(newtRefArg bin, void** ptr);
@@ -272,18 +272,18 @@ bool		NewtHasVariable(newtRefArg r, newtRefArg name);
 
 void *		NewtRefToNativeFn(newtRefArg r);
 // old style
-newtRef		NewtMakeNativeFn0(void * funcPtr, size_t numArgs, bool indefinite, char * doc);
-newtRef		NewtDefGlobalFn0(newtRefArg sym, void * funcPtr, size_t numArgs, bool indefinite, char * doc);
+newtRef		NewtMakeNativeFn0(void * funcPtr, size_t numArgs, bool indefinite, const char * doc);
+newtRef		NewtDefGlobalFn0(newtRefArg sym, void * funcPtr, size_t numArgs, bool indefinite, const char * doc);
 // new style
-newtRef		NewtMakeNativeFunc0(void * funcPtr, size_t numArgs, bool indefinite, char * doc);
-newtRef		NewtDefGlobalFunc0(newtRefArg sym, void * funcPtr, size_t numArgs, bool indefinite, char * doc);
+newtRef		NewtMakeNativeFunc0(void * funcPtr, size_t numArgs, bool indefinite, const char * doc);
+newtRef		NewtDefGlobalFunc0(newtRefArg sym, void * funcPtr, size_t numArgs, bool indefinite, const char * doc);
 
 bool		NewtHasSubclass(newtRefArg sub, newtRefArg supr);
 bool		NewtIsSubclass(newtRefArg sub, newtRefArg supr);
 bool		NewtIsInstance(newtRefArg obj, newtRefArg r);
 
-newtRef		NewtStrCat(newtRefArg r, char * s);
-newtRef		NewtStrCat2(newtRefArg r, char * s, size_t slen);
+newtRef		NewtStrCat(newtRefArg r, const char * s);
+newtRef		NewtStrCat2(newtRefArg r, const char * s, size_t slen);
 
 newtRef		NewtGetEnv(const char * s);
 
