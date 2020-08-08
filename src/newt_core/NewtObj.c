@@ -854,6 +854,13 @@ intptr_t NewtRefToInteger(newtRefArg r)
             | (((uintptr_t) objData[1]) << 16)
             | (((uintptr_t) objData[2]) << 8)
             | ((uintptr_t) objData[3]);
+
+#if INT32_MAX < INTPTR_MAX
+        if (v & 0x80000000){
+            v |= 0xffffffff00000000;
+        }
+#endif
+
     } else if (NewtRefIsInt64(r)) {
         newtObjRef    obj;
         uint8_t *    objData;
