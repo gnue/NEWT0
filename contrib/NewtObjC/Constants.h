@@ -45,7 +45,7 @@
 #define kObjCDefaultFunc2TypeStr	"@16@0:4@8@12"
 #define kObjCDefaultFunc3TypeStr	"@24@0:4@8@12@16"
 #define kObjCNSFrameVarName			"_ns"
-#define kObjCNSFrameVarType			@encode(TNewtObjCRef)
+#define kObjCNSFrameVarType			@encode(TNewtObjCRef*)
 #define kObjCOutletTypeStr			@encode(id)
 #define kInstanceParentMagicPtrKey	NSSYM(parentObjCInstance)
 

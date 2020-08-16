@@ -377,6 +377,8 @@ newtRef NsSetLength(newtRefArg rcvr, newtRefArg r, newtRefArg len)
 
 newtRef NsHasSlot(newtRefArg rcvr, newtRefArg frame, newtRefArg slot)
 {
+    if (!NewtRefIsFrame(frame))
+        return NewtThrow(kNErrNotAFrame, frame);
     return NewtMakeBoolean(NewtHasSlot(frame, slot));
 }
 

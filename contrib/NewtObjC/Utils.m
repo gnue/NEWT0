@@ -527,6 +527,12 @@ CastToNS(id* inObjCValuePtr, const char* inType)
 			result = NewtMakeInteger((long)(*inObjCValuePtr));
 			break;
 
+		case 'q':
+		case 'Q':
+			// long long
+			result = NewtMakeInteger((long long)(*inObjCValuePtr));
+			break;
+
 		case 'f':
 			// float
 			printf( "CastToNS: unhandled type: %s (float)\n", inType );
@@ -749,6 +755,15 @@ CastParamsToNS(va_list inArgList, Method inMethod)
 			}
 			break;
 	
+			case 'q':
+			case 'Q':
+			{
+				// long long
+				long long theLongLong = va_arg(inArgList, long long);
+				theParam = NewtMakeInteger(theLongLong);
+			}
+			break;
+
 			case 'f':
 			{
 				// float
@@ -901,6 +916,15 @@ void CastParamToObjC(Method method, NSInvocation* invocation, int argIndex, newt
         }
         break;
 
+		case 'q':
+		case 'Q':
+        {
+			// long
+            long long ll = (long long) RefToIntConverting(inObject);
+            [invocation setArgument:&ll atIndex:argIndex];
+        }
+        break;
+
 		case 'f':
         {
             float f = (float) RefToDoubleConverting(inObject);
@@ -932,7 +956,16 @@ void CastParamToObjC(Method method, NSInvocation* invocation, int argIndex, newt
 
 		case '^':	// pointer
 			// POINTER
-			printf( "unhandled type: %s (POINTER)\n", theTypeCrsr );
+			if (NewtRefIsSymbol(inObject)) {
+				// bridge symbols.
+				char* theObjCName =
+					ObjCNSNameTranslation(NewtSymbolGetName(inObject));
+				SEL theSEL = sel_registerName(theObjCName);
+				free(theObjCName);
+                [invocation setArgument:&theSEL atIndex:argIndex];
+            } else {
+			    printf( "unhandled type: %s (POINTER)\n", theTypeCrsr );
+            }
 			break;
 
 		case '*':	// char*
@@ -1111,7 +1144,16 @@ CastResultToObjC(
 
 		case '^':	// pointer
 			// POINTER
-			printf( "unhandled type: %s (POINTER)\n", inType );
+			if (NewtRefIsSymbol(inObject)) {
+				// bridge symbols.
+				char* theObjCName =
+					ObjCNSNameTranslation(NewtSymbolGetName(inObject));
+				SEL theSEL = sel_registerName(theObjCName);
+				free(theObjCName);
+				return (id) sel_getName(theSEL);
+            } else {
+			    printf( "unhandled type: %s (POINTER)\n", inType );
+            }
 			break;
 
 		case '*':	// char*

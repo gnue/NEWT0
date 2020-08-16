@@ -22,6 +22,9 @@
 #undef HAVE_ENDIAN_H
 #undef HAVE_MACHINE_ENDIAN_H
 #undef HAVE_TERMIOS_H
+#undef HAVE_FFI_FFI_H
+#undef HAVE_FFI_H
+#undef HAVE_GNU_LIB_NAMES_H
 
 #undef HAVE_LIBICONV
 #undef HAVE_DLOPEN

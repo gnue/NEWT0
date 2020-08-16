@@ -28,8 +28,6 @@ EXTLIBS =
 
 NEWTLIBNAME	= NewtObjC
 NEWTEXLIB	= $(build)/$(NEWTLIBNAME).$(DLEXT)
-RUNTIMEXLIBNAME = objc-runtime-x.dylib
-RUNTIMEXLIB = $(build)/objc-runtime-x.dylib
 
 LIBOBJ		= \
 	$(NEWTLIBNAME).o \
@@ -39,27 +37,25 @@ LIBOBJ		= \
 	TNewtObjCRef.o \
 	Utils.o
 
-CFLAGS		+= -Wall
+CFLAGS		+= -Wall -O2 -pipe @NEWT_CFLAGS@
 
 %.o: %.m
 	$(CC) $(CFLAGS) $(INCS) -c $< -o $@
 
-all: $(build) $(RUNTIMEXLIB) $(NEWTEXLIB)
+all: $(build) $(NEWTEXLIB)
 
 $(build):
 	mkdir -p $(build)
 
-$(RUNTIMEXLIB):
-	cd objc-runtime-x && make
-	cp objc-runtime-x/objc-runtime-x.dylib $(RUNTIMEXLIB)
-
-$(NEWTEXLIB): $(LIBOBJ) $(RUNTIMEXLIB)
+$(NEWTEXLIB): $(LIBOBJ)
 	$(LDSHARED) $(LIBOBJ) $(LDIMPORT) -framework Cocoa -o $@
 
 install::
 	install -d -m 755 $(DESTDIR)$(sitedir)
-	install -m 644 $(NEWTEXLIB) $(RUNTIMEXLIB) $(DESTDIR)$(sitedir)
+	install -m 644 $(NEWTEXLIB) $(DESTDIR)$(sitedir)
 
 clean:
-	rm -rf $(NEWTEXLIB) $(LIBOBJ) $(RUNTIMEXLIB)
-	cd objc-runtime-x && make clean
+	rm -rf $(NEWTEXLIB) $(LIBOBJ)
+
+test:
+	$(NEWT) -C tests test_newtobjc.newt

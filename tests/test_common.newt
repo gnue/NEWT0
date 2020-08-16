@@ -1,14 +1,15 @@
 func TestEquality(x, y)
 begin
     local equal := nil;
-    if IsImmediate(x) then equal := x = y;
-    if IsBinary(x) then equal := IsBinary(y) and BinEqual(x, y);
+    if x = y then return true;
+    if IsImmediate(x) then return nil;
+    if IsBinary(x) then return IsBinary(y) and BinEqual(x, y);
     if IsFrame(x) then begin
         if IsFrame(y) and Length(x) = Length(y) then
         begin
             equal := true;
             foreach k, v in x do
-                equal := equal and HasSlot(k, y) and TestEquality(v, y.k)
+                equal := equal and HasSlot(y, k) and TestEquality(v, GetSlot(y, k));
         end;
     end;
     if IsArray(x) then begin
@@ -16,7 +17,7 @@ begin
         begin
             equal := true;
             foreach k, v in x do
-                equal := equal and TestEquality(v, y[k])
+                equal := equal and TestEquality(v, y[k]);
         end;
     end;
     return equal;
@@ -74,11 +75,27 @@ global protoTestCase := {
         end;
     end,
     
+    AssertNotNIL: func(x)
+    begin
+        if x = nil then
+        begin
+            Throw('|evt.ex.test.assertNotNILFailed|, {x: x})
+        end;
+    end,
+
     AssertEqual: func(x, y)
     begin
         if not TestEquality(x, y) then
         begin
             Throw('|evt.ex.test.assertEqualFailed|, {x: x, y: y})
+        end;
+    end,
+
+    AssertNotEqual: func(x, y)
+    begin
+        if TestEquality(x, y) then
+        begin
+            Throw('|evt.ex.test.assertNotEqualFailed|, {x: x, y: y})
         end;
     end,
 
@@ -115,3 +132,15 @@ global protoTestCase := {
         end;
     end,
 };
+
+func RunTestCases(testCases)
+begin
+    local finalResult := true;
+
+    foreach tc in testCases do
+    begin
+        finalResult := finalResult and tc:Run();
+    end;
+
+    if not finalResult then Exit(1);
+end;

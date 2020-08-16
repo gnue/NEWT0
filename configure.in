@@ -64,7 +64,7 @@ AC_MSG_RESULT($HAVE_DLOPEN)
 
 # Checks for header files.
 AC_HEADER_STDC
-AC_CHECK_HEADERS([inttypes.h memory.h stdint.h stdlib.h string.h unistd.h termios.h endian.h machine/endian.h])
+AC_CHECK_HEADERS([inttypes.h memory.h stdint.h stdlib.h string.h unistd.h termios.h endian.h machine/endian.h gnu/lib-names.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_HEADER_STDBOOL
@@ -78,6 +78,23 @@ AC_FUNC_REALLOC
 AC_FUNC_VPRINTF
 AC_CHECK_FUNCS([getcwd memchr memmove memset regcomp strcasecmp strchr strdup strncasecmp mmap chdir getpwnam])
 
+HAVE_OBJC='no'
+AC_LANG_PUSH([Objective C])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [
+    have_objc_compiler=yes
+], [
+    have_objc_compiler=no
+])
+if test "$have_objc_compiler" != "no"; then
+    AC_CHECK_HEADERS([Cocoa/Cocoa.h], [
+        AC_CHECK_HEADERS([objc/objc.h], [
+            AC_CHECK_HEADERS([Foundation/Foundation.h], [
+                HAVE_OBJC='yes'
+            ])
+        ])
+    ])
+fi
+AC_LANG_POP([Objective C])
 
 #
 # AC_CANONICAL_SYSTEM
@@ -139,6 +156,12 @@ case "$HAVE_DLOPEN" in
   yes)
 	AC_DEFINE(HAVE_DLOPEN)
 	MAKE_EXT='ext'
+
+    HAVE_LIBFFI='no'
+    AC_SEARCH_LIBS(ffi_call, ffi)
+    if test "$ac_cv_search" != "no"; then
+        AC_CHECK_HEADERS([ffi/ffi.h, ffi.h], [HAVE_LIBFFI='yes'])
+    fi
     ;;
 esac
 
@@ -151,12 +174,6 @@ AC_ARG_WITH(sitedir,
 	[sitedir='${prefix}/lib/newt0'])
 SITE_DIR="`eval \"echo ${sitedir}\"`"
 
-AC_ARG_WITH(libffidir,
-	AS_HELP_STRING([--with-libffidir=DIR],
-		[where libffi libraries can be found [[PREFIX]]]),
-	[libffidir=$withval],
-	[libffidir='${prefix}'])
-
 AC_ARG_ENABLE(compat,
 	AS_HELP_STRING([--enable-compat],
 		[enable compatibility with the Newton, and break many features on the desktop]),
@@ -166,7 +183,15 @@ AC_ARG_ENABLE(compat,
 AC_ARG_ENABLE(contrib,
 	AS_HELP_STRING([--enable-contrib],
 		[include contrib packages (inwt, NativeCalls, and NewtObjC)]),
-		[MAKE_CONTRIB='contrib'])
+		[
+		MAKE_CONTRIB='contrib'
+		if test "x$HAVE_LIBFFI" = "xyes"; then
+		    MAKE_CONTRIB_LIBFFI='contrib_libffi'
+		fi
+		if test "x$HAVE_OBJC" = "xyes"; then
+		    MAKE_CONTRIB_OBJC='contrib_objc'
+		fi
+		])
 
 test "x$compat" = xno && AC_DEFINE(__NAMED_MAGIC_POINTER__)
 
@@ -184,9 +209,10 @@ AC_SUBST(LINK_NEWT_APP_)
 AC_SUBST(DLEXT)
 AC_SUBST(MAKE_EXT)
 AC_SUBST(MAKE_CONTRIB)
+AC_SUBST(MAKE_CONTRIB_LIBFFI)
+AC_SUBST(MAKE_CONTRIB_OBJC)
 AC_SUBST(BINDIR)
 AC_SUBST(sitedir)
-AC_SUBST(libffidir)
 AC_SUBST(__NAMED_MAGIC_POINTER__)
 
 AC_SUBST(LIBREGEX)
