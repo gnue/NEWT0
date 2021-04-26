@@ -459,8 +459,9 @@ int16_t NBCMakeFnArgFrame(newtRefArg argFrame, nps_syntax_node_t * stree, nps_no
         switch (node->code)
         {
             case kNPSCommaList:
-                numArgs = NBCMakeFnArgFrame(argFrame, stree, node->op1, indefiniteP)
-                            + NBCMakeFnArgFrame(argFrame, stree, node->op2, indefiniteP);
+                // C and C++ do not guarantee an order of evaluation, so don't write 'numArgs = a + b;'
+                numArgs  = NBCMakeFnArgFrame(argFrame, stree, node->op1, indefiniteP);
+                numArgs += NBCMakeFnArgFrame(argFrame, stree, node->op2, indefiniteP);
                 break;
 
             case kNPSArg:
@@ -2464,8 +2465,8 @@ int16_t NBCCountNumArgs(nps_syntax_node_t * stree, nps_node_t r)
         switch (node->code)
         {
             case kNPSCommaList:
-                numArgs = NBCCountNumArgs(stree, node->op1)
-                            + NBCCountNumArgs(stree, node->op2);
+                numArgs  = NBCCountNumArgs(stree, node->op1);
+                numArgs += NBCCountNumArgs(stree, node->op2);
                 break;
         }
     }
