@@ -32,3 +32,18 @@ jobs:
       with:
         name: NEWT0 ${{matrix.os}}
         path: build/NEWT0_*.tgz
+  cmake-build:
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: configure
+      run: |
+        cmake -S . -B build
+    - name: build
+      run: |
+        cmake --build build

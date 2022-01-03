@@ -504,7 +504,7 @@ pkgNewtRef PkgWriteBinary(pkg_stream_t *pkg, newtRefArg obj)
 	}
 	if (klass==NSSYM0(code)) {
 		pkg->code_offset = dst+12;
-		printf("Added native code at %d, size %d\n", dst+12, size-12);
+		printf("Added native code at %lu, size %lu\n", dst+12, size-12);
 	}
 
 	return (pkgNewtRef) NewtMakePointer(dst);
@@ -629,12 +629,12 @@ void PkgReserveRelocations(newtRefArg package, pkg_stream_t *pkg)
 	ssize_t ix = NewtFindSlotIndex(package, NSSYM(relocations));
 	if (ix >= 0) {
 		newtRef relocation_binary = NewtGetFrameSlot(package, ix);
-		uint32_t *relocations = NewtRefToBinary(relocation_binary);
+		uint32_t *relocations = (uint32_t *) NewtRefToBinary(relocation_binary);
 		size_t num_relocations = htonl(relocations[0]);
 		uint32_t num_pages = 2 + ((htonl(relocations[num_relocations]) - htonl(relocations[1])) / 1024);
-		pkg->relocation_size = PkgAlign(&pkg, sizeof(relocation_header_t) + num_pages * (sizeof(relocation_set_t) + 4)
+		pkg->relocation_size = PkgAlign(pkg, sizeof(relocation_header_t) + num_pages * (sizeof(relocation_set_t) + 4)
 			+ num_relocations);
-		PkgMakeRoom(&pkg, pkg->directory_size, pkg->relocation_size);
+		PkgMakeRoom(pkg, pkg->directory_size, pkg->relocation_size);
 	} else {
 		pkg->relocation_size = 0;
 	}
@@ -645,7 +645,7 @@ void PkgUpdateRelocations(newtRefArg package, pkg_stream_t *pkg)
 	ssize_t ix = NewtFindSlotIndex(package, NSSYM(relocations));
 	if (ix >= 0) {
 		newtRef relocation_binary = NewtGetFrameSlot(package, ix);
-		uint32_t *relocations = NewtRefToBinary(relocation_binary);
+		uint32_t *relocations = (uint32_t *) NewtRefToBinary(relocation_binary);
 		size_t num_relocations = htonl(relocations[0]);
 		uint32_t num_pages;
 		relocation_header_t header;
@@ -680,7 +680,7 @@ void PkgUpdateRelocations(newtRefArg package, pkg_stream_t *pkg)
 			reloc_data[num_reloc_data++] = (pkg_reloc - page_number * 1024) / 4;
 		}
 		if (num_reloc_data > 0) {
-			printf ("Finishing page: %04x, offset %d count %d\n", page_number, reloc_sets_size, num_reloc_data);
+			printf ("Finishing page: %04x, offset %u count %zu\n", page_number, reloc_sets_size, num_reloc_data);
 			reloc_set.offset_count = htons(num_reloc_data);
 			reloc_set.page_number = htons(page_number);
 			PkgWriteData(pkg, pkg->header_size + pkg->var_data_size + sizeof(header) + reloc_sets_size,
